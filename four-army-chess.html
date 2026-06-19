@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>云上四国军棋</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;overflow:hidden;color:#eee2c5;font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#07100d}
+    main{height:100vh;background:radial-gradient(circle at center,#294e3e,#10281f 60%,#050b09);display:grid;grid-template-rows:58px 1fr}
+    header{display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:#030907d9;border-bottom:1px solid #9d79443d}a{color:#d7bd89;text-decoration:none}.title{font:700 22px "KaiTi",serif;color:#ffe1a0;letter-spacing:4px}.tools{display:flex;gap:8px}.tools button{padding:7px 11px;border:1px solid #9f783e;border-radius:16px;background:#21160e;color:#ead5a6}
+    .layout{min-height:0;display:grid;grid-template-columns:minmax(280px,1fr) 260px;gap:12px;padding:10px}.board-wrap{min-height:0;display:grid;place-items:center}.board{position:relative;width:min(78vh,72vw);aspect-ratio:1;background:#d6bc85;border:10px solid #573a20;border-radius:9px;box-shadow:0 18px 50px #000b,inset 0 0 35px #795c31}
+    .board:before,.board:after{content:"";position:absolute;background:#315f4c55}.board:before{left:38%;right:38%;top:0;bottom:0}.board:after{top:38%;bottom:38%;left:0;right:0}
+    .road{position:absolute;height:2px;background:#69563b;transform-origin:left center;z-index:1}.road.rail{height:4px;background:#252b27;box-shadow:0 2px 0 #c8a86f}
+    .node{position:absolute;z-index:3;width:4.9%;aspect-ratio:1;transform:translate(-50%,-50%);border:1px solid #755f3d;border-radius:4px;background:#ead9ad;display:grid;place-items:center;font-size:clamp(6px,1.05vw,11px);font-weight:800;color:#2d2419;cursor:pointer;transition:.15s}.node.rail{border:2px solid #4f5348}.node.camp{transform:translate(-50%,-50%) rotate(45deg);border-color:#3f795e;background:#d2deb9}.node.camp>*{transform:rotate(-45deg)}.node.hq{border-radius:50%;background:#e4c588}.node.valid{box-shadow:0 0 0 3px #74e5a0,0 0 15px #48e48a}.node.selected{box-shadow:0 0 0 3px #ffe36d;transform:translate(-50%,-50%) scale(1.13)}
+    .piece{width:92%;height:92%;border-radius:3px;display:grid;place-items:center;color:white;text-shadow:0 1px 2px #000;font-size:inherit}.red{background:#b43c32}.blue{background:#355eae}.purple{background:#7948a7}.green{background:#39835b}.dead{opacity:.2}.flag-reveal{animation:flash .7s infinite alternate}@keyframes flash{to{box-shadow:0 0 18px #fff06c}}
+    aside{padding:15px;border:1px solid #9f783e55;border-radius:12px;background:#090f0cbb;overflow:auto}.turn{font:700 18px "KaiTi",serif;color:#ffe09a}.teams{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:12px 0}.team{padding:8px;border-radius:7px;background:#ffffff09;font-size:12px}.log{height:240px;overflow:auto;padding:9px;border-radius:8px;background:#0005;font-size:12px;line-height:1.7}.rules{font-size:12px;color:#b9c4ba;line-height:1.65}.result{position:fixed;z-index:20;inset:0;display:none;place-items:center;background:#000b}.result.show{display:grid}.result>div{padding:28px 38px;border:1px solid #d1a654;border-radius:14px;background:#180f0c;text-align:center}.result button{padding:9px 20px;border:0;border-radius:18px;background:#d19a45;font-weight:700}
+    @media(max-width:800px){body{overflow:auto}main{height:auto;min-height:100dvh;grid-template-rows:auto 1fr}header{min-height:82px;flex-wrap:wrap;padding:8px}.title{font-size:18px}.layout{display:flex;flex-direction:column;padding:5px}.board{width:min(96vw,76vh)}aside{width:96vw;margin:auto}.log{height:110px}.tools{overflow-x:auto}.tools button{flex:0 0 auto;font-size:11px}}
+    @media(orientation:landscape) and (max-height:600px){main{height:100dvh;grid-template-rows:45px 1fr}header{min-height:45px}.layout{display:grid;grid-template-columns:1fr 210px}.board{width:min(82vh,70vw)}aside{width:auto;padding:8px}.log{height:105px}.rules{font-size:10px}.title{font-size:16px}}
+  </style>
+</head>
+<body><main>
+  <header><a href="index.html">← 游戏大厅</a><div class="title">云上四国军棋 · 全明教学版</div><div class="tools"><button id="landscape">↻ 横屏</button><button id="rulesBtn">规则说明</button><button id="restart">重新布阵</button></div></header>
+  <div class="layout"><div class="board-wrap"><div class="board" id="board"></div></div><aside>
+    <div class="turn" id="turnText">红方行动</div><div class="teams"><div class="team">🔴 红方（你）<br>盟友：紫方</div><div class="team">🔵 蓝方<br>盟友：绿方</div><div class="team">🟣 紫方（电脑）</div><div class="team">🟢 绿方（电脑）</div></div>
+    <div class="log" id="log"></div><div class="rules" id="rules">点击红方棋子，再点击绿色目标点。公路每次一步；铁路可直线远行，工兵可在铁路转弯。行营中的棋子不可被攻击。</div>
+  </aside></div>
+  <div class="result" id="result"><div><h2 id="resultTitle"></h2><p id="resultText"></p><button onclick="start()">再来一局</button></div></div>
+</main><script>
+const names=['司令','军长','师长','师长','旅长','旅长','团长','团长','营长','营长','连长','连长','连长','排长','排长','排长','工兵','工兵','工兵','炸弹','炸弹','地雷','地雷','地雷','军旗'];
+const rank={'司令':9,'军长':8,'师长':7,'旅长':6,'团长':5,'营长':4,'连长':3,'排长':2,'工兵':1}, colors=['red','blue','purple','green'], labels=['红方','蓝方','紫方','绿方'], allies=[[0,2],[1,3]];
+let nodes=[],edges=[],pieces=[],turn=0,selected=null,valid=[],aliveFlags=[true,true,true,true],over=false;
+const $=s=>document.querySelector(s),board=$('#board');
+function key(x,y){return `${x},${y}`} function nodeAt(x,y){return nodes.find(n=>n.x===x&&n.y===y)}
+function addNode(x,y,owner,row,col,type='post',rail=false){if(nodeAt(x,y))return;nodes.push({id:key(x,y),x,y,owner,row,col,type,rail})}
+function buildMap(){
+  nodes=[];edges=[];
+  for(let r=0;r<6;r++)for(let c=0;c<5;c++){addNode(6+c,11+r,0,r,c,['2,1','2,3','4,1','4,3'].includes(`${r},${c}`)?'camp':r===5&&(c===1||c===3)?'hq':'post',r===0||r===4||c===0||c===4)}
+  for(let r=0;r<6;r++)for(let c=0;c<5;c++){addNode(5-r,6+c,1,r,c,['2,1','2,3','4,1','4,3'].includes(`${r},${c}`)?'camp':r===5&&(c===1||c===3)?'hq':'post',r===0||r===4||c===0||c===4)}
+  for(let r=0;r<6;r++)for(let c=0;c<5;c++){addNode(6+c,5-r,2,r,c,['2,1','2,3','4,1','4,3'].includes(`${r},${c}`)?'camp':r===5&&(c===1||c===3)?'hq':'post',r===0||r===4||c===0||c===4)}
+  for(let r=0;r<6;r++)for(let c=0;c<5;c++){addNode(11+r,6+c,3,r,c,['2,1','2,3','4,1','4,3'].includes(`${r},${c}`)?'camp':r===5&&(c===1||c===3)?'hq':'post',r===0||r===4||c===0||c===4)}
+  for(let y=6;y<=10;y++)for(let x=6;x<=10;x++)addNode(x,y,-1,0,0,'post',x===6||x===10||y===6||y===10||x===8||y===8);
+  let seen=new Set();for(let a of nodes)for(let b of nodes){let d=Math.abs(a.x-b.x)+Math.abs(a.y-b.y),linked=d===1||(a.type==='camp'&&Math.abs(a.x-b.x)===1&&Math.abs(a.y-b.y)===1);if(!linked)continue;let pair=[a.id,b.id].sort(),id=pair.join('|');if(seen.has(id))continue;seen.add(id);edges.push([pair[0],pair[1],a.rail&&b.rail?'rail':'road'])}
+}
+function pos(n){return{x:n.x/16*96+2,y:n.y/16*96+2}} function pieceAt(id){return pieces.find(p=>p.node===id&&!p.dead)}
+function draw(){
+  board.innerHTML='';for(let [a,b,t] of edges){let A=pos(nodes.find(n=>n.id===a)),B=pos(nodes.find(n=>n.id===b)),dx=B.x-A.x,dy=B.y-A.y,l=Math.hypot(dx,dy),el=document.createElement('i');el.className=`road ${t}`;el.style.cssText=`left:${A.x}%;top:${A.y}%;width:${l}%;transform:rotate(${Math.atan2(dy,dx)*180/Math.PI}deg)`;board.appendChild(el)}
+  nodes.forEach(n=>{let p=pos(n),el=document.createElement('button'),pc=pieceAt(n.id);el.className=`node ${n.type} ${n.rail?'rail':''} ${valid.includes(n.id)?'valid':''} ${selected?.node===n.id?'selected':''}`;el.style.cssText=`left:${p.x}%;top:${p.y}%`;el.dataset.id=n.id;if(pc)el.innerHTML=`<span class="piece ${colors[pc.owner]} ${pc.reveal?'flag-reveal':''}">${pc.name}</span>`;else if(n.type==='camp')el.innerHTML='<span>营</span>';else if(n.type==='hq')el.textContent='本营';el.onclick=()=>clickNode(n.id);board.appendChild(el)})
+}
+function deploy(){
+  pieces=[];for(let owner=0;owner<4;owner++){let slots=nodes.filter(n=>n.owner===owner&&n.type!=='camp'),hq=slots.filter(n=>n.type==='hq'),front=slots.filter(n=>n.row===0),back=slots.filter(n=>n.row>=4);let pool=[...names],flag=pool.splice(pool.indexOf('军旗'),1)[0],flagNode=hq[Math.random()<.5?0:1];pieces.push({owner,name:flag,node:flagNode.id});let mines=pool.filter(x=>x==='地雷');pool=pool.filter(x=>x!=='地雷');mines.forEach((name,i)=>pieces.push({owner,name,node:back.filter(n=>!pieceAt(n.id))[i].id}));pool.sort(()=>Math.random()-.5);for(let name of pool){let opts=slots.filter(n=>!pieceAt(n.id)&&(name!=='炸弹'||n.row!==0));let n=opts[Math.floor(Math.random()*opts.length)];pieces.push({owner,name,node:n.id})}}
+}
+function adjacentMoves(p){let n=nodes.find(x=>x.id===p.node),out=edges.filter(e=>e[0]===n.id||e[1]===n.id).map(e=>e[0]===n.id?e[1]:e[0]);if(n.rail&&p.name==='工兵'){let queue=[n.id],seen=new Set(queue);while(queue.length){let at=queue.shift();for(let e of edges.filter(e=>e[2]==='rail'&&(e[0]===at||e[1]===at))){let id=e[0]===at?e[1]:e[0];if(seen.has(id))continue;seen.add(id);out.push(id);if(!pieceAt(id))queue.push(id)}}}else if(n.rail){let dirs=[[1,0],[-1,0],[0,1],[0,-1]];for(let [dx,dy] of dirs){let x=n.x+dx,y=n.y+dy;while(true){let q=nodeAt(x,y);if(!q||!q.rail)break;out.push(q.id);if(pieceAt(q.id))break;x+=dx;y+=dy}}}return[...new Set(out)].filter(id=>{let q=pieceAt(id),dest=nodes.find(n=>n.id===id);return(!q||q.owner!==p.owner)&&!(q&&dest.type==='camp')})}
+function legal(p){if(p.name==='地雷'||p.name==='军旗')return[];return adjacentMoves(p)}
+function clickNode(id){if(over||turn!==0)return;let p=pieceAt(id);if(selected&&valid.includes(id))return move(selected,id);if(p&&p.owner===0){selected=p;valid=legal(p);draw()}else{selected=null;valid=[];draw()}}
+function battle(a,d){if(a.name==='炸弹'||d.name==='炸弹')return 0;if(d.name==='地雷')return a.name==='工兵'?1:-1;if(d.name==='军旗')return 1;let x=rank[a.name],y=rank[d.name];return x===y?0:x>y?1:-1}
+function move(p,id){let d=pieceAt(id);if(!d)p.node=id;else{let r=battle(p,d);log(`${labels[p.owner]}${p.name} 攻击 ${labels[d.owner]}${d.name}`);if(r>=0)d.dead=true;if(r<=0)p.dead=true;if(r>0)p.node=id;if(d.name==='军旗'&&d.dead){aliveFlags[d.owner]=false;log(`🚩 ${labels[d.owner]}军旗被夺！`) }if(d.name==='司令'&&d.dead){let f=pieces.find(x=>x.owner===d.owner&&x.name==='军旗'&&!x.dead);if(f)f.reveal=true}}selected=null;valid=[];checkWin();nextTurn();draw()}
+function teamOf(o){return o%2} function checkWin(){if(!aliveFlags[1]&&!aliveFlags[3])finish(true);if(!aliveFlags[0]&&!aliveFlags[2])finish(false)}
+function nextTurn(){if(over)return;do{turn=(turn+1)%4}while(!aliveFlags[turn]);$('#turnText').textContent=`${labels[turn]}行动`;if(turn!==0)setTimeout(ai,550)}
+function ai(){if(over)return;let ps=pieces.filter(p=>p.owner===turn&&!p.dead&&legal(p).length),moves=[];ps.forEach(p=>legal(p).forEach(id=>moves.push({p,id,hit:!!pieceAt(id)})));if(!moves.length){aliveFlags[turn]=false;return nextTurn()}let hits=moves.filter(m=>m.hit),m=(hits.length?hits:moves)[Math.floor(Math.random()*(hits.length||moves.length))];move(m.p,m.id)}
+function log(t){let el=document.createElement('div');el.textContent=t;$('#log').prepend(el)}
+function finish(win){over=true;$('#resultTitle').textContent=win?'红紫联盟获胜！':'蓝绿联盟获胜';$('#resultText').textContent='敌方两面军旗均已被夺取。';$('#result').classList.add('show')}
+function start(){buildMap();deploy();turn=0;selected=null;valid=[];aliveFlags=[true,true,true,true];over=false;$('#result').classList.remove('show');$('#log').innerHTML='';$('#turnText').textContent='红方行动';log('战局开始：红方先行');draw()}
+$('#restart').onclick=start;$('#rulesBtn').onclick=()=>alert('布阵：军旗在大本营，地雷在后两排，炸弹不在第一排。移动：公路一步，铁路直线不限步，工兵可转弯。战斗：军阶大吃小；同级和炸弹同归于尽；工兵可排雷。对家为盟友，夺取敌方两面军旗获胜。');$('#landscape').onclick=async()=>{try{await document.documentElement.requestFullscreen?.();await screen.orientation?.lock?.('landscape')}catch(e){alert('请关闭竖屏锁定并横置手机')}};start();
+</script></body></html>
