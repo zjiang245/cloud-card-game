@@ -58,7 +58,16 @@
     .counter-item b{color:#fff0b7;font-size:15px}.counter-item.zero{opacity:.3}.counter.collapsed{width:132px}.counter.collapsed .counter-grid{display:none}
     .rules{position:absolute;left:20px;bottom:16px;border:0;background:transparent;color:#b9aa8d;cursor:pointer}
     @media(max-width:900px){header{padding:0 12px}.stats .pill:first-child{display:none}.tool-btn{padding:7px 9px;font-size:12px}}
-    @media(max-width:800px){.player.left{left:2%}.player.right{right:2%}.avatar{width:52px;height:52px;font-size:23px}.card{width:58px;height:84px;margin-left:-22px}.rank{font-size:18px}.big-suit{font-size:25px}.hand{height:122px}.player.me{bottom:8px}.center{top:38%}h1{font-size:19px}.played{height:92px}.brand .seal{display:none}}
+    @media(max-width:800px){
+      body{height:100dvh}.game{min-height:100dvh}header{height:96px;display:block;padding:7px 8px;background:#06100ed9}.brand{height:35px;justify-content:space-between}.home-link{padding:5px 8px;font-size:11px}.brand .seal{display:none}h1{font-size:17px;letter-spacing:3px}
+      .stats{height:47px;width:100%;overflow-x:auto;justify-content:flex-start;padding:4px 0;scrollbar-width:none}.stats::-webkit-scrollbar{display:none}.stats>*{flex:0 0 auto}.pill,.tool-btn{padding:6px 9px;font-size:11px}
+      .table{height:calc(100dvh - 96px);min-height:0}.game:before{inset:8% 2% -8%;box-shadow:0 0 0 8px #17110c,0 0 0 10px #52331d,inset 0 0 50px #0008}
+      .player.left{left:3%;top:13%}.player.right{right:3%;top:13%}.avatar{width:43px;height:43px;font-size:20px}.turn-ring{width:55px;height:55px;inset:-8px}.name{margin-top:4px;font-size:11px}.count{font-size:10px}.opponent-cards{margin:6px 0}.mini{width:18px;height:27px;margin-left:-13px}
+      .center{top:35%;width:72vw}.bottom-cards{height:48px}.bottom-cards .card{transform:scale(.46);margin-right:-37px}.message{min-height:28px;font-size:14px}.played{height:76px}.played .card{margin-left:-31px}
+      .player.me{bottom:3px;width:100vw}.actions{height:44px;gap:7px}.btn{min-width:76px;padding:8px 13px;font-size:13px}.hand{height:100px;padding:22px 6px 0;overflow:visible}.card{width:49px;height:73px;margin-left:-29px;border-radius:6px}.rank{font-size:16px;left:5px}.suit{font-size:14px;left:6px;top:22px}.big-suit{font-size:21px}.hand .card.selected{transform:translateY(-18px)}
+      .counter{left:7px;top:5px;width:116px}.counter-head{height:29px;padding:0 7px;font-size:10px;letter-spacing:0}.counter-head span{font-size:0}.counter-head span:after{content:"◈ 记牌器";font-size:10px}.counter-toggle{font-size:9px;padding:2px 5px}.counter-grid{grid-template-columns:repeat(5,1fr);gap:2px;padding:3px}.counter-item{font-size:8px;padding:2px}.counter-item b{font-size:10px}.counter:not(.mobile-open) .counter-grid{display:none}.counter:not(.mobile-open){width:116px}.rules{left:7px;bottom:3px;font-size:10px}.toast{max-width:88vw;padding:13px 18px;font-size:18px}
+    }
+    @media(max-width:430px){.stats .pill:nth-child(2){display:none}.center{top:32%}.player.left,.player.right{top:11%}.card{margin-left:-31px}.actions{transform:translateY(2px)}}
   </style>
 </head>
 <body>
@@ -100,7 +109,7 @@
 const suits=['♠','♥','♣','♦'], ranks=['3','4','5','6','7','8','9','10','J','Q','K','A','2'];
 const val=Object.fromEntries(ranks.map((r,i)=>[r,i+3])); val['小王']=16;val['大王']=17;
 let hands=[[],[],[]],bottom=[],landlord=-1,turn=0,lastPlay=null,lastPlayer=-1,selected=new Set(),phase='deal',mult=1,beans=+(localStorage.getItem('cloudCoins')||1000),serial=0,balloons=0,stealMode=false,playedHistory=[];
-let audioCtx=null,musicTimer=null,musicOn=false,musicStep=0,thinkingToken=0,musicBoostUntil=0,dragSelecting=false,dragSelectState=true,dragTouched=new Set();
+let audioCtx=null,musicTimer=null,musicOn=false,musicStep=0,thinkingToken=0,musicBoostUntil=0,dragSelecting=false,dragSelectState=true,dragTouched=new Set(),hintIndex=0,hintSignature='';
 const $=s=>document.querySelector(s), sleep=ms=>new Promise(r=>setTimeout(r,ms));
 function deck(){let d=[];for(const r of ranks)for(const s of suits)d.push({r,s,v:val[r],id:serial++});d.push({r:'小王',s:'🃏',v:16,id:serial++},{r:'大王',s:'👑',v:17,id:serial++});return d.sort(()=>Math.random()-.5)}
 function sortHand(h){h.sort((a,b)=>a.v-b.v||suits.indexOf(a.s)-suits.indexOf(b.s))}
@@ -157,10 +166,11 @@ function candidates(hand,target){
 function showPlay(cs,who){let a=analyze(cs);$('#played').innerHTML=cs.map(cardHTML).join('');$('#message').textContent=`${['你','青竹','流萤'][who]}出了 ${namePlay(a)}`;speakPlay(who,cs,a)}
 function namePlay(a){return({single:'单张',pair:'对子',triple:'三张',triple1:'三带一',triple2:'三带二',four2:'四带二',four2pairs:'四带两对',plane:'飞机',plane1:'飞机带单翅',plane2:'飞机带对翅',straight:'顺子',pairs:'连对',bomb:'炸弹',rocket:'王炸'})[a.type]}
 function removeCards(i,cs){let ids=new Set(cs.map(c=>c.id));hands[i]=hands[i].filter(c=>!ids.has(c.id))}
-function next(){stealMode=false;turn=(turn+1)%3;if(turn===lastPlayer){lastPlay=null;lastPlayer=-1;$('#played').innerHTML='';$('#message').textContent=`${['你','青竹','流萤'][turn]}获得新一轮出牌权`}render();if(turn!==0)setTimeout(aiTurn,420)}
+function resetHints(){hintIndex=0;hintSignature=''}
+function next(){stealMode=false;resetHints();turn=(turn+1)%3;if(turn===lastPlayer){lastPlay=null;lastPlayer=-1;$('#played').innerHTML='';$('#message').textContent=`${['你','青竹','流萤'][turn]}获得新一轮出牌权`}render();if(turn!==0)setTimeout(aiTurn,420)}
 function saveCoins(){localStorage.setItem('cloudCoins',beans)}
 function finish(winner){phase='over';let win=(winner===0)||(landlord!==0&&winner!==landlord),gain=100*mult*(win?1:-1);beans=Math.max(0,beans+gain),rescued=beans===0;if(rescued)beans=1000;saveCoins();render();toast(rescued?'金币归零，获得 1000 救助金':win?`你赢了  +${100*mult} 金币`:`再来一局  ${gain} 金币`);buttons([{a:'restart',t:'再来一局',primary:true}])}
-async function commit(i,cs){let a=analyze(cs);if(a.type==='bomb'||a.type==='rocket')mult*=2;removeCards(i,cs);playedHistory.push(...cs);lastPlay=a;lastPlayer=i;showPlay(cs,i);render();if(!hands[i].length)return finish(i);await sleep(650);next()}
+async function commit(i,cs){resetHints();let a=analyze(cs);if(a.type==='bomb'||a.type==='rocket')mult*=2;removeCards(i,cs);playedHistory.push(...cs);lastPlay=a;lastPlayer=i;showPlay(cs,i);render();if(!hands[i].length)return finish(i);await sleep(650);next()}
 async function aiTurn(){
   if(phase!=='play'||turn===0)return;let player=turn,token=++thinkingToken;
   $(`#p${player}`).classList.add('thinking');$('#message').textContent=`${['','青竹','流萤'][player]}正在思考…`;
@@ -223,15 +233,15 @@ const actions={
   passBid(){landlord=Math.random()<.5?1:2;hands[landlord].push(...bottom);turn=landlord;phase='play';$('#message').textContent=`${['','青竹','流萤'][landlord]}成为地主`;render();setTimeout(aiTurn,650)},
   play(){let cs=hands[0].filter(c=>selected.has(c.id)),a=analyze(cs),target=lastPlayer===0?null:lastPlay;if(!a)return toast('这组牌不符合牌型');if(!beats(a,target))return toast('要出得比上一手更大');selected.clear();commit(0,cs)},
   pass(){if(lastPlayer<0||lastPlayer===0)return toast('你拥有出牌权，不能不出');selected.clear();$('#message').textContent='你选择不出';render();setTimeout(next,350)},
-  hint(){let target=lastPlayer===0?null:lastPlay,o=candidates(hands[0],target)[0];selected.clear();if(!o)return toast('没有能压过的牌');o.cards.forEach(c=>selected.add(c.id));render()},
+  hint(){let target=lastPlayer===0?null:lastPlay,opts=candidates(hands[0],target),sig=`${lastPlayer}:${target?.type||'lead'}:${target?.power||0}:${hands[0].map(c=>c.id).join(',')}`;if(!opts.length){selected.clear();return toast('没有能压过的牌')}if(sig!==hintSignature){hintSignature=sig;hintIndex=0}let o=opts[hintIndex%opts.length];hintIndex++;selected.clear();o.cards.forEach(c=>selected.add(c.id));render();toast(`提示 ${((hintIndex-1)%opts.length)+1}/${opts.length}：${namePlay(o.a)}`)},
   restart(){start()}
 };
 function buyBalloon(){initAudio();if(beans<500)return toast('金币不足 500');beans-=500;let rescued=beans===0;if(rescued)beans=1000;saveCoins();balloons++;tone(659.25,audioCtx.currentTime,.18,.05);tone(880,audioCtx.currentTime+.15,.3,.04);toast(rescued?'购买成功，金币归零并获得 1000 救助金':'购买成功！获得偷牌气球 ×1');render()}
 function useBalloon(){initAudio();if(balloons<1)return toast('还没有偷牌气球');if(phase!=='play'||turn!==0)return toast('只能在你的出牌回合使用');stealMode=!stealMode;toast(stealMode?'请选择青竹或流萤':'已取消使用');render()}
 function toast(t){let el=$('#toast');el.textContent=t;el.classList.add('show');clearTimeout(el._t);el._t=setTimeout(()=>el.classList.remove('show'),1400)}
-function start(){thinkingToken++;beans=+(localStorage.getItem('cloudCoins')||1000);document.querySelectorAll('.thinking').forEach(el=>el.classList.remove('thinking'));window.speechSynthesis?.cancel();serial=0;let d=deck();hands=[d.slice(0,17),d.slice(17,34),d.slice(34,51)];bottom=d.slice(51);hands.forEach(sortHand);landlord=-1;turn=0;lastPlay=null;lastPlayer=-1;playedHistory=[];selected.clear();stealMode=false;phase='bid';mult=1;$('#played').innerHTML='';$('#message').textContent='底牌已定，要叫地主吗？';render()}
+function start(){thinkingToken++;resetHints();beans=+(localStorage.getItem('cloudCoins')||1000);document.querySelectorAll('.thinking').forEach(el=>el.classList.remove('thinking'));window.speechSynthesis?.cancel();serial=0;let d=deck();hands=[d.slice(0,17),d.slice(17,34),d.slice(34,51)];bottom=d.slice(51);hands.forEach(sortHand);landlord=-1;turn=0;lastPlay=null;lastPlayer=-1;playedHistory=[];selected.clear();stealMode=false;phase='bid';mult=1;$('#played').innerHTML='';$('#message').textContent='底牌已定，要叫地主吗？';render()}
 function autoStartMusic(e){if(e.target.id==='musicToggle')return;if(musicOn){document.removeEventListener('pointerdown',autoStartMusic);return}initAudio();musicOn=true;$('#musicToggle').textContent='♫ 音乐：开';musicTick();document.removeEventListener('pointerdown',autoStartMusic)}
-function toggleCounter(){let collapsed=$('#counter').classList.toggle('collapsed');$('#counterToggle').textContent=collapsed?'展开':'收起';localStorage.setItem('counterCollapsed',collapsed?'1':'0')}
+function toggleCounter(){if(innerWidth<=800){let open=$('#counter').classList.toggle('mobile-open');$('#counterToggle').textContent=open?'收起':'展开';return}let collapsed=$('#counter').classList.toggle('collapsed');$('#counterToggle').textContent=collapsed?'展开':'收起';localStorage.setItem('counterCollapsed',collapsed?'1':'0')}
 function dragCard(el){
   if(!el||dragTouched.has(el.dataset.id))return;let id=+el.dataset.id;dragTouched.add(el.dataset.id);
   if(dragSelectState){selected.add(id);el.classList.add('selected')}else{selected.delete(id);el.classList.remove('selected')}

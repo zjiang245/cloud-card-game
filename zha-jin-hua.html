@@ -17,6 +17,12 @@
     .actions{height:47px;display:flex;justify-content:center;gap:9px}.btn{min-width:95px;padding:9px 16px;border:1px solid #cc9947;border-radius:22px;background:linear-gradient(#5c351e,#321a0f);color:#ffe1a5;cursor:pointer}.btn.primary{background:linear-gradient(#ffe19a,#c98b35);color:#452706;font-weight:800}.btn:disabled{opacity:.35}
     .modal,.result{position:fixed;z-index:12;left:50%;top:48%;transform:translate(-50%,-50%) scale(.92);min-width:340px;padding:23px;border:1px solid #d7aa56;border-radius:14px;background:#160e0cf2;text-align:center;opacity:0;pointer-events:none;transition:.2s}.modal.show,.result.show{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}.modal h3,.result h2{margin:0 0 15px;color:#ffe09a;font:700 25px "KaiTi",serif}.targets{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.targets button,.result button{padding:9px 15px;border:1px solid #b98842;border-radius:18px;background:#422515;color:#ffe1a6;cursor:pointer}.cancel{margin-top:14px}
     @media(max-width:900px){.seat{transform:scale(.82);transform-origin:center}.seat0{transform:translateX(-50%) scale(.9)}.seat3{left:24%}.seat5{right:24%}.info .pill:first-child{display:none}}
+    @media(max-width:600px){
+      body{height:100dvh}.game{min-height:100dvh}.game:before{inset:8% 1% -3%;box-shadow:0 0 0 7px #160f0b,0 0 0 9px #54331d,inset 0 0 40px #0008}
+      header{height:88px;padding:5px 8px;display:grid;grid-template-columns:auto 1fr;gap:3px 8px}.title{font-size:16px;letter-spacing:2px;text-align:right}.info{grid-column:1/3;overflow-x:auto;gap:5px;scrollbar-width:none}.info::-webkit-scrollbar{display:none}.pill{flex:0 0 auto;padding:5px 8px;font-size:10px}
+      .table{height:calc(100dvh - 88px);min-height:0}.seat{width:75px;transform:scale(.68)}.seat0{bottom:2px;width:100vw;transform:translateX(-50%) scale(.86)}.seat1{left:0;top:44%}.seat2{left:2%;top:18%}.seat3{left:18%;top:3%}.seat4{top:0;transform:translateX(-50%) scale(.68)}.seat5{right:18%;top:3%}.seat6{right:2%;top:18%}.seat7{right:0;top:44%}
+      .avatar{width:42px;height:42px;font-size:19px}.cards{margin-top:3px}.pot{top:36%}.pot b{font-size:27px}.message{top:49%;width:80%;text-align:center;font-size:14px}.actions{height:auto;min-height:76px;display:flex;flex-wrap:wrap;align-content:center;gap:5px;padding:3px 8px}.btn{min-width:30%;padding:7px 8px;font-size:11px}.seat0 .cards{min-height:83px}.seat0 .card{width:56px;height:80px}.modal,.result{min-width:0;width:90vw;padding:18px}.targets{grid-template-columns:repeat(2,1fr)}
+    }
   </style>
 </head>
 <body>
