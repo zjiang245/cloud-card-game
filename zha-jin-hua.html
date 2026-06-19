@@ -16,6 +16,7 @@
     .pot{position:absolute;left:50%;top:37%;transform:translateX(-50%);text-align:center}.pot b{display:block;font:700 38px Georgia;color:#ffd97e;text-shadow:0 4px 12px #000}.pot span{color:#cbb78f;font-size:13px}.message{position:absolute;left:50%;top:50%;transform:translateX(-50%);color:#ffe4a6;font:700 18px "KaiTi",serif;text-shadow:0 3px 10px #000}
     .actions{height:47px;display:flex;justify-content:center;gap:9px}.btn{min-width:95px;padding:9px 16px;border:1px solid #cc9947;border-radius:22px;background:linear-gradient(#5c351e,#321a0f);color:#ffe1a5;cursor:pointer}.btn.primary{background:linear-gradient(#ffe19a,#c98b35);color:#452706;font-weight:800}.btn:disabled{opacity:.35}
     .modal,.result{position:fixed;z-index:12;left:50%;top:48%;transform:translate(-50%,-50%) scale(.92);min-width:340px;padding:23px;border:1px solid #d7aa56;border-radius:14px;background:#160e0cf2;text-align:center;opacity:0;pointer-events:none;transition:.2s}.modal.show,.result.show{opacity:1;transform:translate(-50%,-50%) scale(1);pointer-events:auto}.modal h3,.result h2{margin:0 0 15px;color:#ffe09a;font:700 25px "KaiTi",serif}.targets{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}.targets button,.result button{padding:9px 15px;border:1px solid #b98842;border-radius:18px;background:#422515;color:#ffe1a6;cursor:pointer}.cancel{margin-top:14px}
+    .landscape-hint{position:fixed;z-index:30;inset:0;display:none;place-items:center;background:#030806ed;text-align:center;padding:28px}.landscape-hint.show{display:grid}.landscape-hint .phone{font-size:64px;animation:rotatePhone 1.5s ease-in-out infinite alternate}.landscape-hint p{color:#ffe1a2;line-height:1.8}.landscape-hint button{padding:9px 20px;border:1px solid #c7974f;border-radius:20px;background:#402314;color:#ffe0a5}@keyframes rotatePhone{to{transform:rotate(90deg)}}
     @media(max-width:900px){.seat{transform:scale(.82);transform-origin:center}.seat0{transform:translateX(-50%) scale(.9)}.seat3{left:24%}.seat5{right:24%}.info .pill:first-child{display:none}}
     @media(max-width:600px){
       body{height:100dvh}.game{min-height:100dvh}.game:before{inset:8% 1% -3%;box-shadow:0 0 0 7px #160f0b,0 0 0 9px #54331d,inset 0 0 40px #0008}
@@ -23,24 +24,41 @@
       .table{height:calc(100dvh - 88px);min-height:0}.seat{width:75px;transform:scale(.68)}.seat0{bottom:2px;width:100vw;transform:translateX(-50%) scale(.86)}.seat1{left:0;top:44%}.seat2{left:2%;top:18%}.seat3{left:18%;top:3%}.seat4{top:0;transform:translateX(-50%) scale(.68)}.seat5{right:18%;top:3%}.seat6{right:2%;top:18%}.seat7{right:0;top:44%}
       .avatar{width:42px;height:42px;font-size:19px}.cards{margin-top:3px}.pot{top:36%}.pot b{font-size:27px}.message{top:49%;width:80%;text-align:center;font-size:14px}.actions{height:auto;min-height:76px;display:flex;flex-wrap:wrap;align-content:center;gap:5px;padding:3px 8px}.btn{min-width:30%;padding:7px 8px;font-size:11px}.seat0 .cards{min-height:83px}.seat0 .card{width:56px;height:80px}.modal,.result{min-width:0;width:90vw;padding:18px}.targets{grid-template-columns:repeat(2,1fr)}
     }
+    @media(orientation:landscape) and (max-height:600px){
+      header{height:48px;padding:3px 10px}.title{font-size:16px;letter-spacing:2px}.info{gap:5px}.pill{padding:4px 7px;font-size:10px}
+      .table{height:calc(100dvh - 48px);min-height:0}.game:before{inset:3% 4% -18%}.seat{transform:scale(.63)}.seat0{bottom:-6px;transform:translateX(-50%) scale(.72)}.seat1{left:2%;top:42%}.seat2{left:8%;top:10%}.seat3{left:27%;top:-5%}.seat4{top:-7%;transform:translateX(-50%) scale(.63)}.seat5{right:27%;top:-5%}.seat6{right:8%;top:10%}.seat7{right:2%;top:42%}
+      .pot{top:33%}.pot b{font-size:25px}.message{top:49%;font-size:13px}.actions{height:38px;gap:5px}.btn{min-width:78px;padding:6px 10px;font-size:11px}.seat0 .cards{min-height:72px}.seat0 .card{width:50px;height:69px}.seat0 .rank{font-size:17px}.seat0 .big{font-size:24px}
+    }
   </style>
 </head>
 <body>
 <main class="game">
-  <header><a href="index.html">← 游戏大厅</a><div class="title">云上炸金花 · 八人桌</div><div class="info"><button class="pill" id="musicToggle">♫ 贝多芬：待启动</button><div class="pill">玩家：<b id="playerName"></b></div><div class="pill">金币：<b id="myCoins"></b></div></div></header>
+  <header><a href="index.html">← 游戏大厅</a><div class="title">云上炸金花 · 八人桌</div><div class="info"><button class="pill" id="voiceToggle">🔊 语音：待启动</button><button class="pill" id="landscapeBtn">↻ 横屏模式</button><button class="pill" id="musicToggle">♫ 贝多芬：待启动</button><div class="pill">玩家：<b id="playerName"></b></div><div class="pill">金币：<b id="myCoins"></b></div></div></header>
   <section class="table" id="table">
     <div class="pot"><span>底池金币</span><b id="pot">0</b></div><div class="message" id="message">准备开局</div>
     <div class="seat seat0" id="seat0"><div class="actions" id="actions"></div><div class="cards"></div></div>
   </section>
   <div class="modal" id="compareModal"><h3 id="compareTitle">选择比牌对手</h3><div class="targets" id="targets"></div><button class="cancel" id="cancelCompare">取消</button></div>
   <div class="result" id="result"><h2 id="resultTitle"></h2><p id="resultText"></p><button id="again">再来一局</button></div>
+  <div class="landscape-hint" id="landscapeHint"><div><div class="phone">📱</div><p>当前浏览器无法自动锁定方向。<br>请关闭手机竖屏锁定，并将手机横过来。</p><button id="closeLandscapeHint">知道了</button></div></div>
 </main>
 <script>
 const suits=['♠','♥','♣','♦'],ranks=['2','3','4','5','6','7','8','9','10','J','Q','K','A'],rv=Object.fromEntries(ranks.map((r,i)=>[r,i+2]));
 const aiData=[['山君','🐯'],['赤狐','🦊'],['墨鹤','🦢'],['金蟾','🐸'],['白鹿','🦌'],['玄猫','🐈'],['苍狼','🐺']];
-let players=[],pot=0,bet=10,round=0,turn=0,seen=false,over=false,token=0,forcedCompare=false,audioCtx=null,musicOn=false,musicTimer=null,musicStep=0;
+let players=[],pot=0,bet=10,round=0,turn=0,seen=false,over=false,token=0,forcedCompare=false,audioCtx=null,musicOn=false,musicTimer=null,musicStep=0,voiceOn=true,voiceUnlocked=false,pendingSpeech='';
 const $=s=>document.querySelector(s),sleep=ms=>new Promise(r=>setTimeout(r,ms));
-function speak(t){if(!('speechSynthesis'in window))return;let u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=1.05;u.pitch=1.03;speechSynthesis.cancel();speechSynthesis.speak(u)}
+function makeUtterance(t){let u=new SpeechSynthesisUtterance(t);u.lang='zh-CN';u.rate=1.02;u.pitch=1.02;u.volume=.95;let cn=speechSynthesis.getVoices().find(v=>v.lang?.toLowerCase().startsWith('zh'));if(cn)u.voice=cn;return u}
+function speak(t){
+  if(!voiceOn||!('speechSynthesis'in window))return;
+  if(!voiceUnlocked){pendingSpeech=t;return}
+  pendingSpeech='';speechSynthesis.cancel();speechSynthesis.resume();setTimeout(()=>{if(voiceOn)speechSynthesis.speak(makeUtterance(t))},70)
+}
+function unlockVoice(){
+  if(!voiceOn||voiceUnlocked||!('speechSynthesis'in window))return;
+  voiceUnlocked=true;speechSynthesis.cancel();speechSynthesis.resume();$('#voiceToggle').textContent='🔊 语音：开';
+  if(pendingSpeech){let t=pendingSpeech;pendingSpeech='';setTimeout(()=>speak(t),100)}
+}
+function toggleVoice(){if(voiceOn&&!voiceUnlocked)return unlockVoice();voiceOn=!voiceOn;if(!voiceOn){window.speechSynthesis?.cancel();$('#voiceToggle').textContent='🔇 语音：关'}else{voiceUnlocked=false;pendingSpeech='';unlockVoice()}}
 function announce(t){$('#message').textContent=t;speak(t)}
 const furElise=[659.25,622.25,659.25,622.25,659.25,493.88,587.33,523.25,440,261.63,329.63,440,493.88,329.63,415.3,493.88,523.25,329.63,659.25,622.25,659.25,622.25,659.25,493.88,587.33,523.25,440];
 function initMusic(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume()}
@@ -48,6 +66,13 @@ function piano(freq,when,duration=.38,volume=.026){let o=audioCtx.createOscillat
 function musicTick(){if(!musicOn||!audioCtx)return;let now=audioCtx.currentTime+.02,f=furElise[musicStep%furElise.length];piano(f,now,.38,.024);if(musicStep%3===0)piano(f/4,now,.7,.009);musicStep++;musicTimer=setTimeout(musicTick,250)}
 function toggleMusic(){document.removeEventListener('pointerdown',autoMusic);initMusic();musicOn=!musicOn;$('#musicToggle').textContent=musicOn?'♫ 贝多芬：播放中':'♫ 贝多芬：关闭';if(musicOn)musicTick();else clearTimeout(musicTimer)}
 function autoMusic(e){if(e.target.id==='musicToggle')return;if(musicOn){document.removeEventListener('pointerdown',autoMusic);return}initMusic();musicOn=true;$('#musicToggle').textContent='♫ 贝多芬：播放中';musicTick();document.removeEventListener('pointerdown',autoMusic)}
+async function enableLandscape(){
+  try{
+    if(document.documentElement.requestFullscreen&&!document.fullscreenElement)await document.documentElement.requestFullscreen();
+    if(screen.orientation?.lock)await screen.orientation.lock('landscape');
+    document.body.classList.add('landscape-mode')
+  }catch(e){$('#landscapeHint').classList.add('show')}
+}
 function deck(){let d=[];for(let s of suits)for(let r of ranks)d.push({s,r,v:rv[r]});return d.sort(()=>Math.random()-.5)}
 function card(c,hidden=false){if(hidden)return'<i class="card back"></i>';let red=c.s==='♥'||c.s==='♦';return`<i class="card ${red?'red':''}"><b class="rank">${c.r}</b><span class="suit">${c.s}</span><span class="big">${c.s}</span></i>`}
 function score(h){let vs=h.map(c=>c.v).sort((a,b)=>b-a),flush=h.every(c=>c.s===h[0].s),uniq=[...new Set(vs)],straight=uniq.length===3&&((vs[0]-vs[2]===2)||(vs[0]===14&&vs[1]===3&&vs[2]===2)),cnt={};vs.forEach(v=>cnt[v]=(cnt[v]||0)+1);let gs=Object.entries(cnt).map(([v,n])=>({v:+v,n})).sort((a,b)=>b.n-a.n||b.v-a.v);if(gs[0].n===3)return[6,gs[0].v];if(straight&&flush)return[5,vs[0]===14&&vs[1]===3?3:vs[0]];if(flush)return[4,...vs];if(straight)return[3,vs[0]===14&&vs[1]===3?3:vs[0]];if(gs[0].n===2)return[2,gs[0].v,gs[1].v];return[1,...vs]}
@@ -71,7 +96,7 @@ function chooseCompare(i){$('#compareModal').classList.remove('show');let cost=b
 function afterPlayerBet(label,amount){let emptied=pay(0,amount,true);if(emptied){forcedCompare=true;announce(`金币归零，救助金将在本局结束后发放，本回合必须比牌`);render();return setTimeout(()=>openCompare(true),450)}announce(label);render();setTimeout(next,300)}
 const actions={see(){if(seen)return;seen=true;players[0].seen=true;announce(`看牌，${handName(players[0].hand)}`);render()},follow(){afterPlayerBet('跟注',bet*(seen?2:1))},raise(){bet=Math.min(80,bet*2);afterPlayerBet(`加注到${bet}`,bet*(seen?2:1))},fold(){players[0].fold=true;announce('弃牌');render();setTimeout(next,300)},compare(){openCompare()}};
 function start(){token++;forcedCompare=false;$('#compareModal').classList.remove('show');buildSeats();let d=deck(),coins=+(localStorage.getItem('cloudCoins')||1000);if(coins<=0){coins=1000;localStorage.setItem('cloudCoins','1000')}players=[{name:localStorage.getItem('cloudPlayer')||'云游客',coins,hand:d.slice(0,3),seen:false,fold:false,pendingAid:false},...aiData.map(([name],i)=>({name,coins:1000,hand:d.slice((i+1)*3,(i+2)*3),seen:false,fold:false,pendingAid:false}))];pot=0;bet=10;round=0;turn=0;seen=false;over=false;players.forEach((p,i)=>pay(i,10));$('#playerName').textContent=players[0].name;$('#result').classList.remove('show');announce('八人入座，每人投入十金币');render()}
-$('#cancelCompare').onclick=()=>{if(!forcedCompare)$('#compareModal').classList.remove('show')};$('#musicToggle').onclick=toggleMusic;document.addEventListener('pointerdown',autoMusic);$('#again').onclick=start;start();
+$('#cancelCompare').onclick=()=>{if(!forcedCompare)$('#compareModal').classList.remove('show')};$('#voiceToggle').onclick=toggleVoice;$('#landscapeBtn').onclick=enableLandscape;$('#closeLandscapeHint').onclick=()=>$('#landscapeHint').classList.remove('show');$('#musicToggle').onclick=toggleMusic;document.addEventListener('pointerdown',e=>{if(e.target.id!=='voiceToggle')unlockVoice()},{capture:true});document.addEventListener('pointerdown',autoMusic);$('#again').onclick=start;start();
 </script>
 </body>
 </html>
