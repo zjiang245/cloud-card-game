@@ -11,7 +11,7 @@
     .board:before,.board:after{content:"";position:absolute;background:#315f4c55}.board:before{left:38%;right:38%;top:0;bottom:0}.board:after{top:38%;bottom:38%;left:0;right:0}
     .road{position:absolute;height:2px;background:#69563b;transform-origin:left center;z-index:1}.road.rail,.road.corner-rail{height:4px;background:#252b27;box-shadow:0 2px 0 #c8a86f}.road.corner-rail{height:5px}
     .node{position:absolute;z-index:3;width:5.8%;height:5.8%;aspect-ratio:1;transform:translate(-50%,-50%);padding:0;border:1px solid #755f3d;border-radius:4px;background:#ead9ad;display:grid;place-items:center;font-size:clamp(7px,1.2vw,13px);font-weight:800;color:#2d2419;cursor:pointer;transition:.15s}.node.rail{border:2px solid #4f5348}.node.camp{transform:translate(-50%,-50%) rotate(45deg);border-color:#3f795e;background:#d2deb9}.node.camp>*{transform:rotate(-45deg)}.node.hq{border-radius:50%;background:#e4c588}.node.valid{box-shadow:0 0 0 3px #74e5a0,0 0 15px #48e48a}.node.selected{box-shadow:0 0 0 3px #ffe36d;transform:translate(-50%,-50%) scale(1.08)}.node.setup-target{border-color:#c3483e}.node.setup-target:hover{box-shadow:0 0 0 3px #ffd669}
-    .piece{width:calc(100% + 4px);aspect-ratio:1;height:auto;border-radius:3px;display:grid;place-items:center;color:white;text-shadow:0 1px 2px #000;font-size:inherit;line-height:1;cursor:pointer;user-select:none;touch-action:none}.piece.large-label{font-size:clamp(20px,3.6vw,42px);font-family:"STKaiti","KaiTi",serif;font-weight:900;line-height:.9}.red{background:#b43c32}.blue{background:#355eae}.purple{background:#7948a7}.green{background:#39835b}.hidden-piece{color:transparent;border:1px solid #eadcad;text-shadow:none}.hidden-piece.blue{background:#355eae}.hidden-piece.purple{background:#7948a7}.hidden-piece.green{background:#39835b}.font-toggle{position:absolute;z-index:12;right:3%;top:4%;width:16%;aspect-ratio:1;border:3px solid #1ca5ef;border-radius:12px;background:#f5dfaaeb;color:#173e55;font-weight:900;font-size:clamp(10px,1.5vw,18px);cursor:pointer;box-shadow:0 6px 18px #0004}.font-toggle.active{background:#167bb6;color:white}.board-surrender{position:absolute;z-index:12;right:4%;bottom:5%;width:24%;height:20%;border:4px solid #e65b4f;border-radius:12px;background:#2a1613dd;color:#ffd6b0;font:900 clamp(16px,2.4vw,30px) "KaiTi",serif;cursor:pointer;box-shadow:0 8px 20px #0005}.board-surrender:hover{background:#8f2922;color:white}.trail-arrow{position:absolute;z-index:8;width:3.2%;aspect-ratio:1;display:grid;place-items:center;border-radius:50%;background:#fff2a9dc;color:#7c261e;font-size:clamp(8px,1.15vw,15px);font-weight:900;pointer-events:none;box-shadow:0 0 6px #0008}.trail-arrow.start{background:#ffe36d;color:#5c2917;box-shadow:0 0 0 2px #fff2a1,0 0 10px #ffdc3f}.battle-flash{position:absolute;z-index:9;width:6.7%;aspect-ratio:1;transform:translate(-50%,-50%);border:4px solid #ffe33f;border-radius:8px;pointer-events:none;animation:battleBlink .45s infinite alternate;box-shadow:0 0 14px #ffd91a}@keyframes battleBlink{to{opacity:.18;transform:translate(-50%,-50%) scale(1.12)}}.setup-selected{outline:3px solid #ffe36d;box-shadow:0 0 14px #ffd54f}.setup-tray{position:absolute;z-index:6;left:2%;top:67%;width:31%;aspect-ratio:1;padding:5px;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);gap:3px;border:3px solid #e34d42;border-radius:7px;background:#cbae7288}.setup-tray.hidden{display:none}.tray-cell{min-width:0;min-height:0;display:grid;place-items:center}.tray-piece{width:100%;height:100%;aspect-ratio:1;border:1px solid #f0cf9b;border-radius:4px;font-size:clamp(6px,.85vw,10px);font-weight:800}.tray-piece.large-label{font-size:clamp(15px,2.4vw,28px)}.difficulty{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:8px 0}.difficulty.hidden{display:none}.difficulty button{padding:7px 3px;border:1px solid #8b734d;border-radius:14px;background:#171b18;color:#c8b990;font-weight:800}.difficulty button.active{border-color:#ffd46c;background:#73501d;color:#fff1bd}.setup-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}.setup-actions.hidden{display:none}.setup-action{padding:10px 6px;border:0;border-radius:18px;background:linear-gradient(#ffe18a,#c98b2e);color:#3a2108;font-weight:900;cursor:pointer}.quick-setup{background:linear-gradient(#b8e4bd,#4d9b61)}.dead{opacity:.2}.flag-reveal{animation:flash .7s infinite alternate}@keyframes flash{to{box-shadow:0 0 18px #fff06c}}
+    .piece{width:calc(100% + 4px);aspect-ratio:1;height:auto;border-radius:3px;display:grid;place-items:center;color:white;text-shadow:0 1px 2px #000;font-size:inherit;line-height:1;cursor:pointer;user-select:none;touch-action:none}.piece.large-label{font-size:clamp(20px,3.6vw,42px);font-family:"STKaiti","KaiTi",serif;font-weight:900;line-height:.9}.red{background:#b43c32}.blue{background:#355eae}.purple{background:#7948a7}.green{background:#39835b}.hidden-piece{color:transparent;border:1px solid #eadcad;text-shadow:none}.hidden-piece.blue{background:#355eae}.hidden-piece.purple{background:#7948a7}.hidden-piece.green{background:#39835b}.font-toggle{position:absolute;z-index:12;right:3%;top:4%;width:16%;aspect-ratio:1;border:3px solid #1ca5ef;border-radius:12px;background:#f5dfaaeb;color:#173e55;font-weight:900;font-size:clamp(10px,1.5vw,18px);cursor:pointer;box-shadow:0 6px 18px #0004}.font-toggle.active{background:#167bb6;color:white}.board-actions{position:absolute;z-index:12;right:4%;bottom:5%;width:24%;height:20%;display:grid;grid-template-rows:1fr 1fr;gap:7px}.board-actions button{border:3px solid #c59b52;border-radius:10px;background:#201b14dd;color:#ffe1a7;font:900 clamp(13px,1.8vw,23px) "KaiTi",serif;cursor:pointer;box-shadow:0 6px 16px #0005}.board-actions .surrender{border-color:#e65b4f;background:#57201bdd;color:#ffd6b0}.board-actions button:hover{filter:brightness(1.35)}.trail-arrow{position:absolute;z-index:8;width:3.2%;aspect-ratio:1;display:grid;place-items:center;border-radius:50%;background:#fff2a9dc;color:#7c261e;font-size:clamp(8px,1.15vw,15px);font-weight:900;pointer-events:none;box-shadow:0 0 6px #0008}.trail-arrow.start{background:#ffe36d;color:#5c2917;box-shadow:0 0 0 2px #fff2a1,0 0 10px #ffdc3f}.battle-flash{position:absolute;z-index:9;width:6.7%;aspect-ratio:1;transform:translate(-50%,-50%);border:4px solid #ffe33f;border-radius:8px;pointer-events:none;animation:battleBlink .45s infinite alternate;box-shadow:0 0 14px #ffd91a}@keyframes battleBlink{to{opacity:.18;transform:translate(-50%,-50%) scale(1.12)}}.setup-selected{outline:3px solid #ffe36d;box-shadow:0 0 14px #ffd54f}.setup-tray{position:absolute;z-index:6;left:2%;top:67%;width:31%;aspect-ratio:1;padding:5px;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);gap:3px;border:3px solid #e34d42;border-radius:7px;background:#cbae7288}.setup-tray.hidden{display:none}.tray-cell{min-width:0;min-height:0;display:grid;place-items:center}.tray-piece{width:100%;height:100%;aspect-ratio:1;border:1px solid #f0cf9b;border-radius:4px;font-size:clamp(6px,.85vw,10px);font-weight:800}.tray-piece.large-label{font-size:clamp(15px,2.4vw,28px)}.difficulty{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:8px 0}.difficulty.hidden{display:none}.difficulty button{padding:7px 3px;border:1px solid #8b734d;border-radius:14px;background:#171b18;color:#c8b990;font-weight:800}.difficulty button.active{border-color:#ffd46c;background:#73501d;color:#fff1bd}.setup-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}.setup-actions.hidden{display:none}.setup-action{padding:10px 6px;border:0;border-radius:18px;background:linear-gradient(#ffe18a,#c98b2e);color:#3a2108;font-weight:900;cursor:pointer}.quick-setup{background:linear-gradient(#b8e4bd,#4d9b61)}.dead{opacity:.2}.flag-reveal{animation:flash .7s infinite alternate}@keyframes flash{to{box-shadow:0 0 18px #fff06c}}
     aside{padding:15px;border:1px solid #9f783e55;border-radius:12px;background:#090f0cbb;overflow:auto}.turn{font:700 18px "KaiTi",serif;color:#ffe09a}.coin-box{margin:8px 0;padding:8px 11px;border:1px solid #d4a95755;border-radius:9px;background:#20170c;color:#ffd77e;font-weight:800}.teams{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:12px 0}.team{padding:8px;border-radius:7px;background:#ffffff09;font-size:12px}.log{height:240px;overflow:auto;padding:9px;border-radius:8px;background:#0005;font-size:12px;line-height:1.7}.rules{font-size:12px;color:#b9c4ba;line-height:1.65}.result{position:fixed;z-index:20;inset:0;display:none;place-items:center;background:#000b}.result.show{display:grid}.result>div{padding:28px 38px;border:1px solid #d1a654;border-radius:14px;background:#180f0c;text-align:center}.result button{padding:9px 20px;border:0;border-radius:18px;background:#d19a45;font-weight:700}
     @media(max-width:800px){body{overflow:auto}main{height:auto;min-height:100dvh;grid-template-rows:auto 1fr}header{min-height:82px;flex-wrap:wrap;padding:8px}.title{font-size:18px}.layout{display:flex;flex-direction:column;padding:5px}.board{width:min(96vw,76vh)}.piece.large-label{font-size:clamp(9px,2.8vw,14px);line-height:1}.tray-piece.large-label{font-size:clamp(8px,2.5vw,12px)}aside{width:96vw;margin:auto}.log{height:110px}.tools{overflow-x:auto}.tools button{flex:0 0 auto;font-size:11px}}
     @media(orientation:landscape) and (max-height:600px){main{height:100dvh;grid-template-rows:45px 1fr}header{min-height:45px}.layout{display:grid;grid-template-columns:1fr 210px}.board{width:min(82vh,70vw)}aside{width:auto;padding:8px}.log{height:105px}.rules{font-size:10px}.title{font-size:16px}}
@@ -28,7 +28,7 @@
 const names=['司令','军长','师长','师长','旅长','旅长','团长','团长','营长','营长','连长','连长','连长','排长','排长','排长','工兵','工兵','工兵','炸弹','炸弹','地雷','地雷','地雷','军旗'];
 const rank={'司令':9,'军长':8,'师长':7,'旅长':6,'团长':5,'营长':4,'连长':3,'排长':2,'工兵':1}, colors=['red','blue','purple','green'], labels=['红方','蓝方','紫方','绿方'], allies=[[0,2],[1,3]];
 const chaosMode=new URLSearchParams(location.search).get('mode')==='chaos';
-let nodes=[],edges=[],pieces=[],turn=0,selected=null,valid=[],aliveFlags=[true,true,true,true],over=false,phase='setup',setupSelected=null,draggedPiece=null,lastTrail=null,lastBattle=null,settled=false,purpleSafeTurns=0,purpleAttacked=false,hardRedBreach=false;
+let nodes=[],edges=[],pieces=[],turn=0,selected=null,valid=[],aliveFlags=[true,true,true,true],over=false,phase='setup',setupSelected=null,draggedPiece=null,lastTrail=null,lastBattle=null,settled=false,purpleSafeTurns=0,purpleAttacked=false,hardRedBreach=false,redSurrendered=false,aiTimer=null,aiOrders={1:null,2:null,3:null};
 const $=s=>document.querySelector(s),board=$('#board');
 let difficulty=localStorage.getItem('armyDifficulty')||'easy';
 const shortName={'司令':'司','军长':'军','师长':'师','旅长':'旅','团长':'团','营长':'营','连长':'连','排长':'排','工兵':'兵','炸弹':'弹','地雷':'雷','军旗':'旗'};
@@ -55,13 +55,19 @@ function bindSetupPiece(el,p){el.draggable=true;el.dataset.pieceId=p.id;el.oncli
 function draw(){
   board.innerHTML='';for(let [a,b,t] of edges){let A=pos(nodes.find(n=>n.id===a)),B=pos(nodes.find(n=>n.id===b)),dx=B.x-A.x,dy=B.y-A.y,l=Math.hypot(dx,dy),el=document.createElement('i');el.className=`road ${t}`;el.style.cssText=`left:${A.x}%;top:${A.y}%;width:${l}%;transform:rotate(${Math.atan2(dy,dx)*180/Math.PI}deg)`;board.appendChild(el)}
   let fontButton=document.createElement('button');fontButton.className=`font-toggle ${largeFont?'active':''}`;fontButton.textContent=largeFont?'标准字体':'放大字体';fontButton.onclick=()=>{largeFont=!largeFont;localStorage.setItem('armyLargeFont',largeFont?'1':'0');draw()};board.appendChild(fontButton);
-  if(phase==='play'&&!over){let surrenderButton=document.createElement('button');surrenderButton.className='board-surrender';surrenderButton.textContent='投降';surrenderButton.onclick=surrender;board.appendChild(surrenderButton)}
+  if(phase==='play'&&!over){let actions=document.createElement('div'),endButton=document.createElement('button');actions.className='board-actions';endButton.textContent='结束游戏';endButton.onclick=endGame;actions.appendChild(endButton);if(!redSurrendered){let surrenderButton=document.createElement('button');surrenderButton.className='surrender';surrenderButton.textContent='投降';surrenderButton.onclick=surrender;actions.appendChild(surrenderButton)}board.appendChild(actions)}
   if(lastTrail){lastTrail.path.slice(0,-1).forEach((id,i)=>{let n=nodes.find(x=>x.id===id),next=nodes.find(x=>x.id===lastTrail.path[i+1]);if(!n||!next)return;let at=pos(n),angle=Math.atan2(next.y-n.y,next.x-n.x)*180/Math.PI,el=document.createElement('span');el.className=`trail-arrow ${i===0?'start':''}`;el.textContent='➤';el.style.cssText=`left:${at.x}%;top:${at.y}%;transform:translate(-50%,-50%) rotate(${angle}deg);color:${['#8e211a','#173f8a','#603080','#17613a'][lastTrail.owner]}`;board.appendChild(el)});if(lastBattle){let n=nodes.find(x=>x.id===lastBattle);if(n){let at=pos(n),el=document.createElement('span');el.className='battle-flash';el.style.cssText=`left:${at.x}%;top:${at.y}%`;board.appendChild(el)}}}
-  nodes.filter(n=>n.type!=='transit').forEach(n=>{let p=pos(n),el=document.createElement('button'),pc=pieceAt(n.id),setupTarget=phase==='setup'&&n.owner===0&&n.type!=='camp';el.className=`node ${n.type} ${n.rail?'rail':''} ${valid.includes(n.id)?'valid':''} ${selected?.node===n.id?'selected':''} ${setupTarget?'setup-target':''}`;el.style.cssText=`left:${p.x}%;top:${p.y}%`;el.dataset.id=n.id;if(pc){let hidden=pc.owner!==0&&!pc.reveal;el.innerHTML=`<span class="piece ${colors[pc.owner]} ${hidden?'hidden-piece':''} ${largeFont&&!hidden?'large-label':''} ${pc.reveal?'flag-reveal':''} ${setupSelected===pc.id?'setup-selected':''}">${hidden?'':pieceLabel(pc.name)}</span>`;if(phase==='setup'&&pc.owner===0)bindSetupPiece(el.firstElementChild,pc)}else if(n.type==='camp')el.innerHTML='<span>营</span>';else if(n.type==='hq')el.textContent='本营';el.onclick=()=>clickNode(n.id);if(setupTarget){el.ondragover=e=>e.preventDefault();el.ondrop=e=>{e.preventDefault();placeSetup(e.dataTransfer.getData('text/plain')||draggedPiece,n.id)}}board.appendChild(el)})
+  nodes.filter(n=>n.type!=='transit').forEach(n=>{let p=pos(n),el=document.createElement('button'),pc=pieceAt(n.id),setupTarget=phase==='setup'&&n.owner===0&&n.type!=='camp';el.className=`node ${n.type} ${n.rail?'rail':''} ${valid.includes(n.id)?'valid':''} ${selected?.node===n.id?'selected':''} ${setupTarget?'setup-target':''}`;el.style.cssText=`left:${p.x}%;top:${p.y}%`;el.dataset.id=n.id;if(pc){let hidden=pc.owner!==0&&!pc.reveal&&!(redSurrendered&&pc.owner===2);el.innerHTML=`<span class="piece ${colors[pc.owner]} ${hidden?'hidden-piece':''} ${largeFont&&!hidden?'large-label':''} ${pc.reveal?'flag-reveal':''} ${setupSelected===pc.id?'setup-selected':''}">${hidden?'':pieceLabel(pc.name)}</span>`;if(phase==='setup'&&pc.owner===0)bindSetupPiece(el.firstElementChild,pc)}else if(n.type==='camp')el.innerHTML='<span>营</span>';else if(n.type==='hq')el.textContent='本营';el.onclick=()=>clickNode(n.id);if(setupTarget){el.ondragover=e=>e.preventDefault();el.ondrop=e=>{e.preventDefault();placeSetup(e.dataTransfer.getData('text/plain')||draggedPiece,n.id)}}board.appendChild(el)})
   if(phase==='setup'){let tray=document.createElement('div');tray.className='setup-tray';tray.ondragover=e=>e.preventDefault();tray.ondrop=e=>{e.preventDefault();returnToTray(e.dataTransfer.getData('text/plain')||draggedPiece)};pieces.filter(p=>p.owner===0&&!p.node).forEach(p=>{let cell=document.createElement('div'),el=document.createElement('span');cell.className='tray-cell';el.className=`piece tray-piece red ${largeFont?'large-label':''} ${setupSelected===p.id?'setup-selected':''}`;el.textContent=pieceLabel(p.name);bindSetupPiece(el,p);cell.appendChild(el);tray.appendChild(cell)});board.appendChild(tray)}
 }
 function deployOwner(owner){
-  let slots=nodes.filter(n=>n.owner===owner&&n.type!=='camp'),hq=slots.filter(n=>n.type==='hq'),back=slots.filter(n=>n.row>=4),pool=[...names],flagNode=hq[Math.random()<.5?0:1];pieces.push({id:`${owner}-flag`,owner,name:'军旗',node:flagNode.id});pool.splice(pool.indexOf('军旗'),1);for(let i=0;i<3;i++){let opts=back.filter(n=>!pieceAt(n.id)),n=opts[Math.floor(Math.random()*opts.length)];pieces.push({id:`${owner}-mine${i}`,owner,name:'地雷',node:n.id});pool.splice(pool.indexOf('地雷'),1)}for(let i=0;i<2;i++){let opts=slots.filter(n=>!pieceAt(n.id)&&n.row!==0),n=opts[Math.floor(Math.random()*opts.length)];pieces.push({id:`${owner}-bomb${i}`,owner,name:'炸弹',node:n.id});pool.splice(pool.indexOf('炸弹'),1)}shuffle(pool).forEach((name,i)=>{let opts=slots.filter(n=>!pieceAt(n.id)),n=opts[Math.floor(Math.random()*opts.length)];pieces.push({id:`${owner}-p${i}`,owner,name,node:n.id})})
+  let slots=nodes.filter(n=>n.owner===owner&&n.type!=='camp'),hq=slots.filter(n=>n.type==='hq'),back=slots.filter(n=>n.row>=4),pool=[...names],place=(name,filter,id)=>{let opts=slots.filter(n=>!pieceAt(n.id)&&filter(n)),n=opts[Math.floor(Math.random()*opts.length)];pieces.push({id,owner,name,node:n.id});pool.splice(pool.indexOf(name),1)};
+  place('军旗',n=>n.type==='hq',`${owner}-flag`);
+  for(let i=0;i<3;i++)place('地雷',n=>n.row>=4,`${owner}-mine${i}`);
+  for(let i=0;i<2;i++)place('炸弹',n=>n.row!==0,`${owner}-bomb${i}`);
+  place('工兵',n=>n.row===0,`${owner}-engineer0`);
+  for(let i=1;i<3;i++)place('工兵',n=>n.row>=2,`${owner}-engineer${i}`);
+  shuffle([...pool]).forEach((name,i)=>place(name,()=>true,`${owner}-p${i}`));
 }
 function normalizeChaosHand(hand){
   let flags=hand.map((name,i)=>name==='军旗'?i:-1).filter(i=>i>=0);
@@ -83,6 +89,10 @@ function deployChaosOwner(owner,hand){
   place('军旗',n=>n.type==='hq',`${owner}-chaos-flag`);
   let mineCount=remaining.filter(x=>x==='地雷').length;for(let i=0;i<mineCount;i++)place('地雷',n=>n.row>=4,`${owner}-chaos-mine${i}`);
   let bombCount=remaining.filter(x=>x==='炸弹').length;for(let i=0;i<bombCount;i++)place('炸弹',n=>n.row!==0,`${owner}-chaos-bomb${i}`);
+  let engineerCount=remaining.filter(x=>x==='工兵').length;
+  if(engineerCount)place('工兵',n=>n.row===0,`${owner}-chaos-engineer0`);
+  for(let i=1;i<Math.min(engineerCount,3);i++)place('工兵',n=>n.row>=2,`${owner}-chaos-engineer${i}`);
+  for(let i=3;i<engineerCount;i++)place('工兵',n=>n.row!==0,`${owner}-chaos-engineer${i}`);
   shuffle([...remaining]).forEach((name,i)=>place(name,()=>true,`${owner}-chaos-${i}`));
 }
 function deploy(){
@@ -109,12 +119,50 @@ function commanderDeathSound(){if(!audioCtx)return;let now=audioCtx.currentTime,
 function clickNode(id){enableAudio();let p=pieceAt(id),n=nodes.find(x=>x.id===id);if(phase==='setup'){if(n.owner!==0||n.type==='camp')return;if(setupSelected)return placeSetup(setupSelected,id);if(p&&p.owner===0){setupSelected=p.id;draw()}return}if(over||turn!==0)return;if(selected&&valid.includes(id))return move(selected,id);if(p&&p.owner===0){selected=p;valid=legal(p);draw()}else{selected=null;valid=[];draw()}}
 function battle(a,d){if(a.name==='炸弹'||d.name==='炸弹')return 0;if(d.name==='地雷')return a.name==='工兵'?1:-1;if(d.name==='军旗')return 1;let x=rank[a.name],y=rank[d.name];return x===y?0:x>y?1:-1}
 function revealFlag(owner){let f=pieces.find(x=>x.owner===owner&&x.name==='军旗'&&!x.dead);if(f)f.reveal=true}
-function eliminateOwner(owner){pieces.filter(p=>p.owner===owner).forEach(p=>p.dead=true);aliveFlags[owner]=false;log(`🏳️ ${labels[owner]}军旗失守，全军退场`)}
+function activateRedObserver(){if(redSurrendered)return;redSurrendered=true;aiOrders={1:null,2:null,3:null};log('👁️ 红方退出战场：紫方棋子全部公开，三方电脑进入乱战模式')}
+function eliminateOwner(owner){pieces.filter(p=>p.owner===owner).forEach(p=>p.dead=true);aliveFlags[owner]=false;aiOrders[owner]=null;Object.keys(aiOrders).forEach(k=>{let order=aiOrders[k];if(order&&pieces.find(p=>p.id===order.targetId)?.owner===owner)aiOrders[k]=null});log(`🏳️ ${labels[owner]}军旗失守，全军退场`);if(owner===0&&phase==='play')activateRedObserver()}
 function movePath(p,id){return railRoutes(p).get(id)||[p.node,id]}
-function move(p,id){let d=pieceAt(id);if(d&&isAlly(p.owner,d.owner)){selected=null;valid=[];draw();return}lastTrail={owner:p.owner,path:movePath(p,id)};lastBattle=d?id:null;if(!d){moveSound();p.node=id}else{captureSound();if(d.owner===2&&p.owner!==2)purpleAttacked=true;let r=battle(p,d);if(p.owner===0)log(`你发起攻击：${r>0?'获胜':r<0?'失败':'双方同归于尽'}`);if(r>=0)d.dead=true;if(r<=0)p.dead=true;if(r>0)p.node=id;let flagOwner=d.name==='军旗'&&d.dead?d.owner:null;let commanderDied=(d.name==='司令'&&d.dead)||(p.name==='司令'&&p.dead);if(d.name==='司令'&&d.dead)revealFlag(d.owner);if(p.name==='司令'&&p.dead)revealFlag(p.owner);if(commanderDied)commanderDeathSound();if(flagOwner!==null){if(p.owner===0)log('🚩 你夺取了一面敌方军旗！');eliminateOwner(flagOwner)}}let landed=nodes.find(n=>n.id===p.node);if(difficulty==='hard'&&(p.owner===1||p.owner===3)&&!p.dead&&landed?.owner===0&&landed.row===4)hardRedBreach=true;if(p.owner===2){purpleSafeTurns=purpleAttacked?0:purpleSafeTurns+1;purpleAttacked=false}selected=null;valid=[];checkWin();nextTurn();draw()}
+function recordAiFailure(attacker,defender,node,result){
+  if(attacker.owner===0||result>=0||defender.dead||isAlly(attacker.owner,defender.owner))return;
+  let existing=aiOrders[attacker.owner],attackerRank=rank[attacker.name]||0;
+  if(existing?.targetId===defender.id){
+    if(existing.kind==='backline'&&existing.stage==='engineer'&&attacker.name==='工兵')existing.stage='bomb';
+    else if(existing.kind==='frontline'&&existing.stage==='max')existing.stage='bomb';
+    return;
+  }
+  if(attackerRank>=7&&node.row>=4)aiOrders[attacker.owner]={targetId:defender.id,kind:'backline',stage:'engineer'};
+  else if(attackerRank>=5&&node.row<=3)aiOrders[attacker.owner]={targetId:defender.id,kind:'frontline',stage:'max'};
+}
+function clearTargetOrders(targetId){Object.keys(aiOrders).forEach(k=>{if(aiOrders[k]?.targetId===targetId)aiOrders[k]=null})}
+function move(p,id){let d=pieceAt(id);if(d&&isAlly(p.owner,d.owner)){selected=null;valid=[];draw();return}lastTrail={owner:p.owner,path:movePath(p,id)};lastBattle=d?id:null;if(!d){moveSound();p.node=id}else{captureSound();if(d.owner===2&&p.owner!==2)purpleAttacked=true;let battleNode=nodes.find(n=>n.id===id),r=battle(p,d);if(p.owner===0)log(`你发起攻击：${r>0?'获胜':r<0?'失败':'双方同归于尽'}`);if(r>=0)d.dead=true;if(r<=0)p.dead=true;if(r>0)p.node=id;recordAiFailure(p,d,battleNode,r);if(d.dead)clearTargetOrders(d.id);let flagOwner=d.name==='军旗'&&d.dead?d.owner:null;let commanderDied=(d.name==='司令'&&d.dead)||(p.name==='司令'&&p.dead);if(d.name==='司令'&&d.dead)revealFlag(d.owner);if(p.name==='司令'&&p.dead)revealFlag(p.owner);if(commanderDied)commanderDeathSound();if(flagOwner!==null){if(p.owner===0)log('🚩 你夺取了一面敌方军旗！');eliminateOwner(flagOwner)}}let landed=nodes.find(n=>n.id===p.node);if(difficulty==='hard'&&(p.owner===1||p.owner===3)&&!p.dead&&landed?.owner===0&&landed.row===4)hardRedBreach=true;if(p.owner===2){purpleSafeTurns=purpleAttacked?0:purpleSafeTurns+1;purpleAttacked=false}selected=null;valid=[];checkWin();nextTurn();draw()}
 function teamOf(o){return o%2} function checkWin(){if(!aliveFlags[1]&&!aliveFlags[3])finish(true);if(!aliveFlags[0]&&!aliveFlags[2])finish(false)}
 function hasMove(owner){return pieces.some(p=>p.owner===owner&&!p.dead&&legal(p).length)}
-function nextTurn(){if(over)return;do{turn=(turn+1)%4}while(!aliveFlags[turn]);if(!hasMove(turn)){log(`⛔ ${labels[turn]}无子可走，军旗视为被俘`);eliminateOwner(turn);checkWin();if(!over)return nextTurn();return draw()}$('#turnText').textContent=turn===0?'红方行动':'电脑思考中…';if(turn!==0)setTimeout(ai,2000)}
+function nextTurn(){if(over)return;do{turn=(turn+1)%4}while(!aliveFlags[turn]);if(!hasMove(turn)){log(`⛔ ${labels[turn]}无子可走，军旗视为被俘`);eliminateOwner(turn);checkWin();if(!over)return nextTurn();return draw()}$('#turnText').textContent=turn===0?'红方行动':redSurrendered?'红方观战中 · 电脑思考…':'电脑思考中…';if(turn!==0)aiTimer=setTimeout(ai,2000)}
+function normalizeAiOrder(owner,allMoves){
+  let order=aiOrders[owner];if(!order)return null;
+  let target=pieces.find(p=>p.id===order.targetId&&!p.dead);if(!target||isAlly(owner,target.owner)){aiOrders[owner]=null;return null}
+  let available=name=>allMoves.some(m=>m.p.name===name);
+  if(order.kind==='backline'){
+    if(order.stage==='engineer'&&!available('工兵'))order.stage=available('炸弹')?'bomb':'avoid';
+    if(order.stage==='bomb'&&!available('炸弹'))order.stage='avoid';
+  }else{
+    if(order.stage==='max'){
+      let ranked=allMoves.filter(m=>rank[m.p.name]).sort((a,b)=>rank[b.p.name]-rank[a.p.name]);
+      if(ranked.length)order.maxPieceId=ranked[0].p.id;else order.stage=available('炸弹')?'bomb':'avoid';
+    }
+    if(order.stage==='bomb'&&!available('炸弹'))order.stage='avoid';
+  }
+  return order;
+}
+function orderScore(move,order){
+  if(!order)return 0;let target=pieces.find(p=>p.id===order.targetId&&!p.dead);if(!target)return 0;
+  let targetNode=nodes.find(n=>n.id===target.node),dest=nodes.find(n=>n.id===move.id),distance=Math.abs(dest.x-targetNode.x)+Math.abs(dest.y-targetNode.y),required=order.stage==='engineer'?'工兵':order.stage==='bomb'?'炸弹':null,score=0;
+  if(order.stage==='avoid'){if(move.id===target.node)return-20000;score-=Math.max(0,18-distance)*25;if(order.kind==='frontline'&&dest.type==='camp'&&dest.owner===move.p.owner&&!pieceAt(dest.id))score+=1400;return score}
+  let correct=order.stage==='max'?move.p.id===order.maxPieceId:move.p.name===required;
+  score+=correct?(60-distance)*70:-3600;
+  if(correct&&move.id===target.node)score+=18000;
+  return score;
+}
 function aiScore(move, omniscient=false) {
   let target = pieceAt(move.id);
   let dest = nodes.find(n => n.id === move.id);
@@ -187,6 +235,9 @@ function aiScore(move, omniscient=false) {
       const d = Math.abs(dest.x - mNode.x) + Math.abs(dest.y - mNode.y);
       if (d <= 4) score += 12;
     }
+    const engineers=pieces.filter(p=>p.owner===self&&p.name==='工兵'&&!p.dead).length;
+    const ordered=aiOrders[self]?.stage==='engineer';
+    if(engineers<=2&&!ordered&&(target||dest.owner!==self))score-=850;
   }
 
   // 4. 炸弹策略：不浪费，专盯敌方大官
@@ -239,9 +290,9 @@ function aiScore(move, omniscient=false) {
 
 function hardScore(move){
   let score=aiScore(move,turn===1||turn===3),target=pieceAt(move.id),dest=nodes.find(n=>n.id===move.id),ally=turn===1?3:1;
-  if((turn===1||turn===3)&&target?.owner===0){let result=battle(move.p,target);score+=result>0?320:result===0?90:-260;if(target.name==='炸弹'&&move.p.name!=='工兵')score-=180}
-  if(turn===1||turn===3){let redFlag=pieces.find(p=>p.owner===0&&p.name==='军旗'&&!p.dead),allyPieces=pieces.filter(p=>p.owner===ally&&!p.dead);if(redFlag){let f=nodes.find(n=>n.id===redFlag.node),d=Math.abs(dest.x-f.x)+Math.abs(dest.y-f.y);score+=(35-d)*5}let support=Math.min(...allyPieces.map(p=>{let n=nodes.find(x=>x.id===p.node);return Math.abs(n.x-dest.x)+Math.abs(n.y-dest.y)}));if(support<=7)score+=(8-support)*12}
-  if(turn===1||turn===3){
+  if(!redSurrendered&&(turn===1||turn===3)&&target?.owner===0){let result=battle(move.p,target);score+=result>0?320:result===0?90:-260;if(target.name==='炸弹'&&move.p.name!=='工兵')score-=180}
+  if(!redSurrendered&&(turn===1||turn===3)){let redFlag=pieces.find(p=>p.owner===0&&p.name==='军旗'&&!p.dead),allyPieces=pieces.filter(p=>p.owner===ally&&!p.dead);if(redFlag){let f=nodes.find(n=>n.id===redFlag.node),d=Math.abs(dest.x-f.x)+Math.abs(dest.y-f.y);score+=(35-d)*5}let support=Math.min(...allyPieces.map(p=>{let n=nodes.find(x=>x.id===p.node);return Math.abs(n.x-dest.x)+Math.abs(n.y-dest.y)}));if(support<=7)score+=(8-support)*12}
+  if((turn===1||turn===3)&&!redSurrendered){
     let redBack=nodes.filter(n=>n.owner===0&&n.row===4),redFlag=pieces.find(p=>p.owner===0&&p.name==='军旗'&&!p.dead),flagNode=redFlag&&nodes.find(n=>n.id===redFlag.node);
     if(!hardRedBreach){
       let breachDistance=Math.min(...redBack.map(n=>Math.abs(dest.x-n.x)+Math.abs(dest.y-n.y)));
@@ -271,6 +322,11 @@ function backInvaders(owner){
 }
 function strategyScore(move){
   let dest=nodes.find(n=>n.id===move.id),target=pieceAt(move.id),score=0;
+  if(redSurrendered){
+    if(turn===1||turn===3){score+=(38-distanceToOwner(dest,2))*18;if(target?.owner===2)score+=1600;if(dest.owner===2)score+=500}
+    if(turn===2){let targets=[1,3],nearest=Math.min(...targets.map(owner=>distanceToOwner(dest,owner)));score+=(38-nearest)*16;if(target&&(target.owner===1||target.owner===3))score+=1500}
+    return score;
+  }
   if(turn===2){
     let alive=pieces.filter(p=>p.owner===2&&!p.dead).length;
     let emptyCamps=nodes.filter(n=>n.owner===2&&n.type==='camp'&&!pieceAt(n.id));
@@ -343,14 +399,15 @@ function ai() {
     return draw();
   }
 
+  const activeOrder=normalizeAiOrder(turn,allMoves);
   if(difficulty==='easy'){
-    allMoves.forEach(m=>m.score=strategyScore(m)+Math.random()*180);
+    allMoves.forEach(m=>m.score=strategyScore(m)+orderScore(m,activeOrder)+Math.random()*180);
     allMoves.sort((a,b)=>b.score-a.score);
     let pool=allMoves.slice(0,Math.min(5,allMoves.length)),randomMove=pool[Math.floor(Math.random()*pool.length)];
     return move(randomMove.p,randomMove.id);
   }
   // 一般难度使用暗棋策略；困难难度的蓝绿可读取玩家棋子并协同。
-  allMoves.forEach(m => m.score = (difficulty==='hard'?hardScore(m):aiScore(m))+strategyScore(m)*(difficulty==='hard'?1.35:1));
+  allMoves.forEach(m => m.score = (difficulty==='hard'?hardScore(m):aiScore(m))+strategyScore(m)*(difficulty==='hard'?1.35:1)+orderScore(m,activeOrder));
   allMoves.sort((a, b) => b.score - a.score);
   const bestMove = allMoves[0];
   move(bestMove.p, bestMove.id);
@@ -359,7 +416,8 @@ function log(t){let el=document.createElement('div');el.textContent=t;$('#log').
 function getCoins(){let value=parseInt(localStorage.getItem('cloudCoins')||'1000',10);return Number.isFinite(value)?Math.max(0,value):1000}
 function setCoins(value){value=Math.max(0,value);localStorage.setItem('cloudCoins',String(value));$('#coinCount').textContent=value;return value}
 function finish(win){over=true;let delta=win?300:-200,balance=getCoins();if(!settled){balance=setCoins(balance+delta);settled=true}$('#resultTitle').textContent=win?'红紫联盟获胜！':'蓝绿联盟获胜';$('#resultText').textContent=`${win?'获得 300':'失去 200'} 金币，当前余额 ${balance} 金币。`;$('#result').classList.add('show')}
-function surrender(){if(over)return;if(!confirm('确定投降吗？本局将立即失败并扣除 200 金币。'))return;eliminateOwner(0);draw();finish(false)}
-function start(){buildMap();deploy();phase='setup';turn=0;selected=null;setupSelected=null;lastTrail=null;lastBattle=null;purpleSafeTurns=0;purpleAttacked=false;hardRedBreach=false;valid=[];aliveFlags=[true,true,true,true];over=false;settled=false;setCoins(getCoins());document.title=chaosMode?'云上乱战四国':'云上四国军棋';$('#gameTitle').textContent=chaosMode?'云上乱战四国 · 随机分兵':'云上四国军棋 · 暗棋模式';$('#result').classList.remove('show');$('#setupActions').classList.remove('hidden');$('#difficulty').classList.remove('hidden');updateDifficulty();$('#log').innerHTML='';log(chaosMode?'100枚棋子已随机分给四家；请查看红方所得25枚棋子并完成布阵。':'请选择电脑难度并完成布阵。');$('#rules').textContent=chaosMode?'乱战规则：100枚棋子随机四等分；多余军旗异化为军长，无军旗则最小棋子异化为军旗；超过9枚的地雷异化为团长。其余规则与四国军棋一致。':'侧边铁路：本方侧边前五点与邻家侧边前五点连续相通，遇到棋子立即停止；普通棋子不能转入邻家第一排，工兵可在铁路交叉点转向。';draw();updateSetupText()}
+function surrender(){if(over||redSurrendered)return;if(!confirm('确定投降吗？将扣除200金币并转为观战，紫方棋子会对你公开。'))return;clearTimeout(aiTimer);eliminateOwner(0);if(!settled){setCoins(getCoins()-200);settled=true}log('红方已主动投降，蓝绿将进攻紫方，紫方将同时反击蓝绿');$('#turnText').textContent='红方观战中';draw();checkWin();if(!over){turn=0;nextTurn()}}
+function endGame(){if(over)return;if(!confirm('确定结束当前游戏吗？'))return;clearTimeout(aiTimer);over=true;$('#resultTitle').textContent='游戏已结束';$('#resultText').textContent=settled?'本局金币已结算。':'本局主动结束，不结算金币。';$('#result').classList.add('show')}
+function start(){clearTimeout(aiTimer);buildMap();deploy();phase='setup';turn=0;selected=null;setupSelected=null;lastTrail=null;lastBattle=null;purpleSafeTurns=0;purpleAttacked=false;hardRedBreach=false;redSurrendered=false;aiOrders={1:null,2:null,3:null};valid=[];aliveFlags=[true,true,true,true];over=false;settled=false;setCoins(getCoins());document.title=chaosMode?'云上乱战四国':'云上四国军棋';$('#gameTitle').textContent=chaosMode?'云上乱战四国 · 随机分兵':'云上四国军棋 · 暗棋模式';$('#result').classList.remove('show');$('#setupActions').classList.remove('hidden');$('#difficulty').classList.remove('hidden');updateDifficulty();$('#log').innerHTML='';log(chaosMode?'100枚棋子已随机分给四家；请查看红方所得25枚棋子并完成布阵。':'请选择电脑难度并完成布阵。');$('#rules').textContent=chaosMode?'乱战规则：100枚棋子随机四等分；多余军旗异化为军长，无军旗则最小棋子异化为军旗；超过9枚的地雷异化为团长。其余规则与四国军棋一致。':'侧边铁路：本方侧边前五点与邻家侧边前五点连续相通，遇到棋子立即停止；普通棋子不能转入邻家第一排，工兵可在铁路交叉点转向。';draw();updateSetupText()}
 document.querySelectorAll('#difficulty button').forEach(b=>b.onclick=()=>{if(phase!=='setup')return;difficulty=b.dataset.level;localStorage.setItem('armyDifficulty',difficulty);updateDifficulty()});$('#quickSetup').onclick=quickSetup;$('#confirmSetup').onclick=confirmSetup;$('#restart').onclick=start;$('#rulesBtn').onclick=()=>alert(chaosMode?'乱战四国：标准100枚棋子彻底洗牌，四家各得25枚。每方保留第一面军旗，多出的军旗按军长使用；没有军旗的一方由最小棋子异化为军旗；超过9枚的地雷异化为团长。布阵、联盟、走棋、淘汰及胜负规则与四国军棋一致。':'紫方：15枚以上猛攻绿方，10—15枚收缩护旗，少于10枚猛攻蓝方。蓝绿优先合作进攻紫方；任一方后两排被红紫入侵时，立即转入防守并优先清除入侵棋子。困难模式下蓝绿可识别玩家棋子并选择最优应对。');$('#landscape').onclick=async()=>{try{await document.documentElement.requestFullscreen?.();await screen.orientation?.lock?.('landscape')}catch(e){alert('请关闭竖屏锁定并横置手机')}};start();
 </script></body></html>
