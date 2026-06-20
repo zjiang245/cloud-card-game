@@ -24,6 +24,26 @@
     /* ==================== 4. 右侧信息栏与结算弹窗 ==================== */
     aside{padding:15px;border:1px solid #9f783e55;border-radius:12px;background:#090f0cbb;overflow:auto}.turn{font:700 18px "KaiTi",serif;color:#ffe09a}.coin-box{margin:8px 0;padding:8px 11px;border:1px solid #d4a95755;border-radius:9px;background:#20170c;color:#ffd77e;font-weight:800}.teams{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:12px 0}.team{padding:8px;border-radius:7px;background:#ffffff09;font-size:12px}.log{height:240px;overflow:auto;padding:9px;border-radius:8px;background:#0005;font-size:12px;line-height:1.7}.rules{font-size:12px;color:#b9c4ba;line-height:1.65}.result,.intro-modal,.formation-modal{position:fixed;z-index:20;inset:0;display:none;place-items:center;background:#000b}.result.show,.intro-modal.show,.formation-modal.show{display:grid}.result>div,.intro-card,.formation-card{width:min(430px,90vw);max-height:82vh;overflow:auto;padding:24px 28px;border:1px solid #d1a654;border-radius:14px;background:#180f0c;text-align:center;box-shadow:0 18px 50px #000b}.result button,.intro-card button,.formation-card button{padding:9px 16px;border:0;border-radius:18px;background:#d19a45;font-weight:700;cursor:pointer}.intro-card h2,.formation-card h2{margin:0 0 14px;color:#ffe2a0}.intro-list{display:grid;gap:8px;margin-bottom:16px;text-align:left}.intro-list div{padding:8px 12px;border-radius:8px;background:#ffffff0c}.intro-list b{display:inline-block;width:48px;color:#ffd36f}.formation-save{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:14px}.formation-save input{min-width:0;padding:10px 12px;border:1px solid #a9844d;border-radius:10px;background:#0d1712;color:#fff;font-size:16px}.formation-list{display:grid;gap:8px;text-align:left}.formation-empty{padding:18px;color:#bcae90}.formation-row{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;padding:8px;border:1px solid #795c35;border-radius:9px;background:#ffffff08}.formation-row span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.formation-row .load-one{background:#68a8ca;color:#102638}.formation-row .delete-one{background:#8e332d;color:#fff}.formation-close{margin-top:14px;background:#5d574c!important;color:#fff}
 
+    /* 乱战四国使用冷色夜战主题，与标准模式的沙金棋盘明显区分。 */
+    body.chaos-mode{color:#e9efff;background:#08091b}
+    body.chaos-mode main{background:radial-gradient(circle at center,#354064,#151b38 58%,#07091a)}
+    body.chaos-mode header{background:#090b22e8;border-bottom-color:#8fa9ff55}
+    body.chaos-mode header a,body.chaos-mode .title{color:#dbe4ff}
+    body.chaos-mode .tools button{border-color:#718bd0;background:#151d43;color:#e7ecff}
+    body.chaos-mode .board{background:#8391aa;border-color:#252c52;box-shadow:0 18px 50px #000c,inset 0 0 42px #263258}
+    body.chaos-mode .board:before,body.chaos-mode .board:after{background:#46557f55}
+    body.chaos-mode .road{background:#46506a}
+    body.chaos-mode .road.rail,body.chaos-mode .road.corner-rail{background:#151a31;box-shadow:0 2px 0 #a7b7dc}
+    body.chaos-mode .node{border-color:#3c4663;background:#d5dcef;color:#18203d}
+    body.chaos-mode .node.rail{border-color:#29334f}
+    body.chaos-mode .node.camp{border-color:#5969a8;background:#c9d0ec}
+    body.chaos-mode .node.hq{background:#b7c2e5}
+    body.chaos-mode .node.setup-target{border-color:#ff7b8f}
+    body.chaos-mode aside{border-color:#7f94d755;background:#080b20d9}
+    body.chaos-mode .coin-box{border-color:#8ba7ef66;background:#11183b;color:#dce7ff}
+    body.chaos-mode .turn{color:#cad8ff}
+    body.chaos-mode .rules{color:#b8c5e8}
+
     /* ==================== 5. 手机竖屏与手机横屏适配 ==================== */
     @media(max-width:800px){body{overflow:auto}main{height:auto;min-height:100dvh;grid-template-rows:auto 1fr}header{min-height:82px;flex-wrap:wrap;padding:8px}.title{font-size:18px}.layout{display:flex;flex-direction:column;padding:5px}.board{width:min(96vw,76vh)}.piece.large-label{font-size:clamp(9px,2.8vw,14px);line-height:1}.tray-piece.large-label{font-size:clamp(8px,2.5vw,12px)}aside{width:96vw;margin:auto}.log{height:110px}.tools{overflow-x:auto}.tools button{flex:0 0 auto;font-size:11px}.font-toggle{right:2%;top:2%;width:25%;height:10%;font-size:clamp(10px,3.3vw,16px);border-width:3px}.cheat-panel{right:2%;top:13%;width:37%;padding:6px 7px;border-width:3px}.cheat-panel h3,.marker-panel h3{font-size:clamp(11px,3.2vw,16px)}.cheat-panel label{font-size:clamp(9px,2.7vw,13px);padding:3px 0}.marker-panel{left:2%;top:2%;width:43%;min-height:0;padding:7px 8px;border-width:3px}.marker-panel p{font-size:clamp(8px,2.4vw,11px);margin:3px 0 5px}.marker-panel select,.marker-panel button{padding:5px 4px;margin-top:4px;font-size:clamp(9px,2.6vw,12px)}.marker-panel.collapsed,.cheat-panel.collapsed{width:auto;min-width:25%;padding:4px 7px}.marker-panel.collapsed .panel-body,.cheat-panel.collapsed .panel-body{display:none}.panel-toggle{width:100%;padding:3px 4px!important;margin:0!important;border:0!important;background:transparent!important;color:inherit!important;text-align:left}.board-actions{right:2%;width:27%}}
     @media(orientation:landscape) and (max-height:600px){main{height:100dvh;grid-template-rows:45px 1fr}header{min-height:45px}.layout{display:grid;grid-template-columns:1fr 210px}.board{width:min(82vh,70vw)}aside{width:auto;padding:8px}.log{height:105px}.rules{font-size:10px}.title{font-size:16px}}
@@ -67,7 +87,7 @@
 const names=['司令','军长','师长','师长','旅长','旅长','团长','团长','营长','营长','连长','连长','连长','排长','排长','排长','工兵','工兵','工兵','炸弹','炸弹','地雷','地雷','地雷','军旗'];
 
 // 普通棋子的比较等级；炸弹、地雷和军旗在 battle() 中单独处理。
-const rank={'元帅':10,'司令':9,'军长':8,'师长':7,'旅长':6,'团长':5,'营长':4,'连长':3,'排长':2,'工兵':1}, colors=['red','blue','purple','green'], labels=['红方','蓝方','紫方','绿方'];
+const rank={'堡垒':11,'元帅':10,'司令':9,'军长':8,'师长':7,'旅长':6,'团长':5,'营长':4,'导弹':4,'连长':3,'排长':2,'工兵':1}, colors=['red','blue','purple','green'], labels=['红方','蓝方','紫方','绿方'];
 
 // URL 带 ?mode=chaos 时启用“乱战随机分兵”模式。
 const chaosMode=new URLSearchParams(location.search).get('mode')==='chaos';
@@ -76,13 +96,13 @@ const chaosMode=new URLSearchParams(location.search).get('mode')==='chaos';
    turn：当前行动方；phase：setup 布阵 / play 对局；
    selected、valid：玩家当前选中的棋子和可走目标；
    aliveFlags：四方是否仍在场；aiOrders：三方电脑记住的特殊追击任务。 */
-let nodes=[],edges=[],pieces=[],turn=0,selected=null,valid=[],aliveFlags=[true,true,true,true],over=false,phase='setup',setupSelected=null,draggedPiece=null,lastTrail=null,lastBattle=null,settled=false,purpleSafeTurns=0,purpleAttacked=false,hardRedBreach=false,redSurrendered=false,aiTimer=null,aiOrders={1:null,2:null,3:null},cheats={platoonToCommander:false,companyToBomb:false,marshal:false},marshalFallen=false,markingEnabled=false,markGuess='司令',markerPanelOpen=true,cheatPanelOpen=true;
+let nodes=[],edges=[],pieces=[],turn=0,selected=null,valid=[],aliveFlags=[true,true,true,true],over=false,phase='setup',setupSelected=null,draggedPiece=null,lastTrail=null,lastBattle=null,settled=false,purpleSafeTurns=0,purpleAttacked=false,hardRedBreach=false,redSurrendered=false,aiTimer=null,aiOrders={1:null,2:null,3:null},cheats={platoonToCommander:false,companyToBomb:false,marshal:false,missile:false,fortress:false},marshalFallen=false,markingEnabled=false,markGuess='司令',markerPanelOpen=true,cheatPanelOpen=true;
 
 // 常用 DOM、难度设置和“大字体单字显示”配置。
 const $=s=>document.querySelector(s),board=$('#board');
 let difficulty=localStorage.getItem('armyDifficulty')||'easy';
 if(!['easy','normal','hard','hell'].includes(difficulty))difficulty='easy';
-const shortName={'元帅':'帅','司令':'司','军长':'军','师长':'师','旅长':'旅','团长':'团','营长':'营','连长':'连','排长':'排','工兵':'兵','炸弹':'弹','地雷':'雷','军旗':'旗'};
+const shortName={'堡垒':'堡','元帅':'帅','司令':'司','军长':'军','师长':'师','旅长':'旅','团长':'团','营长':'营','导弹':'导','连长':'连','排长':'排','工兵':'兵','炸弹':'弹','地雷':'雷','军旗':'旗'};
 let largeFont=localStorage.getItem('armyLargeFont')==='1';
 
 // 根据字体模式返回“司令”或“司”这样的显示文字。
@@ -137,6 +157,9 @@ function buildMap(){
 // 将逻辑坐标换成棋盘中的百分比位置；pieceAt() 返回指定格点上的存活棋子。
 function pos(n){return{x:n.x/16*96+2,y:n.y/16*96+2}} function pieceAt(id){return pieces.find(p=>p.node===id&&!p.dead)}
 
+// 标准25枚棋子只能进入普通布阵格；开启额外棋子后，红方五个行营也成为布阵目标。
+function canSetupOnNode(n){return!!n&&n.owner===0&&(n.type!=='camp'||pieces.filter(p=>p.owner===0&&!p.dead).length>25)}
+
 // 给布阵棋子绑定点击互换和拖动事件。
 function bindSetupPiece(el,p){el.draggable=true;el.dataset.pieceId=p.id;el.onclick=e=>{e.stopPropagation();if(setupSelected&&setupSelected!==p.id&&p.node)return placeSetup(setupSelected,p.node);setupSelected=setupSelected===p.id?null:p.id;draw()};el.ondragstart=e=>{draggedPiece=p.id;e.dataTransfer.setData('text/plain',p.id)}}
 
@@ -149,12 +172,12 @@ function bindSetupPiece(el,p){el.draggable=true;el.dataset.pieceId=p.id;el.oncli
 function draw(){
   board.innerHTML='';for(let [a,b,t] of edges){let A=pos(nodes.find(n=>n.id===a)),B=pos(nodes.find(n=>n.id===b)),dx=B.x-A.x,dy=B.y-A.y,l=Math.hypot(dx,dy),el=document.createElement('i');el.className=`road ${t}`;el.style.cssText=`left:${A.x}%;top:${A.y}%;width:${l}%;transform:rotate(${Math.atan2(dy,dx)*180/Math.PI}deg)`;board.appendChild(el)}
   let fontButton=document.createElement('button');fontButton.className=`font-toggle ${largeFont?'active':''}`;fontButton.textContent=largeFont?'标准字体':'放大字体';fontButton.onclick=()=>{largeFont=!largeFont;localStorage.setItem('armyLargeFont',largeFont?'1':'0');draw()};board.appendChild(fontButton);
-  if(!chaosMode&&!over){let panel=document.createElement('div');panel.className=`cheat-panel ${cheatPanelOpen?'':'collapsed'}`;panel.innerHTML=`<button class="panel-toggle"><h3>⚠ 作弊器 ${cheatPanelOpen?'▲':'▼'}</h3></button><div class="panel-body"><label><input type="checkbox" data-cheat="platoonToCommander" ${cheats.platoonToCommander?'checked':''}>排长变司令</label><label><input type="checkbox" data-cheat="companyToBomb" ${cheats.companyToBomb?'checked':''}>连长变炸弹</label><label><input type="checkbox" data-cheat="marshal" ${cheats.marshal?'checked':''}>增加元帅</label></div>`;panel.querySelector('.panel-toggle').onclick=()=>{cheatPanelOpen=!cheatPanelOpen;draw()};panel.querySelectorAll('input').forEach(input=>input.onchange=()=>toggleCheat(input.dataset.cheat,input.checked));board.appendChild(panel)}
+  if(!chaosMode&&!over){let panel=document.createElement('div');panel.className=`cheat-panel ${cheatPanelOpen?'':'collapsed'}`;panel.innerHTML=`<button class="panel-toggle"><h3>⚠ 作弊器 ${cheatPanelOpen?'▲':'▼'}</h3></button><div class="panel-body"><label><input type="checkbox" data-cheat="platoonToCommander" ${cheats.platoonToCommander?'checked':''}>排长变司令</label><label><input type="checkbox" data-cheat="companyToBomb" ${cheats.companyToBomb?'checked':''}>连长变炸弹</label><label><input type="checkbox" data-cheat="marshal" ${cheats.marshal?'checked':''}>增加元帅</label><label><input type="checkbox" data-cheat="missile" ${cheats.missile?'checked':''}>增加导弹</label><label><input type="checkbox" data-cheat="fortress" ${cheats.fortress?'checked':''}>增加堡垒</label></div>`;panel.querySelector('.panel-toggle').onclick=()=>{cheatPanelOpen=!cheatPanelOpen;draw()};panel.querySelectorAll('input').forEach(input=>input.onchange=()=>toggleCheat(input.dataset.cheat,input.checked));board.appendChild(panel)}
   if(!over){let marker=document.createElement('div'),options=['司令','军长','师长','旅长','团长','营长','连长','排长','工兵','炸弹','地雷','军旗'];marker.className=`marker-panel ${markerPanelOpen?'':'collapsed'}`;marker.innerHTML=`<button class="panel-toggle"><h3>🏷 标记器 ${markerPanelOpen?'▲':'▼'}</h3></button><div class="panel-body"><p>选棋种并开启，再点击敌方棋子；标记会跟随移动。</p><select>${options.map(name=>`<option ${markGuess===name?'selected':''}>${name}</option>`).join('')}</select><button class="${markingEnabled?'active':''}">${markingEnabled?'标记模式：开启':'开启标记模式'}</button><button class="clear-marks">清除全部标记</button></div>`;marker.querySelector('.panel-toggle').onclick=()=>{markerPanelOpen=!markerPanelOpen;draw()};let select=marker.querySelector('select'),buttons=marker.querySelectorAll('.panel-body button');select.onchange=()=>markGuess=select.value;buttons[0].onclick=()=>{markingEnabled=!markingEnabled;if(window.innerWidth<=800)markerPanelOpen=false;draw()};buttons[1].onclick=()=>{pieces.forEach(p=>delete p.mark);draw();log('🏷 已清除全部棋子标记')};board.appendChild(marker)}
   if(phase==='play'&&!over){let actions=document.createElement('div'),endButton=document.createElement('button');actions.className='board-actions';endButton.textContent='结束游戏';endButton.onclick=endGame;actions.appendChild(endButton);if(!redSurrendered){let surrenderButton=document.createElement('button');surrenderButton.className='surrender';surrenderButton.textContent='投降';surrenderButton.onclick=surrender;actions.appendChild(surrenderButton)}let skipButton=document.createElement('button');skipButton.className='skip-turn';skipButton.textContent='跳过回合';skipButton.disabled=turn!==0||!aliveFlags[0];skipButton.onclick=skipTurn;actions.appendChild(skipButton);board.appendChild(actions)}
   if(lastTrail){lastTrail.path.slice(0,-1).forEach((id,i)=>{let n=nodes.find(x=>x.id===id),next=nodes.find(x=>x.id===lastTrail.path[i+1]);if(!n||!next)return;let at=pos(n),angle=Math.atan2(next.y-n.y,next.x-n.x)*180/Math.PI,el=document.createElement('span');el.className=`trail-arrow ${i===0?'start':''}`;el.textContent='➤';el.style.cssText=`left:${at.x}%;top:${at.y}%;transform:translate(-50%,-50%) rotate(${angle}deg);color:${['#8e211a','#173f8a','#603080','#17613a'][lastTrail.owner]}`;board.appendChild(el)});if(lastBattle){let n=nodes.find(x=>x.id===lastBattle);if(n){let at=pos(n),el=document.createElement('span');el.className='battle-flash';el.style.cssText=`left:${at.x}%;top:${at.y}%`;board.appendChild(el)}}}
-  nodes.filter(n=>n.type!=='transit').forEach(n=>{let p=pos(n),el=document.createElement('button'),pc=pieceAt(n.id),setupTarget=phase==='setup'&&n.owner===0&&n.type!=='camp';el.className=`node ${n.type} ${n.rail?'rail':''} ${valid.includes(n.id)?'valid':''} ${selected?.node===n.id?'selected':''} ${setupTarget?'setup-target':''}`;el.style.cssText=`left:${p.x}%;top:${p.y}%`;el.dataset.id=n.id;if(pc){let hidden=pc.owner!==0&&!pc.reveal&&!(redSurrendered&&pc.owner===2),mark=pc.mark?`<i class="piece-mark">${shortName[pc.mark]||pc.mark}</i>`:'';el.innerHTML=`<span class="piece ${colors[pc.owner]} ${pc.name==='元帅'?'marshal':''} ${hidden?'hidden-piece':''} ${largeFont&&!hidden?'large-label':''} ${pc.reveal?'flag-reveal':''} ${setupSelected===pc.id?'setup-selected':''}">${hidden?'':pieceLabel(pc.name)}${mark}</span>`;if(phase==='setup'&&pc.owner===0)bindSetupPiece(el.firstElementChild,pc)}else if(n.type==='camp')el.innerHTML='<span>营</span>';else if(n.type==='hq')el.textContent='本营';el.onclick=()=>clickNode(n.id);if(setupTarget){el.ondragover=e=>e.preventDefault();el.ondrop=e=>{e.preventDefault();placeSetup(e.dataTransfer.getData('text/plain')||draggedPiece,n.id)}}board.appendChild(el)})
-  if(phase==='setup'){let tray=document.createElement('div');tray.className='setup-tray';tray.ondragover=e=>e.preventDefault();tray.ondrop=e=>{e.preventDefault();returnToTray(e.dataTransfer.getData('text/plain')||draggedPiece)};pieces.filter(p=>p.owner===0&&!p.node).forEach(p=>{let cell=document.createElement('div'),el=document.createElement('span');cell.className='tray-cell';el.className=`piece tray-piece red ${largeFont?'large-label':''} ${setupSelected===p.id?'setup-selected':''}`;el.textContent=pieceLabel(p.name);bindSetupPiece(el,p);cell.appendChild(el);tray.appendChild(cell)});board.appendChild(tray)}
+  nodes.filter(n=>n.type!=='transit').forEach(n=>{let p=pos(n),el=document.createElement('button'),pc=pieceAt(n.id),setupTarget=phase==='setup'&&canSetupOnNode(n);el.className=`node ${n.type} ${n.rail?'rail':''} ${valid.includes(n.id)?'valid':''} ${selected?.node===n.id?'selected':''} ${setupTarget?'setup-target':''}`;el.style.cssText=`left:${p.x}%;top:${p.y}%`;el.dataset.id=n.id;if(pc){let hidden=pc.owner!==0&&!pc.reveal&&!(redSurrendered&&pc.owner===2),mark=pc.mark?`<i class="piece-mark">${shortName[pc.mark]||pc.mark}</i>`:'';el.innerHTML=`<span class="piece ${colors[pc.owner]} ${['元帅','导弹','堡垒'].includes(pc.name)?'marshal':''} ${hidden?'hidden-piece':''} ${largeFont&&!hidden?'large-label':''} ${pc.reveal?'flag-reveal':''} ${setupSelected===pc.id?'setup-selected':''}">${hidden?'':pieceLabel(pc.name)}${mark}</span>`;if(phase==='setup'&&pc.owner===0)bindSetupPiece(el.firstElementChild,pc)}else if(n.type==='camp')el.innerHTML='<span>营</span>';else if(n.type==='hq')el.textContent='本营';el.onclick=()=>clickNode(n.id);if(setupTarget){el.ondragover=e=>e.preventDefault();el.ondrop=e=>{e.preventDefault();placeSetup(e.dataTransfer.getData('text/plain')||draggedPiece,n.id)}}board.appendChild(el)})
+  if(phase==='setup'){let tray=document.createElement('div');tray.className='setup-tray';tray.ondragover=e=>e.preventDefault();tray.ondrop=e=>{e.preventDefault();returnToTray(e.dataTransfer.getData('text/plain')||draggedPiece)};pieces.filter(p=>p.owner===0&&!p.node).forEach(p=>{let cell=document.createElement('div'),el=document.createElement('span');cell.className='tray-cell';el.className=`piece tray-piece red ${['元帅','导弹','堡垒'].includes(p.name)?'marshal':''} ${largeFont?'large-label':''} ${setupSelected===p.id?'setup-selected':''}`;el.textContent=pieceLabel(p.name);bindSetupPiece(el,p);cell.appendChild(el);tray.appendChild(cell)});board.appendChild(tray)}
 }
 
 // ==================== 4. 标准模式与乱战模式布阵 ====================
@@ -223,51 +246,61 @@ function deploy(){
  */
 function toggleCheat(type,enabled){
   if(chaosMode||over)return;
+  const special={
+    marshal:{id:'0-cheat-marshal',name:'元帅',row:2,col:2,label:'红方第三排中央行营'},
+    missile:{id:'0-cheat-missile',name:'导弹',row:1,col:1,label:'红方第二排第二列行营'},
+    fortress:{id:'0-cheat-fortress',name:'堡垒',row:1,col:3,label:'红方第二排第四列行营'}
+  }[type];
   if(type==='marshal'&&enabled){
     if(marshalFallen){cheats.marshal=false;draw();return alert('本局元帅已经阵亡，不能再次生成。')}
-    if(pieces.some(p=>p.id==='0-cheat-marshal'&&!p.dead)){cheats.marshal=true;draw();return}
-    let camp=nodes.find(n=>n.owner===0&&n.row===2&&n.col===2&&n.type==='camp');
-    if(!camp||pieceAt(camp.id)){cheats.marshal=false;draw();return alert('红方第三排中央行营已有棋子，暂时无法增加元帅。')}
-    pieces.push({id:'0-cheat-marshal',owner:0,name:'元帅',node:camp.id,cheatPiece:true});
-  }else if(type==='marshal'&&!enabled){
-    pieces=pieces.filter(p=>p.id!=='0-cheat-marshal');
+  }
+  if(special&&enabled){
+    if(pieces.some(p=>p.id===special.id&&!p.dead)){cheats[type]=true;draw();return}
+    let camp=nodes.find(n=>n.owner===0&&n.row===special.row&&n.col===special.col&&n.type==='camp');
+    if(!camp||pieceAt(camp.id)){cheats[type]=false;draw();return alert(`${special.label}已有棋子，暂时无法增加${special.name}。`)}
+    pieces.push({id:special.id,owner:0,name:special.name,node:camp.id,cheatPiece:true});
+  }else if(special&&!enabled){
+    pieces=pieces.filter(p=>p.id!==special.id);
   }else{
     let original=type==='platoonToCommander'?'排长':'连长',replacement=type==='platoonToCommander'?'司令':'炸弹';
     pieces.filter(p=>p.owner===0).forEach(p=>{
-      if(enabled&&p.name===original&&!p.cheatedFrom){p.cheatedFrom=original;p.name=replacement}
+      if(enabled&&p.name===original&&!p.cheatedFrom){p.cheatedFrom=original;p.name=replacement;if(replacement==='炸弹'&&nodes.find(n=>n.id===p.node)?.row===0)p.node=null}
       else if(!enabled&&p.cheatedFrom===original){p.name=original;delete p.cheatedFrom}
     });
   }
   cheats[type]=enabled;selected=null;valid=[];draw();updateSetupText();
-  log(`🎛️ 作弊器：${{platoonToCommander:'排长变司令',companyToBomb:'连长变炸弹',marshal:'增加元帅'}[type]}已${enabled?'开启':'关闭'}`);
+  log(`🎛️ 作弊器：${{platoonToCommander:'排长变司令',companyToBomb:'连长变炸弹',marshal:'增加元帅',missile:'增加导弹',fortress:'增加堡垒'}[type]}已${enabled?'开启':'关闭'}`);
 }
 
+// 所有炸弹（包括由连长变化的炸弹）都不能布置在第一排。
+function canPlaceSetupPiece(p,n){return canSetupOnNode(n)&&!(p?.name==='炸弹'&&n.row===0)}
+
 // 把红方棋子放到目标格；目标已有红棋时，交换两枚棋子的位置。
-function placeSetup(pieceId,nodeId){if(phase!=='setup')return;let p=pieces.find(x=>x.id===pieceId&&x.owner===0),n=nodes.find(x=>x.id===nodeId);if(!p||!n||n.owner!==0||n.type==='camp')return;let other=pieceAt(nodeId),source=p.node;if(other&&other.id!==p.id)other.node=source;p.node=nodeId;setupSelected=null;draggedPiece=null;draw();updateSetupText()}
+function placeSetup(pieceId,nodeId){if(phase!=='setup')return;let p=pieces.find(x=>x.id===pieceId&&x.owner===0),n=nodes.find(x=>x.id===nodeId);if(!p||!canPlaceSetupPiece(p,n))return p?.name==='炸弹'&&n?.row===0?alert('炸弹不能放在第一排。'):undefined;let other=pieceAt(nodeId),source=p.node,sourceNode=nodes.find(x=>x.id===source);if(other&&other.id!==p.id&&sourceNode&&!canPlaceSetupPiece(other,sourceNode))return alert('交换后炸弹不能位于第一排。');if(other&&other.id!==p.id)other.node=source;p.node=nodeId;setupSelected=null;draggedPiece=null;draw();updateSetupText()}
 
 // 把红方棋子从棋盘拖回待布阵托盘。
 function returnToTray(pieceId){let p=pieces.find(x=>x.id===pieceId&&x.owner===0);if(!p)return;p.node=null;setupSelected=null;draw();updateSetupText()}
 
-// 在侧栏显示红方已经放置了多少枚棋子；开启元帅后总数会变成26。
+// 在侧栏显示红方已经放置了多少枚棋子；开启特殊棋子后总数会超过25。
 function updateSetupText(){let own=pieces.filter(p=>p.owner===0),placed=own.filter(p=>p.node).length;$('#turnText').textContent=`布阵中：已放置 ${placed}/${own.length} 枚`}
 
 // Fisher–Yates 原地洗牌。
 function shuffle(a){for(let i=a.length-1;i;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 
-// 按军旗、地雷、炸弹的限制为红方生成随机阵型，并兼容三项作弊器。
+// 按军旗、地雷、炸弹的限制为红方生成随机阵型，并为特殊棋子预留行营。
 function quickSetup(){
   if(phase!=='setup')return;
-  let own=pieces.filter(p=>p.owner===0),marshal=own.find(p=>p.id==='0-cheat-marshal'&&!p.dead),regular=own.filter(p=>p!==marshal),slots=nodes.filter(n=>n.owner===0&&n.type!=='camp');
-  regular.forEach(p=>p.node=null);
-  // 元帅不占用25个普通布阵格，始终保留在红方第三排中央行营。
-  if(marshal){let camp=nodes.find(n=>n.owner===0&&n.row===2&&n.col===2&&n.type==='camp');marshal.node=camp.id}
+  let own=pieces.filter(p=>p.owner===0),specials=own.filter(p=>p.cheatPiece),regular=own.filter(p=>!p.cheatPiece),slots=nodes.filter(n=>n.owner===0&&n.type!=='camp');
+  own.forEach(p=>p.node=null);
+  const homes={'元帅':[2,2],'导弹':[1,1],'堡垒':[1,3]};
+  specials.forEach(p=>{let [row,col]=homes[p.name],camp=nodes.find(n=>n.owner===0&&n.row===row&&n.col===col&&n.type==='camp');p.node=camp?.id||null});
   let take=filter=>{let opts=slots.filter(n=>!pieceAt(n.id)&&filter(n)),n=opts[Math.floor(Math.random()*opts.length)];return n?.id};
   let flag=regular.find(p=>p.name==='军旗');flag.node=take(n=>n.type==='hq');
   regular.filter(p=>p.name==='地雷').forEach(p=>p.node=take(n=>n.row>=4));
-  // 只有原生炸弹受“不能放第一排”限制；由连长变化的炸弹可以参与普通随机布阵。
-  regular.filter(p=>p.name==='炸弹'&&!p.cheatedFrom).forEach(p=>p.node=take(n=>n.row!==0));
+  // 原生炸弹和由连长变化的炸弹都不能放在第一排。
+  regular.filter(p=>p.name==='炸弹').forEach(p=>p.node=take(n=>n.row!==0));
   shuffle(regular.filter(p=>!p.node)).forEach(p=>p.node=take(()=>true));
-  setupSelected=null;draw();updateSetupText();log(`已按规则完成随机布阵${marshal?'，元帅保留在中央行营':''}。`);
+  setupSelected=null;draw();updateSetupText();log(`已按规则完成随机布阵${specials.length?'，特殊棋子已进入指定行营':''}。`);
 }
 
 // 阵型库保存在浏览器本地，可用名称保存多套阵型。
@@ -277,7 +310,7 @@ function setFormations(value){localStorage.setItem(FORMATION_KEY,JSON.stringify(
 
 // 打开阵型管理弹窗；保存和调用共用同一个可视化列表。
 function openFormationManager(focusName=false){
-  if(phase!=='setup')return;
+  if(chaosMode||phase!=='setup')return;
   renderFormationList();
   $('#formationModal').classList.add('show');
   if(focusName){$('#formationName').value=`阵型${getFormations().length+1}`;$('#formationName').focus()}
@@ -302,6 +335,7 @@ function renderFormationList(){
  * 阵型按“棋子名称 + 格点ID”保存，因此重复棋子也能逐枚恢复。
  */
 function confirmSaveFormation(){
+  if(chaosMode)return;
   let placed=pieces.filter(p=>p.owner===0&&p.node),name=$('#formationName').value.trim();
   if(!placed.length)return alert('请先在棋盘上放置棋子。');
   if(!name)return alert('请输入阵型名称。');
@@ -316,20 +350,24 @@ function confirmSaveFormation(){
  * 若乱战模式当前手牌缺少某类棋子，会尽量摆放匹配棋子，其余留在托盘。
  */
 function applyFormation(index){
+  if(chaosMode)return;
   let formations=getFormations(),formation=formations[index];
   if(!formation)return;
   if(!chaosMode&&formation.cheats){
-    pieces=pieces.filter(p=>p.id!=='0-cheat-marshal');
+    pieces=pieces.filter(p=>!['0-cheat-marshal','0-cheat-missile','0-cheat-fortress'].includes(p.id));
     pieces.filter(p=>p.owner===0&&p.cheatedFrom).forEach(p=>{p.name=p.cheatedFrom;delete p.cheatedFrom});
-    cheats={platoonToCommander:false,companyToBomb:false,marshal:false};
+    pieces.filter(p=>p.owner===0).forEach(p=>p.node=null);
+    cheats={platoonToCommander:false,companyToBomb:false,marshal:false,missile:false,fortress:false};
     if(formation.cheats.platoonToCommander)toggleCheat('platoonToCommander',true);
     if(formation.cheats.companyToBomb)toggleCheat('companyToBomb',true);
     if(formation.cheats.marshal)toggleCheat('marshal',true);
+    if(formation.cheats.missile)toggleCheat('missile',true);
+    if(formation.cheats.fortress)toggleCheat('fortress',true);
   }
   let own=pieces.filter(p=>p.owner===0),used=new Set,placed=0;
   own.forEach(p=>p.node=null);
   formation.layout.forEach(item=>{
-    let piece=own.find(p=>!used.has(p.id)&&p.name===item.name),node=nodes.find(n=>n.id===item.node&&n.owner===0&&n.type!=='camp');
+    let piece=own.find(p=>!used.has(p.id)&&p.name===item.name),node=nodes.find(n=>n.id===item.node&&canPlaceSetupPiece(piece,n));
     if(!piece||!node||pieceAt(node.id))return;
     piece.node=node.id;used.add(piece.id);placed++;
   });
@@ -345,7 +383,7 @@ function deleteFormation(index){
 }
 
 // 校验红方阵型；通过后隐藏布阵控件并进入正式对局。
-function confirmSetup(){let mine=pieces.filter(p=>p.owner===0&&p.name==='地雷'),bomb=pieces.filter(p=>p.owner===0&&p.name==='炸弹'&&!p.cheatedFrom),flag=pieces.find(p=>p.owner===0&&p.name==='军旗');if(pieces.some(p=>p.owner===0&&!p.node))return alert('请先把所有棋子全部放入本方棋盘。');if(nodes.find(n=>n.id===flag.node).type!=='hq')return alert('军旗必须放在两个大本营之一。');if(mine.some(p=>nodes.find(n=>n.id===p.node).row<4))return alert('地雷只能放在最后两排。');if(bomb.some(p=>nodes.find(n=>n.id===p.node).row===0))return alert('原有炸弹不能放在第一排。');enableAudio();phase='play';setupSelected=null;$('#setupActions').classList.add('hidden');$('#formationActions').classList.add('hidden');$('#difficulty').classList.add('hidden');$('#turnText').textContent='红方行动';$('#log').innerHTML='';log(`布阵完成，${{easy:'简单',normal:'一般',hard:'困难',hell:'地狱'}[difficulty]}模式战局开始`);hornSound();if(difficulty==='normal'){eliminateOwner(2);log('一般模式：紫方25枚棋子已在开局清空，红方对抗蓝绿共50枚棋子。')}if(!hasMove(0)){eliminateOwner(0);checkWin();if(!over)nextTurn()}draw()}
+function confirmSetup(){let mine=pieces.filter(p=>p.owner===0&&p.name==='地雷'),bomb=pieces.filter(p=>p.owner===0&&p.name==='炸弹'),flag=pieces.find(p=>p.owner===0&&p.name==='军旗');if(pieces.some(p=>p.owner===0&&!p.node))return alert('请先把所有棋子全部放入本方棋盘。');if(nodes.find(n=>n.id===flag.node).type!=='hq')return alert('军旗必须放在两个大本营之一。');if(mine.some(p=>nodes.find(n=>n.id===p.node).row<4))return alert('地雷只能放在最后两排。');if(bomb.some(p=>nodes.find(n=>n.id===p.node).row===0))return alert('炸弹不能放在第一排。');enableAudio();phase='play';setupSelected=null;$('#setupActions').classList.add('hidden');$('#formationActions').classList.add('hidden');$('#difficulty').classList.add('hidden');$('#turnText').textContent='红方行动';$('#log').innerHTML='';log(`布阵完成，${{easy:'简单',normal:'一般',hard:'困难',hell:'地狱'}[difficulty]}模式战局开始`);hornSound();if(difficulty==='normal'){eliminateOwner(2);log('一般模式：紫方25枚棋子已在开局清空，红方对抗蓝绿共50枚棋子。')}if(!hasMove(0)){eliminateOwner(0);checkWin();if(!over)nextTurn()}draw()}
 
 // ==================== 5. 阵营关系、铁路寻路与合法走法 ====================
 
@@ -381,13 +419,13 @@ function cornerRoutes(n,routes){if(n.owner<0||n.row>4||(n.col!==0&&n.col!==4))re
  * 工兵用广度优先搜索，可在铁路交叉点转向；其他棋子只能沿一条直线前进。
  * @returns {Map<string,string[]>} 目标格ID -> 经过的格点ID数组。
  */
-function railRoutes(p){let n=nodes.find(x=>x.id===p.node),routes=new Map;if(!n?.rail)return routes;if(p.name==='工兵'){let queue=[[n.id,[n.id]]],seen=new Set([n.id]);while(queue.length){let [at,path]=queue.shift();for(let q of railNeighbors(at,['rail','corner-rail'])){if(seen.has(q.id))continue;seen.add(q.id);let next=[...path,q.id];routes.set(q.id,next);if(!pieceAt(q.id))queue.push([q.id,next])}}return routes}for(let first of railNeighbors(n.id,['rail','corner-rail'])){let dx=Math.sign(first.x-n.x),dy=Math.sign(first.y-n.y),at=n,next=first,path=[n.id];while(next){path.push(next.id);routes.set(next.id,[...path]);if(pieceAt(next.id))break;let onward=railNeighbors(next.id,['rail','corner-rail']).filter(x=>x.id!==at.id&&Math.sign(x.x-next.x)===dx&&Math.sign(x.y-next.y)===dy);at=next;next=onward[0]}}cornerRoutes(n,routes);return routes}
+function railRoutes(p){let n=nodes.find(x=>x.id===p.node),routes=new Map;if(!n?.rail)return routes;if(p.name==='工兵'||p.name==='导弹'){let queue=[[n.id,[n.id]]],seen=new Set([n.id]);while(queue.length){let [at,path]=queue.shift();for(let q of railNeighbors(at,['rail','corner-rail'])){if(seen.has(q.id))continue;seen.add(q.id);let next=[...path,q.id];routes.set(q.id,next);if(!pieceAt(q.id))queue.push([q.id,next])}}return routes}for(let first of railNeighbors(n.id,['rail','corner-rail'])){let dx=Math.sign(first.x-n.x),dy=Math.sign(first.y-n.y),at=n,next=first,path=[n.id];while(next){path.push(next.id);routes.set(next.id,[...path]);if(pieceAt(next.id))break;let onward=railNeighbors(next.id,['rail','corner-rail']).filter(x=>x.id!==at.id&&Math.sign(x.x-next.x)===dx&&Math.sign(x.y-next.y)===dy);at=next;next=onward[0]}}cornerRoutes(n,routes);return routes}
 
 // 合并相邻公路和铁路目标，再排除友军占位及“攻击行营内棋子”的非法目标。
 function adjacentMoves(p){let n=nodes.find(x=>x.id===p.node),out=edges.filter(e=>e[2]==='road'&&(e[0]===n.id||e[1]===n.id)).map(e=>e[0]===n.id?e[1]:e[0]);out.push(...railRoutes(p).keys());return[...new Set(out)].filter(id=>{let q=pieceAt(id),dest=nodes.find(n=>n.id===id);return(!q||!isAlly(q.owner,p.owner))&&!(q&&dest.type==='camp')})}
 
 // 返回一枚棋子的全部合法目标；地雷、军旗以及进入大本营的棋子不能移动。
-function legal(p){let current=nodes.find(n=>n.id===p.node);if(p.name==='地雷'||p.name==='军旗'||current?.type==='hq')return[];return adjacentMoves(p)}
+function legal(p){let current=nodes.find(n=>n.id===p.node);if(p.name==='地雷'||p.name==='军旗'||p.name==='堡垒'||current?.type==='hq')return[];return adjacentMoves(p)}
 
 // ==================== 6. 音效、玩家点击与战斗结算 ====================
 
@@ -403,10 +441,9 @@ function moveSound(){if(!audioCtx)return;let now=audioCtx.currentTime,g=audioCtx
 // 司令阵亡时播放的特殊提示旋律。
 function commanderDeathSound(){if(!audioCtx)return;let now=audioCtx.currentTime,g=audioCtx.createGain();g.connect(audioCtx.destination);g.gain.setValueAtTime(.28,now);g.gain.exponentialRampToValueAtTime(.001,now+1.15);[392,330,262,196].forEach((freq,i)=>{let o=audioCtx.createOscillator();o.type='triangle';o.frequency.setValueAtTime(freq,now+i*.2);o.connect(g);o.start(now+i*.2);o.stop(now+i*.2+.42)})}
 
-// 元帅被炸弹炸死或撞上地雷时，发出“啊”的语音提示。
+// 元帅被炸弹炸死或撞上地雷时，播放 assets 中的村民死亡配音。
 function marshalDeathSound(){
-  if('speechSynthesis'in window&&window.SpeechSynthesisUtterance){window.speechSynthesis.cancel();let u=new window.SpeechSynthesisUtterance('啊');u.lang='zh-CN';u.rate=.65;u.pitch=.65;u.volume=1;window.speechSynthesis.speak(u)}
-  if(!audioCtx)return;let now=audioCtx.currentTime,g=audioCtx.createGain(),o=audioCtx.createOscillator();g.connect(audioCtx.destination);o.connect(g);o.type='sawtooth';o.frequency.setValueAtTime(360,now);o.frequency.exponentialRampToValueAtTime(150,now+.7);g.gain.setValueAtTime(.16,now);g.gain.exponentialRampToValueAtTime(.001,now+.75);o.start(now);o.stop(now+.75)
+  try{let audio=new Audio('assets/minecraft/sounds/mob/villager/death.ogg');audio.volume=.9;audio.play().catch(()=>{})}catch(e){}
 }
 
 // 确认布阵、正式开局时播放短号角。
@@ -420,7 +457,7 @@ function hornSound(){
  * 棋盘格点击入口。
  * 布阵阶段用于放置/交换棋子；对局阶段用于选棋并执行红方合法走法。
  */
-function clickNode(id){enableAudio();let p=pieceAt(id),n=nodes.find(x=>x.id===id);if(phase==='setup'){if(p&&p.owner!==0&&markingEnabled)return markPiece(p);if(n.owner!==0||n.type==='camp')return;if(setupSelected)return placeSetup(setupSelected,id);if(p&&p.owner===0){setupSelected=p.id;draw()}return}if(over)return;if(turn===0&&selected&&valid.includes(id))return move(selected,id);if(p&&p.owner!==0&&markingEnabled)return markPiece(p);if(turn!==0)return;if(p&&p.owner===0){selected=p;valid=legal(p);draw()}else{selected=null;valid=[];draw()}}
+function clickNode(id){enableAudio();let p=pieceAt(id),n=nodes.find(x=>x.id===id);if(phase==='setup'){if(p&&p.owner!==0&&markingEnabled)return markPiece(p);if(!canSetupOnNode(n))return;if(setupSelected)return placeSetup(setupSelected,id);if(p&&p.owner===0){setupSelected=p.id;draw()}return}if(over)return;if(turn===0&&selected&&valid.includes(id))return move(selected,id);if(p&&p.owner!==0&&markingEnabled)return markPiece(p);if(turn!==0)return;if(p&&p.owner===0){selected=p;valid=legal(p);draw()}else{selected=null;valid=[];draw()}}
 
 // 把当前选择的推测棋种绑定到具体棋子对象上，因此棋子移动时标记会自动跟随。
 function markPiece(piece){piece.mark=markGuess;draw();log(`🏷 已将${labels[piece.owner]}一枚棋子标记为“${markGuess}”`)}
@@ -429,7 +466,24 @@ function markPiece(piece){piece.mark=markGuess;draw();log(`🏷 已将${labels[p
  * 比较进攻方a和防守方d。
  * @returns {number} 1=进攻方胜，0=同归于尽，-1=进攻方败。
  */
-function battle(a,d){if(a.name==='炸弹'||d.name==='炸弹')return 0;if(d.name==='地雷')return a.name==='工兵'?1:-1;if(d.name==='军旗')return 1;let x=rank[a.name],y=rank[d.name];return x===y?0:x>y?1:-1}
+function battle(a,d){
+  // 堡垒固定防守：只有炸弹能完整炸开，其他任何进攻棋子都会战败。
+  if(d.name==='堡垒')return a.name==='炸弹'?1:-1;
+  if(a.name==='炸弹'||d.name==='炸弹')return 0;
+  if(d.name==='地雷')return a.name==='工兵'?1:-1;
+  if(d.name==='军旗')return 1;
+  // 导弹克制连长、排长、工兵；碰到营长及以上双方同归于尽。
+  if(a.name==='导弹'){
+    if(d.name==='导弹')return 0;
+    if(['连长','排长','工兵'].includes(d.name))return 1;
+    if((rank[d.name]||0)>=rank['营长'])return 0;
+  }
+  if(d.name==='导弹'){
+    if(['连长','排长','工兵'].includes(a.name))return-1;
+    if((rank[a.name]||0)>=rank['营长'])return 0;
+  }
+  let x=rank[a.name],y=rank[d.name];return x===y?0:x>y?1:-1
+}
 
 // 司令阵亡后公开同方军旗的位置。
 function revealFlag(owner){let f=pieces.find(x=>x.owner===owner&&x.name==='军旗'&&!x.dead);if(f)f.reveal=true}
@@ -452,7 +506,7 @@ function recordAiFailure(attacker,defender,node,result){
   let existing=aiOrders[attacker.owner],attackerRank=rank[attacker.name]||0;
   if(existing?.targetId===defender.id){
     if(existing.kind==='backline'&&existing.stage==='engineer'&&attacker.name==='工兵')existing.stage='bomb';
-    else if(existing.kind==='frontline'&&existing.stage==='max')existing.stage='bomb';
+    else if(['frontline','camp-gate'].includes(existing.kind)&&existing.stage==='max')existing.stage='bomb';
     return;
   }
   if(attackerRank>=7&&node.row>=4)aiOrders[attacker.owner]={targetId:defender.id,kind:'backline',stage:'engineer'};
@@ -466,7 +520,7 @@ function clearTargetOrders(targetId){Object.keys(aiOrders).forEach(k=>{if(aiOrde
  * 执行一次移动或战斗，是整局游戏最核心的状态更新函数。
  * 流程：保存轨迹 -> 播音效 -> 比较棋子 -> 处理阵亡/军旗/司令 -> 判断胜负 -> 下一回合。
  */
-function move(p,id){let d=pieceAt(id);if(d&&isAlly(p.owner,d.owner)){selected=null;valid=[];draw();return}lastTrail={owner:p.owner,path:movePath(p,id)};lastBattle=d?id:null;if(!d){moveSound();p.node=id}else{captureSound();let battleNode=nodes.find(n=>n.id===id),r=battle(p,d),marshalKilled=(p.name==='元帅'&&r<=0&&(d.name==='炸弹'||d.name==='地雷'))||(d.name==='元帅'&&r>=0&&p.name==='炸弹');if(p.owner===0)log(`你发起攻击：${r>0?'获胜':r<0?'失败':'双方同归于尽'}`);if(r>=0){d.dead=true;delete d.mark}if(r<=0){p.dead=true;delete p.mark}if(r>0)p.node=id;if(marshalKilled){marshalFallen=true;cheats.marshal=false;marshalDeathSound();log('💥 元帅阵亡：啊！')}recordAiFailure(p,d,battleNode,r);if(d.dead)clearTargetOrders(d.id);let flagOwner=d.name==='军旗'&&d.dead?d.owner:null;let commanderDied=(d.name==='司令'&&d.dead)||(p.name==='司令'&&p.dead);if(d.name==='司令'&&d.dead)revealFlag(d.owner);if(p.name==='司令'&&p.dead)revealFlag(p.owner);if(commanderDied)commanderDeathSound();if(flagOwner!==null){if(p.owner===0)log('🚩 你夺取了一面敌方军旗！');eliminateOwner(flagOwner)}}let landed=nodes.find(n=>n.id===p.node),redAttacker=p.owner===1||p.owner===3||(difficulty==='hell'&&p.owner===2);if(['easy','hard','hell'].includes(difficulty)&&redAttacker&&!p.dead&&landed?.owner===0&&landed.row===4)hardRedBreach=true;selected=null;valid=[];checkWin();nextTurn();draw()}
+function move(p,id){let d=pieceAt(id);if(d&&isAlly(p.owner,d.owner)){selected=null;valid=[];draw();return}lastTrail={owner:p.owner,path:movePath(p,id)};lastBattle=d?id:null;if(!d){moveSound();p.node=id}else{captureSound();let battleNode=nodes.find(n=>n.id===id),r=battle(p,d),marshalKilled=(p.name==='元帅'&&r<=0)||(d.name==='元帅'&&r>=0);if(p.owner===0)log(`你发起攻击：${r>0?'获胜':r<0?'失败':'双方同归于尽'}`);if(r>=0){d.dead=true;delete d.mark}if(r<=0){p.dead=true;delete p.mark}if(r>0)p.node=id;if(marshalKilled){marshalFallen=true;cheats.marshal=false;marshalDeathSound();log('💥 元帅阵亡：啊！')}recordAiFailure(p,d,battleNode,r);if(d.dead)clearTargetOrders(d.id);let flagOwner=d.name==='军旗'&&d.dead?d.owner:null;let commanderDied=(d.name==='司令'&&d.dead)||(p.name==='司令'&&p.dead);if(d.name==='司令'&&d.dead)revealFlag(d.owner);if(p.name==='司令'&&p.dead)revealFlag(p.owner);if(commanderDied)commanderDeathSound();if(flagOwner!==null){if(p.owner===0)log('🚩 你夺取了一面敌方军旗！');eliminateOwner(flagOwner)}}let landed=nodes.find(n=>n.id===p.node),redAttacker=p.owner===1||p.owner===3||(difficulty==='hell'&&p.owner===2);if(['easy','hard','hell'].includes(difficulty)&&redAttacker&&!p.dead&&landed?.owner===0&&landed.row===4)hardRedBreach=true;selected=null;valid=[];checkWin();nextTurn();draw()}
 
 // 不同模式拥有不同胜负目标。
 function checkWin(){
@@ -518,7 +572,7 @@ function normalizeAiOrder(owner,allMoves){
 function orderScore(move,order){
   if(!order)return 0;let target=pieces.find(p=>p.id===order.targetId&&!p.dead);if(!target)return 0;
   let targetNode=nodes.find(n=>n.id===target.node),dest=nodes.find(n=>n.id===move.id),distance=Math.abs(dest.x-targetNode.x)+Math.abs(dest.y-targetNode.y),required=order.stage==='engineer'?'工兵':order.stage==='bomb'?'炸弹':null,score=0;
-  if(order.stage==='avoid'){if(move.id===target.node)return-20000;score-=Math.max(0,18-distance)*25;if(order.kind==='frontline'&&dest.type==='camp'&&dest.owner===move.p.owner&&!pieceAt(dest.id))score+=1400;return score}
+  if(order.stage==='avoid'){if(move.id===target.node)return-20000;score-=Math.max(0,18-distance)*25;if(['frontline','camp-gate'].includes(order.kind)&&dest.type==='camp'&&dest.owner===move.p.owner&&!pieceAt(dest.id))score+=order.kind==='camp-gate'?9000:1400;return score}
   let correct=order.stage==='max'?move.p.id===order.maxPieceId:move.p.name===required;
   score+=correct?(60-distance)*70:-3600;
   if(correct&&move.id===target.node)score+=18000;
@@ -694,6 +748,35 @@ function distanceToOwner(dest,owner,type='hq'){
 function backInvaders(owner){
   return pieces.filter(p=>!p.dead&&!isAlly(owner,p.owner)).filter(p=>{let n=nodes.find(x=>x.id===p.node);return n?.owner===owner&&n.row>=4});
 }
+
+/**
+ * 检查敌军是否进入倒数第三排两个行营周围的8个位置。
+ * 每个行营与其外围八格组成九宫格；敌棋进入外围任意一格都会触发占营防守。
+ */
+function fourthRowCampThreat(owner){
+  let camps=nodes.filter(n=>n.owner===owner&&n.row===3&&[1,3].includes(n.col)&&n.type==='camp'),threats=[];
+  for(let camp of camps){
+    pieces.filter(p=>!p.dead&&!isAlly(owner,p.owner)).forEach(piece=>{
+      let at=nodes.find(n=>n.id===piece.node);
+      if(at?.owner!==owner||at.id===camp.id)return;
+      if(Math.abs(at.row-camp.row)<=1&&Math.abs(at.col-camp.col)<=1)threats.push({invader:piece,gate:at,camp,campPiece:pieceAt(camp.id)});
+    });
+  }
+  if(!threats.length)return null;
+  // 若其中一个受威胁行营尚未驻军，优先返回该行营，确保电脑先把它占住。
+  threats.sort((a,b)=>(a.campPiece?1:0)-(b.campPiece?1:0));
+  return threats[0]
+}
+
+// 受威胁行营已经有己方棋子守住时，建立“最大棋子 -> 炸弹 -> 占满行营避战”的紧急任务。
+function prepareCampGateOrder(owner){
+  let threat=fourthRowCampThreat(owner);
+  if(!threat||!threat.campPiece||threat.campPiece.owner!==owner)return threat;
+  let order=aiOrders[owner];
+  if(!order||order.targetId!==threat.invader.id)aiOrders[owner]={targetId:threat.invader.id,kind:'camp-gate',stage:'max'};
+  return threat
+}
+
 /**
  * 三打一全局战略评分。
  * 后两排被红方入侵时优先回防；否则向红方推进并靠近盟友形成夹击。
@@ -701,6 +784,23 @@ function backInvaders(owner){
 function strategyScore(move){
   let dest=nodes.find(n=>n.id===move.id),target=pieceAt(move.id),score=0;
   if(turn!==0){
+    let gateThreat=fourthRowCampThreat(turn);
+    if(gateThreat){
+      // 对应行营为空时，抢占行营是本回合最高优先级。
+      if(!gateThreat.campPiece){
+        if(move.id===gateThreat.camp.id)score+=30000;
+        else score-=6500;
+        return score
+      }
+      // 清除失败且没有炸弹时进入龟缩：先填满自己的空行营，不再硬碰该入侵棋子。
+      if(aiOrders[turn]?.targetId===gateThreat.invader.id&&aiOrders[turn]?.stage==='avoid'){
+        let emptyCamps=nodes.filter(n=>n.owner===turn&&n.type==='camp'&&!pieceAt(n.id));
+        if(emptyCamps.length){
+          if(dest.type==='camp'&&dest.owner===turn&&!target)score+=11000;
+          if(target)score-=1800;
+        }else if(target&&!isAlly(turn,target.owner)&&target.id!==gateThreat.invader.id)score+=1200;
+      }
+    }
     let invaders=backInvaders(turn);
     if(invaders.length){
       let nearest=Math.min(...invaders.map(p=>{let n=nodes.find(x=>x.id===p.node);return Math.abs(dest.x-n.x)+Math.abs(dest.y-n.y)}));
@@ -756,6 +856,8 @@ function ai() {
     return draw();
   }
 
+  // 敌棋进入倒数第三排行营外围八格时，先生成专用防守任务，再进入统一任务归一化。
+  prepareCampGateOrder(turn);
   const activeOrder=normalizeAiOrder(turn,allMoves);
   // 简单沿用旧困难算法；一般使用常规暗棋AI；困难和地狱启用更强的突破、识牌与协同。
   let useHard=difficulty==='easy'||difficulty==='hard'||difficulty==='hell';
@@ -789,8 +891,8 @@ function endGame(){if(over)return;if(!confirm('确定结束当前游戏吗？'))
 function showDifficultyIntro(){$('#introModal').classList.add('show')}
 
 // 重建棋盘、重新发棋并清空上一局状态，然后回到红方布阵阶段。
-function start(){clearTimeout(aiTimer);buildMap();cheats={platoonToCommander:false,companyToBomb:false,marshal:false};marshalFallen=false;markingEnabled=false;markGuess='司令';markerPanelOpen=window.innerWidth>800;cheatPanelOpen=window.innerWidth>800;deploy();phase='setup';turn=0;selected=null;setupSelected=null;lastTrail=null;lastBattle=null;purpleSafeTurns=0;purpleAttacked=false;hardRedBreach=false;redSurrendered=false;aiOrders={1:null,2:null,3:null};valid=[];aliveFlags=[true,true,true,true];over=false;settled=false;setCoins(getCoins());document.title=chaosMode?'云上乱战四国':'云上四国军棋';$('#gameTitle').textContent=chaosMode?'云上乱战四国 · 多阵营难度':'云上四国军棋 · 多阵营难度';$('#result').classList.remove('show');$('#setupActions').classList.remove('hidden');$('#formationActions').classList.remove('hidden');$('#difficulty').classList.remove('hidden');updateDifficulty();$('#log').innerHTML='';log(chaosMode?'乱战模式不提供作弊器；可快速布阵或调用阵型。':'请选择难度；可使用作弊器、快速布阵或调用阵型。');draw();updateSetupText();showDifficultyIntro()}
+function start(){clearTimeout(aiTimer);document.body.classList.toggle('chaos-mode',chaosMode);buildMap();cheats={platoonToCommander:false,companyToBomb:false,marshal:false,missile:false,fortress:false};marshalFallen=false;markingEnabled=false;markGuess='司令';markerPanelOpen=window.innerWidth>800;cheatPanelOpen=window.innerWidth>800;deploy();phase='setup';turn=0;selected=null;setupSelected=null;lastTrail=null;lastBattle=null;purpleSafeTurns=0;purpleAttacked=false;hardRedBreach=false;redSurrendered=false;aiOrders={1:null,2:null,3:null};valid=[];aliveFlags=[true,true,true,true];over=false;settled=false;setCoins(getCoins());document.title=chaosMode?'云上乱战四国':'云上四国军棋';$('#gameTitle').textContent=chaosMode?'云上乱战四国 · 多阵营难度':'云上四国军棋 · 多阵营难度';$('#result').classList.remove('show');$('#setupActions').classList.remove('hidden');$('#formationActions').classList.toggle('hidden',chaosMode);$('#difficulty').classList.remove('hidden');updateDifficulty();$('#log').innerHTML='';log(chaosMode?'乱战模式不提供作弊器和阵型库；请快速布阵或手动布阵。':'请选择难度；可使用作弊器、快速布阵或调用阵型。');draw();updateSetupText();showDifficultyIntro()}
 
 // 绑定难度、布阵、规则、横屏等静态按钮；最后 start() 完成首次初始化。
-document.querySelectorAll('#difficulty button').forEach(b=>b.onclick=()=>{if(phase!=='setup')return;difficulty=b.dataset.level;localStorage.setItem('armyDifficulty',difficulty);updateDifficulty()});$('#quickSetup').onclick=quickSetup;$('#confirmSetup').onclick=confirmSetup;$('#saveFormation').onclick=()=>openFormationManager(true);$('#loadFormation').onclick=()=>openFormationManager(false);$('#confirmSaveFormation').onclick=confirmSaveFormation;$('#formationName').onkeydown=e=>{if(e.key==='Enter')confirmSaveFormation()};$('#closeFormation').onclick=()=>$('#formationModal').classList.remove('show');$('#closeIntro').onclick=()=>$('#introModal').classList.remove('show');$('#restart').onclick=start;$('#rulesBtn').onclick=()=>alert(`${chaosMode?'乱战分兵规则仍然生效：100枚棋子随机四等分。\\n\\n':''}简单：红紫联盟对蓝绿联盟，使用原困难AI。\\n一般：紫方开局清空，红方25枚对蓝绿50枚。\\n困难：红方对蓝绿联盟，紫方完全中立。\\n地狱：蓝绿紫三家联盟围攻红方。`);$('#landscape').onclick=async()=>{try{await document.documentElement.requestFullscreen?.();await screen.orientation?.lock?.('landscape')}catch(e){alert('请关闭竖屏锁定并横置手机')}};start();
+document.querySelectorAll('#difficulty button').forEach(b=>b.onclick=()=>{if(phase!=='setup')return;difficulty=b.dataset.level;localStorage.setItem('armyDifficulty',difficulty);updateDifficulty()});$('#quickSetup').onclick=quickSetup;$('#confirmSetup').onclick=confirmSetup;$('#saveFormation').onclick=()=>openFormationManager(true);$('#loadFormation').onclick=()=>openFormationManager(false);$('#confirmSaveFormation').onclick=confirmSaveFormation;$('#formationName').onkeydown=e=>{if(e.key==='Enter')confirmSaveFormation()};$('#closeFormation').onclick=()=>$('#formationModal').classList.remove('show');$('#closeIntro').onclick=()=>$('#introModal').classList.remove('show');$('#restart').onclick=start;$('#rulesBtn').onclick=()=>alert(`${chaosMode?'乱战分兵规则：100枚棋子随机四等分；乱战模式不提供作弊器。\\n\\n':'【特殊棋子（仅标准模式作弊器）】\\n元帅：等级高于司令，默认在红方第三排中央行营；可被炸弹炸死，撞地雷也会阵亡。\\n导弹：默认在红方第二排第二列行营，拥有工兵的铁路转向能力；战胜连长、排长、工兵，遇营长及以上同归于尽。\\n堡垒：默认在红方第二排第四列行营，固定不能移动；只有炸弹能炸开，其他棋子攻击都会战败。\\n\\n'}简单：红紫联盟对蓝绿联盟，使用原困难AI。\\n一般：紫方开局清空，红方25枚对蓝绿50枚。\\n困难：红方对蓝绿联盟，紫方完全中立。\\n地狱：蓝绿紫三家联盟围攻红方。`);$('#landscape').onclick=async()=>{try{await document.documentElement.requestFullscreen?.();await screen.orientation?.lock?.('landscape')}catch(e){alert('请关闭竖屏锁定并横置手机')}};start();
 </script></body></html>
