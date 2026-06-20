@@ -195,6 +195,26 @@ function deployOwner(owner){
   place('工兵',n=>n.row===0,`${owner}-engineer0`);
   for(let i=1;i<3;i++)place('工兵',n=>n.row>=2,`${owner}-engineer${i}`);
   shuffle([...pool]).forEach((name,i)=>place(name,()=>true,`${owner}-p${i}`));
+  protectMineBackRow(owner);
+}
+
+/**
+ * 电脑布阵保护规则：若倒数第二排有地雷，其正下方的倒数第一排不能放
+ * 团长及以上军官或炸弹；发现违规时与前方的低级棋子/地雷交换。
+ */
+function protectMineBackRow(owner){
+  let mines=pieces.filter(p=>p.owner===owner&&p.name==='地雷'&&!p.dead).map(p=>nodes.find(n=>n.id===p.node)).filter(n=>n?.row===4);
+  for(let mineNode of mines){
+    let below=nodes.find(n=>n.owner===owner&&n.row===5&&n.col===mineNode.col),blocked=below&&pieceAt(below.id);
+    if(!blocked||!(blocked.name==='炸弹'||(rank[blocked.name]||0)>=rank['团长']))continue;
+    let replacement=pieces.find(p=>{
+      if(p.owner!==owner||p.dead||p.id===blocked.id||['军旗','炸弹'].includes(p.name))return false;
+      if((rank[p.name]||0)>=rank['团长'])return false;
+      let n=nodes.find(x=>x.id===p.node);
+      return n&&n.row<5&&n.type!=='hq'
+    });
+    if(replacement){let source=replacement.node;replacement.node=below.id;blocked.node=source}
+  }
 }
 
 /**
@@ -219,6 +239,12 @@ function makeChaosHands(){
   return [0,1,2,3].map(()=>[...names]);
 }
 
+// 乱战红方待布阵棋子按军阶从大到小排列，其后依次显示炸弹、地雷、军旗。
+function sortChaosHand(hand){
+  const order=name=>rank[name]!==undefined?100+rank[name]:name==='炸弹'?3:name==='地雷'?2:name==='军旗'?1:0;
+  return[...hand].sort((a,b)=>order(b)-order(a))
+}
+
 // 将乱战模式中某个电脑分到的25枚棋子放进其棋盘区域。
 function deployChaosOwner(owner,hand){
   let slots=nodes.filter(n=>n.owner===owner&&n.type!=='camp'),hq=slots.filter(n=>n.type==='hq'),back=slots.filter(n=>n.row>=4),remaining=[...hand],place=(name,filter,id)=>{let opts=slots.filter(n=>!pieceAt(n.id)&&filter(n)),n=opts[Math.floor(Math.random()*opts.length)];pieces.push({id,owner,name,node:n.id});remaining.splice(remaining.indexOf(name),1)};
@@ -230,11 +256,12 @@ function deployChaosOwner(owner,hand){
   for(let i=1;i<Math.min(engineerCount,3);i++)place('工兵',n=>n.row>=2,`${owner}-chaos-engineer${i}`);
   for(let i=3;i<engineerCount;i++)place('工兵',n=>n.row!==0,`${owner}-chaos-engineer${i}`);
   shuffle([...remaining]).forEach((name,i)=>place(name,()=>true,`${owner}-chaos-${i}`));
+  protectMineBackRow(owner);
 }
 
 // 根据当前模式创建四家的棋子：红方留在托盘等待玩家布阵，三方电脑自动布阵。
 function deploy(){
-  if(chaosMode){let hands=makeChaosHands();pieces=hands[0].map((name,i)=>({id:`0-chaos-${i}`,owner:0,name,node:null}));for(let owner=1;owner<4;owner++)deployChaosOwner(owner,hands[owner]);return}
+  if(chaosMode){let hands=makeChaosHands(),redHand=sortChaosHand(hands[0]);pieces=redHand.map((name,i)=>({id:`0-chaos-${i}`,owner:0,name,node:null}));for(let owner=1;owner<4;owner++)deployChaosOwner(owner,hands[owner]);return}
   pieces=names.map((name,i)=>({id:`0-${i}`,owner:0,name,node:null}));for(let owner=1;owner<4;owner++)deployOwner(owner)
 }
 
@@ -467,10 +494,10 @@ function markPiece(piece){piece.mark=markGuess;draw();log(`🏷 已将${labels[p
  * @returns {number} 1=进攻方胜，0=同归于尽，-1=进攻方败。
  */
 function battle(a,d){
-  // 堡垒固定防守：只有炸弹能完整炸开，其他任何进攻棋子都会战败。
-  if(d.name==='堡垒')return a.name==='炸弹'?1:-1;
+  // 堡垒固定防守：炸弹与堡垒同归于尽，其他任何进攻棋子都会战败。
+  if(d.name==='堡垒')return a.name==='炸弹'?0:-1;
   if(a.name==='炸弹'||d.name==='炸弹')return 0;
-  if(d.name==='地雷')return a.name==='工兵'?1:-1;
+  if(d.name==='地雷')return a.name==='工兵'?1:a.name==='导弹'?0:-1;
   if(d.name==='军旗')return 1;
   // 导弹克制连长、排长、工兵；碰到营长及以上双方同归于尽。
   if(a.name==='导弹'){
@@ -826,6 +853,31 @@ function strategyScore(move){
 }
 
 /**
+ * 判断己方军旗是否会在敌人的下一步被直接俘获。
+ * 若存在威胁，优先返回能消灭威胁棋子的走法；若无法清除，则返回所有可攻击敌人的走法。
+ */
+function flagEmergencyMoves(owner,allMoves){
+  let flag=pieces.find(p=>p.owner===owner&&p.name==='军旗'&&!p.dead);
+  if(!flag)return null;
+  let threats=pieces.filter(p=>!p.dead&&!isAlly(owner,p.owner)&&legal(p).includes(flag.node));
+  if(!threats.length)return null;
+  let threatIds=new Set(threats.map(p=>p.id));
+  let clears=allMoves.filter(m=>{let target=pieceAt(m.id);return target&&threatIds.has(target.id)&&battle(m.p,target)>=0});
+  if(clears.length)return{kind:'clear',moves:clears,threats};
+  let attacks=allMoves.filter(m=>{let target=pieceAt(m.id);return target&&!isAlly(owner,target.owner)});
+  let lethalAttacks=attacks.filter(m=>battle(m.p,pieceAt(m.id))>=0);
+  return{kind:'last-stand',moves:lethalAttacks.length?lethalAttacks:attacks,threats}
+}
+
+// 电脑已走到敌方大本营正上方时，下一步强制攻击对应大本营内的棋子。
+function immediateHqAssault(owner,allMoves){
+  return allMoves.filter(m=>{
+    let from=nodes.find(n=>n.id===m.p.node),dest=nodes.find(n=>n.id===m.id),target=pieceAt(m.id);
+    return from&&dest&&target&&!isAlly(owner,target.owner)&&from.owner===dest.owner&&from.owner!==owner&&from.row===4&&dest.row===5&&from.col===dest.col&&dest.type==='hq'
+  })
+}
+
+/**
  * 电脑回合入口。
  * 枚举全部合法走法，将基础评分、战略评分、战斗记忆评分相加后执行最高分走法。
  * 简单难度会从前几名中随机选择，因此会保留一定失误。
@@ -854,6 +906,26 @@ function ai() {
     checkWin();
     if (!over) nextTurn();
     return draw();
+  }
+
+  // 军旗下一步即将失守时覆盖其他战略：能杀威胁者就立即清除，否则拼死攻击任意敌棋。
+  const emergency=flagEmergencyMoves(turn,allMoves);
+  if(emergency?.moves.length){
+    emergency.moves.forEach(m=>{
+      let target=pieceAt(m.id),result=battle(m.p,target),targetValue=rank[target.name]||0,cost=rank[m.p.name]||2;
+      m.emergencyScore=(result>0?3000:1600)+targetValue*30-cost*8
+    });
+    emergency.moves.sort((a,b)=>b.emergencyScore-a.emergencyScore);
+    log(emergency.kind==='clear'?`🚨 ${labels[turn]}军旗告急，立即清除威胁`:`🚨 ${labels[turn]}军旗告急，发动最后反击`);
+    return move(emergency.moves[0].p,emergency.moves[0].id)
+  }
+
+  // 已抵达敌方大本营上方时，不再犹豫，立即攻击大本营棋子。
+  const hqAssaults=immediateHqAssault(turn,allMoves);
+  if(hqAssaults.length){
+    hqAssaults.sort((a,b)=>{let A=pieceAt(a.id),B=pieceAt(b.id);return(B.name==='军旗'?1:0)-(A.name==='军旗'?1:0)});
+    log(`⚔️ ${labels[turn]}攻入敌方大本营`);
+    return move(hqAssaults[0].p,hqAssaults[0].id)
   }
 
   // 敌棋进入倒数第三排行营外围八格时，先生成专用防守任务，再进入统一任务归一化。
@@ -894,5 +966,5 @@ function showDifficultyIntro(){$('#introModal').classList.add('show')}
 function start(){clearTimeout(aiTimer);document.body.classList.toggle('chaos-mode',chaosMode);buildMap();cheats={platoonToCommander:false,companyToBomb:false,marshal:false,missile:false,fortress:false};marshalFallen=false;markingEnabled=false;markGuess='司令';markerPanelOpen=window.innerWidth>800;cheatPanelOpen=window.innerWidth>800;deploy();phase='setup';turn=0;selected=null;setupSelected=null;lastTrail=null;lastBattle=null;purpleSafeTurns=0;purpleAttacked=false;hardRedBreach=false;redSurrendered=false;aiOrders={1:null,2:null,3:null};valid=[];aliveFlags=[true,true,true,true];over=false;settled=false;setCoins(getCoins());document.title=chaosMode?'云上乱战四国':'云上四国军棋';$('#gameTitle').textContent=chaosMode?'云上乱战四国 · 多阵营难度':'云上四国军棋 · 多阵营难度';$('#result').classList.remove('show');$('#setupActions').classList.remove('hidden');$('#formationActions').classList.toggle('hidden',chaosMode);$('#difficulty').classList.remove('hidden');updateDifficulty();$('#log').innerHTML='';log(chaosMode?'乱战模式不提供作弊器和阵型库；请快速布阵或手动布阵。':'请选择难度；可使用作弊器、快速布阵或调用阵型。');draw();updateSetupText();showDifficultyIntro()}
 
 // 绑定难度、布阵、规则、横屏等静态按钮；最后 start() 完成首次初始化。
-document.querySelectorAll('#difficulty button').forEach(b=>b.onclick=()=>{if(phase!=='setup')return;difficulty=b.dataset.level;localStorage.setItem('armyDifficulty',difficulty);updateDifficulty()});$('#quickSetup').onclick=quickSetup;$('#confirmSetup').onclick=confirmSetup;$('#saveFormation').onclick=()=>openFormationManager(true);$('#loadFormation').onclick=()=>openFormationManager(false);$('#confirmSaveFormation').onclick=confirmSaveFormation;$('#formationName').onkeydown=e=>{if(e.key==='Enter')confirmSaveFormation()};$('#closeFormation').onclick=()=>$('#formationModal').classList.remove('show');$('#closeIntro').onclick=()=>$('#introModal').classList.remove('show');$('#restart').onclick=start;$('#rulesBtn').onclick=()=>alert(`${chaosMode?'乱战分兵规则：100枚棋子随机四等分；乱战模式不提供作弊器。\\n\\n':'【特殊棋子（仅标准模式作弊器）】\\n元帅：等级高于司令，默认在红方第三排中央行营；可被炸弹炸死，撞地雷也会阵亡。\\n导弹：默认在红方第二排第二列行营，拥有工兵的铁路转向能力；战胜连长、排长、工兵，遇营长及以上同归于尽。\\n堡垒：默认在红方第二排第四列行营，固定不能移动；只有炸弹能炸开，其他棋子攻击都会战败。\\n\\n'}简单：红紫联盟对蓝绿联盟，使用原困难AI。\\n一般：紫方开局清空，红方25枚对蓝绿50枚。\\n困难：红方对蓝绿联盟，紫方完全中立。\\n地狱：蓝绿紫三家联盟围攻红方。`);$('#landscape').onclick=async()=>{try{await document.documentElement.requestFullscreen?.();await screen.orientation?.lock?.('landscape')}catch(e){alert('请关闭竖屏锁定并横置手机')}};start();
+document.querySelectorAll('#difficulty button').forEach(b=>b.onclick=()=>{if(phase!=='setup')return;difficulty=b.dataset.level;localStorage.setItem('armyDifficulty',difficulty);updateDifficulty()});$('#quickSetup').onclick=quickSetup;$('#confirmSetup').onclick=confirmSetup;$('#saveFormation').onclick=()=>openFormationManager(true);$('#loadFormation').onclick=()=>openFormationManager(false);$('#confirmSaveFormation').onclick=confirmSaveFormation;$('#formationName').onkeydown=e=>{if(e.key==='Enter')confirmSaveFormation()};$('#closeFormation').onclick=()=>$('#formationModal').classList.remove('show');$('#closeIntro').onclick=()=>$('#introModal').classList.remove('show');$('#restart').onclick=start;$('#rulesBtn').onclick=()=>alert(`${chaosMode?'乱战分兵规则：100枚棋子随机四等分；乱战模式不提供作弊器。\\n\\n':'【特殊棋子（仅标准模式作弊器）】\\n元帅：等级高于司令，默认在红方第三排中央行营；可被炸弹炸死，撞地雷也会阵亡。\\n导弹：默认在红方第二排第二列行营，拥有工兵的铁路转向能力；战胜连长、排长、工兵，遇地雷或营长及以上同归于尽。\\n堡垒：默认在红方第二排第四列行营，固定不能移动；遇炸弹同归于尽，其他棋子攻击都会战败。\\n\\n'}简单：红紫联盟对蓝绿联盟，使用原困难AI。\\n一般：紫方开局清空，红方25枚对蓝绿50枚。\\n困难：红方对蓝绿联盟，紫方完全中立。\\n地狱：蓝绿紫三家联盟围攻红方。`);$('#landscape').onclick=async()=>{try{await document.documentElement.requestFullscreen?.();await screen.orientation?.lock?.('landscape')}catch(e){alert('请关闭竖屏锁定并横置手机')}};start();
 </script></body></html>
