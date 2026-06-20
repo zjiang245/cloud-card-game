@@ -953,8 +953,24 @@ function setCoins(value){value=Math.max(0,value);localStorage.setItem('cloudCoin
 // 正常胜负结算：红方阵营获胜增加300金币，失败扣除200金币。
 function finish(win){over=true;clearTimeout(aiTimer);let delta=win?300:-200,balance=getCoins();if(!settled){balance=setCoins(balance+delta);settled=true}let winTitle=difficulty==='easy'?'红紫联盟获胜！':difficulty==='hell'?'红方地狱挑战成功！':'红方获胜！',loseTitle=difficulty==='easy'?'蓝绿联盟获胜':'红方战败';$('#resultTitle').textContent=win?winTitle:loseTitle;$('#resultText').textContent=`${win?'获得 300':'失去 200'} 金币，当前余额 ${balance} 金币。`;$('#result').classList.add('show')}
 
-// 投降会立即结束整局并按红方失败结算，即使简单模式的紫方盟友仍然存活。
-function surrender(){if(over||redSurrendered)return;if(!confirm('确定投降吗？本局将立即判负并扣除200金币。'))return;clearTimeout(aiTimer);eliminateOwner(0);finish(false);draw()}
+/**
+ * 投降处理：
+ * 简单模式中红方只退出战场并观战紫方，红紫均被淘汰后才判负扣金币；
+ * 其他难度仍然立即判负。
+ */
+function surrender(){
+  if(over||redSurrendered)return;
+  let easy=difficulty==='easy',message=easy?'确定投降并退出战场吗？你可以继续观看紫方盟友作战，红紫都战败后才会扣除金币。':'确定投降吗？本局将立即判负并扣除200金币。';
+  if(!confirm(message))return;
+  clearTimeout(aiTimer);eliminateOwner(0);
+  if(!easy){finish(false);return draw()}
+  checkWin();
+  if(!over){
+    if(turn===0)nextTurn();
+    else{$('#turnText').textContent='红方观战中 · 电脑思考…';aiTimer=setTimeout(ai,2000)}
+  }
+  draw()
+}
 
 // “结束游戏”只停止当前局，不主动结算金币。
 function endGame(){if(over)return;if(!confirm('确定结束当前游戏吗？'))return;clearTimeout(aiTimer);over=true;$('#resultTitle').textContent='游戏已结束';$('#resultText').textContent=settled?'本局金币已结算。':'本局主动结束，不结算金币。';$('#result').classList.add('show')}

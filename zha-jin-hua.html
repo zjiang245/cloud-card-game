@@ -33,7 +33,7 @@
 </head>
 <body>
 <main class="game">
-  <header><a href="index.html">← 游戏大厅</a><div class="title">云上炸金花 · 八人桌</div><div class="info"><button class="pill" id="voiceToggle">🔊 语音：待启动</button><button class="pill" id="landscapeBtn">↻ 横屏模式</button><button class="pill" id="musicToggle">♫ 贝多芬：待启动</button><div class="pill">玩家：<b id="playerName"></b></div><div class="pill">金币：<b id="myCoins"></b></div></div></header>
+  <header><a href="index.html">← 游戏大厅</a><div class="title">云上炸金花 · 八人桌</div><div class="info"><button class="pill" id="voiceToggle">🔊 语音：待启动</button><button class="pill" id="landscapeBtn">↻ 横屏模式</button><button class="pill" id="musicToggle">♫ 赌桌战歌：待启动</button><div class="pill">玩家：<b id="playerName"></b></div><div class="pill">金币：<b id="myCoins"></b></div></div></header>
   <section class="table" id="table">
     <div class="pot"><span>底池金币</span><b id="pot">0</b></div><div class="message" id="message">准备开局</div>
     <div class="seat seat0" id="seat0"><div class="actions" id="actions"></div><div class="cards"></div></div>
@@ -60,17 +60,20 @@ function unlockVoice(){
 }
 function toggleVoice(){if(voiceOn&&!voiceUnlocked)return unlockVoice();voiceOn=!voiceOn;if(!voiceOn){window.speechSynthesis?.cancel();$('#voiceToggle').textContent='🔇 语音：关'}else{voiceUnlocked=false;pendingSpeech='';unlockVoice()}}
 function announce(t){$('#message').textContent=t;speak(t)}
-const furElise=[659.25,622.25,659.25,622.25,659.25,493.88,587.33,523.25,440,261.63,329.63,440,493.88,329.63,415.3,493.88,523.25,329.63,659.25,622.25,659.25,622.25,659.25,493.88,587.33,523.25,440];
+// 快速半音阶与低音脉冲组成的原创悬疑赌桌循环。
+const tensionLead=[440,466.16,523.25,554.37,659.25,622.25,554.37,493.88,440,466.16,554.37,622.25,698.46,659.25,554.37,466.16];
+const tensionBass=[110,110,123.47,103.83,110,98,123.47,92.5];
 function initMusic(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume()}
 function piano(freq,when,duration=.38,volume=.026){let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type='triangle';o.frequency.value=freq;g.gain.setValueAtTime(0,when);g.gain.linearRampToValueAtTime(volume,when+.015);g.gain.exponentialRampToValueAtTime(.0001,when+duration);o.connect(g).connect(audioCtx.destination);o.start(when);o.stop(when+duration+.02)}
+function tensionNote(freq,when,type='sawtooth',duration=.14,volume=.021){let o=audioCtx.createOscillator(),g=audioCtx.createGain();o.type=type;o.frequency.setValueAtTime(freq,when);g.gain.setValueAtTime(.001,when);g.gain.linearRampToValueAtTime(volume,when+.012);g.gain.exponentialRampToValueAtTime(.001,when+duration);o.connect(g).connect(audioCtx.destination);o.start(when);o.stop(when+duration+.02)}
 // 跟注或加注时播放一串由高到低交错的金币碰撞声。
 function moneySound(){
   initMusic();let now=audioCtx.currentTime+.01;
   [1568,1318,1760,1174,1480,988].forEach((freq,i)=>{let o=audioCtx.createOscillator(),g=audioCtx.createGain(),at=now+i*.045;o.type=i%2?'triangle':'sine';o.frequency.setValueAtTime(freq,at);o.frequency.exponentialRampToValueAtTime(freq*.72,at+.11);g.gain.setValueAtTime(.001,at);g.gain.linearRampToValueAtTime(.09,at+.008);g.gain.exponentialRampToValueAtTime(.001,at+.14);o.connect(g).connect(audioCtx.destination);o.start(at);o.stop(at+.15)})
 }
-function musicTick(){if(!musicOn||!audioCtx)return;let now=audioCtx.currentTime+.02,f=furElise[musicStep%furElise.length];piano(f,now,.38,.024);if(musicStep%3===0)piano(f/4,now,.7,.009);musicStep++;musicTimer=setTimeout(musicTick,250)}
-function toggleMusic(){document.removeEventListener('pointerdown',autoMusic);initMusic();musicOn=!musicOn;$('#musicToggle').textContent=musicOn?'♫ 贝多芬：播放中':'♫ 贝多芬：关闭';if(musicOn)musicTick();else clearTimeout(musicTimer)}
-function autoMusic(e){if(e.target.id==='musicToggle')return;if(musicOn){document.removeEventListener('pointerdown',autoMusic);return}initMusic();musicOn=true;$('#musicToggle').textContent='♫ 贝多芬：播放中';musicTick();document.removeEventListener('pointerdown',autoMusic)}
+function musicTick(){if(!musicOn||!audioCtx)return;let now=audioCtx.currentTime+.02,lead=tensionLead[musicStep%tensionLead.length],bass=tensionBass[Math.floor(musicStep/2)%tensionBass.length];tensionNote(lead,now,musicStep%4===3?'square':'sawtooth',.13,.018);if(musicStep%2===0)tensionNote(bass,now,'triangle',.28,.055);if(musicStep%8===7){tensionNote(70,now,'square',.22,.065);tensionNote(880,now+.05,'triangle',.1,.022)}musicStep++;musicTimer=setTimeout(musicTick,155)}
+function toggleMusic(){document.removeEventListener('pointerdown',autoMusic);initMusic();musicOn=!musicOn;$('#musicToggle').textContent=musicOn?'♫ 赌桌战歌：播放中':'♫ 赌桌战歌：关闭';if(musicOn)musicTick();else clearTimeout(musicTimer)}
+function autoMusic(e){if(e.target.id==='musicToggle')return;if(musicOn){document.removeEventListener('pointerdown',autoMusic);return}initMusic();musicOn=true;$('#musicToggle').textContent='♫ 赌桌战歌：播放中';musicTick();document.removeEventListener('pointerdown',autoMusic)}
 async function enableLandscape(){
   try{
     if(document.documentElement.requestFullscreen&&!document.fullscreenElement)await document.documentElement.requestFullscreen();
