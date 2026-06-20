@@ -19,10 +19,10 @@
 
     /* ==================== 3. 棋子与棋盘内控件 ====================
        包含四色棋子、暗棋外观、放大字体、结束/投降按钮、轨迹箭头和战斗闪框。 */
-    .piece{width:calc(100% + 4px);aspect-ratio:1;height:auto;border-radius:3px;display:grid;place-items:center;color:white;text-shadow:0 1px 2px #000;font-size:inherit;line-height:1;cursor:pointer;user-select:none;touch-action:none}.piece.large-label{font-size:clamp(20px,3.6vw,42px);font-family:"STKaiti","KaiTi",serif;font-weight:900;line-height:.9}.red{background:#b43c32}.blue{background:#355eae}.purple{background:#7948a7}.green{background:#39835b}.hidden-piece{color:transparent;border:1px solid #eadcad;text-shadow:none}.hidden-piece.blue{background:#355eae}.hidden-piece.purple{background:#7948a7}.hidden-piece.green{background:#39835b}.font-toggle{position:absolute;z-index:12;right:3%;top:4%;width:16%;aspect-ratio:1;border:3px solid #1ca5ef;border-radius:12px;background:#f5dfaaeb;color:#173e55;font-weight:900;font-size:clamp(10px,1.5vw,18px);cursor:pointer;box-shadow:0 6px 18px #0004}.font-toggle.active{background:#167bb6;color:white}.board-actions{position:absolute;z-index:12;right:4%;bottom:5%;width:24%;height:20%;display:grid;grid-template-rows:1fr 1fr;gap:7px}.board-actions button{border:3px solid #c59b52;border-radius:10px;background:#201b14dd;color:#ffe1a7;font:900 clamp(13px,1.8vw,23px) "KaiTi",serif;cursor:pointer;box-shadow:0 6px 16px #0005}.board-actions .surrender{border-color:#e65b4f;background:#57201bdd;color:#ffd6b0}.board-actions button:hover{filter:brightness(1.35)}.trail-arrow{position:absolute;z-index:8;width:3.2%;aspect-ratio:1;display:grid;place-items:center;border-radius:50%;background:#fff2a9dc;color:#7c261e;font-size:clamp(8px,1.15vw,15px);font-weight:900;pointer-events:none;box-shadow:0 0 6px #0008}.trail-arrow.start{background:#ffe36d;color:#5c2917;box-shadow:0 0 0 2px #fff2a1,0 0 10px #ffdc3f}.battle-flash{position:absolute;z-index:9;width:6.7%;aspect-ratio:1;transform:translate(-50%,-50%);border:4px solid #ffe33f;border-radius:8px;pointer-events:none;animation:battleBlink .45s infinite alternate;box-shadow:0 0 14px #ffd91a}@keyframes battleBlink{to{opacity:.18;transform:translate(-50%,-50%) scale(1.12)}}.setup-selected{outline:3px solid #ffe36d;box-shadow:0 0 14px #ffd54f}.setup-tray{position:absolute;z-index:6;left:2%;top:67%;width:31%;aspect-ratio:1;padding:5px;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);gap:3px;border:3px solid #e34d42;border-radius:7px;background:#cbae7288}.setup-tray.hidden{display:none}.tray-cell{min-width:0;min-height:0;display:grid;place-items:center}.tray-piece{width:100%;height:100%;aspect-ratio:1;border:1px solid #f0cf9b;border-radius:4px;font-size:clamp(6px,.85vw,10px);font-weight:800}.tray-piece.large-label{font-size:clamp(15px,2.4vw,28px)}.difficulty{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:8px 0}.difficulty.hidden{display:none}.difficulty button{padding:7px 3px;border:1px solid #8b734d;border-radius:14px;background:#171b18;color:#c8b990;font-weight:800}.difficulty button.active{border-color:#ffd46c;background:#73501d;color:#fff1bd}.setup-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}.setup-actions.hidden{display:none}.setup-action{padding:10px 6px;border:0;border-radius:18px;background:linear-gradient(#ffe18a,#c98b2e);color:#3a2108;font-weight:900;cursor:pointer}.quick-setup{background:linear-gradient(#b8e4bd,#4d9b61)}.dead{opacity:.2}.flag-reveal{animation:flash .7s infinite alternate}@keyframes flash{to{box-shadow:0 0 18px #fff06c}}
+    .piece{position:relative;width:calc(100% + 4px);aspect-ratio:1;height:auto;border-radius:3px;display:grid;place-items:center;color:white;text-shadow:0 1px 2px #000;font-size:inherit;line-height:1;cursor:pointer;user-select:none;touch-action:none}.piece.large-label{font-size:clamp(20px,3.6vw,42px);font-family:"STKaiti","KaiTi",serif;font-weight:900;line-height:.9}.red{background:#b43c32}.blue{background:#355eae}.purple{background:#7948a7}.green{background:#39835b}.piece.marshal{border:4px solid #ffd74a;background:#b43c32;box-shadow:inset 0 0 9px #fff0a2,0 0 12px #ffd329;color:#fff6bc;text-shadow:0 2px 3px #5a2400}.hidden-piece{color:transparent;border:1px solid #eadcad;text-shadow:none}.hidden-piece.blue{background:#355eae}.hidden-piece.purple{background:#7948a7}.hidden-piece.green{background:#39835b}.piece-mark{position:absolute;left:7%;top:7%;width:86%;height:86%;padding:0;border:3px solid #ffea61;border-radius:8px;display:grid;place-items:center;background:#18251ef2;color:#fff7a7!important;text-shadow:0 2px 3px #000;font:900 clamp(14px,2.3vw,30px) "KaiTi",serif;box-shadow:inset 0 0 8px #ffe73f,0 0 9px #ffe73f;z-index:4}.font-toggle{position:absolute;z-index:12;right:4%;top:1.5%;width:24%;height:12%;border:4px solid #1ca5ef;border-radius:13px;background:#f5dfaaeb;color:#173e55;font-weight:900;font-size:clamp(14px,2vw,25px);cursor:pointer;box-shadow:0 7px 18px #0004}.font-toggle.active{background:#167bb6;color:white}.cheat-panel{position:absolute;z-index:12;right:4%;top:14.5%;width:24%;padding:7px 11px;border:4px solid #e5534b;border-radius:13px;background:#351411e8;color:#ffe2ad;box-shadow:0 7px 18px #0005}.cheat-panel h3{margin:0 0 4px;font-size:clamp(12px,1.65vw,21px);color:#ff9d73;white-space:nowrap}.cheat-panel label{display:flex;align-items:center;gap:7px;padding:3px 0;font-size:clamp(10px,1.25vw,16px);line-height:1.1;cursor:pointer}.cheat-panel input{width:17px;height:17px;margin:0;accent-color:#e5483f}.marker-panel{position:absolute;z-index:12;left:4%;top:4%;width:25%;min-height:28%;padding:10px 12px;border:4px solid #72c900;border-radius:12px;background:#18301ee8;color:#ecffd0;box-shadow:0 7px 18px #0005}.marker-panel h3{margin:0 0 7px;color:#b8ff59;font-size:clamp(13px,1.7vw,22px)}.marker-panel p{margin:5px 0 8px;font-size:clamp(8px,1vw,13px);line-height:1.35}.marker-panel select,.marker-panel button{width:100%;margin-top:6px;padding:7px 6px;border:1px solid #91c94a;border-radius:8px;background:#e9f6c8;color:#183214;font-weight:800;font-size:clamp(9px,1.15vw,15px)}.marker-panel button{cursor:pointer}.marker-panel button.active{background:#6fb72d;color:#fff}.marker-panel .clear-marks{background:#684039;color:#ffe1d3;border-color:#a76658}.board-actions{position:absolute;z-index:12;right:4%;bottom:3%;width:24%;height:28%;display:grid;grid-template-rows:repeat(3,1fr);gap:7px}.board-actions button{border:3px solid #c59b52;border-radius:10px;background:#201b14dd;color:#ffe1a7;font:900 clamp(12px,1.55vw,20px) "KaiTi",serif;cursor:pointer;box-shadow:0 6px 16px #0005}.board-actions .surrender{border-color:#e65b4f;background:#57201bdd;color:white}.board-actions .skip-turn{border-color:#6ea6c7;background:#17394ddd;color:#cceeff}.board-actions button:disabled{cursor:not-allowed;filter:grayscale(1);opacity:.48}.board-actions button:not(:disabled):hover{filter:brightness(1.35)}.trail-arrow{position:absolute;z-index:8;width:3.2%;aspect-ratio:1;display:grid;place-items:center;border-radius:50%;background:#fff2a9dc;color:#7c261e;font-size:clamp(8px,1.15vw,15px);font-weight:900;pointer-events:none;box-shadow:0 0 6px #0008}.trail-arrow.start{background:#ffe36d;color:#5c2917;box-shadow:0 0 0 2px #fff2a1,0 0 10px #ffdc3f}.battle-flash{position:absolute;z-index:9;width:6.7%;aspect-ratio:1;transform:translate(-50%,-50%);border:4px solid #ffe33f;border-radius:8px;pointer-events:none;animation:battleBlink .45s infinite alternate;box-shadow:0 0 14px #ffd91a}@keyframes battleBlink{to{opacity:.18;transform:translate(-50%,-50%) scale(1.12)}}.setup-selected{outline:3px solid #ffe36d;box-shadow:0 0 14px #ffd54f}.setup-tray{position:absolute;z-index:6;left:2%;top:67%;width:31%;aspect-ratio:1;padding:5px;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);gap:3px;border:3px solid #e34d42;border-radius:7px;background:#cbae7288}.setup-tray.hidden{display:none}.tray-cell{min-width:0;min-height:0;display:grid;place-items:center}.tray-piece{width:100%;height:100%;aspect-ratio:1;border:1px solid #f0cf9b;border-radius:4px;font-size:clamp(6px,.85vw,10px);font-weight:800}.tray-piece.large-label{font-size:clamp(15px,2.4vw,28px)}.difficulty{display:grid;grid-template-columns:repeat(4,1fr);gap:5px;margin:8px 0}.difficulty.hidden{display:none}.difficulty button{padding:7px 3px;border:1px solid #8b734d;border-radius:14px;background:#171b18;color:#c8b990;font-weight:800}.difficulty button[data-level="hell"]{color:#ff9b8b;border-color:#9f3c36}.difficulty button.active{border-color:#ffd46c;background:#73501d;color:#fff1bd}.difficulty button[data-level="hell"].active{background:#8d201b;color:#fff}.setup-actions,.formation-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:8px}.setup-actions.hidden,.formation-actions.hidden{display:none}.setup-action,.formation-action{padding:10px 6px;border:0;border-radius:18px;background:linear-gradient(#ffe18a,#c98b2e);color:#3a2108;font-weight:900;cursor:pointer}.quick-setup{background:linear-gradient(#b8e4bd,#4d9b61)}.formation-action{background:linear-gradient(#add9ee,#4d86a8);color:#102b3a}.dead{opacity:.2}.flag-reveal{animation:flash .7s infinite alternate}@keyframes flash{to{box-shadow:0 0 18px #fff06c}}
 
     /* ==================== 4. 右侧信息栏与结算弹窗 ==================== */
-    aside{padding:15px;border:1px solid #9f783e55;border-radius:12px;background:#090f0cbb;overflow:auto}.turn{font:700 18px "KaiTi",serif;color:#ffe09a}.coin-box{margin:8px 0;padding:8px 11px;border:1px solid #d4a95755;border-radius:9px;background:#20170c;color:#ffd77e;font-weight:800}.teams{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:12px 0}.team{padding:8px;border-radius:7px;background:#ffffff09;font-size:12px}.log{height:240px;overflow:auto;padding:9px;border-radius:8px;background:#0005;font-size:12px;line-height:1.7}.rules{font-size:12px;color:#b9c4ba;line-height:1.65}.result{position:fixed;z-index:20;inset:0;display:none;place-items:center;background:#000b}.result.show{display:grid}.result>div{padding:28px 38px;border:1px solid #d1a654;border-radius:14px;background:#180f0c;text-align:center}.result button{padding:9px 20px;border:0;border-radius:18px;background:#d19a45;font-weight:700}
+    aside{padding:15px;border:1px solid #9f783e55;border-radius:12px;background:#090f0cbb;overflow:auto}.turn{font:700 18px "KaiTi",serif;color:#ffe09a}.coin-box{margin:8px 0;padding:8px 11px;border:1px solid #d4a95755;border-radius:9px;background:#20170c;color:#ffd77e;font-weight:800}.teams{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:12px 0}.team{padding:8px;border-radius:7px;background:#ffffff09;font-size:12px}.log{height:240px;overflow:auto;padding:9px;border-radius:8px;background:#0005;font-size:12px;line-height:1.7}.rules{font-size:12px;color:#b9c4ba;line-height:1.65}.result,.intro-modal,.formation-modal{position:fixed;z-index:20;inset:0;display:none;place-items:center;background:#000b}.result.show,.intro-modal.show,.formation-modal.show{display:grid}.result>div,.intro-card,.formation-card{width:min(430px,90vw);max-height:82vh;overflow:auto;padding:24px 28px;border:1px solid #d1a654;border-radius:14px;background:#180f0c;text-align:center;box-shadow:0 18px 50px #000b}.result button,.intro-card button,.formation-card button{padding:9px 16px;border:0;border-radius:18px;background:#d19a45;font-weight:700;cursor:pointer}.intro-card h2,.formation-card h2{margin:0 0 14px;color:#ffe2a0}.intro-list{display:grid;gap:8px;margin-bottom:16px;text-align:left}.intro-list div{padding:8px 12px;border-radius:8px;background:#ffffff0c}.intro-list b{display:inline-block;width:48px;color:#ffd36f}.formation-save{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:14px}.formation-save input{min-width:0;padding:10px 12px;border:1px solid #a9844d;border-radius:10px;background:#0d1712;color:#fff;font-size:16px}.formation-list{display:grid;gap:8px;text-align:left}.formation-empty{padding:18px;color:#bcae90}.formation-row{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;padding:8px;border:1px solid #795c35;border-radius:9px;background:#ffffff08}.formation-row span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.formation-row .load-one{background:#68a8ca;color:#102638}.formation-row .delete-one{background:#8e332d;color:#fff}.formation-close{margin-top:14px;background:#5d574c!important;color:#fff}
 
     /* ==================== 5. 手机竖屏与手机横屏适配 ==================== */
     @media(max-width:800px){body{overflow:auto}main{height:auto;min-height:100dvh;grid-template-rows:auto 1fr}header{min-height:82px;flex-wrap:wrap;padding:8px}.title{font-size:18px}.layout{display:flex;flex-direction:column;padding:5px}.board{width:min(96vw,76vh)}.piece.large-label{font-size:clamp(9px,2.8vw,14px);line-height:1}.tray-piece.large-label{font-size:clamp(8px,2.5vw,12px)}aside{width:96vw;margin:auto}.log{height:110px}.tools{overflow-x:auto}.tools button{flex:0 0 auto;font-size:11px}}
@@ -34,11 +34,15 @@
   <header><a href="index.html">← 游戏大厅</a><div class="title" id="gameTitle">云上四国军棋 · 暗棋模式</div><div class="tools"><button id="landscape">↻ 横屏</button><button id="rulesBtn">规则说明</button><button id="restart">重新布阵</button></div></header>
   <!-- 游戏主体：左侧动态生成棋盘，右侧显示回合、金币、难度、阵营和日志 -->
   <div class="layout"><div class="board-wrap"><div class="board" id="board"></div></div><aside>
-    <div class="turn" id="turnText">请布置红方棋子</div><div class="coin-box">🪙 大厅金币：<span id="coinCount">0</span></div><div class="difficulty" id="difficulty"><button data-level="easy">简单</button><button data-level="normal">一般</button><button data-level="hard">困难</button></div><div class="setup-actions" id="setupActions"><button class="setup-action quick-setup" id="quickSetup">快速布阵</button><button class="setup-action" id="confirmSetup">确认布阵</button></div><div class="teams"><div class="team">🔴 红方（你／下方）<br>孤军作战，对抗三方电脑</div><div class="team">🟣 紫方（上方电脑）<br>盟友：蓝方、绿方</div><div class="team">🔵 蓝方（左方电脑）<br>盟友：紫方、绿方</div><div class="team">🟢 绿方（右方电脑）<br>盟友：蓝方、紫方</div></div>
+    <div class="turn" id="turnText">请布置红方棋子</div><div class="coin-box">🪙 大厅金币：<span id="coinCount">0</span></div><div class="difficulty" id="difficulty"><button data-level="easy">简单</button><button data-level="normal">一般</button><button data-level="hard">困难</button><button data-level="hell">地狱</button></div><div class="setup-actions" id="setupActions"><button class="setup-action quick-setup" id="quickSetup">快速布阵</button><button class="setup-action" id="confirmSetup">确认布阵</button></div><div class="formation-actions" id="formationActions"><button class="formation-action" id="saveFormation">保存阵型</button><button class="formation-action" id="loadFormation">调用阵型</button></div><div class="teams"><div class="team" id="teamRed"></div><div class="team" id="teamPurple"></div><div class="team" id="teamBlue"></div><div class="team" id="teamGreen"></div></div>
     <div class="log" id="log"></div><div class="rules" id="rules">侧边铁路：本方侧边前五点与邻家侧边前五点连续相通，遇到棋子立即停止；普通棋子不能转入邻家第一排，工兵可在铁路交叉点转向。</div>
   </aside></div>
   <!-- 游戏结束时覆盖全屏显示的结算弹窗 -->
   <div class="result" id="result"><div><h2 id="resultTitle"></h2><p id="resultText"></p><button onclick="start()">再来一局</button></div></div>
+  <!-- 每次开局显示的难度速览；每条说明不超过十个汉字。 -->
+  <div class="intro-modal" id="introModal"><div class="intro-card"><h2>难度速览</h2><div class="intro-list"><div><b>简单</b>红紫对蓝绿</div><div><b>一般</b>紫清空战两家</div><div><b>困难</b>紫中立三方战</div><div><b>地狱</b>红方一打三</div></div><button id="closeIntro">开始布阵</button></div></div>
+  <!-- 页面内置阵型管理器，避免 file:// 环境不显示原生 prompt 输入框。 -->
+  <div class="formation-modal" id="formationModal"><div class="formation-card"><h2>我的阵型</h2><div class="formation-save"><input id="formationName" maxlength="16" placeholder="输入阵型名称"><button id="confirmSaveFormation">保存当前阵型</button></div><div class="formation-list" id="formationList"></div><button class="formation-close" id="closeFormation">关闭</button></div></div>
 </main><script>
 /* ========================================================================
    四国军棋主程序阅读导航
@@ -63,7 +67,7 @@
 const names=['司令','军长','师长','师长','旅长','旅长','团长','团长','营长','营长','连长','连长','连长','排长','排长','排长','工兵','工兵','工兵','炸弹','炸弹','地雷','地雷','地雷','军旗'];
 
 // 普通棋子的比较等级；炸弹、地雷和军旗在 battle() 中单独处理。
-const rank={'司令':9,'军长':8,'师长':7,'旅长':6,'团长':5,'营长':4,'连长':3,'排长':2,'工兵':1}, colors=['red','blue','purple','green'], labels=['红方','蓝方','紫方','绿方'];
+const rank={'元帅':10,'司令':9,'军长':8,'师长':7,'旅长':6,'团长':5,'营长':4,'连长':3,'排长':2,'工兵':1}, colors=['red','blue','purple','green'], labels=['红方','蓝方','紫方','绿方'];
 
 // URL 带 ?mode=chaos 时启用“乱战随机分兵”模式。
 const chaosMode=new URLSearchParams(location.search).get('mode')==='chaos';
@@ -72,19 +76,32 @@ const chaosMode=new URLSearchParams(location.search).get('mode')==='chaos';
    turn：当前行动方；phase：setup 布阵 / play 对局；
    selected、valid：玩家当前选中的棋子和可走目标；
    aliveFlags：四方是否仍在场；aiOrders：三方电脑记住的特殊追击任务。 */
-let nodes=[],edges=[],pieces=[],turn=0,selected=null,valid=[],aliveFlags=[true,true,true,true],over=false,phase='setup',setupSelected=null,draggedPiece=null,lastTrail=null,lastBattle=null,settled=false,purpleSafeTurns=0,purpleAttacked=false,hardRedBreach=false,redSurrendered=false,aiTimer=null,aiOrders={1:null,2:null,3:null};
+let nodes=[],edges=[],pieces=[],turn=0,selected=null,valid=[],aliveFlags=[true,true,true,true],over=false,phase='setup',setupSelected=null,draggedPiece=null,lastTrail=null,lastBattle=null,settled=false,purpleSafeTurns=0,purpleAttacked=false,hardRedBreach=false,redSurrendered=false,aiTimer=null,aiOrders={1:null,2:null,3:null},cheats={platoonToCommander:false,companyToBomb:false,marshal:false},marshalFallen=false,markingEnabled=false,markGuess='司令';
 
 // 常用 DOM、难度设置和“大字体单字显示”配置。
 const $=s=>document.querySelector(s),board=$('#board');
 let difficulty=localStorage.getItem('armyDifficulty')||'easy';
-const shortName={'司令':'司','军长':'军','师长':'师','旅长':'旅','团长':'团','营长':'营','连长':'连','排长':'排','工兵':'兵','炸弹':'弹','地雷':'雷','军旗':'旗'};
+if(!['easy','normal','hard','hell'].includes(difficulty))difficulty='easy';
+const shortName={'元帅':'帅','司令':'司','军长':'军','师长':'师','旅长':'旅','团长':'团','营长':'营','连长':'连','排长':'排','工兵':'兵','炸弹':'弹','地雷':'雷','军旗':'旗'};
 let largeFont=localStorage.getItem('armyLargeFont')==='1';
 
 // 根据字体模式返回“司令”或“司”这样的显示文字。
 function pieceLabel(name){return largeFont?shortName[name]:name}
 
-// 更新简单/一般/困难三个按钮的选中样式。
-function updateDifficulty(){document.querySelectorAll('#difficulty button').forEach(b=>b.classList.toggle('active',b.dataset.level===difficulty))}
+// 更新简单/一般/困难/地狱四个按钮的选中样式和阵营说明。
+function updateDifficulty(){document.querySelectorAll('#difficulty button').forEach(b=>b.classList.toggle('active',b.dataset.level===difficulty));updateModeInfo()}
+
+// 四种难度同时代表四套阵营关系，布阵时在右侧实时展示。
+function updateModeInfo(){
+  const info={
+    easy:['🔴 红方（你）<br>盟友：紫方','🟣 紫方<br>盟友：红方','🔵 蓝方<br>盟友：绿方','🟢 绿方<br>盟友：蓝方','简单：沿用原困难电脑，红紫联盟对抗蓝绿联盟。'],
+    normal:['🔴 红方（你）<br>独自对抗蓝绿','🟣 紫方<br>开局清空','🔵 蓝方<br>盟友：绿方','🟢 绿方<br>盟友：蓝方','一般：紫方开局退场，红方25枚对抗蓝绿共50枚。'],
+    hard:['🔴 红方（你）<br>对抗蓝绿','🟣 紫方<br>完全中立，任何方都可交战','🔵 蓝方<br>盟友：绿方','🟢 绿方<br>盟友：蓝方','困难：红方对抗蓝绿联盟；紫方不加入任何联盟。'],
+    hell:['🔴 红方（你）<br>孤军对抗三家','🟣 紫方<br>盟友：蓝方、绿方','🔵 蓝方<br>盟友：紫方、绿方','🟢 绿方<br>盟友：蓝方、紫方','地狱：蓝、绿、紫三家联盟，围攻红方。']
+  }[difficulty];
+  ['#teamRed','#teamPurple','#teamBlue','#teamGreen'].forEach((id,i)=>$(id).innerHTML=info[i]);
+  $('#rules').textContent=info[4];
+}
 
 // ==================== 2. 棋盘数据建模 ====================
 
@@ -132,9 +149,11 @@ function bindSetupPiece(el,p){el.draggable=true;el.dataset.pieceId=p.id;el.oncli
 function draw(){
   board.innerHTML='';for(let [a,b,t] of edges){let A=pos(nodes.find(n=>n.id===a)),B=pos(nodes.find(n=>n.id===b)),dx=B.x-A.x,dy=B.y-A.y,l=Math.hypot(dx,dy),el=document.createElement('i');el.className=`road ${t}`;el.style.cssText=`left:${A.x}%;top:${A.y}%;width:${l}%;transform:rotate(${Math.atan2(dy,dx)*180/Math.PI}deg)`;board.appendChild(el)}
   let fontButton=document.createElement('button');fontButton.className=`font-toggle ${largeFont?'active':''}`;fontButton.textContent=largeFont?'标准字体':'放大字体';fontButton.onclick=()=>{largeFont=!largeFont;localStorage.setItem('armyLargeFont',largeFont?'1':'0');draw()};board.appendChild(fontButton);
-  if(phase==='play'&&!over){let actions=document.createElement('div'),endButton=document.createElement('button');actions.className='board-actions';endButton.textContent='结束游戏';endButton.onclick=endGame;actions.appendChild(endButton);if(!redSurrendered){let surrenderButton=document.createElement('button');surrenderButton.className='surrender';surrenderButton.textContent='投降';surrenderButton.onclick=surrender;actions.appendChild(surrenderButton)}board.appendChild(actions)}
+  if(!chaosMode&&!over){let panel=document.createElement('div');panel.className='cheat-panel';panel.innerHTML=`<h3>⚠ 作弊器</h3><label><input type="checkbox" data-cheat="platoonToCommander" ${cheats.platoonToCommander?'checked':''}>排长变司令</label><label><input type="checkbox" data-cheat="companyToBomb" ${cheats.companyToBomb?'checked':''}>连长变炸弹</label><label><input type="checkbox" data-cheat="marshal" ${cheats.marshal?'checked':''}>增加元帅</label>`;panel.querySelectorAll('input').forEach(input=>input.onchange=()=>toggleCheat(input.dataset.cheat,input.checked));board.appendChild(panel)}
+  if(!over){let marker=document.createElement('div'),options=['司令','军长','师长','旅长','团长','营长','连长','排长','工兵','炸弹','地雷','军旗'];marker.className='marker-panel';marker.innerHTML=`<h3>🏷 棋子标记器</h3><p>选棋种并开启，再点击敌方棋子；标记会跟随移动。</p><select>${options.map(name=>`<option ${markGuess===name?'selected':''}>${name}</option>`).join('')}</select><button class="${markingEnabled?'active':''}">${markingEnabled?'标记模式：开启':'开启标记模式'}</button><button class="clear-marks">清除全部标记</button>`;let select=marker.querySelector('select'),buttons=marker.querySelectorAll('button');select.onchange=()=>markGuess=select.value;buttons[0].onclick=()=>{markingEnabled=!markingEnabled;draw()};buttons[1].onclick=()=>{pieces.forEach(p=>delete p.mark);draw();log('🏷 已清除全部棋子标记')};board.appendChild(marker)}
+  if(phase==='play'&&!over){let actions=document.createElement('div'),endButton=document.createElement('button');actions.className='board-actions';endButton.textContent='结束游戏';endButton.onclick=endGame;actions.appendChild(endButton);if(!redSurrendered){let surrenderButton=document.createElement('button');surrenderButton.className='surrender';surrenderButton.textContent='投降';surrenderButton.onclick=surrender;actions.appendChild(surrenderButton)}let skipButton=document.createElement('button');skipButton.className='skip-turn';skipButton.textContent='跳过回合';skipButton.disabled=turn!==0||!aliveFlags[0];skipButton.onclick=skipTurn;actions.appendChild(skipButton);board.appendChild(actions)}
   if(lastTrail){lastTrail.path.slice(0,-1).forEach((id,i)=>{let n=nodes.find(x=>x.id===id),next=nodes.find(x=>x.id===lastTrail.path[i+1]);if(!n||!next)return;let at=pos(n),angle=Math.atan2(next.y-n.y,next.x-n.x)*180/Math.PI,el=document.createElement('span');el.className=`trail-arrow ${i===0?'start':''}`;el.textContent='➤';el.style.cssText=`left:${at.x}%;top:${at.y}%;transform:translate(-50%,-50%) rotate(${angle}deg);color:${['#8e211a','#173f8a','#603080','#17613a'][lastTrail.owner]}`;board.appendChild(el)});if(lastBattle){let n=nodes.find(x=>x.id===lastBattle);if(n){let at=pos(n),el=document.createElement('span');el.className='battle-flash';el.style.cssText=`left:${at.x}%;top:${at.y}%`;board.appendChild(el)}}}
-  nodes.filter(n=>n.type!=='transit').forEach(n=>{let p=pos(n),el=document.createElement('button'),pc=pieceAt(n.id),setupTarget=phase==='setup'&&n.owner===0&&n.type!=='camp';el.className=`node ${n.type} ${n.rail?'rail':''} ${valid.includes(n.id)?'valid':''} ${selected?.node===n.id?'selected':''} ${setupTarget?'setup-target':''}`;el.style.cssText=`left:${p.x}%;top:${p.y}%`;el.dataset.id=n.id;if(pc){let hidden=pc.owner!==0&&!pc.reveal&&!(redSurrendered&&pc.owner===2);el.innerHTML=`<span class="piece ${colors[pc.owner]} ${hidden?'hidden-piece':''} ${largeFont&&!hidden?'large-label':''} ${pc.reveal?'flag-reveal':''} ${setupSelected===pc.id?'setup-selected':''}">${hidden?'':pieceLabel(pc.name)}</span>`;if(phase==='setup'&&pc.owner===0)bindSetupPiece(el.firstElementChild,pc)}else if(n.type==='camp')el.innerHTML='<span>营</span>';else if(n.type==='hq')el.textContent='本营';el.onclick=()=>clickNode(n.id);if(setupTarget){el.ondragover=e=>e.preventDefault();el.ondrop=e=>{e.preventDefault();placeSetup(e.dataTransfer.getData('text/plain')||draggedPiece,n.id)}}board.appendChild(el)})
+  nodes.filter(n=>n.type!=='transit').forEach(n=>{let p=pos(n),el=document.createElement('button'),pc=pieceAt(n.id),setupTarget=phase==='setup'&&n.owner===0&&n.type!=='camp';el.className=`node ${n.type} ${n.rail?'rail':''} ${valid.includes(n.id)?'valid':''} ${selected?.node===n.id?'selected':''} ${setupTarget?'setup-target':''}`;el.style.cssText=`left:${p.x}%;top:${p.y}%`;el.dataset.id=n.id;if(pc){let hidden=pc.owner!==0&&!pc.reveal&&!(redSurrendered&&pc.owner===2),mark=pc.mark?`<i class="piece-mark">${shortName[pc.mark]||pc.mark}</i>`:'';el.innerHTML=`<span class="piece ${colors[pc.owner]} ${pc.name==='元帅'?'marshal':''} ${hidden?'hidden-piece':''} ${largeFont&&!hidden?'large-label':''} ${pc.reveal?'flag-reveal':''} ${setupSelected===pc.id?'setup-selected':''}">${hidden?'':pieceLabel(pc.name)}${mark}</span>`;if(phase==='setup'&&pc.owner===0)bindSetupPiece(el.firstElementChild,pc)}else if(n.type==='camp')el.innerHTML='<span>营</span>';else if(n.type==='hq')el.textContent='本营';el.onclick=()=>clickNode(n.id);if(setupTarget){el.ondragover=e=>e.preventDefault();el.ondrop=e=>{e.preventDefault();placeSetup(e.dataTransfer.getData('text/plain')||draggedPiece,n.id)}}board.appendChild(el)})
   if(phase==='setup'){let tray=document.createElement('div');tray.className='setup-tray';tray.ondragover=e=>e.preventDefault();tray.ondrop=e=>{e.preventDefault();returnToTray(e.dataTransfer.getData('text/plain')||draggedPiece)};pieces.filter(p=>p.owner===0&&!p.node).forEach(p=>{let cell=document.createElement('div'),el=document.createElement('span');cell.className='tray-cell';el.className=`piece tray-piece red ${largeFont?'large-label':''} ${setupSelected===p.id?'setup-selected':''}`;el.textContent=pieceLabel(p.name);bindSetupPiece(el,p);cell.appendChild(el);tray.appendChild(cell)});board.appendChild(tray)}
 }
 
@@ -196,28 +215,154 @@ function deploy(){
   pieces=names.map((name,i)=>({id:`0-${i}`,owner:0,name,node:null}));for(let owner=1;owner<4;owner++)deployOwner(owner)
 }
 
+// ==================== 标准模式作弊器 ====================
+
+/**
+ * 开关一项作弊器。乱战模式下此函数直接拒绝执行。
+ * 排长/连长会保留 cheatedFrom 标记，因此关闭开关时可以恢复原棋种。
+ */
+function toggleCheat(type,enabled){
+  if(chaosMode||over)return;
+  if(type==='marshal'&&enabled){
+    if(marshalFallen){cheats.marshal=false;draw();return alert('本局元帅已经阵亡，不能再次生成。')}
+    if(pieces.some(p=>p.id==='0-cheat-marshal'&&!p.dead)){cheats.marshal=true;draw();return}
+    let camp=nodes.find(n=>n.owner===0&&n.row===2&&n.col===2&&n.type==='camp');
+    if(!camp||pieceAt(camp.id)){cheats.marshal=false;draw();return alert('红方第三排中央行营已有棋子，暂时无法增加元帅。')}
+    pieces.push({id:'0-cheat-marshal',owner:0,name:'元帅',node:camp.id,cheatPiece:true});
+  }else if(type==='marshal'&&!enabled){
+    pieces=pieces.filter(p=>p.id!=='0-cheat-marshal');
+  }else{
+    let original=type==='platoonToCommander'?'排长':'连长',replacement=type==='platoonToCommander'?'司令':'炸弹';
+    pieces.filter(p=>p.owner===0).forEach(p=>{
+      if(enabled&&p.name===original&&!p.cheatedFrom){p.cheatedFrom=original;p.name=replacement}
+      else if(!enabled&&p.cheatedFrom===original){p.name=original;delete p.cheatedFrom}
+    });
+  }
+  cheats[type]=enabled;selected=null;valid=[];draw();updateSetupText();
+  log(`🎛️ 作弊器：${{platoonToCommander:'排长变司令',companyToBomb:'连长变炸弹',marshal:'增加元帅'}[type]}已${enabled?'开启':'关闭'}`);
+}
+
 // 把红方棋子放到目标格；目标已有红棋时，交换两枚棋子的位置。
 function placeSetup(pieceId,nodeId){if(phase!=='setup')return;let p=pieces.find(x=>x.id===pieceId&&x.owner===0),n=nodes.find(x=>x.id===nodeId);if(!p||!n||n.owner!==0||n.type==='camp')return;let other=pieceAt(nodeId),source=p.node;if(other&&other.id!==p.id)other.node=source;p.node=nodeId;setupSelected=null;draggedPiece=null;draw();updateSetupText()}
 
 // 把红方棋子从棋盘拖回待布阵托盘。
 function returnToTray(pieceId){let p=pieces.find(x=>x.id===pieceId&&x.owner===0);if(!p)return;p.node=null;setupSelected=null;draw();updateSetupText()}
 
-// 在侧栏显示红方已经放置了多少枚棋子。
-function updateSetupText(){let placed=pieces.filter(p=>p.owner===0&&p.node).length;$('#turnText').textContent=`布阵中：已放置 ${placed}/25 枚`}
+// 在侧栏显示红方已经放置了多少枚棋子；开启元帅后总数会变成26。
+function updateSetupText(){let own=pieces.filter(p=>p.owner===0),placed=own.filter(p=>p.node).length;$('#turnText').textContent=`布阵中：已放置 ${placed}/${own.length} 枚`}
 
 // Fisher–Yates 原地洗牌。
 function shuffle(a){for(let i=a.length-1;i;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 
-// 按军旗、地雷、炸弹的限制为红方生成随机阵型；红方工兵位置不受电脑限制。
-function quickSetup(){if(phase!=='setup')return;let own=pieces.filter(p=>p.owner===0),slots=nodes.filter(n=>n.owner===0&&n.type!=='camp');own.forEach(p=>p.node=null);let take=filter=>{let opts=slots.filter(n=>!pieceAt(n.id)&&filter(n)),n=opts[Math.floor(Math.random()*opts.length)];return n.id};let flag=own.find(p=>p.name==='军旗');flag.node=take(n=>n.type==='hq');own.filter(p=>p.name==='地雷').forEach(p=>p.node=take(n=>n.row>=4));own.filter(p=>p.name==='炸弹').forEach(p=>p.node=take(n=>n.row!==0));shuffle(own.filter(p=>!p.node)).forEach(p=>p.node=take(()=>true));setupSelected=null;draw();updateSetupText();log('已按规则完成随机布阵，可继续手动调整。')}
+// 按军旗、地雷、炸弹的限制为红方生成随机阵型，并兼容三项作弊器。
+function quickSetup(){
+  if(phase!=='setup')return;
+  let own=pieces.filter(p=>p.owner===0),marshal=own.find(p=>p.id==='0-cheat-marshal'&&!p.dead),regular=own.filter(p=>p!==marshal),slots=nodes.filter(n=>n.owner===0&&n.type!=='camp');
+  regular.forEach(p=>p.node=null);
+  // 元帅不占用25个普通布阵格，始终保留在红方第三排中央行营。
+  if(marshal){let camp=nodes.find(n=>n.owner===0&&n.row===2&&n.col===2&&n.type==='camp');marshal.node=camp.id}
+  let take=filter=>{let opts=slots.filter(n=>!pieceAt(n.id)&&filter(n)),n=opts[Math.floor(Math.random()*opts.length)];return n?.id};
+  let flag=regular.find(p=>p.name==='军旗');flag.node=take(n=>n.type==='hq');
+  regular.filter(p=>p.name==='地雷').forEach(p=>p.node=take(n=>n.row>=4));
+  // 只有原生炸弹受“不能放第一排”限制；由连长变化的炸弹可以参与普通随机布阵。
+  regular.filter(p=>p.name==='炸弹'&&!p.cheatedFrom).forEach(p=>p.node=take(n=>n.row!==0));
+  shuffle(regular.filter(p=>!p.node)).forEach(p=>p.node=take(()=>true));
+  setupSelected=null;draw();updateSetupText();log(`已按规则完成随机布阵${marshal?'，元帅保留在中央行营':''}。`);
+}
+
+// 阵型库保存在浏览器本地，可用名称保存多套阵型。
+const FORMATION_KEY='armySavedFormationsV1';
+function getFormations(){try{let value=JSON.parse(localStorage.getItem(FORMATION_KEY)||'[]');return Array.isArray(value)?value:[]}catch(e){return[]}}
+function setFormations(value){localStorage.setItem(FORMATION_KEY,JSON.stringify(value))}
+
+// 打开阵型管理弹窗；保存和调用共用同一个可视化列表。
+function openFormationManager(focusName=false){
+  if(phase!=='setup')return;
+  renderFormationList();
+  $('#formationModal').classList.add('show');
+  if(focusName){$('#formationName').value=`阵型${getFormations().length+1}`;$('#formationName').focus()}
+}
+
+// 绘制已保存阵型，每套阵型都可以单独调用或删除。
+function renderFormationList(){
+  let list=$('#formationList'),formations=getFormations();
+  list.innerHTML='';
+  if(!formations.length){let empty=document.createElement('div');empty.className='formation-empty';empty.textContent='还没有保存的阵型';list.appendChild(empty);return}
+  formations.forEach((formation,index)=>{
+    let row=document.createElement('div'),name=document.createElement('span'),load=document.createElement('button'),remove=document.createElement('button');
+    row.className='formation-row';name.textContent=`${formation.name}（${formation.layout.length}枚）`;
+    load.className='load-one';load.textContent='调用';load.onclick=()=>applyFormation(index);
+    remove.className='delete-one';remove.textContent='删除';remove.onclick=()=>deleteFormation(index);
+    row.append(name,load,remove);list.appendChild(row);
+  });
+}
+
+/**
+ * 将当前红方布阵写入本地阵型库。相同名称会被覆盖。
+ * 阵型按“棋子名称 + 格点ID”保存，因此重复棋子也能逐枚恢复。
+ */
+function confirmSaveFormation(){
+  let placed=pieces.filter(p=>p.owner===0&&p.node),name=$('#formationName').value.trim();
+  if(!placed.length)return alert('请先在棋盘上放置棋子。');
+  if(!name)return alert('请输入阵型名称。');
+  let formations=getFormations(),layout=placed.map(p=>({name:p.name,node:p.node})),saved={name,layout,mode:chaosMode?'chaos':'standard',cheats:chaosMode?null:{...cheats},updatedAt:Date.now()},index=formations.findIndex(f=>f.name===name);
+  if(index>=0)formations[index]=saved;else formations.push(saved);
+  setFormations(formations);$('#formationName').value='';renderFormationList();
+  log(`💾 已保存阵型“${name}”（${layout.length}枚）`);
+}
+
+/**
+ * 调用指定序号的阵型。
+ * 若乱战模式当前手牌缺少某类棋子，会尽量摆放匹配棋子，其余留在托盘。
+ */
+function applyFormation(index){
+  let formations=getFormations(),formation=formations[index];
+  if(!formation)return;
+  if(!chaosMode&&formation.cheats){
+    pieces=pieces.filter(p=>p.id!=='0-cheat-marshal');
+    pieces.filter(p=>p.owner===0&&p.cheatedFrom).forEach(p=>{p.name=p.cheatedFrom;delete p.cheatedFrom});
+    cheats={platoonToCommander:false,companyToBomb:false,marshal:false};
+    if(formation.cheats.platoonToCommander)toggleCheat('platoonToCommander',true);
+    if(formation.cheats.companyToBomb)toggleCheat('companyToBomb',true);
+    if(formation.cheats.marshal)toggleCheat('marshal',true);
+  }
+  let own=pieces.filter(p=>p.owner===0),used=new Set,placed=0;
+  own.forEach(p=>p.node=null);
+  formation.layout.forEach(item=>{
+    let piece=own.find(p=>!used.has(p.id)&&p.name===item.name),node=nodes.find(n=>n.id===item.node&&n.owner===0&&n.type!=='camp');
+    if(!piece||!node||pieceAt(node.id))return;
+    piece.node=node.id;used.add(piece.id);placed++;
+  });
+  setupSelected=null;$('#formationModal').classList.remove('show');draw();updateSetupText();log(`📂 已调用阵型“${formation.name}”（成功放置${placed}枚）`);
+  if(placed<formation.layout.length)alert(`已尽量调用阵型，${formation.layout.length-placed}枚棋子因当前手牌不同未能放置。`);
+}
+
+// 删除阵型前二次确认，避免误删。
+function deleteFormation(index){
+  let formations=getFormations(),formation=formations[index];if(!formation)return;
+  if(!confirm(`确定删除阵型“${formation.name}”吗？`))return;
+  formations.splice(index,1);setFormations(formations);renderFormationList();
+}
 
 // 校验红方阵型；通过后隐藏布阵控件并进入正式对局。
-function confirmSetup(){let mine=pieces.filter(p=>p.owner===0&&p.name==='地雷'),bomb=pieces.filter(p=>p.owner===0&&p.name==='炸弹'),flag=pieces.find(p=>p.owner===0&&p.name==='军旗');if(pieces.some(p=>p.owner===0&&!p.node))return alert('请先把 25 枚棋子全部放入本方棋盘。');if(nodes.find(n=>n.id===flag.node).type!=='hq')return alert('军旗必须放在两个大本营之一。');if(mine.some(p=>nodes.find(n=>n.id===p.node).row<4))return alert('地雷只能放在最后两排。');if(bomb.some(p=>nodes.find(n=>n.id===p.node).row===0))return alert('炸弹不能放在第一排。');phase='play';setupSelected=null;$('#setupActions').classList.add('hidden');$('#difficulty').classList.add('hidden');$('#turnText').textContent='红方行动';$('#log').innerHTML='';log(`布阵完成，${{easy:'简单',normal:'一般',hard:'困难'}[difficulty]}难度战局开始`);if(!hasMove(0)){eliminateOwner(0);checkWin();if(!over)nextTurn()}draw()}
+function confirmSetup(){let mine=pieces.filter(p=>p.owner===0&&p.name==='地雷'),bomb=pieces.filter(p=>p.owner===0&&p.name==='炸弹'&&!p.cheatedFrom),flag=pieces.find(p=>p.owner===0&&p.name==='军旗');if(pieces.some(p=>p.owner===0&&!p.node))return alert('请先把所有棋子全部放入本方棋盘。');if(nodes.find(n=>n.id===flag.node).type!=='hq')return alert('军旗必须放在两个大本营之一。');if(mine.some(p=>nodes.find(n=>n.id===p.node).row<4))return alert('地雷只能放在最后两排。');if(bomb.some(p=>nodes.find(n=>n.id===p.node).row===0))return alert('原有炸弹不能放在第一排。');enableAudio();phase='play';setupSelected=null;$('#setupActions').classList.add('hidden');$('#formationActions').classList.add('hidden');$('#difficulty').classList.add('hidden');$('#turnText').textContent='红方行动';$('#log').innerHTML='';log(`布阵完成，${{easy:'简单',normal:'一般',hard:'困难',hell:'地狱'}[difficulty]}模式战局开始`);hornSound();if(difficulty==='normal'){eliminateOwner(2);log('一般模式：紫方25枚棋子已在开局清空，红方对抗蓝绿共50枚棋子。')}if(!hasMove(0)){eliminateOwner(0);checkWin();if(!over)nextTurn()}draw()}
 
 // ==================== 5. 阵营关系、铁路寻路与合法走法 ====================
 
-// 三打一阵营：红方只和自己同阵营；蓝、紫、绿三方互为盟友。
-function isAlly(a,b){return a===b||(a>0&&b>0)}
+/**
+ * 根据当前难度判断两方是否为盟友。
+ * 简单：红紫、蓝绿；一般：仅蓝绿；困难：仅蓝绿且紫方中立；地狱：蓝紫绿。
+ */
+function isAlly(a,b){
+  if(a===b)return true;
+  if(difficulty==='easy')return(a===0&&b===2)||(a===2&&b===0)||(a===1&&b===3)||(a===3&&b===1);
+  if(difficulty==='hell')return a>0&&b>0;
+  return(a===1&&b===3)||(a===3&&b===1);
+}
+
+// 返回指定阵营当前的盟友和敌人编号，供电脑评分使用。
+function allyOwnersOf(owner){return[0,1,2,3].filter(other=>other!==owner&&isAlly(owner,other))}
+function enemyOwnersOf(owner){return[0,1,2,3].filter(other=>other!==owner&&aliveFlags[other]&&!isAlly(owner,other))}
 
 // 返回某一家的第一排格点，按列从小到大排列。
 function frontRow(owner){return nodes.filter(n=>n.owner===owner&&n.row===0).sort((a,b)=>a.col-b.col)}
@@ -258,11 +403,27 @@ function moveSound(){if(!audioCtx)return;let now=audioCtx.currentTime,g=audioCtx
 // 司令阵亡时播放的特殊提示旋律。
 function commanderDeathSound(){if(!audioCtx)return;let now=audioCtx.currentTime,g=audioCtx.createGain();g.connect(audioCtx.destination);g.gain.setValueAtTime(.28,now);g.gain.exponentialRampToValueAtTime(.001,now+1.15);[392,330,262,196].forEach((freq,i)=>{let o=audioCtx.createOscillator();o.type='triangle';o.frequency.setValueAtTime(freq,now+i*.2);o.connect(g);o.start(now+i*.2);o.stop(now+i*.2+.42)})}
 
+// 元帅被炸弹炸死或撞上地雷时，发出“啊”的语音提示。
+function marshalDeathSound(){
+  if('speechSynthesis'in window&&window.SpeechSynthesisUtterance){window.speechSynthesis.cancel();let u=new window.SpeechSynthesisUtterance('啊');u.lang='zh-CN';u.rate=.65;u.pitch=.65;u.volume=1;window.speechSynthesis.speak(u)}
+  if(!audioCtx)return;let now=audioCtx.currentTime,g=audioCtx.createGain(),o=audioCtx.createOscillator();g.connect(audioCtx.destination);o.connect(g);o.type='sawtooth';o.frequency.setValueAtTime(360,now);o.frequency.exponentialRampToValueAtTime(150,now+.7);g.gain.setValueAtTime(.16,now);g.gain.exponentialRampToValueAtTime(.001,now+.75);o.start(now);o.stop(now+.75)
+}
+
+// 确认布阵、正式开局时播放短号角。
+function hornSound(){
+  if(!audioCtx)return;let now=audioCtx.currentTime,g=audioCtx.createGain();g.connect(audioCtx.destination);g.gain.setValueAtTime(.001,now);
+  [[392,0,.24],[523,.2,.3],[659,.46,.42]].forEach(([freq,delay,length])=>{let o=audioCtx.createOscillator();o.type='sawtooth';o.frequency.setValueAtTime(freq,now+delay);o.connect(g);o.start(now+delay);o.stop(now+delay+length)});
+  g.gain.linearRampToValueAtTime(.18,now+.04);g.gain.setValueAtTime(.16,now+.58);g.gain.exponentialRampToValueAtTime(.001,now+.9)
+}
+
 /**
  * 棋盘格点击入口。
  * 布阵阶段用于放置/交换棋子；对局阶段用于选棋并执行红方合法走法。
  */
-function clickNode(id){enableAudio();let p=pieceAt(id),n=nodes.find(x=>x.id===id);if(phase==='setup'){if(n.owner!==0||n.type==='camp')return;if(setupSelected)return placeSetup(setupSelected,id);if(p&&p.owner===0){setupSelected=p.id;draw()}return}if(over||turn!==0)return;if(selected&&valid.includes(id))return move(selected,id);if(p&&p.owner===0){selected=p;valid=legal(p);draw()}else{selected=null;valid=[];draw()}}
+function clickNode(id){enableAudio();let p=pieceAt(id),n=nodes.find(x=>x.id===id);if(phase==='setup'){if(p&&p.owner!==0&&markingEnabled)return markPiece(p);if(n.owner!==0||n.type==='camp')return;if(setupSelected)return placeSetup(setupSelected,id);if(p&&p.owner===0){setupSelected=p.id;draw()}return}if(over)return;if(turn===0&&selected&&valid.includes(id))return move(selected,id);if(p&&p.owner!==0&&markingEnabled)return markPiece(p);if(turn!==0)return;if(p&&p.owner===0){selected=p;valid=legal(p);draw()}else{selected=null;valid=[];draw()}}
+
+// 把当前选择的推测棋种绑定到具体棋子对象上，因此棋子移动时标记会自动跟随。
+function markPiece(piece){piece.mark=markGuess;draw();log(`🏷 已将${labels[piece.owner]}一枚棋子标记为“${markGuess}”`)}
 
 /**
  * 比较进攻方a和防守方d。
@@ -274,10 +435,10 @@ function battle(a,d){if(a.name==='炸弹'||d.name==='炸弹')return 0;if(d.name=
 function revealFlag(owner){let f=pieces.find(x=>x.owner===owner&&x.name==='军旗'&&!x.dead);if(f)f.reveal=true}
 
 // 红方退出战场时更新状态和日志。
-function activateRedObserver(){if(redSurrendered)return;redSurrendered=true;aiOrders={1:null,2:null,3:null};log('🏳️ 红方退出战场，蓝绿紫联盟获胜')}
+function activateRedObserver(){if(redSurrendered)return;redSurrendered=true;aiOrders={1:null,2:null,3:null};log(difficulty==='easy'?'👁️ 红方退出战场，继续观看紫方盟友作战。':'🏳️ 红方退出战场')}
 
 // 清空某一方所有棋子，并清理涉及该方的电脑追击任务。
-function eliminateOwner(owner){pieces.filter(p=>p.owner===owner).forEach(p=>p.dead=true);aliveFlags[owner]=false;aiOrders[owner]=null;Object.keys(aiOrders).forEach(k=>{let order=aiOrders[k];if(order&&pieces.find(p=>p.id===order.targetId)?.owner===owner)aiOrders[k]=null});log(`🏳️ ${labels[owner]}军旗失守，全军退场`);if(owner===0&&phase==='play')activateRedObserver()}
+function eliminateOwner(owner){pieces.filter(p=>p.owner===owner).forEach(p=>{p.dead=true;delete p.mark});aliveFlags[owner]=false;aiOrders[owner]=null;Object.keys(aiOrders).forEach(k=>{let order=aiOrders[k];if(order&&pieces.find(p=>p.id===order.targetId)?.owner===owner)aiOrders[k]=null});log(`🏳️ ${labels[owner]}军旗失守，全军退场`);if(owner===0&&phase==='play')activateRedObserver()}
 
 // 返回棋子从当前位置走到目标格所经过的完整铁路路径；普通公路只有起点和终点。
 function movePath(p,id){return railRoutes(p).get(id)||[p.node,id]}
@@ -305,13 +466,27 @@ function clearTargetOrders(targetId){Object.keys(aiOrders).forEach(k=>{if(aiOrde
  * 执行一次移动或战斗，是整局游戏最核心的状态更新函数。
  * 流程：保存轨迹 -> 播音效 -> 比较棋子 -> 处理阵亡/军旗/司令 -> 判断胜负 -> 下一回合。
  */
-function move(p,id){let d=pieceAt(id);if(d&&isAlly(p.owner,d.owner)){selected=null;valid=[];draw();return}lastTrail={owner:p.owner,path:movePath(p,id)};lastBattle=d?id:null;if(!d){moveSound();p.node=id}else{captureSound();let battleNode=nodes.find(n=>n.id===id),r=battle(p,d);if(p.owner===0)log(`你发起攻击：${r>0?'获胜':r<0?'失败':'双方同归于尽'}`);if(r>=0)d.dead=true;if(r<=0)p.dead=true;if(r>0)p.node=id;recordAiFailure(p,d,battleNode,r);if(d.dead)clearTargetOrders(d.id);let flagOwner=d.name==='军旗'&&d.dead?d.owner:null;let commanderDied=(d.name==='司令'&&d.dead)||(p.name==='司令'&&p.dead);if(d.name==='司令'&&d.dead)revealFlag(d.owner);if(p.name==='司令'&&p.dead)revealFlag(p.owner);if(commanderDied)commanderDeathSound();if(flagOwner!==null){if(p.owner===0)log('🚩 你夺取了一面敌方军旗！');eliminateOwner(flagOwner)}}let landed=nodes.find(n=>n.id===p.node);if(difficulty==='hard'&&p.owner!==0&&!p.dead&&landed?.owner===0&&landed.row===4)hardRedBreach=true;selected=null;valid=[];checkWin();nextTurn();draw()}
+function move(p,id){let d=pieceAt(id);if(d&&isAlly(p.owner,d.owner)){selected=null;valid=[];draw();return}lastTrail={owner:p.owner,path:movePath(p,id)};lastBattle=d?id:null;if(!d){moveSound();p.node=id}else{captureSound();let battleNode=nodes.find(n=>n.id===id),r=battle(p,d),marshalKilled=(p.name==='元帅'&&r<=0&&(d.name==='炸弹'||d.name==='地雷'))||(d.name==='元帅'&&r>=0&&p.name==='炸弹');if(p.owner===0)log(`你发起攻击：${r>0?'获胜':r<0?'失败':'双方同归于尽'}`);if(r>=0){d.dead=true;delete d.mark}if(r<=0){p.dead=true;delete p.mark}if(r>0)p.node=id;if(marshalKilled){marshalFallen=true;cheats.marshal=false;marshalDeathSound();log('💥 元帅阵亡：啊！')}recordAiFailure(p,d,battleNode,r);if(d.dead)clearTargetOrders(d.id);let flagOwner=d.name==='军旗'&&d.dead?d.owner:null;let commanderDied=(d.name==='司令'&&d.dead)||(p.name==='司令'&&p.dead);if(d.name==='司令'&&d.dead)revealFlag(d.owner);if(p.name==='司令'&&p.dead)revealFlag(p.owner);if(commanderDied)commanderDeathSound();if(flagOwner!==null){if(p.owner===0)log('🚩 你夺取了一面敌方军旗！');eliminateOwner(flagOwner)}}let landed=nodes.find(n=>n.id===p.node),redAttacker=p.owner===1||p.owner===3||(difficulty==='hell'&&p.owner===2);if(['easy','hard','hell'].includes(difficulty)&&redAttacker&&!p.dead&&landed?.owner===0&&landed.row===4)hardRedBreach=true;selected=null;valid=[];checkWin();nextTurn();draw()}
 
-// 红方被淘汰则失败；蓝、紫、绿三方全部被淘汰，红方才获胜。
-function checkWin(){if(!aliveFlags[0])finish(false);else if(!aliveFlags[1]&&!aliveFlags[2]&&!aliveFlags[3])finish(true)}
+// 不同模式拥有不同胜负目标。
+function checkWin(){
+  if(difficulty==='easy'){
+    if(!aliveFlags[1]&&!aliveFlags[3])finish(true);
+    else if(!aliveFlags[0]&&!aliveFlags[2])finish(false);
+    return;
+  }
+  if(!aliveFlags[0])finish(false);
+  else if(difficulty==='hell'?!aliveFlags[1]&&!aliveFlags[2]&&!aliveFlags[3]:!aliveFlags[1]&&!aliveFlags[3])finish(true);
+}
 
 // 判断某一方是否至少有一枚棋子能走。
 function hasMove(owner){return pieces.some(p=>p.owner===owner&&!p.dead&&legal(p).length)}
+
+// 红方主动放弃当前行动；只有正式对局且轮到红方时才会生效。
+function skipTurn(){
+  if(over||phase!=='play'||turn!==0||!aliveFlags[0])return;
+  selected=null;valid=[];log('⏭️ 红方跳过了本回合');nextTurn();draw();
+}
 
 // 切换到下一位仍存活的玩家；电脑回合延迟2秒，模拟思考过程。
 function nextTurn(){if(over)return;do{turn=(turn+1)%4}while(!aliveFlags[turn]);if(!hasMove(turn)){log(`⛔ ${labels[turn]}无子可走，军旗视为被俘`);eliminateOwner(turn);checkWin();if(!over)return nextTurn();return draw()}$('#turnText').textContent=turn===0?'红方行动':redSurrendered?'红方观战中 · 电脑思考…':'电脑思考中…';if(turn!==0)aiTimer=setTimeout(ai,2000)}
@@ -360,8 +535,8 @@ function aiScore(move, omniscient=false) {
   let dest = nodes.find(n => n.id === move.id);
   let score = Math.random() * 12;
   const self = turn;
-  const allyOwners = self===0?[]:[1,2,3].filter(owner=>owner!==self);
-  const enemyFocus = self===0?[1,2,3]:[0];
+  const allyOwners = allyOwnersOf(self);
+  const enemyFocus = enemyOwnersOf(self);
 
   // 1. 吃子收益计算
   if (target) {
@@ -486,10 +661,10 @@ function aiScore(move, omniscient=false) {
  * 突破后集中向红方军旗推进，并参考盟友位置形成夹击。
  */
 function hardScore(move){
-  let score=aiScore(move,turn===1||turn===3),target=pieceAt(move.id),dest=nodes.find(n=>n.id===move.id),allyOwners=[1,2,3].filter(owner=>owner!==turn);
-  if(turn!==0&&target?.owner===0){let result=battle(move.p,target);score+=result>0?320:result===0?90:-260;if(target.name==='炸弹'&&move.p.name!=='工兵')score-=180}
-  if(turn!==0){let redFlag=pieces.find(p=>p.owner===0&&p.name==='军旗'&&!p.dead),allyPieces=pieces.filter(p=>allyOwners.includes(p.owner)&&!p.dead);if(redFlag){let f=nodes.find(n=>n.id===redFlag.node),d=Math.abs(dest.x-f.x)+Math.abs(dest.y-f.y);score+=(35-d)*5}let support=Math.min(...allyPieces.map(p=>{let n=nodes.find(x=>x.id===p.node);return Math.abs(n.x-dest.x)+Math.abs(n.y-dest.y)}));if(support<=7)score+=(8-support)*12}
-  if(turn!==0){
+  let redAttacker=turn===1||turn===3||(difficulty==='hell'&&turn===2),score=aiScore(move,redAttacker),target=pieceAt(move.id),dest=nodes.find(n=>n.id===move.id),allyOwners=allyOwnersOf(turn);
+  if(redAttacker&&target?.owner===0){let result=battle(move.p,target);score+=result>0?320:result===0?90:-260;if(target.name==='炸弹'&&move.p.name!=='工兵')score-=180}
+  if(redAttacker){let redFlag=pieces.find(p=>p.owner===0&&p.name==='军旗'&&!p.dead),allyPieces=pieces.filter(p=>allyOwners.includes(p.owner)&&!p.dead);if(redFlag){let f=nodes.find(n=>n.id===redFlag.node),d=Math.abs(dest.x-f.x)+Math.abs(dest.y-f.y);score+=(35-d)*5}if(allyPieces.length){let support=Math.min(...allyPieces.map(p=>{let n=nodes.find(x=>x.id===p.node);return Math.abs(n.x-dest.x)+Math.abs(n.y-dest.y)}));if(support<=7)score+=(8-support)*12}}
+  if(redAttacker){
     let redBack=nodes.filter(n=>n.owner===0&&n.row===4),redFlag=pieces.find(p=>p.owner===0&&p.name==='军旗'&&!p.dead),flagNode=redFlag&&nodes.find(n=>n.id===redFlag.node);
     if(!hardRedBreach){
       let breachDistance=Math.min(...redBack.map(n=>Math.abs(dest.x-n.x)+Math.abs(dest.y-n.y)));
@@ -503,8 +678,8 @@ function hardScore(move){
       if(target?.owner===0)score+=1400;
       if(target===redFlag)score+=20000;
       if(dest.owner===0)score+=900;
-      let allyFront=pieces.filter(p=>allyOwners.includes(p.owner)&&!p.dead).map(p=>nodes.find(n=>n.id===p.node)),support=Math.min(...allyFront.map(n=>Math.abs(dest.x-n.x)+Math.abs(dest.y-n.y)));
-      if(support<=6)score+=(7-support)*90;
+      let allyFront=pieces.filter(p=>allyOwners.includes(p.owner)&&!p.dead).map(p=>nodes.find(n=>n.id===p.node));
+      if(allyFront.length){let support=Math.min(...allyFront.map(n=>Math.abs(dest.x-n.x)+Math.abs(dest.y-n.y)));if(support<=6)score+=(7-support)*90}
     }
   }
   return score;
@@ -536,12 +711,15 @@ function strategyScore(move){
       }else if(target)score-=260;
       if(dest.owner!==turn&&nearest>3)score-=500;
     }else{
-      score+=(40-distanceToOwner(dest,0))*15;
-      if(target?.owner===0)score+=900;
-      if(dest.owner===0)score+=360;
-      let allyOwners=[1,2,3].filter(owner=>owner!==turn),allyAttackers=pieces.filter(p=>allyOwners.includes(p.owner)&&!p.dead).map(p=>nodes.find(n=>n.id===p.node));
-      let support=Math.min(...allyAttackers.map(n=>Math.abs(dest.x-n.x)+Math.abs(dest.y-n.y)));
-      if(support<8)score+=(8-support)*22;
+      let enemies=enemyOwnersOf(turn),focusOwner=(turn===1||turn===3||(difficulty==='hell'&&turn===2))&&enemies.includes(0)?0:null;
+      if(focusOwner===null&&enemies.length)focusOwner=enemies.reduce((best,owner)=>distanceToOwner(dest,owner)<distanceToOwner(dest,best)?owner:best,enemies[0]);
+      if(focusOwner!==null){
+        score+=(40-distanceToOwner(dest,focusOwner))*15;
+        if(target?.owner===focusOwner)score+=900;
+        if(dest.owner===focusOwner)score+=360;
+      }
+      let allyAttackers=pieces.filter(p=>allyOwnersOf(turn).includes(p.owner)&&!p.dead).map(p=>nodes.find(n=>n.id===p.node));
+      if(allyAttackers.length){let support=Math.min(...allyAttackers.map(n=>Math.abs(dest.x-n.x)+Math.abs(dest.y-n.y)));if(support<8)score+=(8-support)*22}
     }
   }
   return score;
@@ -579,14 +757,9 @@ function ai() {
   }
 
   const activeOrder=normalizeAiOrder(turn,allMoves);
-  if(difficulty==='easy'){
-    allMoves.forEach(m=>m.score=strategyScore(m)+orderScore(m,activeOrder)+Math.random()*180);
-    allMoves.sort((a,b)=>b.score-a.score);
-    let pool=allMoves.slice(0,Math.min(5,allMoves.length)),randomMove=pool[Math.floor(Math.random()*pool.length)];
-    return move(randomMove.p,randomMove.id);
-  }
-  // 一般难度按暗棋信息决策；困难难度的三方电脑可读取红方棋子并协同。
-  allMoves.forEach(m => m.score = (difficulty==='hard'?hardScore(m):aiScore(m))+strategyScore(m)*(difficulty==='hard'?1.35:1)+orderScore(m,activeOrder));
+  // 简单沿用旧困难算法；一般使用常规暗棋AI；困难和地狱启用更强的突破、识牌与协同。
+  let useHard=difficulty==='easy'||difficulty==='hard'||difficulty==='hell';
+  allMoves.forEach(m => m.score = (useHard?hardScore(m):aiScore(m))+strategyScore(m)*(useHard?1.35:1)+orderScore(m,activeOrder));
   allMoves.sort((a, b) => b.score - a.score);
   const bestMove = allMoves[0];
   move(bestMove.p, bestMove.id);
@@ -603,18 +776,21 @@ function getCoins(){let value=parseInt(localStorage.getItem('cloudCoins')||'1000
 // 保存金币并同步更新侧栏，余额最低为0。
 function setCoins(value){value=Math.max(0,value);localStorage.setItem('cloudCoins',String(value));$('#coinCount').textContent=value;return value}
 
-// 正常胜负结算：红方获胜增加300金币，失败扣除200金币。
-function finish(win){over=true;clearTimeout(aiTimer);let delta=win?300:-200,balance=getCoins();if(!settled){balance=setCoins(balance+delta);settled=true}$('#resultTitle').textContent=win?'红方以一敌三获胜！':'蓝绿紫联盟获胜';$('#resultText').textContent=`${win?'获得 300':'失去 200'} 金币，当前余额 ${balance} 金币。`;$('#result').classList.add('show')}
+// 正常胜负结算：红方阵营获胜增加300金币，失败扣除200金币。
+function finish(win){over=true;clearTimeout(aiTimer);let delta=win?300:-200,balance=getCoins();if(!settled){balance=setCoins(balance+delta);settled=true}let winTitle=difficulty==='easy'?'红紫联盟获胜！':difficulty==='hell'?'红方地狱挑战成功！':'红方获胜！',loseTitle=difficulty==='easy'?'蓝绿联盟获胜':'红方战败';$('#resultTitle').textContent=win?winTitle:loseTitle;$('#resultText').textContent=`${win?'获得 300':'失去 200'} 金币，当前余额 ${balance} 金币。`;$('#result').classList.add('show')}
 
-// 投降等同于红方立即被淘汰，并按失败结算。
-function surrender(){if(over||redSurrendered)return;if(!confirm('确定投降吗？本局将立即判负并扣除200金币。'))return;clearTimeout(aiTimer);eliminateOwner(0);checkWin();draw()}
+// 投降会立即结束整局并按红方失败结算，即使简单模式的紫方盟友仍然存活。
+function surrender(){if(over||redSurrendered)return;if(!confirm('确定投降吗？本局将立即判负并扣除200金币。'))return;clearTimeout(aiTimer);eliminateOwner(0);finish(false);draw()}
 
 // “结束游戏”只停止当前局，不主动结算金币。
 function endGame(){if(over)return;if(!confirm('确定结束当前游戏吗？'))return;clearTimeout(aiTimer);over=true;$('#resultTitle').textContent='游戏已结束';$('#resultText').textContent=settled?'本局金币已结算。':'本局主动结束，不结算金币。';$('#result').classList.add('show')}
 
+// 每次新开一局都显示四种难度的十字以内速览。
+function showDifficultyIntro(){$('#introModal').classList.add('show')}
+
 // 重建棋盘、重新发棋并清空上一局状态，然后回到红方布阵阶段。
-function start(){clearTimeout(aiTimer);buildMap();deploy();phase='setup';turn=0;selected=null;setupSelected=null;lastTrail=null;lastBattle=null;purpleSafeTurns=0;purpleAttacked=false;hardRedBreach=false;redSurrendered=false;aiOrders={1:null,2:null,3:null};valid=[];aliveFlags=[true,true,true,true];over=false;settled=false;setCoins(getCoins());document.title=chaosMode?'云上乱战四国':'云上四国军棋';$('#gameTitle').textContent=chaosMode?'云上乱战四国 · 三打一':'云上四国军棋 · 三打一暗棋';$('#result').classList.remove('show');$('#setupActions').classList.remove('hidden');$('#difficulty').classList.remove('hidden');updateDifficulty();$('#log').innerHTML='';log(chaosMode?'100枚棋子已随机分给四家；蓝绿紫结盟围攻红方，请完成红方布阵。':'三打一战局：蓝、绿、紫结盟围攻红方，请选择难度并完成布阵。');$('#rules').textContent=`阵营：红方孤军作战，蓝绿紫互为盟友且不能互相攻击。${chaosMode?'棋子由100枚标准棋随机四等分。':'侧边铁路遇到棋子立即停止，普通棋子不能转入邻家第一排，工兵可在铁路交叉点转向。'}`;draw();updateSetupText()}
+function start(){clearTimeout(aiTimer);buildMap();cheats={platoonToCommander:false,companyToBomb:false,marshal:false};marshalFallen=false;markingEnabled=false;markGuess='司令';deploy();phase='setup';turn=0;selected=null;setupSelected=null;lastTrail=null;lastBattle=null;purpleSafeTurns=0;purpleAttacked=false;hardRedBreach=false;redSurrendered=false;aiOrders={1:null,2:null,3:null};valid=[];aliveFlags=[true,true,true,true];over=false;settled=false;setCoins(getCoins());document.title=chaosMode?'云上乱战四国':'云上四国军棋';$('#gameTitle').textContent=chaosMode?'云上乱战四国 · 多阵营难度':'云上四国军棋 · 多阵营难度';$('#result').classList.remove('show');$('#setupActions').classList.remove('hidden');$('#formationActions').classList.remove('hidden');$('#difficulty').classList.remove('hidden');updateDifficulty();$('#log').innerHTML='';log(chaosMode?'乱战模式不提供作弊器；可快速布阵或调用阵型。':'请选择难度；可使用作弊器、快速布阵或调用阵型。');draw();updateSetupText();showDifficultyIntro()}
 
 // 绑定难度、布阵、规则、横屏等静态按钮；最后 start() 完成首次初始化。
-document.querySelectorAll('#difficulty button').forEach(b=>b.onclick=()=>{if(phase!=='setup')return;difficulty=b.dataset.level;localStorage.setItem('armyDifficulty',difficulty);updateDifficulty()});$('#quickSetup').onclick=quickSetup;$('#confirmSetup').onclick=confirmSetup;$('#restart').onclick=start;$('#rulesBtn').onclick=()=>alert(`${chaosMode?'乱战分兵规则：100枚棋子随机四等分；多余军旗异化为军长，无军旗则最小棋子异化为军旗；超过9枚的地雷异化为团长。\\n\\n':''}阵营规则：红方孤军作战；蓝方、绿方、紫方互为盟友，三方只进攻红方，不能互相攻击。红方需淘汰三方电脑才能获胜。`);$('#landscape').onclick=async()=>{try{await document.documentElement.requestFullscreen?.();await screen.orientation?.lock?.('landscape')}catch(e){alert('请关闭竖屏锁定并横置手机')}};start();
+document.querySelectorAll('#difficulty button').forEach(b=>b.onclick=()=>{if(phase!=='setup')return;difficulty=b.dataset.level;localStorage.setItem('armyDifficulty',difficulty);updateDifficulty()});$('#quickSetup').onclick=quickSetup;$('#confirmSetup').onclick=confirmSetup;$('#saveFormation').onclick=()=>openFormationManager(true);$('#loadFormation').onclick=()=>openFormationManager(false);$('#confirmSaveFormation').onclick=confirmSaveFormation;$('#formationName').onkeydown=e=>{if(e.key==='Enter')confirmSaveFormation()};$('#closeFormation').onclick=()=>$('#formationModal').classList.remove('show');$('#closeIntro').onclick=()=>$('#introModal').classList.remove('show');$('#restart').onclick=start;$('#rulesBtn').onclick=()=>alert(`${chaosMode?'乱战分兵规则仍然生效：100枚棋子随机四等分。\\n\\n':''}简单：红紫联盟对蓝绿联盟，使用原困难AI。\\n一般：紫方开局清空，红方25枚对蓝绿50枚。\\n困难：红方对蓝绿联盟，紫方完全中立。\\n地狱：蓝绿紫三家联盟围攻红方。`);$('#landscape').onclick=async()=>{try{await document.documentElement.requestFullscreen?.();await screen.orientation?.lock?.('landscape')}catch(e){alert('请关闭竖屏锁定并横置手机')}};start();
 </script></body></html>
