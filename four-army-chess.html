@@ -4,39 +4,105 @@
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
   <title id="pageTitle">云上四国军棋</title>
   <style>
+    /* ==================== 1. 页面基础布局 ====================
+       main 分为顶部工具栏和游戏主体；主体再分为棋盘和右侧信息栏。 */
     *{box-sizing:border-box}body{margin:0;min-height:100vh;overflow:hidden;color:#eee2c5;font-family:"PingFang SC","Microsoft YaHei",sans-serif;background:#07100d}
     main{height:100vh;background:radial-gradient(circle at center,#294e3e,#10281f 60%,#050b09);display:grid;grid-template-rows:58px 1fr}
     header{display:flex;align-items:center;justify-content:space-between;padding:0 18px;background:#030907d9;border-bottom:1px solid #9d79443d}a{color:#d7bd89;text-decoration:none}.title{font:700 22px "KaiTi",serif;color:#ffe1a0;letter-spacing:4px}.tools{display:flex;gap:8px}.tools button{padding:7px 11px;border:1px solid #9f783e;border-radius:16px;background:#21160e;color:#ead5a6}
+
+    /* ==================== 2. 棋盘、道路与落子点 ====================
+       .road 是公路；.rail/.corner-rail 是铁路；.node 是可站立的格点。 */
     .layout{min-height:0;display:grid;grid-template-columns:minmax(280px,1fr) 260px;gap:12px;padding:10px}.board-wrap{min-height:0;display:grid;place-items:center}.board{position:relative;width:min(78vh,72vw);aspect-ratio:1;background:#d6bc85;border:10px solid #573a20;border-radius:9px;box-shadow:0 18px 50px #000b,inset 0 0 35px #795c31}
     .board:before,.board:after{content:"";position:absolute;background:#315f4c55}.board:before{left:38%;right:38%;top:0;bottom:0}.board:after{top:38%;bottom:38%;left:0;right:0}
     .road{position:absolute;height:2px;background:#69563b;transform-origin:left center;z-index:1}.road.rail,.road.corner-rail{height:4px;background:#252b27;box-shadow:0 2px 0 #c8a86f}.road.corner-rail{height:5px}
     .node{position:absolute;z-index:3;width:5.8%;height:5.8%;aspect-ratio:1;transform:translate(-50%,-50%);padding:0;border:1px solid #755f3d;border-radius:4px;background:#ead9ad;display:grid;place-items:center;font-size:clamp(7px,1.2vw,13px);font-weight:800;color:#2d2419;cursor:pointer;transition:.15s}.node.rail{border:2px solid #4f5348}.node.camp{transform:translate(-50%,-50%) rotate(45deg);border-color:#3f795e;background:#d2deb9}.node.camp>*{transform:rotate(-45deg)}.node.hq{border-radius:50%;background:#e4c588}.node.valid{box-shadow:0 0 0 3px #74e5a0,0 0 15px #48e48a}.node.selected{box-shadow:0 0 0 3px #ffe36d;transform:translate(-50%,-50%) scale(1.08)}.node.setup-target{border-color:#c3483e}.node.setup-target:hover{box-shadow:0 0 0 3px #ffd669}
+
+    /* ==================== 3. 棋子与棋盘内控件 ====================
+       包含四色棋子、暗棋外观、放大字体、结束/投降按钮、轨迹箭头和战斗闪框。 */
     .piece{width:calc(100% + 4px);aspect-ratio:1;height:auto;border-radius:3px;display:grid;place-items:center;color:white;text-shadow:0 1px 2px #000;font-size:inherit;line-height:1;cursor:pointer;user-select:none;touch-action:none}.piece.large-label{font-size:clamp(20px,3.6vw,42px);font-family:"STKaiti","KaiTi",serif;font-weight:900;line-height:.9}.red{background:#b43c32}.blue{background:#355eae}.purple{background:#7948a7}.green{background:#39835b}.hidden-piece{color:transparent;border:1px solid #eadcad;text-shadow:none}.hidden-piece.blue{background:#355eae}.hidden-piece.purple{background:#7948a7}.hidden-piece.green{background:#39835b}.font-toggle{position:absolute;z-index:12;right:3%;top:4%;width:16%;aspect-ratio:1;border:3px solid #1ca5ef;border-radius:12px;background:#f5dfaaeb;color:#173e55;font-weight:900;font-size:clamp(10px,1.5vw,18px);cursor:pointer;box-shadow:0 6px 18px #0004}.font-toggle.active{background:#167bb6;color:white}.board-actions{position:absolute;z-index:12;right:4%;bottom:5%;width:24%;height:20%;display:grid;grid-template-rows:1fr 1fr;gap:7px}.board-actions button{border:3px solid #c59b52;border-radius:10px;background:#201b14dd;color:#ffe1a7;font:900 clamp(13px,1.8vw,23px) "KaiTi",serif;cursor:pointer;box-shadow:0 6px 16px #0005}.board-actions .surrender{border-color:#e65b4f;background:#57201bdd;color:#ffd6b0}.board-actions button:hover{filter:brightness(1.35)}.trail-arrow{position:absolute;z-index:8;width:3.2%;aspect-ratio:1;display:grid;place-items:center;border-radius:50%;background:#fff2a9dc;color:#7c261e;font-size:clamp(8px,1.15vw,15px);font-weight:900;pointer-events:none;box-shadow:0 0 6px #0008}.trail-arrow.start{background:#ffe36d;color:#5c2917;box-shadow:0 0 0 2px #fff2a1,0 0 10px #ffdc3f}.battle-flash{position:absolute;z-index:9;width:6.7%;aspect-ratio:1;transform:translate(-50%,-50%);border:4px solid #ffe33f;border-radius:8px;pointer-events:none;animation:battleBlink .45s infinite alternate;box-shadow:0 0 14px #ffd91a}@keyframes battleBlink{to{opacity:.18;transform:translate(-50%,-50%) scale(1.12)}}.setup-selected{outline:3px solid #ffe36d;box-shadow:0 0 14px #ffd54f}.setup-tray{position:absolute;z-index:6;left:2%;top:67%;width:31%;aspect-ratio:1;padding:5px;display:grid;grid-template-columns:repeat(5,1fr);grid-template-rows:repeat(5,1fr);gap:3px;border:3px solid #e34d42;border-radius:7px;background:#cbae7288}.setup-tray.hidden{display:none}.tray-cell{min-width:0;min-height:0;display:grid;place-items:center}.tray-piece{width:100%;height:100%;aspect-ratio:1;border:1px solid #f0cf9b;border-radius:4px;font-size:clamp(6px,.85vw,10px);font-weight:800}.tray-piece.large-label{font-size:clamp(15px,2.4vw,28px)}.difficulty{display:grid;grid-template-columns:repeat(3,1fr);gap:5px;margin:8px 0}.difficulty.hidden{display:none}.difficulty button{padding:7px 3px;border:1px solid #8b734d;border-radius:14px;background:#171b18;color:#c8b990;font-weight:800}.difficulty button.active{border-color:#ffd46c;background:#73501d;color:#fff1bd}.setup-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-bottom:10px}.setup-actions.hidden{display:none}.setup-action{padding:10px 6px;border:0;border-radius:18px;background:linear-gradient(#ffe18a,#c98b2e);color:#3a2108;font-weight:900;cursor:pointer}.quick-setup{background:linear-gradient(#b8e4bd,#4d9b61)}.dead{opacity:.2}.flag-reveal{animation:flash .7s infinite alternate}@keyframes flash{to{box-shadow:0 0 18px #fff06c}}
+
+    /* ==================== 4. 右侧信息栏与结算弹窗 ==================== */
     aside{padding:15px;border:1px solid #9f783e55;border-radius:12px;background:#090f0cbb;overflow:auto}.turn{font:700 18px "KaiTi",serif;color:#ffe09a}.coin-box{margin:8px 0;padding:8px 11px;border:1px solid #d4a95755;border-radius:9px;background:#20170c;color:#ffd77e;font-weight:800}.teams{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:12px 0}.team{padding:8px;border-radius:7px;background:#ffffff09;font-size:12px}.log{height:240px;overflow:auto;padding:9px;border-radius:8px;background:#0005;font-size:12px;line-height:1.7}.rules{font-size:12px;color:#b9c4ba;line-height:1.65}.result{position:fixed;z-index:20;inset:0;display:none;place-items:center;background:#000b}.result.show{display:grid}.result>div{padding:28px 38px;border:1px solid #d1a654;border-radius:14px;background:#180f0c;text-align:center}.result button{padding:9px 20px;border:0;border-radius:18px;background:#d19a45;font-weight:700}
+
+    /* ==================== 5. 手机竖屏与手机横屏适配 ==================== */
     @media(max-width:800px){body{overflow:auto}main{height:auto;min-height:100dvh;grid-template-rows:auto 1fr}header{min-height:82px;flex-wrap:wrap;padding:8px}.title{font-size:18px}.layout{display:flex;flex-direction:column;padding:5px}.board{width:min(96vw,76vh)}.piece.large-label{font-size:clamp(9px,2.8vw,14px);line-height:1}.tray-piece.large-label{font-size:clamp(8px,2.5vw,12px)}aside{width:96vw;margin:auto}.log{height:110px}.tools{overflow-x:auto}.tools button{flex:0 0 auto;font-size:11px}}
     @media(orientation:landscape) and (max-height:600px){main{height:100dvh;grid-template-rows:45px 1fr}header{min-height:45px}.layout{display:grid;grid-template-columns:1fr 210px}.board{width:min(82vh,70vw)}aside{width:auto;padding:8px}.log{height:105px}.rules{font-size:10px}.title{font-size:16px}}
   </style>
 </head>
 <body><main>
+  <!-- 顶部工具栏：返回大厅、横屏、规则说明和重新布阵 -->
   <header><a href="index.html">← 游戏大厅</a><div class="title" id="gameTitle">云上四国军棋 · 暗棋模式</div><div class="tools"><button id="landscape">↻ 横屏</button><button id="rulesBtn">规则说明</button><button id="restart">重新布阵</button></div></header>
+  <!-- 游戏主体：左侧动态生成棋盘，右侧显示回合、金币、难度、阵营和日志 -->
   <div class="layout"><div class="board-wrap"><div class="board" id="board"></div></div><aside>
     <div class="turn" id="turnText">请布置红方棋子</div><div class="coin-box">🪙 大厅金币：<span id="coinCount">0</span></div><div class="difficulty" id="difficulty"><button data-level="easy">简单</button><button data-level="normal">一般</button><button data-level="hard">困难</button></div><div class="setup-actions" id="setupActions"><button class="setup-action quick-setup" id="quickSetup">快速布阵</button><button class="setup-action" id="confirmSetup">确认布阵</button></div><div class="teams"><div class="team">🔴 红方（你／下方）<br>孤军作战，对抗三方电脑</div><div class="team">🟣 紫方（上方电脑）<br>盟友：蓝方、绿方</div><div class="team">🔵 蓝方（左方电脑）<br>盟友：紫方、绿方</div><div class="team">🟢 绿方（右方电脑）<br>盟友：蓝方、紫方</div></div>
     <div class="log" id="log"></div><div class="rules" id="rules">侧边铁路：本方侧边前五点与邻家侧边前五点连续相通，遇到棋子立即停止；普通棋子不能转入邻家第一排，工兵可在铁路交叉点转向。</div>
   </aside></div>
+  <!-- 游戏结束时覆盖全屏显示的结算弹窗 -->
   <div class="result" id="result"><div><h2 id="resultTitle"></h2><p id="resultText"></p><button onclick="start()">再来一局</button></div></div>
 </main><script>
+/* ========================================================================
+   四国军棋主程序阅读导航
+   1. 常量与全局状态
+   2. 棋盘数据建模
+   3. 页面绘制
+   4. 标准/乱战布阵
+   5. 铁路寻路与合法走法
+   6. 音效、点击与战斗结算
+   7. 电脑战斗记忆与评分
+   8. 回合、胜负、金币和按钮事件
+
+   核心数据结构：
+   - nodes：所有棋盘格点。owner 0/1/2/3 分别表示红/蓝/紫/绿，-1 表示中央区。
+   - edges：[起点ID, 终点ID, 道路类型]，道路类型为 road、rail 或 corner-rail。
+   - pieces：棋子对象数组，主要字段为 id、owner、name、node、dead、reveal。
+   ======================================================================== */
+
+// ==================== 1. 常量与全局状态 ====================
+
+// 标准四国军棋中，每一方拥有的25枚棋子。
 const names=['司令','军长','师长','师长','旅长','旅长','团长','团长','营长','营长','连长','连长','连长','排长','排长','排长','工兵','工兵','工兵','炸弹','炸弹','地雷','地雷','地雷','军旗'];
+
+// 普通棋子的比较等级；炸弹、地雷和军旗在 battle() 中单独处理。
 const rank={'司令':9,'军长':8,'师长':7,'旅长':6,'团长':5,'营长':4,'连长':3,'排长':2,'工兵':1}, colors=['red','blue','purple','green'], labels=['红方','蓝方','紫方','绿方'];
+
+// URL 带 ?mode=chaos 时启用“乱战随机分兵”模式。
 const chaosMode=new URLSearchParams(location.search).get('mode')==='chaos';
+
+/* 运行状态：
+   turn：当前行动方；phase：setup 布阵 / play 对局；
+   selected、valid：玩家当前选中的棋子和可走目标；
+   aliveFlags：四方是否仍在场；aiOrders：三方电脑记住的特殊追击任务。 */
 let nodes=[],edges=[],pieces=[],turn=0,selected=null,valid=[],aliveFlags=[true,true,true,true],over=false,phase='setup',setupSelected=null,draggedPiece=null,lastTrail=null,lastBattle=null,settled=false,purpleSafeTurns=0,purpleAttacked=false,hardRedBreach=false,redSurrendered=false,aiTimer=null,aiOrders={1:null,2:null,3:null};
+
+// 常用 DOM、难度设置和“大字体单字显示”配置。
 const $=s=>document.querySelector(s),board=$('#board');
 let difficulty=localStorage.getItem('armyDifficulty')||'easy';
 const shortName={'司令':'司','军长':'军','师长':'师','旅长':'旅','团长':'团','营长':'营','连长':'连','排长':'排','工兵':'兵','炸弹':'弹','地雷':'雷','军旗':'旗'};
 let largeFont=localStorage.getItem('armyLargeFont')==='1';
+
+// 根据字体模式返回“司令”或“司”这样的显示文字。
 function pieceLabel(name){return largeFont?shortName[name]:name}
+
+// 更新简单/一般/困难三个按钮的选中样式。
 function updateDifficulty(){document.querySelectorAll('#difficulty button').forEach(b=>b.classList.toggle('active',b.dataset.level===difficulty))}
+
+// ==================== 2. 棋盘数据建模 ====================
+
+// 把二维坐标转换为唯一字符串ID，并按坐标查找格点。
 function key(x,y){return `${x},${y}`} function nodeAt(x,y){return nodes.find(n=>n.x===x&&n.y===y)}
+
+/**
+ * 向棋盘加入一个格点。
+ * @param {number} owner 归属方：0红、1蓝、2紫、3绿、-1中央。
+ * @param {string} type post普通点、camp行营、hq大本营、center中央点。
+ * @param {boolean} rail 该点是否位于铁路上。
+ */
 function addNode(x,y,owner,row,col,type='post',rail=false){if(nodeAt(x,y))return;nodes.push({id:key(x,y),x,y,owner,row,col,type,rail})}
+
+/**
+ * 创建整张棋盘的格点和道路连接。
+ * 四家区域分别旋转放置；中央建立九宫格铁路；四角再接上侧边铁路。
+ */
 function buildMap(){
   nodes=[];edges=[];
   const camps=['1,1','1,3','2,2','3,1','3,3'];
@@ -50,8 +116,19 @@ function buildMap(){
   let armyNode=(owner,row,col)=>nodes.find(n=>n.owner===owner&&n.row===row&&n.col===col).id;
   [[armyNode(0,0,0),armyNode(1,0,4)],[armyNode(1,0,0),armyNode(2,0,0)],[armyNode(2,0,4),armyNode(3,0,0)],[armyNode(3,0,4),armyNode(0,0,4)]].forEach(([a,b])=>edges.push([a,b,'corner-rail']));
 }
+
+// 将逻辑坐标换成棋盘中的百分比位置；pieceAt() 返回指定格点上的存活棋子。
 function pos(n){return{x:n.x/16*96+2,y:n.y/16*96+2}} function pieceAt(id){return pieces.find(p=>p.node===id&&!p.dead)}
+
+// 给布阵棋子绑定点击互换和拖动事件。
 function bindSetupPiece(el,p){el.draggable=true;el.dataset.pieceId=p.id;el.onclick=e=>{e.stopPropagation();if(setupSelected&&setupSelected!==p.id&&p.node)return placeSetup(setupSelected,p.node);setupSelected=setupSelected===p.id?null:p.id;draw()};el.ondragstart=e=>{draggedPiece=p.id;e.dataTransfer.setData('text/plain',p.id)}}
+
+// ==================== 3. 页面绘制 ====================
+
+/**
+ * 根据当前 nodes、edges、pieces 和游戏状态重新绘制整个棋盘。
+ * 这里同时负责道路、按钮、轨迹箭头、战斗闪框、棋子和布阵托盘。
+ */
 function draw(){
   board.innerHTML='';for(let [a,b,t] of edges){let A=pos(nodes.find(n=>n.id===a)),B=pos(nodes.find(n=>n.id===b)),dx=B.x-A.x,dy=B.y-A.y,l=Math.hypot(dx,dy),el=document.createElement('i');el.className=`road ${t}`;el.style.cssText=`left:${A.x}%;top:${A.y}%;width:${l}%;transform:rotate(${Math.atan2(dy,dx)*180/Math.PI}deg)`;board.appendChild(el)}
   let fontButton=document.createElement('button');fontButton.className=`font-toggle ${largeFont?'active':''}`;fontButton.textContent=largeFont?'标准字体':'放大字体';fontButton.onclick=()=>{largeFont=!largeFont;localStorage.setItem('armyLargeFont',largeFont?'1':'0');draw()};board.appendChild(fontButton);
@@ -60,6 +137,14 @@ function draw(){
   nodes.filter(n=>n.type!=='transit').forEach(n=>{let p=pos(n),el=document.createElement('button'),pc=pieceAt(n.id),setupTarget=phase==='setup'&&n.owner===0&&n.type!=='camp';el.className=`node ${n.type} ${n.rail?'rail':''} ${valid.includes(n.id)?'valid':''} ${selected?.node===n.id?'selected':''} ${setupTarget?'setup-target':''}`;el.style.cssText=`left:${p.x}%;top:${p.y}%`;el.dataset.id=n.id;if(pc){let hidden=pc.owner!==0&&!pc.reveal&&!(redSurrendered&&pc.owner===2);el.innerHTML=`<span class="piece ${colors[pc.owner]} ${hidden?'hidden-piece':''} ${largeFont&&!hidden?'large-label':''} ${pc.reveal?'flag-reveal':''} ${setupSelected===pc.id?'setup-selected':''}">${hidden?'':pieceLabel(pc.name)}</span>`;if(phase==='setup'&&pc.owner===0)bindSetupPiece(el.firstElementChild,pc)}else if(n.type==='camp')el.innerHTML='<span>营</span>';else if(n.type==='hq')el.textContent='本营';el.onclick=()=>clickNode(n.id);if(setupTarget){el.ondragover=e=>e.preventDefault();el.ondrop=e=>{e.preventDefault();placeSetup(e.dataTransfer.getData('text/plain')||draggedPiece,n.id)}}board.appendChild(el)})
   if(phase==='setup'){let tray=document.createElement('div');tray.className='setup-tray';tray.ondragover=e=>e.preventDefault();tray.ondrop=e=>{e.preventDefault();returnToTray(e.dataTransfer.getData('text/plain')||draggedPiece)};pieces.filter(p=>p.owner===0&&!p.node).forEach(p=>{let cell=document.createElement('div'),el=document.createElement('span');cell.className='tray-cell';el.className=`piece tray-piece red ${largeFont?'large-label':''} ${setupSelected===p.id?'setup-selected':''}`;el.textContent=pieceLabel(p.name);bindSetupPiece(el,p);cell.appendChild(el);tray.appendChild(cell)});board.appendChild(tray)}
 }
+
+// ==================== 4. 标准模式与乱战模式布阵 ====================
+
+/**
+ * 为一方电脑生成标准25枚棋子的合法随机阵型。
+ * 电脑规则：军旗进大本营、地雷在后两排、炸弹不在第一排；
+ * 工兵第一排最多一个，其余工兵靠后保留。
+ */
 function deployOwner(owner){
   let slots=nodes.filter(n=>n.owner===owner&&n.type!=='camp'),hq=slots.filter(n=>n.type==='hq'),back=slots.filter(n=>n.row>=4),pool=[...names],place=(name,filter,id)=>{let opts=slots.filter(n=>!pieceAt(n.id)&&filter(n)),n=opts[Math.floor(Math.random()*opts.length)];pieces.push({id,owner,name,node:n.id});pool.splice(pool.indexOf(name),1)};
   place('军旗',n=>n.type==='hq',`${owner}-flag`);
@@ -69,6 +154,11 @@ function deployOwner(owner){
   for(let i=1;i<3;i++)place('工兵',n=>n.row>=2,`${owner}-engineer${i}`);
   shuffle([...pool]).forEach((name,i)=>place(name,()=>true,`${owner}-p${i}`));
 }
+
+/**
+ * 修正乱战模式随机分到的手牌：
+ * 多余军旗变军长；没有军旗则把最小棋子变军旗；第10枚起的地雷变团长。
+ */
 function normalizeChaosHand(hand){
   let flags=hand.map((name,i)=>name==='军旗'?i:-1).filter(i=>i>=0);
   flags.slice(1).forEach(i=>hand[i]='军长');
@@ -77,6 +167,8 @@ function normalizeChaosHand(hand){
   mines.slice(9).forEach(i=>hand[i]='团长');
   return hand;
 }
+
+// 洗混100枚棋子并分成四手；最多尝试500次，避免生成无法合法布阵的组合。
 function makeChaosHands(){
   for(let tries=0;tries<500;tries++){
     let pool=shuffle(Array.from({length:4},()=>names).flat()),hands=[0,1,2,3].map(owner=>normalizeChaosHand(pool.slice(owner*25,owner*25+25)));
@@ -84,6 +176,8 @@ function makeChaosHands(){
   }
   return [0,1,2,3].map(()=>[...names]);
 }
+
+// 将乱战模式中某个电脑分到的25枚棋子放进其棋盘区域。
 function deployChaosOwner(owner,hand){
   let slots=nodes.filter(n=>n.owner===owner&&n.type!=='camp'),hq=slots.filter(n=>n.type==='hq'),back=slots.filter(n=>n.row>=4),remaining=[...hand],place=(name,filter,id)=>{let opts=slots.filter(n=>!pieceAt(n.id)&&filter(n)),n=opts[Math.floor(Math.random()*opts.length)];pieces.push({id,owner,name,node:n.id});remaining.splice(remaining.indexOf(name),1)};
   place('军旗',n=>n.type==='hq',`${owner}-chaos-flag`);
@@ -95,33 +189,103 @@ function deployChaosOwner(owner,hand){
   for(let i=3;i<engineerCount;i++)place('工兵',n=>n.row!==0,`${owner}-chaos-engineer${i}`);
   shuffle([...remaining]).forEach((name,i)=>place(name,()=>true,`${owner}-chaos-${i}`));
 }
+
+// 根据当前模式创建四家的棋子：红方留在托盘等待玩家布阵，三方电脑自动布阵。
 function deploy(){
   if(chaosMode){let hands=makeChaosHands();pieces=hands[0].map((name,i)=>({id:`0-chaos-${i}`,owner:0,name,node:null}));for(let owner=1;owner<4;owner++)deployChaosOwner(owner,hands[owner]);return}
   pieces=names.map((name,i)=>({id:`0-${i}`,owner:0,name,node:null}));for(let owner=1;owner<4;owner++)deployOwner(owner)
 }
+
+// 把红方棋子放到目标格；目标已有红棋时，交换两枚棋子的位置。
 function placeSetup(pieceId,nodeId){if(phase!=='setup')return;let p=pieces.find(x=>x.id===pieceId&&x.owner===0),n=nodes.find(x=>x.id===nodeId);if(!p||!n||n.owner!==0||n.type==='camp')return;let other=pieceAt(nodeId),source=p.node;if(other&&other.id!==p.id)other.node=source;p.node=nodeId;setupSelected=null;draggedPiece=null;draw();updateSetupText()}
+
+// 把红方棋子从棋盘拖回待布阵托盘。
 function returnToTray(pieceId){let p=pieces.find(x=>x.id===pieceId&&x.owner===0);if(!p)return;p.node=null;setupSelected=null;draw();updateSetupText()}
+
+// 在侧栏显示红方已经放置了多少枚棋子。
 function updateSetupText(){let placed=pieces.filter(p=>p.owner===0&&p.node).length;$('#turnText').textContent=`布阵中：已放置 ${placed}/25 枚`}
+
+// Fisher–Yates 原地洗牌。
 function shuffle(a){for(let i=a.length-1;i;i--){let j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+// 按军旗、地雷、炸弹的限制为红方生成随机阵型；红方工兵位置不受电脑限制。
 function quickSetup(){if(phase!=='setup')return;let own=pieces.filter(p=>p.owner===0),slots=nodes.filter(n=>n.owner===0&&n.type!=='camp');own.forEach(p=>p.node=null);let take=filter=>{let opts=slots.filter(n=>!pieceAt(n.id)&&filter(n)),n=opts[Math.floor(Math.random()*opts.length)];return n.id};let flag=own.find(p=>p.name==='军旗');flag.node=take(n=>n.type==='hq');own.filter(p=>p.name==='地雷').forEach(p=>p.node=take(n=>n.row>=4));own.filter(p=>p.name==='炸弹').forEach(p=>p.node=take(n=>n.row!==0));shuffle(own.filter(p=>!p.node)).forEach(p=>p.node=take(()=>true));setupSelected=null;draw();updateSetupText();log('已按规则完成随机布阵，可继续手动调整。')}
+
+// 校验红方阵型；通过后隐藏布阵控件并进入正式对局。
 function confirmSetup(){let mine=pieces.filter(p=>p.owner===0&&p.name==='地雷'),bomb=pieces.filter(p=>p.owner===0&&p.name==='炸弹'),flag=pieces.find(p=>p.owner===0&&p.name==='军旗');if(pieces.some(p=>p.owner===0&&!p.node))return alert('请先把 25 枚棋子全部放入本方棋盘。');if(nodes.find(n=>n.id===flag.node).type!=='hq')return alert('军旗必须放在两个大本营之一。');if(mine.some(p=>nodes.find(n=>n.id===p.node).row<4))return alert('地雷只能放在最后两排。');if(bomb.some(p=>nodes.find(n=>n.id===p.node).row===0))return alert('炸弹不能放在第一排。');phase='play';setupSelected=null;$('#setupActions').classList.add('hidden');$('#difficulty').classList.add('hidden');$('#turnText').textContent='红方行动';$('#log').innerHTML='';log(`布阵完成，${{easy:'简单',normal:'一般',hard:'困难'}[difficulty]}难度战局开始`);if(!hasMove(0)){eliminateOwner(0);checkWin();if(!over)nextTurn()}draw()}
+
+// ==================== 5. 阵营关系、铁路寻路与合法走法 ====================
+
+// 三打一阵营：红方只和自己同阵营；蓝、紫、绿三方互为盟友。
 function isAlly(a,b){return a===b||(a>0&&b>0)}
+
+// 返回某一家的第一排格点，按列从小到大排列。
 function frontRow(owner){return nodes.filter(n=>n.owner===owner&&n.row===0).sort((a,b)=>a.col-b.col)}
+
+// 查找通过指定铁路类型与某个格点直接相连的邻居。
 function railNeighbors(id,types=['rail']){return edges.filter(e=>types.includes(e[2])&&(e[0]===id||e[1]===id)).map(e=>nodes.find(n=>n.id===(e[0]===id?e[1]:e[0])))}
+
+/**
+ * 为普通棋子补充侧边圆角铁路的直线可达路径。
+ * 沿途遇到第一枚棋子就停止，普通棋子不能在连接点随意拐弯。
+ */
 function cornerRoutes(n,routes){if(n.owner<0||n.row>4||(n.col!==0&&n.col!==4))return;for(let edge of edges.filter(e=>e[2]==='corner-rail')){let a=nodes.find(x=>x.id===edge[0]),b=nodes.find(x=>x.id===edge[1]);if(a.owner!==n.owner)[a,b]=[b,a];if(a.owner!==n.owner||a.col!==n.col)continue;let side=nodes.filter(x=>x.owner===n.owner&&x.col===n.col&&x.row<=4).sort((x,y)=>x.row-y.row),from=side.findIndex(x=>x.id===n.id),end=side.findIndex(x=>x.id===a.id),step=Math.sign(end-from),path=[n.id],blocked=false;for(let i=from+step;i!==end+step;i+=step){path.push(side[i].id);if(pieceAt(side[i].id)){blocked=true;break}}if(blocked)continue;path.push(b.id);routes.set(b.id,[...path]);if(pieceAt(b.id))continue;let otherSide=nodes.filter(x=>x.owner===b.owner&&x.col===b.col&&x.row<=4).sort((x,y)=>x.row-y.row),start=otherSide.findIndex(x=>x.id===b.id);for(let i=start+1;i<otherSide.length;i++){path.push(otherSide[i].id);routes.set(otherSide[i].id,[...path]);if(pieceAt(otherSide[i].id))break}}}
+
+/**
+ * 计算棋子在铁路上的所有可达位置，并保存每个目标对应的完整经过路径。
+ * 工兵用广度优先搜索，可在铁路交叉点转向；其他棋子只能沿一条直线前进。
+ * @returns {Map<string,string[]>} 目标格ID -> 经过的格点ID数组。
+ */
 function railRoutes(p){let n=nodes.find(x=>x.id===p.node),routes=new Map;if(!n?.rail)return routes;if(p.name==='工兵'){let queue=[[n.id,[n.id]]],seen=new Set([n.id]);while(queue.length){let [at,path]=queue.shift();for(let q of railNeighbors(at,['rail','corner-rail'])){if(seen.has(q.id))continue;seen.add(q.id);let next=[...path,q.id];routes.set(q.id,next);if(!pieceAt(q.id))queue.push([q.id,next])}}return routes}for(let first of railNeighbors(n.id,['rail','corner-rail'])){let dx=Math.sign(first.x-n.x),dy=Math.sign(first.y-n.y),at=n,next=first,path=[n.id];while(next){path.push(next.id);routes.set(next.id,[...path]);if(pieceAt(next.id))break;let onward=railNeighbors(next.id,['rail','corner-rail']).filter(x=>x.id!==at.id&&Math.sign(x.x-next.x)===dx&&Math.sign(x.y-next.y)===dy);at=next;next=onward[0]}}cornerRoutes(n,routes);return routes}
+
+// 合并相邻公路和铁路目标，再排除友军占位及“攻击行营内棋子”的非法目标。
 function adjacentMoves(p){let n=nodes.find(x=>x.id===p.node),out=edges.filter(e=>e[2]==='road'&&(e[0]===n.id||e[1]===n.id)).map(e=>e[0]===n.id?e[1]:e[0]);out.push(...railRoutes(p).keys());return[...new Set(out)].filter(id=>{let q=pieceAt(id),dest=nodes.find(n=>n.id===id);return(!q||!isAlly(q.owner,p.owner))&&!(q&&dest.type==='camp')})}
+
+// 返回一枚棋子的全部合法目标；地雷、军旗以及进入大本营的棋子不能移动。
 function legal(p){let current=nodes.find(n=>n.id===p.node);if(p.name==='地雷'||p.name==='军旗'||current?.type==='hq')return[];return adjacentMoves(p)}
+
+// ==================== 6. 音效、玩家点击与战斗结算 ====================
+
+// 浏览器要求用户操作后才能创建/恢复 AudioContext，因此在点击棋盘时启用声音。
 let audioCtx;function enableAudio(){audioCtx=audioCtx||new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume()}
+
+// 发生战斗时播放的低沉碰撞音。
 function captureSound(){if(!audioCtx)return;let now=audioCtx.currentTime,g=audioCtx.createGain();g.connect(audioCtx.destination);g.gain.setValueAtTime(.22,now);g.gain.exponentialRampToValueAtTime(.001,now+.38);[180,110].forEach((freq,i)=>{let o=audioCtx.createOscillator();o.type=i?'sawtooth':'square';o.frequency.setValueAtTime(freq,now+i*.04);o.frequency.exponentialRampToValueAtTime(freq/2,now+.3);o.connect(g);o.start(now+i*.04);o.stop(now+.38)})}
+
+// 没有发生战斗的普通走棋音。
 function moveSound(){if(!audioCtx)return;let now=audioCtx.currentTime,g=audioCtx.createGain();g.connect(audioCtx.destination);g.gain.setValueAtTime(.13,now);g.gain.exponentialRampToValueAtTime(.001,now+.2);[440,620].forEach((freq,i)=>{let o=audioCtx.createOscillator();o.type='sine';o.frequency.setValueAtTime(freq,now+i*.07);o.connect(g);o.start(now+i*.07);o.stop(now+i*.07+.13)})}
+
+// 司令阵亡时播放的特殊提示旋律。
 function commanderDeathSound(){if(!audioCtx)return;let now=audioCtx.currentTime,g=audioCtx.createGain();g.connect(audioCtx.destination);g.gain.setValueAtTime(.28,now);g.gain.exponentialRampToValueAtTime(.001,now+1.15);[392,330,262,196].forEach((freq,i)=>{let o=audioCtx.createOscillator();o.type='triangle';o.frequency.setValueAtTime(freq,now+i*.2);o.connect(g);o.start(now+i*.2);o.stop(now+i*.2+.42)})}
+
+/**
+ * 棋盘格点击入口。
+ * 布阵阶段用于放置/交换棋子；对局阶段用于选棋并执行红方合法走法。
+ */
 function clickNode(id){enableAudio();let p=pieceAt(id),n=nodes.find(x=>x.id===id);if(phase==='setup'){if(n.owner!==0||n.type==='camp')return;if(setupSelected)return placeSetup(setupSelected,id);if(p&&p.owner===0){setupSelected=p.id;draw()}return}if(over||turn!==0)return;if(selected&&valid.includes(id))return move(selected,id);if(p&&p.owner===0){selected=p;valid=legal(p);draw()}else{selected=null;valid=[];draw()}}
+
+/**
+ * 比较进攻方a和防守方d。
+ * @returns {number} 1=进攻方胜，0=同归于尽，-1=进攻方败。
+ */
 function battle(a,d){if(a.name==='炸弹'||d.name==='炸弹')return 0;if(d.name==='地雷')return a.name==='工兵'?1:-1;if(d.name==='军旗')return 1;let x=rank[a.name],y=rank[d.name];return x===y?0:x>y?1:-1}
+
+// 司令阵亡后公开同方军旗的位置。
 function revealFlag(owner){let f=pieces.find(x=>x.owner===owner&&x.name==='军旗'&&!x.dead);if(f)f.reveal=true}
+
+// 红方退出战场时更新状态和日志。
 function activateRedObserver(){if(redSurrendered)return;redSurrendered=true;aiOrders={1:null,2:null,3:null};log('🏳️ 红方退出战场，蓝绿紫联盟获胜')}
+
+// 清空某一方所有棋子，并清理涉及该方的电脑追击任务。
 function eliminateOwner(owner){pieces.filter(p=>p.owner===owner).forEach(p=>p.dead=true);aliveFlags[owner]=false;aiOrders[owner]=null;Object.keys(aiOrders).forEach(k=>{let order=aiOrders[k];if(order&&pieces.find(p=>p.id===order.targetId)?.owner===owner)aiOrders[k]=null});log(`🏳️ ${labels[owner]}军旗失守，全军退场`);if(owner===0&&phase==='play')activateRedObserver()}
+
+// 返回棋子从当前位置走到目标格所经过的完整铁路路径；普通公路只有起点和终点。
 function movePath(p,id){return railRoutes(p).get(id)||[p.node,id]}
+
+/**
+ * 记录电脑“高级棋子未能战胜目标”的战斗经验。
+ * 后排目标：优先派工兵，再派炸弹；前四排目标：优先派最大棋子，再派炸弹。
+ */
 function recordAiFailure(attacker,defender,node,result){
   if(attacker.owner===0||result>=0||defender.dead||isAlly(attacker.owner,defender.owner))return;
   let existing=aiOrders[attacker.owner],attackerRank=rank[attacker.name]||0;
@@ -133,11 +297,31 @@ function recordAiFailure(attacker,defender,node,result){
   if(attackerRank>=7&&node.row>=4)aiOrders[attacker.owner]={targetId:defender.id,kind:'backline',stage:'engineer'};
   else if(attackerRank>=5&&node.row<=3)aiOrders[attacker.owner]={targetId:defender.id,kind:'frontline',stage:'max'};
 }
+
+// 某枚目标棋子死亡后，删除所有追踪它的电脑任务。
 function clearTargetOrders(targetId){Object.keys(aiOrders).forEach(k=>{if(aiOrders[k]?.targetId===targetId)aiOrders[k]=null})}
+
+/**
+ * 执行一次移动或战斗，是整局游戏最核心的状态更新函数。
+ * 流程：保存轨迹 -> 播音效 -> 比较棋子 -> 处理阵亡/军旗/司令 -> 判断胜负 -> 下一回合。
+ */
 function move(p,id){let d=pieceAt(id);if(d&&isAlly(p.owner,d.owner)){selected=null;valid=[];draw();return}lastTrail={owner:p.owner,path:movePath(p,id)};lastBattle=d?id:null;if(!d){moveSound();p.node=id}else{captureSound();let battleNode=nodes.find(n=>n.id===id),r=battle(p,d);if(p.owner===0)log(`你发起攻击：${r>0?'获胜':r<0?'失败':'双方同归于尽'}`);if(r>=0)d.dead=true;if(r<=0)p.dead=true;if(r>0)p.node=id;recordAiFailure(p,d,battleNode,r);if(d.dead)clearTargetOrders(d.id);let flagOwner=d.name==='军旗'&&d.dead?d.owner:null;let commanderDied=(d.name==='司令'&&d.dead)||(p.name==='司令'&&p.dead);if(d.name==='司令'&&d.dead)revealFlag(d.owner);if(p.name==='司令'&&p.dead)revealFlag(p.owner);if(commanderDied)commanderDeathSound();if(flagOwner!==null){if(p.owner===0)log('🚩 你夺取了一面敌方军旗！');eliminateOwner(flagOwner)}}let landed=nodes.find(n=>n.id===p.node);if(difficulty==='hard'&&p.owner!==0&&!p.dead&&landed?.owner===0&&landed.row===4)hardRedBreach=true;selected=null;valid=[];checkWin();nextTurn();draw()}
+
+// 红方被淘汰则失败；蓝、紫、绿三方全部被淘汰，红方才获胜。
 function checkWin(){if(!aliveFlags[0])finish(false);else if(!aliveFlags[1]&&!aliveFlags[2]&&!aliveFlags[3])finish(true)}
+
+// 判断某一方是否至少有一枚棋子能走。
 function hasMove(owner){return pieces.some(p=>p.owner===owner&&!p.dead&&legal(p).length)}
+
+// 切换到下一位仍存活的玩家；电脑回合延迟2秒，模拟思考过程。
 function nextTurn(){if(over)return;do{turn=(turn+1)%4}while(!aliveFlags[turn]);if(!hasMove(turn)){log(`⛔ ${labels[turn]}无子可走，军旗视为被俘`);eliminateOwner(turn);checkWin();if(!over)return nextTurn();return draw()}$('#turnText').textContent=turn===0?'红方行动':redSurrendered?'红方观战中 · 电脑思考…':'电脑思考中…';if(turn!==0)aiTimer=setTimeout(ai,2000)}
+
+// ==================== 7. 电脑战斗记忆与走法评分 ====================
+
+/**
+ * 检查电脑当前追击任务还能否执行。
+ * 若缺少指定工兵/炸弹就进入下一阶段；所有克制棋子都没有时改为避战。
+ */
 function normalizeAiOrder(owner,allMoves){
   let order=aiOrders[owner];if(!order)return null;
   let target=pieces.find(p=>p.id===order.targetId&&!p.dead);if(!target||isAlly(owner,target.owner)){aiOrders[owner]=null;return null}
@@ -154,6 +338,8 @@ function normalizeAiOrder(owner,allMoves){
   }
   return order;
 }
+
+// 给符合追击任务的走法加极高分，确保电脑按“工兵/最大棋子 -> 炸弹 -> 避战”执行。
 function orderScore(move,order){
   if(!order)return 0;let target=pieces.find(p=>p.id===order.targetId&&!p.dead);if(!target)return 0;
   let targetNode=nodes.find(n=>n.id===target.node),dest=nodes.find(n=>n.id===move.id),distance=Math.abs(dest.x-targetNode.x)+Math.abs(dest.y-targetNode.y),required=order.stage==='engineer'?'工兵':order.stage==='bomb'?'炸弹':null,score=0;
@@ -163,6 +349,12 @@ function orderScore(move,order){
   if(correct&&move.id===target.node)score+=18000;
   return score;
 }
+
+/**
+ * 一般难度的基础评分器。
+ * omniscient=true 时，电脑可以读取红方棋子身份（困难难度使用）。
+ * 分数越高，电脑越倾向选择该走法。
+ */
 function aiScore(move, omniscient=false) {
   let target = pieceAt(move.id);
   let dest = nodes.find(n => n.id === move.id);
@@ -288,6 +480,11 @@ function aiScore(move, omniscient=false) {
   return score;
 }
 
+/**
+ * 困难难度附加评分。
+ * 三方电脑可以识别红方棋子，先突破红方倒数第二排，
+ * 突破后集中向红方军旗推进，并参考盟友位置形成夹击。
+ */
 function hardScore(move){
   let score=aiScore(move,turn===1||turn===3),target=pieceAt(move.id),dest=nodes.find(n=>n.id===move.id),allyOwners=[1,2,3].filter(owner=>owner!==turn);
   if(turn!==0&&target?.owner===0){let result=battle(move.p,target);score+=result>0?320:result===0?90:-260;if(target.name==='炸弹'&&move.p.name!=='工兵')score-=180}
@@ -313,13 +510,19 @@ function hardScore(move){
   return score;
 }
 
+// 计算某个位置到指定阵营大本营（或后两排）的最短曼哈顿距离。
 function distanceToOwner(dest,owner,type='hq'){
   let goals=nodes.filter(n=>n.owner===owner&&(type==='back'?n.row>=4:n.type==='hq'));
   return goals.length?Math.min(...goals.map(n=>Math.abs(n.x-dest.x)+Math.abs(n.y-dest.y))):30;
 }
+// 找出已经进入某方后两排的敌方棋子，用于触发紧急回防。
 function backInvaders(owner){
   return pieces.filter(p=>!p.dead&&!isAlly(owner,p.owner)).filter(p=>{let n=nodes.find(x=>x.id===p.node);return n?.owner===owner&&n.row>=4});
 }
+/**
+ * 三打一全局战略评分。
+ * 后两排被红方入侵时优先回防；否则向红方推进并靠近盟友形成夹击。
+ */
 function strategyScore(move){
   let dest=nodes.find(n=>n.id===move.id),target=pieceAt(move.id),score=0;
   if(turn!==0){
@@ -344,6 +547,11 @@ function strategyScore(move){
   return score;
 }
 
+/**
+ * 电脑回合入口。
+ * 枚举全部合法走法，将基础评分、战略评分、战斗记忆评分相加后执行最高分走法。
+ * 简单难度会从前几名中随机选择，因此会保留一定失误。
+ */
 function ai() {
   if (over) return;
   // 筛选所有可移动棋子+全部合法走法
@@ -377,18 +585,36 @@ function ai() {
     let pool=allMoves.slice(0,Math.min(5,allMoves.length)),randomMove=pool[Math.floor(Math.random()*pool.length)];
     return move(randomMove.p,randomMove.id);
   }
-  // 一般难度使用暗棋策略；困难难度的蓝绿可读取玩家棋子并协同。
+  // 一般难度按暗棋信息决策；困难难度的三方电脑可读取红方棋子并协同。
   allMoves.forEach(m => m.score = (difficulty==='hard'?hardScore(m):aiScore(m))+strategyScore(m)*(difficulty==='hard'?1.35:1)+orderScore(m,activeOrder));
   allMoves.sort((a, b) => b.score - a.score);
   const bestMove = allMoves[0];
   move(bestMove.p, bestMove.id);
 }
+
+// ==================== 8. 日志、金币、胜负与页面按钮 ====================
+
+// 把最新行动记录插入日志顶部。
 function log(t){let el=document.createElement('div');el.textContent=t;$('#log').prepend(el)}
+
+// 从浏览器本地存储读取大厅通用金币；没有记录时默认1000。
 function getCoins(){let value=parseInt(localStorage.getItem('cloudCoins')||'1000',10);return Number.isFinite(value)?Math.max(0,value):1000}
+
+// 保存金币并同步更新侧栏，余额最低为0。
 function setCoins(value){value=Math.max(0,value);localStorage.setItem('cloudCoins',String(value));$('#coinCount').textContent=value;return value}
+
+// 正常胜负结算：红方获胜增加300金币，失败扣除200金币。
 function finish(win){over=true;clearTimeout(aiTimer);let delta=win?300:-200,balance=getCoins();if(!settled){balance=setCoins(balance+delta);settled=true}$('#resultTitle').textContent=win?'红方以一敌三获胜！':'蓝绿紫联盟获胜';$('#resultText').textContent=`${win?'获得 300':'失去 200'} 金币，当前余额 ${balance} 金币。`;$('#result').classList.add('show')}
+
+// 投降等同于红方立即被淘汰，并按失败结算。
 function surrender(){if(over||redSurrendered)return;if(!confirm('确定投降吗？本局将立即判负并扣除200金币。'))return;clearTimeout(aiTimer);eliminateOwner(0);checkWin();draw()}
+
+// “结束游戏”只停止当前局，不主动结算金币。
 function endGame(){if(over)return;if(!confirm('确定结束当前游戏吗？'))return;clearTimeout(aiTimer);over=true;$('#resultTitle').textContent='游戏已结束';$('#resultText').textContent=settled?'本局金币已结算。':'本局主动结束，不结算金币。';$('#result').classList.add('show')}
+
+// 重建棋盘、重新发棋并清空上一局状态，然后回到红方布阵阶段。
 function start(){clearTimeout(aiTimer);buildMap();deploy();phase='setup';turn=0;selected=null;setupSelected=null;lastTrail=null;lastBattle=null;purpleSafeTurns=0;purpleAttacked=false;hardRedBreach=false;redSurrendered=false;aiOrders={1:null,2:null,3:null};valid=[];aliveFlags=[true,true,true,true];over=false;settled=false;setCoins(getCoins());document.title=chaosMode?'云上乱战四国':'云上四国军棋';$('#gameTitle').textContent=chaosMode?'云上乱战四国 · 三打一':'云上四国军棋 · 三打一暗棋';$('#result').classList.remove('show');$('#setupActions').classList.remove('hidden');$('#difficulty').classList.remove('hidden');updateDifficulty();$('#log').innerHTML='';log(chaosMode?'100枚棋子已随机分给四家；蓝绿紫结盟围攻红方，请完成红方布阵。':'三打一战局：蓝、绿、紫结盟围攻红方，请选择难度并完成布阵。');$('#rules').textContent=`阵营：红方孤军作战，蓝绿紫互为盟友且不能互相攻击。${chaosMode?'棋子由100枚标准棋随机四等分。':'侧边铁路遇到棋子立即停止，普通棋子不能转入邻家第一排，工兵可在铁路交叉点转向。'}`;draw();updateSetupText()}
+
+// 绑定难度、布阵、规则、横屏等静态按钮；最后 start() 完成首次初始化。
 document.querySelectorAll('#difficulty button').forEach(b=>b.onclick=()=>{if(phase!=='setup')return;difficulty=b.dataset.level;localStorage.setItem('armyDifficulty',difficulty);updateDifficulty()});$('#quickSetup').onclick=quickSetup;$('#confirmSetup').onclick=confirmSetup;$('#restart').onclick=start;$('#rulesBtn').onclick=()=>alert(`${chaosMode?'乱战分兵规则：100枚棋子随机四等分；多余军旗异化为军长，无军旗则最小棋子异化为军旗；超过9枚的地雷异化为团长。\\n\\n':''}阵营规则：红方孤军作战；蓝方、绿方、紫方互为盟友，三方只进攻红方，不能互相攻击。红方需淘汰三方电脑才能获胜。`);$('#landscape').onclick=async()=>{try{await document.documentElement.requestFullscreen?.();await screen.orientation?.lock?.('landscape')}catch(e){alert('请关闭竖屏锁定并横置手机')}};start();
 </script></body></html>
