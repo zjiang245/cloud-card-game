@@ -153,7 +153,7 @@ function quickSetup(){
 }
 function confirmSetup(){
   if(phase!=='setup')return;let err=validateSetup();if(err){log(`⚠ ${err}`);return}
-  phase='play';setupSelected=null;selected=null;valid=[];turn=0;allianceUsedThisTurn=false;log('⚔ 布阵完成，六国开战。');recordReplayFrame('开局阵型');draw();
+  enableAudio();phase='play';setupSelected=null;selected=null;valid=[];turn=0;allianceUsedThisTurn=false;log('⚔ 布阵完成，六国开战。');hornSound();recordReplayFrame('开局阵型');draw();
 }
 function formationData(){return pieces.filter(p=>p.owner===0&&!p.dead&&p.node).map(p=>({name:p.name,node:p.node}))}
 function loadFormationStore(){try{return JSON.parse(localStorage.getItem(FORMATION_KEY)||'[]')}catch(e){return[]}}
@@ -293,8 +293,17 @@ function legalMoves(p){
   }
   return[...out];
 }
+
+// 浏览器要求用户操作后才能创建/恢复 AudioContext，因此在点击棋盘或完成布阵时启用声音。
+let audioCtx;function enableAudio(){audioCtx=audioCtx||new(window.AudioContext||window.webkitAudioContext)();if(audioCtx.state==='suspended')audioCtx.resume()}
+function captureSound(){if(!audioCtx)return;let now=audioCtx.currentTime,g=audioCtx.createGain();g.connect(audioCtx.destination);g.gain.setValueAtTime(.22,now);g.gain.exponentialRampToValueAtTime(.001,now+.38);[180,110].forEach((freq,i)=>{let o=audioCtx.createOscillator();o.type=i?'sawtooth':'square';o.frequency.setValueAtTime(freq,now+i*.04);o.frequency.exponentialRampToValueAtTime(freq/2,now+.3);o.connect(g);o.start(now+i*.04);o.stop(now+.38)})}
+function moveSound(){if(!audioCtx)return;let now=audioCtx.currentTime,g=audioCtx.createGain();g.connect(audioCtx.destination);g.gain.setValueAtTime(.13,now);g.gain.exponentialRampToValueAtTime(.001,now+.2);[440,620].forEach((freq,i)=>{let o=audioCtx.createOscillator();o.type='sine';o.frequency.setValueAtTime(freq,now+i*.07);o.connect(g);o.start(now+i*.07);o.stop(now+i*.07+.13)})}
+function commanderDeathSound(){if(!audioCtx)return;let now=audioCtx.currentTime,g=audioCtx.createGain();g.connect(audioCtx.destination);g.gain.setValueAtTime(.28,now);g.gain.exponentialRampToValueAtTime(.001,now+1.15);[392,330,262,196].forEach((freq,i)=>{let o=audioCtx.createOscillator();o.type='triangle';o.frequency.setValueAtTime(freq,now+i*.2);o.connect(g);o.start(now+i*.2);o.stop(now+i*.2+.42)})}
+function hornSound(){if(!audioCtx)return;let now=audioCtx.currentTime,g=audioCtx.createGain();g.connect(audioCtx.destination);g.gain.setValueAtTime(.001,now);[[392,0,.24],[523,.2,.3],[659,.46,.42]].forEach(([freq,delay,length])=>{let o=audioCtx.createOscillator();o.type='sawtooth';o.frequency.setValueAtTime(freq,now+delay);o.connect(g);o.start(now+delay);o.stop(now+delay+length)});g.gain.linearRampToValueAtTime(.18,now+.04);g.gain.setValueAtTime(.16,now+.58);g.gain.exponentialRampToValueAtTime(.001,now+.9)}
+
 function clickNode(id){
   if(replayMode)return;
+  enableAudio();
   if(over)return;let p=pieceAt(id);
   if(phase==='setup'){
     if(setupSelected){placeSetup(setupSelected,id);return}
@@ -306,7 +315,7 @@ function clickNode(id){
 }
 function movePiece(p,to){
   if(over||p.dead)return;let from=p.node,target=pieceAt(to),dest=node(to),attackerName=p.name,attackerOwner=p.owner,defenderName=target?.name,defenderOwner=target?.owner,resultText=null;selected=null;valid=[];lastTrail={owner:p.owner,path:movePath(p,to)};lastBattle=target?to:null;
-  if(target){resultText=battle(p,target);if(!p.dead&&p.node===to&&dest.type==='hq')p.stuck=true}else{p.node=to;if(dest.type==='hq')p.stuck=true;log(`${labels[p.owner]}${p.name}移动。`)}
+  if(target){captureSound();resultText=battle(p,target);if(!p.dead&&p.node===to&&dest.type==='hq')p.stuck=true}else{moveSound();p.node=to;if(dest.type==='hq')p.stuck=true;log(`${labels[p.owner]}${p.name}移动。`)}
   let caption=target?`${labels[attackerOwner]}${attackerName}攻击${labels[defenderOwner]}${defenderName}：${resultText}`:`${labels[attackerOwner]}${attackerName}移动`;
   recordReplayFrame(caption);draw();checkEnd();if(!over)nextTurn();
 }
@@ -316,8 +325,10 @@ function battle(a,d){
   else if(d.name==='地雷'){if(a.name==='工兵'){d.dead=true;a.node=d.node;result='工兵排雷'}else{a.dead=d.dead=true;result='撞雷同归于尽'}}
   else if(d.name==='军旗'){d.dead=true;a.node=d.node;result='扛旗成功';eliminate(d.owner,a.owner)}
   else{let ar=rank[a.name]||0,dr=rank[d.name]||0;if(ar>dr){d.dead=true;a.node=d.node;result='胜'}else if(ar<dr){a.dead=true;result='败'}else{a.dead=d.dead=true;result='同归于尽'}}
+  let commanderDied=(a.name==='司令'&&a.dead)||(d.name==='司令'&&d.dead);
   if(a.name==='司令'&&a.dead)revealFlag(a.owner);
   if(d.name==='司令'&&d.dead)revealFlag(d.owner);
+  if(commanderDied)commanderDeathSound();
   log(text+result);return result;
 }
 function revealFlag(owner){let f=pieces.find(x=>x.owner===owner&&x.name==='军旗'&&!x.dead);if(f){f.reveal=true;log(`🚩 ${labels[owner]}司令阵亡，军旗位置暴露。`)}}
