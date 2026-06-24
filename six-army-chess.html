@@ -11,8 +11,9 @@
     .board:before{content:"";position:absolute;inset:27% 25%;border:3px solid #75613e;background:#1a201f;box-shadow:inset 0 0 20px #000,0 0 22px #0008;z-index:0}
     .road{position:absolute;height:2px;background:#8f7349;transform-origin:left center;z-index:1}.road.rail{height:4px;background:#141817;box-shadow:0 2px 0 #b8925a}
     .node{position:absolute;z-index:3;width:4.05%;height:4.05%;transform:translate(-50%,-50%);display:grid;place-items:center;padding:0;border:1px solid #9b875f;border-radius:50%;background:#e6d7b5;color:#2d2419;font-size:clamp(10px,1.15vw,16px);font-weight:900;cursor:pointer;box-shadow:0 2px 5px #0007}.node.rail{border:2px solid #333b35}.node.camp{transform:translate(-50%,-50%);border:3px solid #1b8f68;background:#203329;color:#bff5de}.node.hq{border:2px solid #d2b46b;background:#2d271d;color:#f4d895}.node.center{width:2.65%;height:2.65%;border-radius:4px;background:#242923;border:2px solid #8f7349;color:#d7c093;box-shadow:0 1px 4px #0008}.node.valid{box-shadow:0 0 0 3px #5bf08c,0 0 16px #2fea79}.node.selected{box-shadow:0 0 0 3px #ffe36d;transform:translate(-50%,-50%) scale(1.1)}
-    .piece{width:calc(100% + 4px);height:calc(100% + 4px);display:grid;place-items:center;border-radius:4px;color:white;text-shadow:0 1px 2px #000;line-height:1;font-size:inherit;user-select:none}.hidden{color:transparent;text-shadow:none;border:1px solid #f5e5ba}.red{background:#b43c32}.blue{background:#355eae}.purple{background:#7948a7}.green{background:#39835b}.orange{background:#b97826}.cyan{background:#238b95}.dead{opacity:.25}.flash{animation:flash .7s infinite alternate}.trail-arrow{position:absolute;z-index:8;width:3.2%;aspect-ratio:1;display:grid;place-items:center;border-radius:50%;background:#fff2a9dc;color:#7c261e;font-size:clamp(8px,1.15vw,15px);font-weight:900;pointer-events:none;box-shadow:0 0 6px #0008}.trail-arrow.start{background:#ffe36d;color:#5c2917;box-shadow:0 0 0 2px #fff2a1,0 0 10px #ffdc3f}.battle-flash{position:absolute;z-index:9;width:6.7%;aspect-ratio:1;transform:translate(-50%,-50%);border:4px solid #ffe33f;border-radius:8px;pointer-events:none;animation:battleBlink .45s infinite alternate;box-shadow:0 0 14px #ffd91a}@keyframes battleBlink{to{opacity:.18;transform:translate(-50%,-50%) scale(1.12)}}.setup-selected{outline:3px solid #ffe36d;box-shadow:0 0 14px #ffd54f}.setup-tray{position:absolute;z-index:8;left:6%;bottom:8%;width:31%;min-height:17%;padding:6px;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;border:3px solid #d7ae62;border-radius:12px;background:#251610d8;box-shadow:0 8px 24px #0009}.tray-cell{display:grid;place-items:center;min-width:0}.tray-piece{width:100%;aspect-ratio:1;font-size:clamp(10px,1.2vw,16px);border:1px solid #f0cf9b;cursor:pointer}@keyframes flash{to{box-shadow:0 0 16px #fff26d}}
+    .piece{width:calc(100% + 4px);height:calc(100% + 4px);display:grid;place-items:center;border-radius:4px;color:white;text-shadow:0 1px 2px #000;line-height:1;font-size:inherit;user-select:none}.hidden{color:transparent;text-shadow:none;border:1px solid #f5e5ba}.red{background:#b43c32}.blue{background:#355eae}.purple{background:#7948a7}.green{background:#39835b}.orange{background:#b97826}.cyan{background:#238b95}.dead{opacity:.25}.flash{animation:flash .7s infinite alternate}.trail-arrow{position:absolute;z-index:8;width:3.2%;aspect-ratio:1;display:grid;place-items:center;border-radius:50%;background:#fff2a9dc;color:#7c261e;font-size:clamp(8px,1.15vw,15px);font-weight:900;pointer-events:none;box-shadow:0 0 6px #0008}.trail-arrow.start{background:#ffe36d;color:#5c2917;box-shadow:0 0 0 2px #fff2a1,0 0 10px #ffdc3f}.battle-flash{position:absolute;z-index:9;width:6.7%;aspect-ratio:1;transform:translate(-50%,-50%);border:4px solid #ffe33f;border-radius:8px;pointer-events:none;animation:battleBlink .45s infinite alternate;box-shadow:0 0 14px #ffd91a}@keyframes battleBlink{to{opacity:.18;transform:translate(-50%,-50%) scale(1.12)}}.surrender-btn{position:absolute;z-index:12;left:65%;top:88%;width:16%;height:6%;border:2px solid #ffb66c;border-radius:12px;background:linear-gradient(#c4483d,#7f1f1a);color:#fff1d2;font:900 clamp(13px,1.55vw,22px) "KaiTi",serif;letter-spacing:3px;text-shadow:0 1px 2px #000;box-shadow:0 5px 16px #0009;cursor:pointer}.surrender-btn:hover{filter:brightness(1.12)}.setup-selected{outline:3px solid #ffe36d;box-shadow:0 0 14px #ffd54f}.setup-tray{position:absolute;z-index:8;left:6%;bottom:8%;width:31%;min-height:17%;padding:6px;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;border:3px solid #d7ae62;border-radius:12px;background:#251610d8;box-shadow:0 8px 24px #0009}.tray-cell{display:grid;place-items:center;min-width:0}.tray-piece{width:100%;aspect-ratio:1;font-size:clamp(10px,1.2vw,16px);border:1px solid #f0cf9b;cursor:pointer}@keyframes flash{to{box-shadow:0 0 16px #fff26d}}
     aside{min-height:0;overflow:auto;padding:10px;border:1px solid #9f783e55;border-radius:12px;background:#080e0bbb}.turn{font:800 18px "KaiTi",serif;color:#ffe09a}.coin-box,.diplomacy,.rules{margin:9px 0;padding:9px 11px;border:1px solid #d4a95755;border-radius:9px;background:#20170c}.coin-box{color:#ffd77e;font-weight:900}.mode-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0}.mode-row button{padding:8px 4px;border:1px solid #8b734d;border-radius:16px;background:#171b18;color:#c8b990;font-weight:900}.mode-row button.active{border-color:#ffd46c;background:#73501d;color:#fff1bd}.setup-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:8px 0}.setup-actions.hidden{display:none}.setup-actions button{padding:9px 5px;border:0;border-radius:17px;background:linear-gradient(#ffe18a,#c98b2e);color:#3a2108;font-weight:900;cursor:pointer}.setup-actions .quick{background:linear-gradient(#b8e4bd,#4d9b61)}.setup-actions .save,.setup-actions .load{background:linear-gradient(#add9ee,#4d86a8);color:#102b3a}.teams{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0}.team{padding:8px;border-radius:8px;background:#ffffff0a;font-size:12px;line-height:1.5}.team.out{opacity:.35}.diplomacy h3{margin:0 0 8px;color:#ffe1a0}.diplomacy button{width:100%;margin:4px 0;padding:8px;border:0;border-radius:16px;background:#d19a45;color:#2c1805;font-weight:900}.diplomacy button.allied{background:#6aac79;color:#082511}.diplomacy button:disabled{cursor:not-allowed;filter:grayscale(1);opacity:.5}.log{height:170px;overflow:auto;padding:9px;border-radius:8px;background:#0006;font-size:12px;line-height:1.65}.rules{font-size:12px;color:#b9c4ba;line-height:1.7}.result,.formation-modal{position:fixed;inset:0;display:none;place-items:center;z-index:20;background:#000b}.result.show,.formation-modal.show{display:grid}.result>div,.formation-card{width:min(430px,92vw);max-height:82vh;overflow:auto;padding:24px 28px;border:1px solid #d1a654;border-radius:14px;background:#180f0c;text-align:center}.result button,.formation-card button{padding:9px 16px;border:0;border-radius:18px;background:#d19a45;font-weight:900;cursor:pointer}.formation-card h2{margin:0 0 14px;color:#ffe2a0}.formation-save{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:14px}.formation-save.hidden{display:none}.formation-save input{min-width:0;padding:10px 12px;border:1px solid #a9844d;border-radius:10px;background:#0d1712;color:#fff;font-size:16px}.formation-list{display:grid;gap:8px;text-align:left}.formation-empty{padding:18px;color:#bcae90;text-align:center}.formation-row{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;padding:8px;border:1px solid #795c35;border-radius:9px;background:#ffffff08}.formation-row span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.formation-row .load-one{background:#68a8ca;color:#102638}.formation-row .delete-one{background:#8e332d;color:#fff}.formation-close{margin-top:14px;background:#5d574c!important;color:#fff}
+    .result-actions{display:flex;justify-content:center;gap:9px;flex-wrap:wrap}.result-actions .replay-open{background:#68a8ca;color:#102638}.replay-controls{position:fixed;z-index:30;left:50%;bottom:18px;transform:translateX(-50%);display:none;align-items:center;gap:8px;width:min(720px,94vw);padding:10px 12px;border:1px solid #dfb55f;border-radius:14px;background:#120d0bea;box-shadow:0 10px 35px #000b}.replay-controls.show{display:flex}.replay-info{min-width:0;flex:1;color:#ffe4a2;font-weight:900;text-align:center}.replay-info small{display:block;margin-top:3px;color:#bdc9c0;font-weight:400;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.replay-controls button{padding:8px 13px;border:1px solid #a9854d;border-radius:18px;background:#352417;color:#ffe1a2;font-weight:900;cursor:pointer}.replay-controls button:disabled{opacity:.35;cursor:not-allowed}.replay-controls .replay-exit{background:#70332d;color:#fff}
     @media(max-width:900px){body{overflow:auto}main{height:auto;min-height:100dvh;grid-template-rows:auto 1fr}header{min-height:82px;flex-wrap:wrap;padding:8px}.title{font-size:19px}.layout{display:flex;flex-direction:column;padding:4px;overflow-x:auto}.board{width:min(112vw,92vh)}aside{width:97vw;margin:auto}.log{height:130px}.node{width:5%;height:5%}.node.center{width:3.05%;height:3.05%}.setup-tray{left:5%;bottom:7%;width:32%;gap:3px}.tray-piece{font-size:clamp(9px,2vw,14px)}}
   </style>
 </head>
@@ -25,18 +26,22 @@
     <div class="teams" id="teams"></div><div class="diplomacy"><h3>外交结盟</h3><div id="diplomacy"></div></div>
     <div class="log" id="log"></div><div class="rules" id="rules">六国混战：相邻国家可以临时结盟，盟友不会主动互吃；半明模式可看见盟友棋子，全明模式所有棋子可见。</div>
   </aside></div>
-  <div class="result" id="result"><div><h2 id="resultTitle"></h2><p id="resultText"></p><button onclick="start()">再来一局</button></div></div>
+  <div class="result" id="result"><div><h2 id="resultTitle"></h2><p id="resultText"></p><div class="result-actions"><button class="replay-open" id="openReplay">全明复盘</button><button onclick="start()">再来一局</button></div></div></div>
   <div class="formation-modal" id="formationModal"><div class="formation-card"><h2 id="formationTitle">我的六国阵型</h2><div class="formation-save" id="formationSaveBox"><input id="formationName" maxlength="16" placeholder="输入阵型名称"><button id="confirmSaveFormation">保存当前阵型</button></div><div class="formation-list" id="formationList"></div><button class="formation-close" id="closeFormation">关闭</button></div></div>
+  <div class="replay-controls" id="replayControls"><button id="replayPrev">上一步</button><button id="replayPlay">自动播放</button><button id="replayNext">下一步</button><div class="replay-info"><span id="replayProgress">0 / 0</span><small id="replayCaption"></small></div><button class="replay-exit" id="replayExit">返回结算</button></div>
 </main><script>
 const names=['司令','军长','师长','师长','旅长','旅长','团长','团长','营长','营长','连长','连长','连长','排长','排长','排长','工兵','工兵','工兵','炸弹','炸弹','地雷','地雷','地雷','军旗'];
 const rank={'司令':9,'军长':8,'师长':7,'旅长':6,'团长':5,'营长':4,'连长':3,'排长':2,'工兵':1};
 const colors=['red','blue','purple','green','orange','cyan'],labels=['红国','蓝国','紫国','绿国','橙国','青国'],short={'司令':'司','军长':'军','师长':'师','旅长':'旅','团长':'团','营长':'营','连长':'连','排长':'排','工兵':'兵','炸弹':'弹','地雷':'雷','军旗':'旗'};
 const FORMATION_KEY='sixArmySavedFormationsV1';
 const $=s=>document.querySelector(s),board=$('#board');
-let nodes=[],edges=[],railLines=[],pieces=[],turn=0,selected=null,valid=[],alive=[true,true,true,true,true,true],over=false,phase='setup',setupSelected=null,draggedPiece=null,formationSaveMode=false,allianceUsedThisTurn=false,mode=localStorage.getItem('sixArmyMode')||'dark',alliances=[],aiTimer=null,lastTrail=null,lastBattle=null;
+let nodes=[],edges=[],railLines=[],pieces=[],turn=0,selected=null,valid=[],alive=[true,true,true,true,true,true],over=false,phase='setup',setupSelected=null,draggedPiece=null,formationSaveMode=false,allianceUsedThisTurn=false,mode=localStorage.getItem('sixArmyMode')||'dark',alliances=[],aiTimer=null,lastTrail=null,lastBattle=null,replayFrames=[],replayIndex=0,replayMode=false,replayTimer=null,replayReturnState=null;
 function key(owner,row,col){return owner>=0?`${owner}-${row}-${col}`:`c-${row}-${col}`}
 function node(id){return nodes.find(n=>n.id===id)}function pieceAt(id){return pieces.find(p=>!p.dead&&p.node===id)}function shuffle(a){return a.sort(()=>Math.random()-.5)}function countLive(owner){return pieces.filter(p=>p.owner===owner&&!p.dead&&p.name!=='军旗').length}
 function isNeighbor(a,b){let d=Math.abs(a-b);return d===1||d===5}function isAllied(a,b){return alliances[a]?.[b]}function setAlliance(a,b,on=true){alliances[a][b]=alliances[b][a]=on}
+function allianceCount(owner){return alliances[owner]?.filter(Boolean).length||0}
+function allianceLimitReason(a,b){if(isAllied(a,b))return'';if(allianceCount(a)>=2)return`${labels[a]}盟友已达2个上限。`;if(allianceCount(b)>=2)return`${labels[b]}盟友已达2个上限。`;return''}
+function notify(msg){log(msg);alert(msg)}
 function addEdge(a,b,type='road'){if(!a||!b||edges.some(e=>(e.a===a&&e.b===b)||(e.a===b&&e.b===a)))return;edges.push({a,b,type})}
 function addRailLine(...ids){railLines.push(ids.filter(Boolean))}
 function addNode(n){nodes.push(n)}
@@ -66,22 +71,26 @@ function buildMap(){
   }
   for(let o=0;o<6;o++){
     let next=(o+1)%6;
+    addRailLine(key(o,0,0),key(o,0,1),key(o,0,2),key(o,0,3),key(o,0,4));
     addEdge(key(o,0,4),key(next,0,0),'rail');
     addRailLine(key(o,4,4),key(o,3,4),key(o,2,4),key(o,1,4),key(o,0,4),key(next,0,0),key(next,1,0),key(next,2,0),key(next,3,0),key(next,4,0));
   }
   const railPath=(ids)=>{ids.forEach((id,i)=>{if(i)addEdge(ids[i-1],id,'rail')});addRailLine(...ids)};
+  const sideToFront=(owner,col)=>[4,3,2,1,0].map(r=>key(owner,r,col));
+  const frontToSide=(owner,col)=>[0,1,2,3,4].map(r=>key(owner,r,col));
+  const sideRailPath=(aOwner,aCol,mids,bOwner,bCol)=>railPath([...sideToFront(aOwner,aCol),...mids,...frontToSide(bOwner,bCol)]);
   // 每组正对国家由三条贯穿铁路连接：边两条穿 4 个中盘点，中间一条穿 3 个中盘点。
-  railPath([key(2,0,4),'mid-ul','mid-u1','mid-u2','mid-ur',key(5,0,0)]);
+  sideRailPath(2,4,['mid-ul','mid-u1','mid-u2','mid-ur'],5,0);
   railPath([key(2,0,2),'mid-l','mid-c','mid-r',key(5,0,2)]);
-  railPath([key(2,0,0),'mid-ll','mid-d1','mid-d2','mid-lr',key(5,0,4)]);
+  sideRailPath(2,0,['mid-ll','mid-d1','mid-d2','mid-lr'],5,4);
 
-  railPath([key(3,0,4),'mid-top','mid-u2','mid-r','mid-lr',key(0,0,0)]);
+  sideRailPath(3,4,['mid-top','mid-u2','mid-r','mid-lr'],0,0);
   railPath([key(3,0,2),'mid-u1','mid-c','mid-d2',key(0,0,2)]);
-  railPath([key(3,0,0),'mid-ul','mid-l','mid-d1','mid-bottom',key(0,0,4)]);
+  sideRailPath(3,0,['mid-ul','mid-l','mid-d1','mid-bottom'],0,4);
 
-  railPath([key(4,0,0),'mid-top','mid-u1','mid-l','mid-ll',key(1,0,4)]);
+  sideRailPath(4,0,['mid-top','mid-u1','mid-l','mid-ll'],1,4);
   railPath([key(4,0,2),'mid-u2','mid-c','mid-d1',key(1,0,2)]);
-  railPath([key(4,0,4),'mid-ur','mid-r','mid-d2','mid-bottom',key(1,0,0)]);
+  sideRailPath(4,4,['mid-ur','mid-r','mid-d2','mid-bottom'],1,0);
 }
 function deployOwner(owner){
   const plan=Math.random()<1/3?'balanced':Math.random()<.5?'assault':'trap',slots=nodes.filter(n=>n.owner===owner&&n.type!=='camp'),pool=[...names];
@@ -126,7 +135,15 @@ function placeSetup(pieceId,nodeId){
   p.node=nodeId;setupSelected=null;draggedPiece=null;draw();
 }
 function returnToTray(pieceId){if(phase!=='setup')return;let p=pieces.find(x=>x.id===pieceId&&x.owner===0&&!x.dead);if(p){p.node=null;setupSelected=null;draw()}}
-function bindSetupPiece(el,p){el.draggable=true;el.dataset.pieceId=p.id;el.onclick=e=>{e.stopPropagation();setupSelected=setupSelected===p.id?null:p.id;draw()};el.ondragstart=e=>{draggedPiece=p.id;e.dataTransfer.setData('text/plain',p.id)}}
+function bindSetupPiece(el,p){
+  el.draggable=true;el.dataset.pieceId=p.id;
+  el.onclick=e=>{
+    e.stopPropagation();
+    if(setupSelected&&setupSelected!==p.id&&p.node){placeSetup(setupSelected,p.node);return}
+    setupSelected=setupSelected===p.id?null:p.id;draw();
+  };
+  el.ondragstart=e=>{draggedPiece=p.id;e.dataTransfer.setData('text/plain',p.id)}
+}
 function quickSetup(){
   if(phase!=='setup')return;pieces.filter(p=>p.owner===0&&!p.dead).forEach(p=>p.node=null);
   const place=(p,filter)=>{let opts=setupSlots().filter(n=>!pieceAt(n.id)&&filter(n)&&canPlaceSetupPiece(p,n)),n=opts[Math.floor(Math.random()*opts.length)];p.node=n.id};
@@ -136,7 +153,7 @@ function quickSetup(){
 }
 function confirmSetup(){
   if(phase!=='setup')return;let err=validateSetup();if(err){log(`⚠ ${err}`);return}
-  phase='play';setupSelected=null;selected=null;valid=[];turn=0;allianceUsedThisTurn=false;log('⚔ 布阵完成，六国开战。');draw();
+  phase='play';setupSelected=null;selected=null;valid=[];turn=0;allianceUsedThisTurn=false;log('⚔ 布阵完成，六国开战。');recordReplayFrame('开局阵型');draw();
 }
 function formationData(){return pieces.filter(p=>p.owner===0&&!p.dead&&p.node).map(p=>({name:p.name,node:p.node}))}
 function loadFormationStore(){try{return JSON.parse(localStorage.getItem(FORMATION_KEY)||'[]')}catch(e){return[]}}
@@ -167,6 +184,7 @@ function applyFormation(idx){
   setupSelected=null;log(`📂 已调入阵型：${list[idx].name}`);$('#formationModal').classList.remove('show');draw();
 }
 function visible(p){
+  if(replayMode)return true;
   if(mode==='open'||p.owner===0||p.reveal)return true;
   if(mode==='semi'&&isAllied(0,p.owner))return true;
   return false;
@@ -177,6 +195,7 @@ function draw(){
   if(lastTrail){lastTrail.path.slice(0,-1).forEach((id,i)=>{let n=node(id),next=node(lastTrail.path[i+1]);if(!n||!next)return;let at=pos(n),angle=Math.atan2(next.y-n.y,next.x-n.x)*180/Math.PI,el=document.createElement('span');el.className=`trail-arrow ${i===0?'start':''}`;el.textContent='➤';el.style.cssText=`left:${at.x}%;top:${at.y}%;transform:translate(-50%,-50%) rotate(${angle}deg);color:${['#8e211a','#173f8a','#603080','#17613a','#8f520d','#0b6970'][lastTrail.owner]}`;board.appendChild(el)});if(lastBattle){let n=node(lastBattle);if(n){let at=pos(n),el=document.createElement('span');el.className='battle-flash';el.style.cssText=`left:${at.x}%;top:${at.y}%`;board.appendChild(el)}}}
   nodes.forEach(n=>{let el=document.createElement('button'),p=pieceAt(n.id);el.className=`node ${n.type} ${n.rail?'rail':''} ${valid.includes(n.id)?'valid':''} ${selected?.node===n.id?'selected':''}`;el.style.cssText=`left:${n.x}%;top:${n.y}%`;el.onclick=()=>clickNode(n.id);if(p){let see=visible(p),setupClass=phase==='setup'&&setupSelected===p.id?'setup-selected':'';el.innerHTML=`<span class="piece ${colors[p.owner]} ${see?'':'hidden'} ${p.reveal?'flash':''} ${setupClass}">${see?short[p.name]:''}</span>`;if(phase==='setup'&&p.owner===0)bindSetupPiece(el.firstElementChild,p)}else if(n.type==='camp')el.innerHTML='<span>营</span>';else if(n.type==='hq')el.textContent='本';if(phase==='setup'&&n.owner===0&&n.type!=='camp'){el.ondragover=e=>e.preventDefault();el.ondrop=e=>{e.preventDefault();placeSetup(e.dataTransfer.getData('text/plain')||draggedPiece,n.id)}}board.appendChild(el)});
   if(phase==='setup'){let tray=document.createElement('div');tray.className='setup-tray';tray.ondragover=e=>e.preventDefault();tray.ondrop=e=>{e.preventDefault();returnToTray(e.dataTransfer.getData('text/plain')||draggedPiece)};pieces.filter(p=>p.owner===0&&!p.dead&&!p.node).forEach(p=>{let cell=document.createElement('div'),el=document.createElement('span');cell.className='tray-cell';el.className=`piece tray-piece red ${setupSelected===p.id?'setup-selected':''}`;el.textContent=short[p.name];bindSetupPiece(el,p);cell.appendChild(el);tray.appendChild(cell)});board.appendChild(tray)}
+  if(phase==='play'&&!over&&!replayMode){let surrender=document.createElement('button');surrender.className='surrender-btn';surrender.textContent='投降';surrender.onclick=e=>{e.stopPropagation();surrenderGame()};board.appendChild(surrender)}
   updateSide();
 }
 function updateSide(){
@@ -191,15 +210,17 @@ function updateSide(){
 function log(t){let div=document.createElement('div');div.textContent=t;$('#log').prepend(div)}
 function neighbors(id,type=null){return edges.filter(e=>e.a===id||e.b===id).filter(e=>!type||e.type===type).map(e=>e.a===id?e.b:e.a)}
 function straightNext(prev,cur){
-  let listed=railLines.flatMap(line=>{
+  let matchedLine=false,listed=railLines.flatMap(line=>{
     let i=line.indexOf(cur),j=line.indexOf(prev);
     if(i<0||j<0||Math.abs(i-j)!==1)return[];
+    matchedLine=true;
     let out=[];
     let step=i-j,next=i+step;
     if(next>=0&&next<line.length)out.push(line[next]);
     return out;
   });
   if(listed.length)return listed.find(id=>neighbors(cur,'rail').includes(id));
+  if(matchedLine)return null;
   let A=node(prev),B=node(cur),dx=Math.sign(Math.round((B.x-A.x)*10)),dy=Math.sign(Math.round((B.y-A.y)*10));
   return neighbors(cur,'rail').find(id=>id!==prev&&Math.sign(Math.round((node(id).x-B.x)*10))===dx&&Math.sign(Math.round((node(id).y-B.y)*10))===dy);
 }
@@ -257,7 +278,8 @@ function movePath(p,to){
   return[p.node,to];
 }
 function legalMoves(p){
-  if(!p||p.dead||p.name==='军旗'||p.name==='地雷'||p.stuck)return[];
+  const current=node(p?.node);
+  if(!p||p.dead||p.name==='军旗'||p.name==='地雷'||p.stuck||current?.type==='hq')return[];
   const out=new Set();
   neighbors(p.node).forEach(id=>{let n=node(id),q=pieceAt(id);if(q&&q.owner===p.owner)return;if(q&&isAllied(p.owner,q.owner))return;if(q&&n.type==='camp')return;out.add(id)});
   if(node(p.node).rail){
@@ -272,6 +294,7 @@ function legalMoves(p){
   return[...out];
 }
 function clickNode(id){
+  if(replayMode)return;
   if(over)return;let p=pieceAt(id);
   if(phase==='setup'){
     if(setupSelected){placeSetup(setupSelected,id);return}
@@ -282,17 +305,57 @@ function clickNode(id){
   if(p&&p.owner===0){selected=p;valid=legalMoves(p);draw()}else{selected=null;valid=[];draw()}
 }
 function movePiece(p,to){
-  if(over||p.dead)return;let from=p.node,target=pieceAt(to),dest=node(to);selected=null;valid=[];lastTrail={owner:p.owner,path:movePath(p,to)};lastBattle=target?to:null;
-  if(target)battle(p,target);else{p.node=to;if(dest.type==='hq')p.stuck=true;log(`${labels[p.owner]}${p.name}移动。`)}
-  draw();checkEnd();if(!over)nextTurn();
+  if(over||p.dead)return;let from=p.node,target=pieceAt(to),dest=node(to),attackerName=p.name,attackerOwner=p.owner,defenderName=target?.name,defenderOwner=target?.owner,resultText=null;selected=null;valid=[];lastTrail={owner:p.owner,path:movePath(p,to)};lastBattle=target?to:null;
+  if(target){resultText=battle(p,target);if(!p.dead&&p.node===to&&dest.type==='hq')p.stuck=true}else{p.node=to;if(dest.type==='hq')p.stuck=true;log(`${labels[p.owner]}${p.name}移动。`)}
+  let caption=target?`${labels[attackerOwner]}${attackerName}攻击${labels[defenderOwner]}${defenderName}：${resultText}`:`${labels[attackerOwner]}${attackerName}移动`;
+  recordReplayFrame(caption);draw();checkEnd();if(!over)nextTurn();
 }
 function battle(a,d){
-  a.reveal=d.reveal=true;let text=`${labels[a.owner]}${a.name}进攻${labels[d.owner]}${d.name}：`;
-  if(a.name==='炸弹'||d.name==='炸弹'){a.dead=d.dead=true;text+='同归于尽'}
-  else if(d.name==='地雷'){if(a.name==='工兵'){d.dead=true;a.node=d.node;text+='工兵排雷'}else{a.dead=d.dead=true;text+='撞雷同归于尽'}}
-  else if(d.name==='军旗'){d.dead=true;a.node=d.node;text+='扛旗成功';eliminate(d.owner,a.owner)}
-  else{let ar=rank[a.name]||0,dr=rank[d.name]||0;if(ar>dr){d.dead=true;a.node=d.node;text+='胜'}else if(ar<dr){a.dead=true;text+='败'}else{a.dead=d.dead=true;text+='同归于尽'}}
-  log(text);
+  let result='',text=`${labels[a.owner]}${a.name}进攻${labels[d.owner]}${d.name}：`;
+  if(a.name==='炸弹'||d.name==='炸弹'){a.dead=d.dead=true;result='同归于尽'}
+  else if(d.name==='地雷'){if(a.name==='工兵'){d.dead=true;a.node=d.node;result='工兵排雷'}else{a.dead=d.dead=true;result='撞雷同归于尽'}}
+  else if(d.name==='军旗'){d.dead=true;a.node=d.node;result='扛旗成功';eliminate(d.owner,a.owner)}
+  else{let ar=rank[a.name]||0,dr=rank[d.name]||0;if(ar>dr){d.dead=true;a.node=d.node;result='胜'}else if(ar<dr){a.dead=true;result='败'}else{a.dead=d.dead=true;result='同归于尽'}}
+  if(a.name==='司令'&&a.dead)revealFlag(a.owner);
+  if(d.name==='司令'&&d.dead)revealFlag(d.owner);
+  log(text+result);return result;
+}
+function revealFlag(owner){let f=pieces.find(x=>x.owner===owner&&x.name==='军旗'&&!x.dead);if(f){f.reveal=true;log(`🚩 ${labels[owner]}司令阵亡，军旗位置暴露。`)}}
+function recordReplayFrame(caption){
+  if(phase!=='play'||replayMode)return;
+  replayFrames.push({caption,pieces:JSON.parse(JSON.stringify(pieces)),alive:[...alive],turn,lastTrail:lastTrail?JSON.parse(JSON.stringify(lastTrail)):null,lastBattle})
+}
+function showReplayFrame(index){
+  if(!replayFrames.length)return;
+  replayIndex=Math.max(0,Math.min(index,replayFrames.length-1));
+  let frame=replayFrames[replayIndex];
+  pieces=JSON.parse(JSON.stringify(frame.pieces)).map(p=>({...p,reveal:true}));
+  alive=[...frame.alive];turn=frame.turn;lastTrail=frame.lastTrail?JSON.parse(JSON.stringify(frame.lastTrail)):null;lastBattle=frame.lastBattle;selected=null;valid=[];draw();
+  $('#replayProgress').textContent=`${replayIndex+1} / ${replayFrames.length}`;
+  $('#replayCaption').textContent=frame.caption;
+  $('#turnText').textContent=`全明复盘 · ${frame.caption}`;
+  $('#replayPrev').disabled=replayIndex===0;
+  $('#replayNext').disabled=replayIndex===replayFrames.length-1;
+}
+function stopReplayAuto(){clearInterval(replayTimer);replayTimer=null;$('#replayPlay').textContent='自动播放'}
+function toggleReplayAuto(){
+  if(replayTimer)return stopReplayAuto();
+  $('#replayPlay').textContent='暂停';
+  replayTimer=setInterval(()=>{if(replayIndex>=replayFrames.length-1)return stopReplayAuto();showReplayFrame(replayIndex+1)},900);
+}
+function openReplay(){
+  if(!replayFrames.length)return alert('本局还没有可复盘的步骤。');
+  clearTimeout(aiTimer);stopReplayAuto();
+  replayReturnState={pieces:JSON.parse(JSON.stringify(pieces)),alive:[...alive],turn,lastTrail:lastTrail?JSON.parse(JSON.stringify(lastTrail)):null,lastBattle,turnText:$('#turnText').textContent,logHTML:$('#log').innerHTML,over};
+  replayMode=true;over=true;$('#result').classList.remove('show');$('#replayControls').classList.add('show');showReplayFrame(0);
+}
+function exitReplay(){
+  stopReplayAuto();replayMode=false;$('#replayControls').classList.remove('show');
+  if(replayReturnState){
+    pieces=replayReturnState.pieces;alive=replayReturnState.alive;turn=replayReturnState.turn;lastTrail=replayReturnState.lastTrail;lastBattle=replayReturnState.lastBattle;over=replayReturnState.over;
+    $('#turnText').textContent=replayReturnState.turnText;$('#log').innerHTML=replayReturnState.logHTML;
+  }
+  replayReturnState=null;draw();$('#result').classList.add('show');
 }
 function eliminate(owner,killer){
   if(!alive[owner])return;alive[owner]=false;pieces.forEach(p=>{if(p.owner===owner)p.dead=true});for(let i=0;i<6;i++)setAlliance(owner,i,false);log(`🏳 ${labels[owner]}军旗被${labels[killer]}扛走，本国淘汰。`)
@@ -307,17 +370,37 @@ function aiMove(){
 }
 function distanceToEnemyFlag(id,owner){let n=node(id),flags=pieces.filter(p=>!p.dead&&p.name==='军旗'&&p.owner!==owner&&!isAllied(owner,p.owner));if(!flags.length)return 0;return Math.min(...flags.map(f=>Math.hypot(node(f.node).x-n.x,node(f.node).y-n.y)))}
 function maybeAiDiplomacy(owner){
-  if(Math.random()>.18)return;let options=[(owner+1)%6,(owner+5)%6].filter(o=>alive[o]&&!isAllied(owner,o));if(!options.length)return;
+  if(allianceCount(owner)>=2)return;
+  if(Math.random()>.18)return;let options=[(owner+1)%6,(owner+5)%6].filter(o=>alive[o]&&!isAllied(owner,o)&&allianceCount(o)<2);if(!options.length)return;
   let strong=alive.map((v,i)=>v?countLive(i):-1).indexOf(Math.max(...alive.map((v,i)=>v?countLive(i):-1)));let target=options.includes(strong)?options.find(o=>o!==strong)??options[0]:options[Math.floor(Math.random()*options.length)];
-  if(Math.random()<.45){setAlliance(owner,target,true);log(`🤝 ${labels[owner]}与${labels[target]}临时结盟，准备制衡强敌。`)}
+  if(Math.random()<.45){
+    let limit=allianceLimitReason(owner,target);
+    if(limit){notify(`⚠ ${labels[owner]}尝试与${labels[target]}结盟失败：${limit}`);return}
+    if(target===0){
+      let ok=confirm(`🤝 ${labels[owner]}向你发起结盟申请，是否接受？\n\n提示：每个国家最多只能有两个盟友。`);
+      if(ok){setAlliance(owner,0,true);notify(`🤝 你接受了${labels[owner]}的结盟申请。半明模式下可互见棋子。`)}
+      else notify(`❌ 你拒绝了${labels[owner]}的结盟申请。`);
+      return;
+    }
+    setAlliance(owner,target,true);notify(`🤝 ${labels[owner]}与${labels[target]}临时结盟，准备制衡强敌。`);
+  }
 }
 function requestAlliance(other){
   if(phase!=='play'||turn!==0||over||!alive[other]||other===0)return;
-  if(allianceUsedThisTurn){log('⚠ 每回合只能进行一次外交。');draw();return}
+  if(allianceUsedThisTurn){notify('⚠ 每回合只能进行一次外交。');draw();return}
   allianceUsedThisTurn=true;
-  if(isAllied(0,other)){setAlliance(0,other,false);log(`⚑ 你解除与${labels[other]}的盟约。`);draw();return}
+  if(isAllied(0,other)){setAlliance(0,other,false);notify(`⚑ 你已解除与${labels[other]}的盟约。`);draw();return}
+  let limit=allianceLimitReason(0,other);
+  if(limit){notify(`⚠ 结盟失败：${limit}`);draw();return}
   let diff=countLive(other)-countLive(0),reject=diff>=4?.9:diff>=0?.8:.5;
-  if(Math.random()<reject)log(`❌ ${labels[other]}拒绝结盟。`);else{setAlliance(0,other,true);log(`🤝 ${labels[other]}接受结盟。半明模式下可互见棋子。`)}draw();
+  if(Math.random()<reject)notify(`❌ ${labels[other]}拒绝结盟。`);else{setAlliance(0,other,true);notify(`🤝 ${labels[other]}接受结盟。半明模式下可互见棋子。`)}draw();
+}
+function surrenderGame(){
+  if(phase!=='play'||over||replayMode)return;
+  clearTimeout(aiTimer);over=true;selected=null;valid=[];recordReplayFrame('红国投降，全局游戏结束');
+  $('#resultTitle').textContent='红国投降';
+  $('#resultText').textContent='你选择投降，本局六国军棋已直接结束。';
+  $('#result').classList.add('show');log('🏳 红国投降，全局游戏结束。');draw();
 }
 function checkEnd(){
   let survivors=alive.map((v,i)=>v?i:-1).filter(i=>i>=0);
@@ -325,11 +408,12 @@ function checkEnd(){
 }
 function setCoins(){if(!localStorage.getItem('cloudCoins'))localStorage.setItem('cloudCoins','1000');$('#coinCount').textContent=localStorage.getItem('cloudCoins')}
 function start(){
-  clearTimeout(aiTimer);buildMap();pieces=[];alliances=Array.from({length:6},()=>Array(6).fill(false));alive=[true,true,true,true,true,true];phase='setup';turn=0;selected=null;valid=[];setupSelected=null;allianceUsedThisTurn=false;over=false;lastTrail=null;lastBattle=null;$('#log').innerHTML='';$('#result').classList.remove('show');setCoins();
+  clearTimeout(aiTimer);stopReplayAuto();replayMode=false;replayFrames=[];replayIndex=0;replayReturnState=null;$('#replayControls').classList.remove('show');buildMap();pieces=[];alliances=Array.from({length:6},()=>Array(6).fill(false));alive=[true,true,true,true,true,true];phase='setup';turn=0;selected=null;valid=[];setupSelected=null;allianceUsedThisTurn=false;over=false;lastTrail=null;lastBattle=null;$('#log').innerHTML='';$('#result').classList.remove('show');setCoins();
   createPlayerPieces();for(let i=1;i<6;i++)deployOwner(i);
   log('请先布置红国棋子：军旗进大本营，地雷最后两行，炸弹不能第一排。');draw();
 }
 document.querySelectorAll('#modeRow button').forEach(b=>b.onclick=()=>{mode=b.dataset.mode;localStorage.setItem('sixArmyMode',mode);draw();log(`已切换为${mode==='dark'?'暗棋':mode==='semi'?'半明':'全明'}模式。`)});
+$('#openReplay').onclick=openReplay;$('#replayPrev').onclick=()=>{stopReplayAuto();showReplayFrame(replayIndex-1)};$('#replayNext').onclick=()=>{stopReplayAuto();showReplayFrame(replayIndex+1)};$('#replayPlay').onclick=toggleReplayAuto;$('#replayExit').onclick=exitReplay;
 $('#restart').onclick=start;$('#rulesBtn').onclick=()=>alert('六国军棋：6人每方25枚；军旗被扛本国淘汰，直到仅存一国。公路一步，铁路直线快行，工兵铁路可转弯。行营安全不可被吃。暗棋隐藏敌方，半明可见盟友，全明全体可见。电脑外交拒绝率按棋子数量差执行。');
 $('#quickSetup').onclick=quickSetup;$('#confirmSetup').onclick=confirmSetup;$('#saveFormation').onclick=()=>openFormationManager(true);$('#loadFormation').onclick=()=>openFormationManager(false);$('#confirmSaveFormation').onclick=confirmSaveFormation;$('#formationName').onkeydown=e=>{if(e.key==='Enter')confirmSaveFormation()};$('#closeFormation').onclick=()=>$('#formationModal').classList.remove('show');
 $('#landscape').onclick=async()=>{try{await document.documentElement.requestFullscreen?.();await screen.orientation?.lock?.('landscape')}catch(e){alert('请关闭竖屏锁定并横置手机')}};
