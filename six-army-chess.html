@@ -1,0 +1,337 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>云上六国军棋</title>
+  <style>
+    *{box-sizing:border-box}body{margin:0;min-height:100vh;overflow:hidden;background:#07100f;color:#eee2c5;font-family:"PingFang SC","Microsoft YaHei",sans-serif}
+    main{height:100vh;display:grid;grid-template-rows:52px 1fr;background:radial-gradient(circle at 50% 50%,#315242,#11271f 58%,#050807)}
+    header{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:0 12px;background:#020806df;border-bottom:1px solid #c39a563d}.title{font:800 23px "KaiTi",serif;color:#ffe1a0;letter-spacing:4px}a{color:#d7bd89;text-decoration:none}.tools{display:flex;gap:8px;flex-wrap:wrap}.tools button,.tools select{padding:7px 11px;border:1px solid #9f783e;border-radius:16px;background:#21160e;color:#ead5a6;font-weight:800}
+    .layout{min-height:0;display:grid;grid-template-columns:minmax(560px,1fr) 270px;gap:6px;padding:4px}.board-wrap{display:grid;place-items:center;min-height:0}.board{position:relative;width:min(calc(100vh - 66px),calc(100vw - 286px),97vw);aspect-ratio:1;border:8px solid #25231d;border-radius:18px;background:radial-gradient(circle at center,#283330 0 18%,#202927 19% 46%,#151b1b 47% 100%);box-shadow:0 18px 60px #000d,inset 0 0 45px #000;overflow:hidden}
+    .board:before{content:"";position:absolute;inset:27% 25%;border:3px solid #75613e;background:#1a201f;box-shadow:inset 0 0 20px #000,0 0 22px #0008;z-index:0}
+    .road{position:absolute;height:2px;background:#8f7349;transform-origin:left center;z-index:1}.road.rail{height:4px;background:#141817;box-shadow:0 2px 0 #b8925a}
+    .node{position:absolute;z-index:3;width:4.05%;height:4.05%;transform:translate(-50%,-50%);display:grid;place-items:center;padding:0;border:1px solid #9b875f;border-radius:50%;background:#e6d7b5;color:#2d2419;font-size:clamp(10px,1.15vw,16px);font-weight:900;cursor:pointer;box-shadow:0 2px 5px #0007}.node.rail{border:2px solid #333b35}.node.camp{transform:translate(-50%,-50%);border:3px solid #1b8f68;background:#203329;color:#bff5de}.node.hq{border:2px solid #d2b46b;background:#2d271d;color:#f4d895}.node.center{width:2.65%;height:2.65%;border-radius:4px;background:#242923;border:2px solid #8f7349;color:#d7c093;box-shadow:0 1px 4px #0008}.node.valid{box-shadow:0 0 0 3px #5bf08c,0 0 16px #2fea79}.node.selected{box-shadow:0 0 0 3px #ffe36d;transform:translate(-50%,-50%) scale(1.1)}
+    .piece{width:calc(100% + 4px);height:calc(100% + 4px);display:grid;place-items:center;border-radius:4px;color:white;text-shadow:0 1px 2px #000;line-height:1;font-size:inherit;user-select:none}.hidden{color:transparent;text-shadow:none;border:1px solid #f5e5ba}.red{background:#b43c32}.blue{background:#355eae}.purple{background:#7948a7}.green{background:#39835b}.orange{background:#b97826}.cyan{background:#238b95}.dead{opacity:.25}.flash{animation:flash .7s infinite alternate}.trail-arrow{position:absolute;z-index:8;width:3.2%;aspect-ratio:1;display:grid;place-items:center;border-radius:50%;background:#fff2a9dc;color:#7c261e;font-size:clamp(8px,1.15vw,15px);font-weight:900;pointer-events:none;box-shadow:0 0 6px #0008}.trail-arrow.start{background:#ffe36d;color:#5c2917;box-shadow:0 0 0 2px #fff2a1,0 0 10px #ffdc3f}.battle-flash{position:absolute;z-index:9;width:6.7%;aspect-ratio:1;transform:translate(-50%,-50%);border:4px solid #ffe33f;border-radius:8px;pointer-events:none;animation:battleBlink .45s infinite alternate;box-shadow:0 0 14px #ffd91a}@keyframes battleBlink{to{opacity:.18;transform:translate(-50%,-50%) scale(1.12)}}.setup-selected{outline:3px solid #ffe36d;box-shadow:0 0 14px #ffd54f}.setup-tray{position:absolute;z-index:8;left:6%;bottom:8%;width:31%;min-height:17%;padding:6px;display:grid;grid-template-columns:repeat(5,1fr);gap:4px;border:3px solid #d7ae62;border-radius:12px;background:#251610d8;box-shadow:0 8px 24px #0009}.tray-cell{display:grid;place-items:center;min-width:0}.tray-piece{width:100%;aspect-ratio:1;font-size:clamp(10px,1.2vw,16px);border:1px solid #f0cf9b;cursor:pointer}@keyframes flash{to{box-shadow:0 0 16px #fff26d}}
+    aside{min-height:0;overflow:auto;padding:10px;border:1px solid #9f783e55;border-radius:12px;background:#080e0bbb}.turn{font:800 18px "KaiTi",serif;color:#ffe09a}.coin-box,.diplomacy,.rules{margin:9px 0;padding:9px 11px;border:1px solid #d4a95755;border-radius:9px;background:#20170c}.coin-box{color:#ffd77e;font-weight:900}.mode-row{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin:8px 0}.mode-row button{padding:8px 4px;border:1px solid #8b734d;border-radius:16px;background:#171b18;color:#c8b990;font-weight:900}.mode-row button.active{border-color:#ffd46c;background:#73501d;color:#fff1bd}.setup-actions{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin:8px 0}.setup-actions.hidden{display:none}.setup-actions button{padding:9px 5px;border:0;border-radius:17px;background:linear-gradient(#ffe18a,#c98b2e);color:#3a2108;font-weight:900;cursor:pointer}.setup-actions .quick{background:linear-gradient(#b8e4bd,#4d9b61)}.setup-actions .save,.setup-actions .load{background:linear-gradient(#add9ee,#4d86a8);color:#102b3a}.teams{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:10px 0}.team{padding:8px;border-radius:8px;background:#ffffff0a;font-size:12px;line-height:1.5}.team.out{opacity:.35}.diplomacy h3{margin:0 0 8px;color:#ffe1a0}.diplomacy button{width:100%;margin:4px 0;padding:8px;border:0;border-radius:16px;background:#d19a45;color:#2c1805;font-weight:900}.diplomacy button.allied{background:#6aac79;color:#082511}.diplomacy button:disabled{cursor:not-allowed;filter:grayscale(1);opacity:.5}.log{height:170px;overflow:auto;padding:9px;border-radius:8px;background:#0006;font-size:12px;line-height:1.65}.rules{font-size:12px;color:#b9c4ba;line-height:1.7}.result,.formation-modal{position:fixed;inset:0;display:none;place-items:center;z-index:20;background:#000b}.result.show,.formation-modal.show{display:grid}.result>div,.formation-card{width:min(430px,92vw);max-height:82vh;overflow:auto;padding:24px 28px;border:1px solid #d1a654;border-radius:14px;background:#180f0c;text-align:center}.result button,.formation-card button{padding:9px 16px;border:0;border-radius:18px;background:#d19a45;font-weight:900;cursor:pointer}.formation-card h2{margin:0 0 14px;color:#ffe2a0}.formation-save{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:14px}.formation-save.hidden{display:none}.formation-save input{min-width:0;padding:10px 12px;border:1px solid #a9844d;border-radius:10px;background:#0d1712;color:#fff;font-size:16px}.formation-list{display:grid;gap:8px;text-align:left}.formation-empty{padding:18px;color:#bcae90;text-align:center}.formation-row{display:grid;grid-template-columns:1fr auto auto;gap:6px;align-items:center;padding:8px;border:1px solid #795c35;border-radius:9px;background:#ffffff08}.formation-row span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.formation-row .load-one{background:#68a8ca;color:#102638}.formation-row .delete-one{background:#8e332d;color:#fff}.formation-close{margin-top:14px;background:#5d574c!important;color:#fff}
+    @media(max-width:900px){body{overflow:auto}main{height:auto;min-height:100dvh;grid-template-rows:auto 1fr}header{min-height:82px;flex-wrap:wrap;padding:8px}.title{font-size:19px}.layout{display:flex;flex-direction:column;padding:4px;overflow-x:auto}.board{width:min(112vw,92vh)}aside{width:97vw;margin:auto}.log{height:130px}.node{width:5%;height:5%}.node.center{width:3.05%;height:3.05%}.setup-tray{left:5%;bottom:7%;width:32%;gap:3px}.tray-piece{font-size:clamp(9px,2vw,14px)}}
+  </style>
+</head>
+<body><main>
+  <header><a href="index.html">← 游戏大厅</a><div class="title">云上六国军棋</div><div class="tools"><button id="rulesBtn">规则说明</button><button id="restart">重新开局</button><button id="landscape">↻ 横屏</button></div></header>
+  <div class="layout"><div class="board-wrap"><div class="board" id="board"></div></div><aside>
+    <div class="turn" id="turnText">六国布阵中</div><div class="coin-box">🪙 大厅金币：<span id="coinCount">0</span></div>
+    <div class="mode-row" id="modeRow"><button data-mode="dark">暗棋</button><button data-mode="semi">半明</button><button data-mode="open">全明</button></div>
+    <div class="setup-actions" id="setupActions"><button class="quick" id="quickSetup">快速布阵</button><button id="confirmSetup">完成布阵</button><button class="save" id="saveFormation">保存布阵</button><button class="load" id="loadFormation">调入布阵</button></div>
+    <div class="teams" id="teams"></div><div class="diplomacy"><h3>外交结盟</h3><div id="diplomacy"></div></div>
+    <div class="log" id="log"></div><div class="rules" id="rules">六国混战：相邻国家可以临时结盟，盟友不会主动互吃；半明模式可看见盟友棋子，全明模式所有棋子可见。</div>
+  </aside></div>
+  <div class="result" id="result"><div><h2 id="resultTitle"></h2><p id="resultText"></p><button onclick="start()">再来一局</button></div></div>
+  <div class="formation-modal" id="formationModal"><div class="formation-card"><h2 id="formationTitle">我的六国阵型</h2><div class="formation-save" id="formationSaveBox"><input id="formationName" maxlength="16" placeholder="输入阵型名称"><button id="confirmSaveFormation">保存当前阵型</button></div><div class="formation-list" id="formationList"></div><button class="formation-close" id="closeFormation">关闭</button></div></div>
+</main><script>
+const names=['司令','军长','师长','师长','旅长','旅长','团长','团长','营长','营长','连长','连长','连长','排长','排长','排长','工兵','工兵','工兵','炸弹','炸弹','地雷','地雷','地雷','军旗'];
+const rank={'司令':9,'军长':8,'师长':7,'旅长':6,'团长':5,'营长':4,'连长':3,'排长':2,'工兵':1};
+const colors=['red','blue','purple','green','orange','cyan'],labels=['红国','蓝国','紫国','绿国','橙国','青国'],short={'司令':'司','军长':'军','师长':'师','旅长':'旅','团长':'团','营长':'营','连长':'连','排长':'排','工兵':'兵','炸弹':'弹','地雷':'雷','军旗':'旗'};
+const FORMATION_KEY='sixArmySavedFormationsV1';
+const $=s=>document.querySelector(s),board=$('#board');
+let nodes=[],edges=[],railLines=[],pieces=[],turn=0,selected=null,valid=[],alive=[true,true,true,true,true,true],over=false,phase='setup',setupSelected=null,draggedPiece=null,formationSaveMode=false,allianceUsedThisTurn=false,mode=localStorage.getItem('sixArmyMode')||'dark',alliances=[],aiTimer=null,lastTrail=null,lastBattle=null;
+function key(owner,row,col){return owner>=0?`${owner}-${row}-${col}`:`c-${row}-${col}`}
+function node(id){return nodes.find(n=>n.id===id)}function pieceAt(id){return pieces.find(p=>!p.dead&&p.node===id)}function shuffle(a){return a.sort(()=>Math.random()-.5)}function countLive(owner){return pieces.filter(p=>p.owner===owner&&!p.dead&&p.name!=='军旗').length}
+function isNeighbor(a,b){let d=Math.abs(a-b);return d===1||d===5}function isAllied(a,b){return alliances[a]?.[b]}function setAlliance(a,b,on=true){alliances[a][b]=alliances[b][a]=on}
+function addEdge(a,b,type='road'){if(!a||!b||edges.some(e=>(e.a===a&&e.b===b)||(e.a===b&&e.b===a)))return;edges.push({a,b,type})}
+function addRailLine(...ids){railLines.push(ids.filter(Boolean))}
+function addNode(n){nodes.push(n)}
+function pos(n){return{x:n.x,y:n.y}}
+function buildMap(){
+  nodes=[];edges=[];railLines=[];const center={x:50,y:50};
+  for(let o=0;o<6;o++){
+    const ang=(90+o*60)*Math.PI/180,dir={x:Math.cos(ang),y:Math.sin(ang)},perp={x:-Math.sin(ang),y:Math.cos(ang)};
+    for(let r=0;r<6;r++)for(let c=0;c<5;c++){
+      const spread=(c-2)*4.25,dist=18.2+r*5.1,type=r===5&&(c===1||c===3)?'hq':['1,1','1,3','2,2','3,1','3,3'].includes(`${r},${c}`)?'camp':'post',rail=r===0||r===4||c===0||c===4;
+      addNode({id:key(o,r,c),owner:o,row:r,col:c,type,rail,x:center.x+dir.x*dist+perp.x*spread,y:center.y+dir.y*dist+perp.y*spread});
+    }
+  }
+  [
+    ['mid-top',57.8,36.5],
+    ['mid-ul',42.2,36.5],['mid-u1',50.0,41.0],['mid-u2',57.8,45.5],['mid-ur',65.6,50.0],
+    ['mid-l',42.2,45.5],['mid-c',50,50],['mid-r',57.8,54.5],
+    ['mid-ll',34.4,50.0],['mid-d1',42.2,54.5],['mid-d2',50.0,59.0],['mid-lr',57.8,63.5],
+    ['mid-bottom',42.2,63.5]
+  ].forEach(([id,x,y],i)=>addNode({id,owner:-1,row:Math.floor(i/4),col:i,type:'center',rail:true,x,y}));
+  for(let o=0;o<6;o++){
+    for(let r=0;r<6;r++)for(let c=0;c<5;c++){
+      const a=key(o,r,c),n=node(a);
+      [[r+1,c],[r,c+1]].forEach(([rr,cc])=>{if(rr<6&&cc<5){let b=key(o,rr,cc),m=node(b),back=Math.min(n.row,m.row)===4&&Math.max(n.row,m.row)===5;addEdge(a,b,!back&&n.rail&&m.rail?'rail':'road')}});
+      if(n.type==='camp')[[r-1,c-1],[r-1,c+1],[r+1,c-1],[r+1,c+1]].forEach(([rr,cc])=>{if(rr>=0&&rr<6&&cc>=0&&cc<5)addEdge(a,key(o,rr,cc),'road')});
+    }
+  }
+  for(let o=0;o<6;o++){
+    let next=(o+1)%6;
+    addEdge(key(o,0,4),key(next,0,0),'rail');
+    addRailLine(key(o,4,4),key(o,3,4),key(o,2,4),key(o,1,4),key(o,0,4),key(next,0,0),key(next,1,0),key(next,2,0),key(next,3,0),key(next,4,0));
+  }
+  const railPath=(ids)=>{ids.forEach((id,i)=>{if(i)addEdge(ids[i-1],id,'rail')});addRailLine(...ids)};
+  // 每组正对国家由三条贯穿铁路连接：边两条穿 4 个中盘点，中间一条穿 3 个中盘点。
+  railPath([key(2,0,4),'mid-ul','mid-u1','mid-u2','mid-ur',key(5,0,0)]);
+  railPath([key(2,0,2),'mid-l','mid-c','mid-r',key(5,0,2)]);
+  railPath([key(2,0,0),'mid-ll','mid-d1','mid-d2','mid-lr',key(5,0,4)]);
+
+  railPath([key(3,0,4),'mid-top','mid-u2','mid-r','mid-lr',key(0,0,0)]);
+  railPath([key(3,0,2),'mid-u1','mid-c','mid-d2',key(0,0,2)]);
+  railPath([key(3,0,0),'mid-ul','mid-l','mid-d1','mid-bottom',key(0,0,4)]);
+
+  railPath([key(4,0,0),'mid-top','mid-u1','mid-l','mid-ll',key(1,0,4)]);
+  railPath([key(4,0,2),'mid-u2','mid-c','mid-d1',key(1,0,2)]);
+  railPath([key(4,0,4),'mid-ur','mid-r','mid-d2','mid-bottom',key(1,0,0)]);
+}
+function deployOwner(owner){
+  const plan=Math.random()<1/3?'balanced':Math.random()<.5?'assault':'trap',slots=nodes.filter(n=>n.owner===owner&&n.type!=='camp'),pool=[...names];
+  const place=(name,filter,id)=>{let opts=slots.filter(n=>!pieceAt(n.id)&&filter(n));let n=opts[Math.floor(Math.random()*opts.length)];pieces.push({id,owner,name,node:n.id,dead:false,reveal:false});pool.splice(pool.indexOf(name),1)};
+  place('军旗',n=>n.type==='hq',`${owner}-flag`);
+  for(let i=0;i<3;i++)place('地雷',n=>n.row>=4,`${owner}-mine${i}`);
+  for(let i=0;i<2;i++)place('炸弹',n=>n.row!==0,`${owner}-bomb${i}`);
+  let sorted=pool.splice(0).sort((a,b)=>{
+    const va=rank[a]||0,vb=rank[b]||0;
+    if(plan==='assault')return (b==='工兵')-(a==='工兵')||vb-va;
+    if(plan==='trap')return va-vb;
+    return vb-va;
+  });
+  let free=slots.filter(n=>!pieceAt(n.id));if(plan==='balanced')free=shuffle(free);else free.sort((a,b)=>a.row-b.row||Math.abs(a.col-2)-Math.abs(b.col-2));
+  sorted.forEach((name,i)=>pieces.push({id:`${owner}-p${i}`,owner,name,node:free[i].id,dead:false,reveal:false}));
+  log(`${labels[owner]}采用${plan==='balanced'?'均衡阵':plan==='assault'?'突击阵':'诱敌阵'}。`);
+}
+function createPlayerPieces(){names.forEach((name,i)=>pieces.push({id:`0-setup-${i}`,owner:0,name,node:null,dead:false,reveal:false}))}
+function setupSlots(){return nodes.filter(n=>n.owner===0&&n.type!=='camp')}
+function canPlaceSetupPiece(p,n){
+  if(!p||!n||n.owner!==0||n.type==='camp')return false;
+  if(p.name==='军旗')return n.type==='hq';
+  if(p.name==='地雷')return n.row>=4;
+  if(p.name==='炸弹')return n.row!==0;
+  return true;
+}
+function validateSetup(){
+  let red=pieces.filter(p=>p.owner===0&&!p.dead);
+  if(red.some(p=>!p.node))return'还有棋子没有放上棋盘。';
+  for(let p of red){let n=node(p.node);if(!canPlaceSetupPiece(p,n))return`${p.name}的位置不符合规则。`}
+  return'';
+}
+function placeSetup(pieceId,nodeId){
+  if(phase!=='setup')return;let p=pieces.find(x=>x.id===pieceId&&x.owner===0&&!x.dead),n=node(nodeId);if(!p||!n)return;
+  if(!canPlaceSetupPiece(p,n)){log(`⚠ ${p.name}不能放在这里。`);setupSelected=p.id;draw();return}
+  let other=pieceAt(nodeId);
+  if(other&&other.owner===0){
+    let old=p.node;
+    if(old&&!canPlaceSetupPiece(other,node(old))){log(`⚠ 交换后${other.name}位置不合法。`);return}
+    other.node=old||null;
+  }
+  p.node=nodeId;setupSelected=null;draggedPiece=null;draw();
+}
+function returnToTray(pieceId){if(phase!=='setup')return;let p=pieces.find(x=>x.id===pieceId&&x.owner===0&&!x.dead);if(p){p.node=null;setupSelected=null;draw()}}
+function bindSetupPiece(el,p){el.draggable=true;el.dataset.pieceId=p.id;el.onclick=e=>{e.stopPropagation();setupSelected=setupSelected===p.id?null:p.id;draw()};el.ondragstart=e=>{draggedPiece=p.id;e.dataTransfer.setData('text/plain',p.id)}}
+function quickSetup(){
+  if(phase!=='setup')return;pieces.filter(p=>p.owner===0&&!p.dead).forEach(p=>p.node=null);
+  const place=(p,filter)=>{let opts=setupSlots().filter(n=>!pieceAt(n.id)&&filter(n)&&canPlaceSetupPiece(p,n)),n=opts[Math.floor(Math.random()*opts.length)];p.node=n.id};
+  let red=pieces.filter(p=>p.owner===0&&!p.dead),flag=red.find(p=>p.name==='军旗'),mines=red.filter(p=>p.name==='地雷'),bombs=red.filter(p=>p.name==='炸弹'),others=red.filter(p=>!['军旗','地雷','炸弹'].includes(p.name));
+  place(flag,n=>n.type==='hq');mines.forEach(p=>place(p,n=>n.row>=4));bombs.forEach(p=>place(p,n=>n.row!==0));shuffle(others).forEach(p=>place(p,()=>true));
+  setupSelected=null;log('✅ 已为红国快速布阵。');draw();
+}
+function confirmSetup(){
+  if(phase!=='setup')return;let err=validateSetup();if(err){log(`⚠ ${err}`);return}
+  phase='play';setupSelected=null;selected=null;valid=[];turn=0;allianceUsedThisTurn=false;log('⚔ 布阵完成，六国开战。');draw();
+}
+function formationData(){return pieces.filter(p=>p.owner===0&&!p.dead&&p.node).map(p=>({name:p.name,node:p.node}))}
+function loadFormationStore(){try{return JSON.parse(localStorage.getItem(FORMATION_KEY)||'[]')}catch(e){return[]}}
+function saveFormationStore(list){localStorage.setItem(FORMATION_KEY,JSON.stringify(list.slice(-20)))}
+function openFormationManager(saveMode){
+  if(phase!=='setup')return;formationSaveMode=saveMode;$('#formationTitle').textContent=saveMode?'保存六国阵型':'调入六国阵型';$('#formationSaveBox').classList.toggle('hidden',!saveMode);$('#formationName').value=`六国阵型${loadFormationStore().length+1}`;renderFormationList();$('#formationModal').classList.add('show');if(saveMode)setTimeout(()=>$('#formationName').focus(),0);
+}
+function renderFormationList(){
+  let list=loadFormationStore(),box=$('#formationList');
+  if(!list.length){box.innerHTML='<div class="formation-empty">还没有保存过阵型</div>';return}
+  box.innerHTML=list.map((f,i)=>`<div class="formation-row"><span>${f.name}</span><button class="load-one" data-i="${i}">调入</button><button class="delete-one" data-i="${i}">删除</button></div>`).join('');
+  box.querySelectorAll('.load-one').forEach(b=>b.onclick=()=>applyFormation(+b.dataset.i));
+  box.querySelectorAll('.delete-one').forEach(b=>b.onclick=()=>{let arr=loadFormationStore();let removed=arr.splice(+b.dataset.i,1)[0];saveFormationStore(arr);log(`🗑 已删除阵型：${removed.name}`);renderFormationList()});
+}
+function confirmSaveFormation(){
+  if(phase!=='setup')return;let err=validateSetup();if(err){log(`⚠ 保存前请先完成合法布阵：${err}`);return}
+  let name=$('#formationName').value.trim()||`六国阵型${loadFormationStore().length+1}`,list=loadFormationStore();list=list.filter(f=>f.name!==name);list.push({name,createdAt:Date.now(),pieces:formationData()});saveFormationStore(list);log(`💾 已保存阵型：${name}`);$('#formationModal').classList.remove('show');
+}
+function applyFormation(idx){
+  if(phase!=='setup')return;let list=loadFormationStore();if(!list[idx])return;
+  pieces.filter(p=>p.owner===0&&!p.dead).forEach(p=>p.node=null);
+  let red=pieces.filter(p=>p.owner===0&&!p.dead),used=new Set();
+  for(let item of list[idx].pieces){
+    let p=red.find(x=>!used.has(x.id)&&x.name===item.name),n=node(item.node);
+    if(!p||!canPlaceSetupPiece(p,n)||pieceAt(item.node))continue;
+    p.node=item.node;used.add(p.id);
+  }
+  setupSelected=null;log(`📂 已调入阵型：${list[idx].name}`);$('#formationModal').classList.remove('show');draw();
+}
+function visible(p){
+  if(mode==='open'||p.owner===0||p.reveal)return true;
+  if(mode==='semi'&&isAllied(0,p.owner))return true;
+  return false;
+}
+function draw(){
+  board.innerHTML='';
+  edges.forEach(e=>{let A=pos(node(e.a)),B=pos(node(e.b)),dx=B.x-A.x,dy=B.y-A.y,l=Math.hypot(dx,dy),el=document.createElement('i');el.className=`road ${e.type}`;el.style.cssText=`left:${A.x}%;top:${A.y}%;width:${l}%;transform:rotate(${Math.atan2(dy,dx)*180/Math.PI}deg)`;board.appendChild(el)});
+  if(lastTrail){lastTrail.path.slice(0,-1).forEach((id,i)=>{let n=node(id),next=node(lastTrail.path[i+1]);if(!n||!next)return;let at=pos(n),angle=Math.atan2(next.y-n.y,next.x-n.x)*180/Math.PI,el=document.createElement('span');el.className=`trail-arrow ${i===0?'start':''}`;el.textContent='➤';el.style.cssText=`left:${at.x}%;top:${at.y}%;transform:translate(-50%,-50%) rotate(${angle}deg);color:${['#8e211a','#173f8a','#603080','#17613a','#8f520d','#0b6970'][lastTrail.owner]}`;board.appendChild(el)});if(lastBattle){let n=node(lastBattle);if(n){let at=pos(n),el=document.createElement('span');el.className='battle-flash';el.style.cssText=`left:${at.x}%;top:${at.y}%`;board.appendChild(el)}}}
+  nodes.forEach(n=>{let el=document.createElement('button'),p=pieceAt(n.id);el.className=`node ${n.type} ${n.rail?'rail':''} ${valid.includes(n.id)?'valid':''} ${selected?.node===n.id?'selected':''}`;el.style.cssText=`left:${n.x}%;top:${n.y}%`;el.onclick=()=>clickNode(n.id);if(p){let see=visible(p),setupClass=phase==='setup'&&setupSelected===p.id?'setup-selected':'';el.innerHTML=`<span class="piece ${colors[p.owner]} ${see?'':'hidden'} ${p.reveal?'flash':''} ${setupClass}">${see?short[p.name]:''}</span>`;if(phase==='setup'&&p.owner===0)bindSetupPiece(el.firstElementChild,p)}else if(n.type==='camp')el.innerHTML='<span>营</span>';else if(n.type==='hq')el.textContent='本';if(phase==='setup'&&n.owner===0&&n.type!=='camp'){el.ondragover=e=>e.preventDefault();el.ondrop=e=>{e.preventDefault();placeSetup(e.dataTransfer.getData('text/plain')||draggedPiece,n.id)}}board.appendChild(el)});
+  if(phase==='setup'){let tray=document.createElement('div');tray.className='setup-tray';tray.ondragover=e=>e.preventDefault();tray.ondrop=e=>{e.preventDefault();returnToTray(e.dataTransfer.getData('text/plain')||draggedPiece)};pieces.filter(p=>p.owner===0&&!p.dead&&!p.node).forEach(p=>{let cell=document.createElement('div'),el=document.createElement('span');cell.className='tray-cell';el.className=`piece tray-piece red ${setupSelected===p.id?'setup-selected':''}`;el.textContent=short[p.name];bindSetupPiece(el,p);cell.appendChild(el);tray.appendChild(cell)});board.appendChild(tray)}
+  updateSide();
+}
+function updateSide(){
+  $('#coinCount').textContent=localStorage.getItem('cloudCoins')||1000;
+  $('#turnText').textContent=over?'对局结束':phase==='setup'?'请布置红国棋子':`${labels[turn]}行动${turn===0?'（你）':'（电脑）'}`;
+  $('#setupActions').classList.toggle('hidden',phase!=='setup');
+  document.querySelectorAll('#modeRow button').forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));
+  $('#teams').innerHTML=labels.map((l,i)=>`<div class="team ${alive[i]?'':'out'}">${l}${i===0?'（你）':''}<br>棋子：${countLive(i)}　军旗：${alive[i]?'存活':'淘汰'}<br>盟友：${labels.map((x,j)=>isAllied(i,j)?x:'').filter(Boolean).join('、')||'无'}</div>`).join('');
+  const candidates=phase==='setup'?[]:[1,2,3,4,5].filter(i=>alive[i]);$('#diplomacy').innerHTML=phase==='setup'?'布阵完成后可与任意存活国家外交；每回合限一次。':(candidates.map(i=>`<button data-owner="${i}" class="${isAllied(0,i)?'allied':''}" ${turn!==0||allianceUsedThisTurn?'disabled':''}>${isAllied(0,i)?'解除盟约：':'请求结盟：'}${labels[i]}</button>`).join('')||'其他国家已出局');
+  document.querySelectorAll('#diplomacy button').forEach(b=>b.onclick=()=>requestAlliance(+b.dataset.owner));
+}
+function log(t){let div=document.createElement('div');div.textContent=t;$('#log').prepend(div)}
+function neighbors(id,type=null){return edges.filter(e=>e.a===id||e.b===id).filter(e=>!type||e.type===type).map(e=>e.a===id?e.b:e.a)}
+function straightNext(prev,cur){
+  let listed=railLines.flatMap(line=>{
+    let i=line.indexOf(cur),j=line.indexOf(prev);
+    if(i<0||j<0||Math.abs(i-j)!==1)return[];
+    let out=[];
+    let step=i-j,next=i+step;
+    if(next>=0&&next<line.length)out.push(line[next]);
+    return out;
+  });
+  if(listed.length)return listed.find(id=>neighbors(cur,'rail').includes(id));
+  let A=node(prev),B=node(cur),dx=Math.sign(Math.round((B.x-A.x)*10)),dy=Math.sign(Math.round((B.y-A.y)*10));
+  return neighbors(cur,'rail').find(id=>id!==prev&&Math.sign(Math.round((node(id).x-B.x)*10))===dx&&Math.sign(Math.round((node(id).y-B.y)*10))===dy);
+}
+function canLandOnRailTarget(p,id){
+  let q=pieceAt(id),n=node(id);
+  if(!n)return false;
+  if(q&&q.owner===p.owner)return false;
+  if(q&&isAllied(p.owner,q.owner))return false;
+  if(q&&n.type==='camp')return false;
+  return true;
+}
+function addExplicitRailLineMoves(p,out){
+  for(let line of railLines){
+    let i=line.indexOf(p.node);
+    if(i<0)continue;
+    [-1,1].forEach(step=>{
+      for(let j=i+step;j>=0&&j<line.length;j+=step){
+        let id=line[j],pc=pieceAt(id);
+        if(pc){if(canLandOnRailTarget(p,id))out.add(id);break}
+        out.add(id);
+      }
+    });
+  }
+}
+function movePath(p,to){
+  if(neighbors(p.node).includes(to))return[p.node,to];
+  if(node(p.node)?.rail){
+    if(p.name==='工兵'){
+      let q=[p.node],seen=new Set([p.node]),parent={};
+      while(q.length){
+        let cur=q.shift();if(cur===to)break;
+        neighbors(cur,'rail').forEach(id=>{if(seen.has(id))return;let pc=pieceAt(id);if(pc&&id!==to)return;seen.add(id);parent[id]=cur;q.push(id)})
+      }
+      if(seen.has(to)){let path=[to];while(path[0]!==p.node)path.unshift(parent[path[0]]);return path}
+    }else{
+      for(let line of railLines){
+        let a=line.indexOf(p.node),b=line.indexOf(to);
+        if(a>=0&&b>=0){
+          let step=b>a?1:-1,path=line.slice(Math.min(a,b),Math.max(a,b)+1);
+          if(step<0)path.reverse();
+          let blocked=path.slice(1,-1).some(id=>pieceAt(id));
+          if(!blocked)return path;
+        }
+      }
+      for(let first of neighbors(p.node,'rail')){
+        let prev=p.node,cur=first,path=[p.node,first];
+        while(cur){
+          if(cur===to)return path;
+          if(pieceAt(cur))break;
+          let next=straightNext(prev,cur);prev=cur;cur=next;if(cur)path.push(cur);
+        }
+      }
+    }
+  }
+  return[p.node,to];
+}
+function legalMoves(p){
+  if(!p||p.dead||p.name==='军旗'||p.name==='地雷'||p.stuck)return[];
+  const out=new Set();
+  neighbors(p.node).forEach(id=>{let n=node(id),q=pieceAt(id);if(q&&q.owner===p.owner)return;if(q&&isAllied(p.owner,q.owner))return;if(q&&n.type==='camp')return;out.add(id)});
+  if(node(p.node).rail){
+    if(p.name==='工兵'){
+      let q=[p.node],seen=new Set([p.node]);while(q.length){let cur=q.shift();neighbors(cur,'rail').forEach(id=>{if(seen.has(id))return;seen.add(id);let pc=pieceAt(id);if(pc){if(pc.owner!==p.owner&&!isAllied(p.owner,pc.owner)&&node(id).type!=='camp')out.add(id);return}out.add(id);q.push(id)})}
+    }else{
+      addExplicitRailLineMoves(p,out);
+      neighbors(p.node,'rail').forEach(first=>{let prev=p.node,cur=first;while(cur){let pc=pieceAt(cur);if(pc){if(pc.owner!==p.owner&&!isAllied(p.owner,pc.owner)&&node(cur).type!=='camp')out.add(cur);break}out.add(cur);let next=straightNext(prev,cur);prev=cur;cur=next}
+      });
+    }
+  }
+  return[...out];
+}
+function clickNode(id){
+  if(over)return;let p=pieceAt(id);
+  if(phase==='setup'){
+    if(setupSelected){placeSetup(setupSelected,id);return}
+    if(p&&p.owner===0){setupSelected=p.id;draw()}return;
+  }
+  if(turn!==0)return;
+  if(selected&&valid.includes(id)){movePiece(selected,id);return}
+  if(p&&p.owner===0){selected=p;valid=legalMoves(p);draw()}else{selected=null;valid=[];draw()}
+}
+function movePiece(p,to){
+  if(over||p.dead)return;let from=p.node,target=pieceAt(to),dest=node(to);selected=null;valid=[];lastTrail={owner:p.owner,path:movePath(p,to)};lastBattle=target?to:null;
+  if(target)battle(p,target);else{p.node=to;if(dest.type==='hq')p.stuck=true;log(`${labels[p.owner]}${p.name}移动。`)}
+  draw();checkEnd();if(!over)nextTurn();
+}
+function battle(a,d){
+  a.reveal=d.reveal=true;let text=`${labels[a.owner]}${a.name}进攻${labels[d.owner]}${d.name}：`;
+  if(a.name==='炸弹'||d.name==='炸弹'){a.dead=d.dead=true;text+='同归于尽'}
+  else if(d.name==='地雷'){if(a.name==='工兵'){d.dead=true;a.node=d.node;text+='工兵排雷'}else{a.dead=d.dead=true;text+='撞雷同归于尽'}}
+  else if(d.name==='军旗'){d.dead=true;a.node=d.node;text+='扛旗成功';eliminate(d.owner,a.owner)}
+  else{let ar=rank[a.name]||0,dr=rank[d.name]||0;if(ar>dr){d.dead=true;a.node=d.node;text+='胜'}else if(ar<dr){a.dead=true;text+='败'}else{a.dead=d.dead=true;text+='同归于尽'}}
+  log(text);
+}
+function eliminate(owner,killer){
+  if(!alive[owner])return;alive[owner]=false;pieces.forEach(p=>{if(p.owner===owner)p.dead=true});for(let i=0;i<6;i++)setAlliance(owner,i,false);log(`🏳 ${labels[owner]}军旗被${labels[killer]}扛走，本国淘汰。`)
+}
+function nextTurn(){for(let i=1;i<=6;i++){let n=(turn+i)%6;if(alive[n]&&pieces.some(p=>p.owner===n&&!p.dead&&legalMoves(p).length)){turn=n;if(turn===0)allianceUsedThisTurn=false;break}}draw();if(turn!==0&&!over){clearTimeout(aiTimer);aiTimer=setTimeout(aiMove,1450)}}
+function aiMove(){
+  if(over||turn===0)return;maybeAiDiplomacy(turn);
+  let mine=pieces.filter(p=>p.owner===turn&&!p.dead),moves=[];
+  mine.forEach(p=>legalMoves(p).forEach(to=>{let t=pieceAt(to),score=Math.random()*2+(t?8+(t.name==='军旗'?100:rank[t.name]||3):0)-distanceToEnemyFlag(to,turn)*.08;moves.push({p,to,score})}));
+  if(!moves.length){alive[turn]=false;log(`${labels[turn]}无子可走，判负淘汰。`);checkEnd();nextTurn();return}
+  moves.sort((a,b)=>b.score-a.score);movePiece(moves[0].p,moves[0].to);
+}
+function distanceToEnemyFlag(id,owner){let n=node(id),flags=pieces.filter(p=>!p.dead&&p.name==='军旗'&&p.owner!==owner&&!isAllied(owner,p.owner));if(!flags.length)return 0;return Math.min(...flags.map(f=>Math.hypot(node(f.node).x-n.x,node(f.node).y-n.y)))}
+function maybeAiDiplomacy(owner){
+  if(Math.random()>.18)return;let options=[(owner+1)%6,(owner+5)%6].filter(o=>alive[o]&&!isAllied(owner,o));if(!options.length)return;
+  let strong=alive.map((v,i)=>v?countLive(i):-1).indexOf(Math.max(...alive.map((v,i)=>v?countLive(i):-1)));let target=options.includes(strong)?options.find(o=>o!==strong)??options[0]:options[Math.floor(Math.random()*options.length)];
+  if(Math.random()<.45){setAlliance(owner,target,true);log(`🤝 ${labels[owner]}与${labels[target]}临时结盟，准备制衡强敌。`)}
+}
+function requestAlliance(other){
+  if(phase!=='play'||turn!==0||over||!alive[other]||other===0)return;
+  if(allianceUsedThisTurn){log('⚠ 每回合只能进行一次外交。');draw();return}
+  allianceUsedThisTurn=true;
+  if(isAllied(0,other)){setAlliance(0,other,false);log(`⚑ 你解除与${labels[other]}的盟约。`);draw();return}
+  let diff=countLive(other)-countLive(0),reject=diff>=4?.9:diff>=0?.8:.5;
+  if(Math.random()<reject)log(`❌ ${labels[other]}拒绝结盟。`);else{setAlliance(0,other,true);log(`🤝 ${labels[other]}接受结盟。半明模式下可互见棋子。`)}draw();
+}
+function checkEnd(){
+  let survivors=alive.map((v,i)=>v?i:-1).filter(i=>i>=0);
+  if(survivors.length<=1){over=true;clearTimeout(aiTimer);let win=survivors[0]===0;$('#resultTitle').textContent=win?'六国归一，红国胜利！':'战局落幕';$('#resultText').textContent=survivors.length?`${labels[survivors[0]]}保存最后一面军旗。`:'六国俱灭。';$('#result').classList.add('show');log(win?'🎉 你赢得六国军棋。':'☁ 对局结束。')}
+}
+function setCoins(){if(!localStorage.getItem('cloudCoins'))localStorage.setItem('cloudCoins','1000');$('#coinCount').textContent=localStorage.getItem('cloudCoins')}
+function start(){
+  clearTimeout(aiTimer);buildMap();pieces=[];alliances=Array.from({length:6},()=>Array(6).fill(false));alive=[true,true,true,true,true,true];phase='setup';turn=0;selected=null;valid=[];setupSelected=null;allianceUsedThisTurn=false;over=false;lastTrail=null;lastBattle=null;$('#log').innerHTML='';$('#result').classList.remove('show');setCoins();
+  createPlayerPieces();for(let i=1;i<6;i++)deployOwner(i);
+  log('请先布置红国棋子：军旗进大本营，地雷最后两行，炸弹不能第一排。');draw();
+}
+document.querySelectorAll('#modeRow button').forEach(b=>b.onclick=()=>{mode=b.dataset.mode;localStorage.setItem('sixArmyMode',mode);draw();log(`已切换为${mode==='dark'?'暗棋':mode==='semi'?'半明':'全明'}模式。`)});
+$('#restart').onclick=start;$('#rulesBtn').onclick=()=>alert('六国军棋：6人每方25枚；军旗被扛本国淘汰，直到仅存一国。公路一步，铁路直线快行，工兵铁路可转弯。行营安全不可被吃。暗棋隐藏敌方，半明可见盟友，全明全体可见。电脑外交拒绝率按棋子数量差执行。');
+$('#quickSetup').onclick=quickSetup;$('#confirmSetup').onclick=confirmSetup;$('#saveFormation').onclick=()=>openFormationManager(true);$('#loadFormation').onclick=()=>openFormationManager(false);$('#confirmSaveFormation').onclick=confirmSaveFormation;$('#formationName').onkeydown=e=>{if(e.key==='Enter')confirmSaveFormation()};$('#closeFormation').onclick=()=>$('#formationModal').classList.remove('show');
+$('#landscape').onclick=async()=>{try{await document.documentElement.requestFullscreen?.();await screen.orientation?.lock?.('landscape')}catch(e){alert('请关闭竖屏锁定并横置手机')}};
+start();
+</script></body></html>
