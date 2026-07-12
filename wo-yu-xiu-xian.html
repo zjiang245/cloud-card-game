@@ -99,27 +99,34 @@ const pillCatalog={
   ]
 };
 const mapScenes=[['⛰️','青云山麓','宗门山脚灵气温和，适合初入仙途者打坐、采药、清理山魈。','修为、药材、低阶材料',50,14],['🌲','幽月森林','林深处妖影游走，常有灵草与散修遗物，是前期最稳定的历练地。','灵石、药材、装备碎片',34,34],['🔥','赤炎秘境','地火翻涌，怪物凶猛，适合筑基之后磨炼法器。','锻造材料、残卷、灵石',62,32],['🐉','东海龙宫','海眼灵潮汇聚，水府遗迹偶有灵玉现世。','灵玉、高额灵石、装备',76,52],['👹','万妖古域','妖族古域危机四伏，胜者可携大量材料满载而归。','大量材料、稀有残卷',48,58],['⚔️','天渊战场','古修战场煞气未散，适合高阶修士刷装备与战功。','装备碎片、功法残卷',25,60],['🌀','虚空遗迹','空间裂隙中漂浮着旧时代洞府，机缘与风险并存。','灵玉、修为、装备',20,78],['☯️','仙魔战场','仙魔余波不息，强敌密布，但掉落极为丰厚。','高阶材料、稀有道具',50,80],['⚡','九天雷域','雷霆洗练肉身与元神，是渡劫前最好的磨刀石。','渡劫丹、修为、灵玉',74,76],['🚪','仙界天门','飞升前最后的门槛，只有真正的大修士才能在此长久驻足。','仙缘、海量修为',50,48],['🏯','太玄宗','宗门总坛，弟子在此晋升职位、领取差事、调阅秘典，所有宗门事务仅可手动处理。','宗门贡献、声望、秘典',22,20]];
-const subMapClasses=['mountain','forest','fire','sea','demon','battle','void','dark','thunder','heaven','mountain'],subMapSpots=[['山门驿站','灵草坡','溪边小道','山魈洞','青云石阶'],['森林入口','月下草径','古树洞府','妖狐巢穴','幽潭'],['熔岩栈道','赤砂坡','地火炉','炎魔洞','玄铁矿脉'],['海滨渡口','珊瑚水道','龟丞相府','龙宫偏殿','海眼'],['荒骨原','妖王旗台','血藤林','古兽坟','万妖洞'],['营地','残剑丘','军械冢','煞气裂谷','战魂台'],['浮空渡桥','星砂台','破碎洞府','虚空裂隙','遗迹核心'],['仙盟前哨','魔气荒原','残碑阵','仙魔裂谷','天命台'],['雷池边缘','淬体石','引雷台','云霄栈道','天劫眼'],['接引亭','仙门石阶','问心桥','南天影壁','飞升台'],['山门广场','外门讲经台','西执事厅','藏经宝阁','宗主峰']];function fresh(){let root=roots[Math.floor(Math.random()*roots.length)];return{v:1,last:Date.now(),created:Date.now(),realm:0,stage:0,cult:0,stones:100,materials:0,herbs:0,fragments:0,scrolls:0,petEggs:0,jades:0,tribPills:0,cultPills:0,boostPills:0,root:root[0],rootMul:root[1],aptitude:40+Math.floor(Math.random()*61),hp:100,maxHp:100,mana:80,attack:12,defense:7,agility:5,crit:5,map:0,gear:{weapon:null,armor:null,treasure:null,helmet:null,boots:null,bracer:null},enhance:0,temper:0,jadeSlots:0,skillLevel:1,skillTier:0,insight:0,pet:null,sect:'太玄宗',sectContribution:0,autoAlchemy:true,tribBonus:0,tribFails:0,kills:0,deaths:0,encounters:0,logs:[],offline:null,newbieGuideDone:false,prologueDone:false,mainQuest:'血月之仇'}};
-let g;try{g=Object.assign(fresh(),JSON.parse(localStorage.getItem(KEY)||'null')||{})}catch(e){g=fresh()}let pendingOffline=0,tickCount=0,battleState=null,simpleMode=localStorage.getItem('xiuSimpleMode')!=='0';g.selectedScene=g.selectedScene??g.map??0;
+const subMapClasses=['mountain','forest','fire','sea','demon','battle','void','dark','thunder','heaven','mountain'],subMapSpots=[['山门驿站','灵草坡','溪边小道','山魈洞','青云石阶'],['森林入口','月下草径','古树洞府','妖狐巢穴','幽潭'],['熔岩栈道','赤砂坡','地火炉','炎魔洞','玄铁矿脉'],['海滨渡口','珊瑚水道','龟丞相府','龙宫偏殿','海眼'],['荒骨原','妖王旗台','血藤林','古兽坟','万妖洞'],['营地','残剑丘','军械冢','煞气裂谷','战魂台'],['浮空渡桥','星砂台','破碎洞府','虚空裂隙','遗迹核心'],['仙盟前哨','魔气荒原','残碑阵','仙魔裂谷','天命台'],['雷池边缘','淬体石','引雷台','云霄栈道','天劫眼'],['接引亭','仙门石阶','问心桥','南天影壁','飞升台'],['山门广场','外门讲经台','西执事厅','藏经宝阁','打坐台']];function fresh(){let root=roots[Math.floor(Math.random()*roots.length)];return{v:1,last:Date.now(),created:Date.now(),realm:0,stage:0,cult:0,stones:100,materials:0,herbs:0,fragments:0,scrolls:0,petEggs:0,jades:0,tribPills:0,cultPills:0,boostPills:0,root:root[0],rootMul:root[1],aptitude:40+Math.floor(Math.random()*61),hp:100,maxHp:100,mana:80,baseMana:80,attack:12,defense:7,agility:5,crit:5,map:0,gear:{weapon:null,armor:null,treasure:null,helmet:null,boots:null,bracer:null},enhance:0,temper:0,jadeSlots:0,skillLevel:1,skillTier:0,insight:0,pet:null,sect:'太玄宗',sectContribution:0,autoAlchemy:true,tribBonus:0,tribFails:0,kills:0,deaths:0,encounters:0,logs:[],offline:null,newbieGuideDone:false,prologueDone:false,mainQuest:'血月之仇'}};
+let g;try{g=Object.assign(fresh(),JSON.parse(localStorage.getItem(KEY)||'null')||{})}catch(e){g=fresh()}let pendingOffline=0,tickCount=0,battleState=null,meditationSession=null,simpleMode=localStorage.getItem('xiuSimpleMode')!=='0';g.selectedScene=g.selectedScene??g.map??0;
 g.sect='太玄宗';
 // 兼容旧存档：原太玄宗宗门广场位于路点2，现统一迁移至路点31。
 if((g.selectedScene===10||g.map===10)&&g.localSpot===2)g.localSpot=31;
+// 兼容旧存档：旧宗主峰路点32现改为打坐台，宗主峰迁至路点33。
+if(g.baseMana==null)g.baseMana=Math.max(1,80+(g.realm||0)*20);
+g.meditating=false;
 Object.assign(g,{sectRank:g.sectRank??0,sectReputation:g.sectReputation??0,sectLevel:g.sectLevel??1,sectExp:g.sectExp??0,sectRealmAt:g.sectRealmAt??0,sectWarAt:g.sectWarAt??0,sectTasks:g.sectTasks??0,sectManualTaskAt:g.sectManualTaskAt??0,sectOfficeTaskAt:g.sectOfficeTaskAt??0,sectLectureAt:g.sectLectureAt??0,sectSparAt:g.sectSparAt??0,sectTreasurySelected:g.sectTreasurySelected??0,sectTreasuryTab:g.sectTreasuryTab||'丹药',sectSisterQuest:g.sectSisterQuest||null,nalanQuest:g.nalanQuest||null,xiaoHuoQuest:g.xiaoHuoQuest||null,qiuQuest:g.qiuQuest||null});
 if(g.healPills==null){g.healPills=g.cultPills||0;g.cultPills=0}Object.assign(g,{alchemyLevel:g.alchemyLevel??1,alchemyExp:g.alchemyExp??0,selectedRecipe:g.selectedRecipe??0,activeBoostUntil:g.activeBoostUntil??0});
-Object.assign(g,{sectPermanentBuys:g.sectPermanentBuys||{},marketHour:g.marketHour??-1,marketStock:g.marketStock||[],marketManualHour:g.marketManualHour??-1,gatherCooldowns:g.gatherCooldowns||{},deadMobs:g.deadMobs||{},bossKills:g.bossKills||{},trophies:g.trophies||{},bag:g.bag||[],bagCap:g.bagCap||20,bagSelected:g.bagSelected??-1,bagPage:g.bagPage??0,passiveSkills:g.passiveSkills||[],activeSkills:g.activeSkills||[],skillReserve:g.skillReserve||[],selectedEquipSlot:g.selectedEquipSlot||'weapon',defaultActiveSkillsGranted:g.defaultActiveSkillsGranted??!!g.skillSchemaV2,deathGuideSeen:g.deathGuideSeen??false,bigFireballLevel:g.bigFireballLevel??0});
+Object.assign(g,{sectPermanentBuys:g.sectPermanentBuys||{},marketHour:g.marketHour??-1,marketStock:g.marketStock||[],marketManualHour:g.marketManualHour??-1,gatherCooldowns:g.gatherCooldowns||{},deadMobs:g.deadMobs||{},bossKills:g.bossKills||{},trophies:g.trophies||{},bag:g.bag||[],bagCap:g.bagCap||20,bagSelected:g.bagSelected??-1,bagPage:g.bagPage??0,passiveSkills:g.passiveSkills||[],activeSkills:g.activeSkills||[],skillReserve:g.skillReserve||[],selectedEquipSlot:g.selectedEquipSlot||'weapon',defaultActiveSkillsGranted:g.defaultActiveSkillsGranted??!!g.skillSchemaV2,deathGuideSeen:g.deathGuideSeen??false,bigFireballLevel:g.bigFireballLevel??0,caveSoulLoops:g.caveSoulLoops||{},rageLearned:g.rageLearned??false});
 if(!g.skillSchemaV2){g.passiveSkills=(g.passiveSkills&&g.passiveSkills.length)?g.passiveSkills:(g.activeSkills||[]);g.activeSkills=[];g.skillSchemaV2=true}
 // 旧存档迁移：药材不再归类为妖兽材料。
 g.bag=(g.bag||[]).map(it=>it&&it.name==='药材'?{...it,type:'herb',icon:it.icon||'🌿'}:it);
 function rootKind(){return g.root.includes('变异')?'变异':g.root.charAt(0)}function rootEffect(){return({金:'灵根偏锋锐，战力额外+10%',木:'灵根偏生机，回春丹额外恢复',水:'灵根偏绵长，法力运转更稳',火:'灵根偏爆烈，稀有掉落直觉更强',土:'灵根偏厚重，综合防御战力+12%',变异:'天灵根资质超绝，兼具少量全系加成'}[rootKind()]||'自定义灵根：影响资质与战斗风格')+`；灵根倍率×${Number(g.rootMul).toFixed(2)}`}function realmIndex(){return g.realm*4+g.stage}function realmNeed(){return Math.floor(100*Math.pow(1.72,realmIndex()))}function realmText(){return g.realm>=9?'飞升仙界·'+stages[g.stage]:realms[g.realm]+stages[g.stage]}function power(){let st=statTotal(),bonus=rootKind()==='金'?1.1:rootKind()==='土'?1.12:rootKind()==='变异'?1.06:1;return Math.floor(((st.attack*5+st.defense*4+st.hp*.7+st.agility*3+st.mana*.18+st.crit*10)+gearPower())*(1+g.temper*.05)*bonus)}
-function sectTitle(){return sectRanks[Math.min(5,g.sectRank)][0]}function sectNextTitle(){return sectRanks[Math.min(5,g.sectRank+1)]}function totalHp(){return statTotal().hp}function sectPermissionText(){return['仅可出入山门、讲经台与东执事厅','可入内门，开放藏经宝阁','可调度西执事厅事务，接触掌教峰外殿','可统筹宗门事务，可上宗主峰候见','可直接参与掌教议事，调阅核心权限','已执掌太玄中枢'][Math.min(5,g.sectRank)]}function sectRoomRule(spot){return({0:{name:'山门广场',need:0},6:{name:'外门讲经台',need:0},12:{name:'西执事厅',need:2},14:{name:'练功房',need:0},19:{name:'东执事厅',need:0},23:{name:'藏经宝阁',need:1},27:{name:'紫云峰',need:0},32:{name:'宗主峰',need:4}}[spot]||{name:'太玄宗',need:0})}function sectRoomStatus(spot){let room=sectRoomRule(spot);return g.sectRank>=room.need?`${room.name}已开放`:`需晋升${sectRanks[room.need][0]}后开放`}function sectUnlockedRooms(){return[['山门广场',0],['外门讲经台',0],['东执事厅',0],['练功房',0],['藏经宝阁',1],['紫云峰',0],['西执事厅',2],['宗主峰',4]].map(([name,need])=>g.sectRank>=need?`${name}（已开）`:`${name}（${sectRanks[need][0]}开放）`)}function sectDutyText(){return['每日巡山、守门、听讲，并可前往紫云峰接取试炼','可入内门听长老讲经，接触宝阁抄录事务','可在西执事厅领差、上缴资源、调度内务','可统筹讲经与宝阁事务，代掌门下令','可登宗主峰参与掌教议事','已是太玄宗中枢，宗门诸务尽在掌中'][Math.min(5,g.sectRank)]}
+function sectTitle(){return sectRanks[Math.min(5,g.sectRank)][0]}function sectNextTitle(){return sectRanks[Math.min(5,g.sectRank+1)]}function totalHp(){return statTotal().hp}function sectPermissionText(){return['仅可出入山门、讲经台与东执事厅','可入内门，开放藏经宝阁','可调度西执事厅事务，接触掌教峰外殿','可统筹宗门事务，可上宗主峰候见','可直接参与掌教议事，调阅核心权限','已执掌太玄中枢'][Math.min(5,g.sectRank)]}function sectRoomRule(spot){return({0:{name:'山门广场',need:0},6:{name:'外门讲经台',need:0},12:{name:'西执事厅',need:2},14:{name:'练功房',need:0},16:{name:'定光峰',need:0},19:{name:'东执事厅',need:0},23:{name:'藏经宝阁',need:1},27:{name:'紫云峰',need:0},32:{name:'打坐台',need:0},33:{name:'宗主峰',need:4}}[spot]||{name:'太玄宗',need:0})}function sectRoomStatus(spot){let room=sectRoomRule(spot);return g.sectRank>=room.need?`${room.name}已开放`:`需晋升${sectRanks[room.need][0]}后开放`}function sectUnlockedRooms(){return[['山门广场',0],['外门讲经台',0],['东执事厅',0],['练功房',0],['定光峰',0],['打坐台',0],['藏经宝阁',1],['紫云峰',0],['西执事厅',2],['宗主峰',4]].map(([name,need])=>g.sectRank>=need?`${name}（已开）`:`${name}（${sectRanks[need][0]}开放）`)}function sectDutyText(){return['每日巡山、守门、听讲，并可前往紫云峰接取试炼','可入内门听长老讲经，接触宝阁抄录事务','可在西执事厅领差、上缴资源、调度内务','可统筹讲经与宝阁事务，代掌门下令','可登宗主峰参与掌教议事','已是太玄宗中枢，宗门诸务尽在掌中'][Math.min(5,g.sectRank)]}
 function log(text,type=''){let stamp=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});g.logs.unshift({text,stamp,type});g.logs=g.logs.slice(0,120);renderLogs()}
 function sanitize(){['cult','stones','materials','herbs','fragments','scrolls','petEggs','jades','sectContribution'].forEach(k=>g[k]=clamp(g[k]));if(!realms[g.realm]){g.realm=0;g.stage=0}g.last=Date.now()}
 function save(manual=false){sanitize();localStorage.setItem(KEY,JSON.stringify(g));$('#saveStatus').textContent='存档：'+(manual?'已手动保存':'安全');if(manual)toast('洞府存档已封存')}
 function removeBagItemsByKeyOrName(key,name,amount){let left=amount;for(let i=(g.bag||[]).length-1;i>=0&&left>0;i--){let it=g.bag[i];if(it&&(it.key===key||it.name===name)){let take=Math.min(left,it.qty||1);if((it.qty||1)>take)it.qty-=take;else g.bag.splice(i,1);left-=take}}return left===0}
 function consumeTribPills(amount=100){if((g.tribPills||0)<amount)return false;g.tribPills-=amount;removeBagItemsByKeyOrName('tribPills','渡劫丹',amount);return true}
-function processRealmProgress(){let changed=false,guard=0;while(g.cult>=realmNeed()&&guard++<50){let need=realmNeed();if(g.realm>=9&&g.stage>=3){g.cult=need;break}if(g.stage<3){g.cult-=need;g.stage++;changed=true;log(`修为圆满，立即晋升至${realmText()}`,'good');continue}if(g.realm<2){g.cult-=need;g.realm++;g.stage=0;changed=true;log(`根基圆满，直接突破至${realmText()}`,'good');continue}if((g.tribPills||0)<100){g.cult=need;break}consumeTribPills(100);g.cult-=need;g.realm++;g.stage=0;g.tribBonus=0;g.tribFails=0;changed=true;log(`消耗渡劫丹×100，突破至${realmText()}`,'good')}if(changed){g.hp=Math.min(g.hp,statTotal().hp);toast('境界突破：'+realmText())}return changed}
+function growBaseStats(mult){let beforeHp=Math.max(1,g.maxHp),beforeMana=Math.max(1,g.baseMana||80),hpRatio=Math.max(0,Math.min(1,(g.hp||0)/beforeHp)),manaRatio=Math.max(0,Math.min(1,(g.mana||0)/beforeMana));['maxHp','baseMana','attack','defense','agility','crit'].forEach(k=>g[k]=Math.max(1,Math.round((g[k]||1)*mult*100)/100));g.hp=Math.max(1,g.maxHp*hpRatio);g.mana=Math.max(0,g.baseMana*manaRatio)}
+function processRealmProgress(){let changed=false,guard=0;while(g.cult>=realmNeed()&&guard++<50){let need=realmNeed();if(g.realm>=9&&g.stage>=3){g.cult=need;break}if(g.stage<3){g.cult-=need;g.stage++;growBaseStats(1.2);changed=true;log(`修为圆满，晋升至${realmText()}，自身基础属性提升20%`,'good');continue}if(g.realm<2){g.cult-=need;g.realm++;g.stage=0;growBaseStats(2);changed=true;log(`根基圆满，突破至${realmText()}，自身基础属性提升100%`,'good');continue}if((g.tribPills||0)<100){g.cult=need;break}consumeTribPills(100);g.cult-=need;g.realm++;g.stage=0;g.tribBonus=0;g.tribFails=0;growBaseStats(2);changed=true;log(`消耗渡劫丹×100，突破至${realmText()}，自身基础属性提升100%`,'good')}if(changed){let st=statTotal();g.hp=Math.min(g.hp,st.hp);g.mana=Math.min(g.mana,st.mana);toast('境界突破：'+realmText())}return changed}
 function offlineSettle(){pendingOffline=0;g.offline=null;g.last=Date.now()}
-function tick(){tickCount++;processRealmProgress();sanitize();if(tickCount%2===0)render();if(tickCount%5===0)save()}
+function stopMeditation(show=true){if(!meditationSession)return 0;let elapsed=Date.now()-meditationSession.started,total=Math.floor(elapsed/10000),gain=Math.max(0,total-meditationSession.awarded);if(gain>0)g.cult+=gain;let discarded=elapsed%10000;meditationSession=null;g.meditating=false;if(show){pushLocalLog(`结束打坐：共获得固定修为 ${total} 点，未满10秒的 ${Math.floor(discarded/1000)} 秒已舍弃。`);toast(`打坐结束：修为 +${total}`)}render();save();return total}
+function startMeditation(){if(meditationSession)return toast('你已经在打坐');meditationSession={started:Date.now(),awarded:0};g.meditating=true;pushLocalLog('在打坐台开始吐纳：每满10秒固定增加1点修为。');toast('开始打坐：每10秒修为+1');save()}
+function meditationTick(){if(!meditationSession)return;let total=Math.floor((Date.now()-meditationSession.started)/10000);if(total>meditationSession.awarded){let gain=total-meditationSession.awarded;meditationSession.awarded=total;g.cult+=gain;pushLocalLog(`打坐吐纳：固定修为 +${gain}（累计${total}）`);render();save()}}
+function tick(){tickCount++;meditationTick();processRealmProgress();sanitize();if(tickCount%2===0)render();if(tickCount%5===0)save()}
 function rows(obj){return Object.entries(obj).map(([k,v])=>`<div class="row"><span>${k}</span><b>${v}</b></div>`).join('')}
 const equipQuality={白色装备:1,绿色装备:2,蓝色装备:3,紫色装备:4,橙色装备:5},qualityClass=['','quality-white','quality-green','quality-blue','quality-purple','quality-orange'],qualityText=['','白','绿','蓝','紫','橙'];
 const pillEffects={回春丹:'使用效果：恢复20点生命；木灵根额外恢复4点。',修为丹:'使用效果：分等级固定增加修为。',渡劫丹:'使用效果：本次渡劫成功率提升。'};
@@ -142,7 +149,7 @@ function equipBaseName(q,slot){let pool=(equipNamePool[slot]&&equipNamePool[slot
 function equipAttrs(it){it=normalizeEquip(it);if(!it)return{hp:0,mana:0,attack:0,defense:0,agility:0,crit:0};if(it.bonus)return{hp:it.bonus.hp||0,mana:it.bonus.mana||0,attack:it.bonus.attack||0,defense:it.bonus.defense||0,agility:it.bonus.agility||0,crit:it.bonus.crit||0};let q=it.quality,lv=it.level||it.powerLevel||q,e=it.enhance||0,base=q*lv+e*2,a={hp:0,mana:0,attack:0,defense:0,agility:0,crit:0};if(it.slot==='weapon'){a.attack=base*4;a.crit=Math.max(1,Math.floor(q+lv/3+e*.5))}else if(it.slot==='armor'){a.hp=base*14;a.defense=base*3}else if(it.slot==='treasure'){a.mana=base*12;a.agility=Math.max(1,Math.floor(base*.8))}else if(it.slot==='helmet'){a.defense=base*2;a.hp=base*8;a.mana=base*6}else if(it.slot==='boots'){a.defense=base;a.agility=Math.max(1,Math.floor(base*1.2))}else if(it.slot==='bracer'){a.defense=base*2;a.crit=Math.max(1,Math.floor(q+lv/4+e*.6))}return a}
 function gearBonus(slot=null){let sum={hp:0,mana:0,attack:0,defense:0,agility:0,crit:0};let arr=slot?[g.gear?.[slot]]:equipSlots.map(k=>g.gear?.[k]);arr.forEach(it=>{let a=equipAttrs(it);Object.keys(sum).forEach(k=>sum[k]+=a[k])});return sum}
 function passiveSkillBonus(){let sum={hp:0,mana:0,attack:0,defense:0,agility:0,crit:0};(g.passiveSkills||[]).forEach(sk=>{let text=`${sk?.name||''} ${sk?.desc||''}`;let rules=[['attack',/攻击\s*\+\s*(\d+)/g],['defense',/防御\s*\+\s*(\d+)/g],['agility',/(?:身法|敏捷)\s*\+\s*(\d+)/g],['crit',/暴击\s*\+\s*(\d+)/g],['hp',/(?:生命上限|生命)\s*\+\s*(\d+)/g],['mana',/(?:法力上限|法力)\s*\+\s*(\d+)/g]];rules.forEach(([key,re])=>{for(let m;(m=re.exec(text));)sum[key]+=Number(m[1])||0})});return sum}
-function statTotal(){let b=gearBonus(),p=passiveSkillBonus(),bonus={};Object.keys(b).forEach(k=>bonus[k]=(b[k]||0)+(p[k]||0));return{hp:g.maxHp+bonus.hp,mana:80+g.realm*20+bonus.mana,attack:g.attack+bonus.attack,defense:g.defense+bonus.defense,agility:g.agility+bonus.agility,crit:g.crit+bonus.crit,bonus,passiveBonus:p}}
+function statTotal(){let b=gearBonus(),p=passiveSkillBonus(),bonus={};Object.keys(b).forEach(k=>bonus[k]=(b[k]||0)+(p[k]||0));return{hp:g.maxHp+bonus.hp,mana:(g.baseMana||80)+bonus.mana,attack:g.attack+bonus.attack,defense:g.defense+bonus.defense,agility:g.agility+bonus.agility,crit:g.crit+bonus.crit,bonus,passiveBonus:p}}
 function gearScore(it){let a=equipAttrs(it);return a.hp*.35+a.mana*.25+a.attack*5+a.defense*4+a.agility*3+a.crit*12}
 function gearPower(){return Math.floor(equipSlots.reduce((n,k)=>n+gearScore(g.gear?.[k]),0))}
 function equipEffect(it){it=normalizeEquip(it);if(!it)return'无装备效果。';let a=equipAttrs(it),parts=[];if(a.attack)parts.push('攻击+'+Math.floor(a.attack));if(a.crit)parts.push('暴击+'+Math.floor(a.crit)+'%');if(a.hp)parts.push('生命+'+Math.floor(a.hp));if(a.defense)parts.push('防御+'+Math.floor(a.defense));if(a.mana)parts.push('法力+'+Math.floor(a.mana));if(a.agility)parts.push('身法+'+Math.floor(a.agility));return `装备效果：${qualityText[it.quality]}色品质 · ${equipSlotNames[it.slot]} · 强化+${it.enhance||0}；${parts.join('，')||'无额外属性'}。`}
@@ -181,7 +188,7 @@ function openRedeem(){if(g.devMode)return openDevMode();$('#redeemInput').value=
 function redeemCode(){let code=$('#redeemInput').value.trim().toLowerCase();if(code!=='jzhnb')return toast('兑换码无效');g.devMode=true;$('#redeemBtn').textContent='开发者面板';$('#redeemModal').classList.remove('show');save();toast('开发者模式已开启');openDevMode()}
 function openDevMode(){if(!g.devMode)return;let realmOptions=realms.map((x,i)=>`<option value="${i}" ${g.realm===i?'selected':''}>${x}</option>`).join(''),stageOptions=stages.map((x,i)=>`<option value="${i}" ${g.stage===i?'selected':''}>${x}</option>`).join('');$('#devFields').innerHTML=`<label class="dev-field">大境界<select data-dev-select="realm">${realmOptions}</select></label><label class="dev-field">境界阶段<select data-dev-select="stage">${stageOptions}</select></label><label class="dev-field">灵根名称<input data-dev-text="root" value="${g.root}"></label>`+devNumbers.map(([k,label])=>`<label class="dev-field">${label}<input type="number" step="any" data-dev-number="${k}" value="${g[k]??0}"></label>`).join('');$('#devModal').classList.add('show')}
 function applyDevMode(){if(!g.devMode)return;document.querySelectorAll('[data-dev-number]').forEach(el=>{let v=Number(el.value);if(Number.isFinite(v))g[el.dataset.devNumber]=clamp(v)});g.realm=Math.max(0,Math.min(9,+document.querySelector('[data-dev-select="realm"]').value||0));g.stage=Math.max(0,Math.min(3,+document.querySelector('[data-dev-select="stage"]').value||0));g.root=document.querySelector('[data-dev-text="root"]').value.trim()||'自定义灵根';g.maxHp=Math.max(1,g.maxHp);g.hp=Math.min(g.maxHp,g.hp);sanitize();save();render();$('#devModal').classList.remove('show');log('开发者模式：手动数值已应用','good');toast('开发者数值已保存')}
-function hydrateFreshState(base){base.selectedScene=base.map??0;base.sect='太玄宗';Object.assign(base,{sectRank:0,sectReputation:0,sectLevel:1,sectExp:0,sectRealmAt:0,sectWarAt:0,sectTasks:0,sectManualTaskAt:0,sectOfficeTaskAt:0,sectLectureAt:0,sectSparAt:0,sectTreasurySelected:0,sectTreasuryTab:'丹药',sectSisterQuest:null,nalanQuest:null,xiaoHuoQuest:null,qiuQuest:null});Object.assign(base,{alchemyLevel:1,alchemyExp:0,selectedRecipe:0,activeBoostUntil:0,healPills:0,cultPills:0,boostPills:0});Object.assign(base,{sectPermanentBuys:{},marketHour:-1,marketStock:[],marketManualHour:-1,gatherCooldowns:{},deadMobs:{},bossKills:{},trophies:{},bag:[],bagCap:20,bagSelected:-1,bagPage:0,passiveSkills:[],activeSkills:[],skillReserve:[],selectedEquipSlot:'weapon',skillSchemaV2:true,defaultActiveSkillsGranted:false,bigFireballLevel:0});return base}
+function hydrateFreshState(base){base.selectedScene=base.map??0;base.sect='太玄宗';Object.assign(base,{sectRank:0,sectReputation:0,sectLevel:1,sectExp:0,sectRealmAt:0,sectWarAt:0,sectTasks:0,sectManualTaskAt:0,sectOfficeTaskAt:0,sectLectureAt:0,sectSparAt:0,sectTreasurySelected:0,sectTreasuryTab:'丹药',sectSisterQuest:null,nalanQuest:null,xiaoHuoQuest:null,qiuQuest:null});Object.assign(base,{alchemyLevel:1,alchemyExp:0,selectedRecipe:0,activeBoostUntil:0,healPills:0,cultPills:0,boostPills:0});Object.assign(base,{sectPermanentBuys:{},marketHour:-1,marketStock:[],marketManualHour:-1,gatherCooldowns:{},deadMobs:{},bossKills:{},trophies:{},bag:[],bagCap:20,bagSelected:-1,bagPage:0,passiveSkills:[],activeSkills:[],skillReserve:[],selectedEquipSlot:'weapon',skillSchemaV2:true,defaultActiveSkillsGranted:false,bigFireballLevel:0,caveSoulLoops:{},rageLearned:false});return base}
 function resetDevGame(){if(!g.devMode)return;if(!confirm('确定要一键重置到刚开局状态吗？当前存档、背包、装备、宗门贡献、地图击杀等都会清空；开发者模式会保留。'))return;g=hydrateFreshState(fresh());g.devMode=true;pendingOffline=0;tickCount=0;localStorage.setItem(KEY,JSON.stringify(g));$('#redeemBtn').textContent='开发者面板';document.querySelectorAll('.event-modal.show').forEach(x=>x.classList.remove('show'));render();renderLogs();openDevMode();log('开发者模式：已一键重置为新开局状态','good');toast('已重置为刚开局状态')}
 function render(){
 processRealmProgress();
@@ -228,7 +235,7 @@ function sceneTransferAt(i,spot){
   if(i===9&&spot===0)return{to:8,toSpot:36,label:'返回九天雷域',icon:'↩️'};
   return null;
 }
-function keySpotMap(i){let spots=subMapSpots[i]||subMapSpots[0],base;if(i===10)base={0:['⛩️',spots[0]],31:['🏛️','宗门广场'],6:['📜',spots[1]],12:['📋','西执事厅'],14:['🥋','练功房'],19:['🏯','东执事厅'],23:['🗃️',spots[3]],27:['☁️','紫云峰'],32:['🏔️',spots[4]]};else base={0:['🏠',spots[0]],6:['🌿',spots[1]],14:['🕳️',spots[2]],23:['👹',spots[3]],32:['💎',spots[4]]};for(let p=0;p<37;p++){let t=sceneTransferAt(i,p);if(t)base[p]=[t.icon,t.label]}return base}
+function keySpotMap(i){let spots=subMapSpots[i]||subMapSpots[0],base;if(i===10)base={0:['⛩️',spots[0]],31:['🏛️','宗门广场'],6:['📜',spots[1]],12:['📋','西执事厅'],14:['🥋','练功房'],16:['🌄','定光峰'],19:['🏯','东执事厅'],23:['🗃️',spots[3]],27:['☁️','紫云峰'],32:['🧘','打坐台'],33:['🏔️','宗主峰']};else base={0:['🏠',spots[0]],6:['🌿',spots[1]],14:['🕳️',spots[2]],23:['👹',spots[3]],32:['💎',spots[4]]};for(let p=0;p<37;p++){let t=sceneTransferAt(i,p);if(t)base[p]=[t.icon,t.label]}return base}
 function spotLabel(i,idx){let m=keySpotMap(i);return m[idx]?.[1]||String(idx).padStart(2,'0')}
 function spotIcon(i,idx){let m=keySpotMap(i);return m[idx]?.[0]||String(idx).padStart(2,'0')}
 function spotIsNamed(i,idx){return !!keySpotMap(i)[idx]}
@@ -243,10 +250,10 @@ function transferGuideText(from,to){
   return `前方通往${target}的界门尚未响应。\n\n你在大地图上还没有取得进入${target}的资格，需要先满足：${req}。\n\n请留在${mapScenes[from][1]}继续修炼、挑战首领；等大地图上的${target}解锁后，再回到这个传送路点通行。`;
 }
 function useSceneTransfer(i,spot){let t=sceneTransferAt(i,spot);if(!t)return false;if(!sceneUnlocked(t.to)){openNpcDialog('界门尚未开启',transferGuideText(i,t.to),[{text:'先在此地继续历练'}]);toast(`${mapScenes[t.to][1]}尚未解锁`);return true}let from=mapScenes[i][1],to=mapScenes[t.to][1];g.selectedScene=t.to;g.map=t.to;g.localSpot=t.toSpot;pushLocalLog(`通过区域界门从${from}抵达${to} · ${spotLabel(t.to,t.toSpot)}。`);toast(`已抵达${to}`);renderSceneMap();render();save();return true}
-function renderSceneMap(){let modal=$('#sceneMapModal');if(!modal||!modal.classList.contains('show'))return;renderSkillHud();let i=g.selectedScene??g.map,s=mapScenes[i],m=maps[i],coords=routeCoords(i),spot=activeSpot(),canvas=$('#localMapCanvas'),world=$('#localMapWorld');$('#localMapName').textContent=s[1];$('#localMapDesc').textContent=s[2];canvas.className='local-map '+(subMapClasses[i]||'forest');world.querySelectorAll('.local-spot,.path-line,.map-deco').forEach(x=>x.remove());let decos=mapDecos(i,s);decos.forEach(d=>{let el=document.createElement('div');el.className='map-deco '+d[3];el.style.left=d[1]+'%';el.style.top=d[2]+'%';el.textContent=d[3]==='sign'?s[1]:d[0];world.appendChild(el)});let prev=null;coords.forEach(c=>{if(prev){let dx=c[0]-prev[0],dy=c[1]-prev[1],len=Math.hypot(dx,dy),ang=Math.atan2(dy,dx)*180/Math.PI,line=document.createElement('div');line.className='path-line';line.style.left=prev[0]+'%';line.style.top=prev[1]+'%';line.style.width=len+'%';line.style.transform=`rotate(${ang}deg)`;world.appendChild(line)}prev=c});coords.forEach((c,idx)=>{let named=spotIsNamed(i,idx),transfer=!!sceneTransferAt(i,idx),b=document.createElement('button');let dir=named?labelDir(idx):'';b.className=`local-spot numbered ${named?'named '+dir+' ':''}${transfer?'transfer ':''}${idx===spot?'active':''}`;b.style.setProperty('--x',c[0]+'%');b.style.setProperty('--y',c[1]+'%');b.dataset.spot=idx;b.innerHTML=`<i>${spotIcon(i,idx)}</i><b>${spotLabel(i,idx)}</b>`;world.appendChild(b)});let hc=coords[spot],hero=$('#localHero');world.appendChild(hero);hero.style.setProperty('--x',hc[0]+'%');hero.style.setProperty('--y',hc[1]+'%');panWorld(world,hc);let localInfo=$('#localMapInfo');if(localInfo)localInfo.innerHTML=rows({'位置信息':`${s[1]} · ${spotLabel(i,spot)}`,'推荐境界':i===10?'宗门弟子皆可入内':sceneReqText(i)});let npcs=localNpcs(i,spot),mobs=localMobs(i,spot);$('#localNpcList').innerHTML=npcs.length?npcs.map((x,idx)=>`<button data-local-npc="${idx}"><span>${x.name||x[0]}</span><b>💬</b></button>`).join(''):'<div class="scene-tip">此编号路点暂无NPC，请前往带汉字的关键地点。</div>';$('#localMobList').innerHTML=mobs.length?mobs.map((x,idx)=>{let info=x.dead?`复活${Math.ceil(x.reviveLeft/60000)}分`:x.type==='采集'?'':localMonsterRealm(i,spot,x,idx);return`<button data-local-mob="${idx}" class="${x.dead?'dead':''}" ${x.dead?'disabled':''}><span>${x.name||x[0]}${info?' '+info:''}</span><b>${x.dead?'☠️':x.boss?'👑':x.type==='采集'?'🌿':'🗡️'}</b></button>`}).join(''):'<div class="scene-tip">此地没有野怪，宗门事务需要逐个手动处理。</div>';document.querySelectorAll('[data-local-npc]').forEach(b=>b.onclick=()=>localMeet(+b.dataset.localNpc));document.querySelectorAll('[data-local-mob]').forEach(b=>b.onclick=()=>localHunt(+b.dataset.localMob));document.querySelectorAll('[data-spot]').forEach(b=>b.onclick=()=>{let nextSpot=+b.dataset.spot;if(useSceneTransfer(i,nextSpot))return;if(i===10){let room=sectRoomRule(nextSpot);if(g.sectRank<room.need)return toast(`${room.name}尚未开放：需晋升${sectRanks[room.need][0]}`)}g.localSpot=nextSpot;pushLocalLog(`沿石子路抵达 ${spotLabel(i,g.localSpot)}。`);renderSceneMap();save()})}
+function renderSceneMap(){let modal=$('#sceneMapModal');if(!modal||!modal.classList.contains('show'))return;renderSkillHud();let i=g.selectedScene??g.map,s=mapScenes[i],m=maps[i],coords=routeCoords(i),spot=activeSpot(),canvas=$('#localMapCanvas'),world=$('#localMapWorld');$('#localMapName').textContent=s[1];$('#localMapDesc').textContent=s[2];canvas.className='local-map '+(subMapClasses[i]||'forest');world.querySelectorAll('.local-spot,.path-line,.map-deco').forEach(x=>x.remove());let decos=mapDecos(i,s);decos.forEach(d=>{let el=document.createElement('div');el.className='map-deco '+d[3];el.style.left=d[1]+'%';el.style.top=d[2]+'%';el.textContent=d[3]==='sign'?s[1]:d[0];world.appendChild(el)});let prev=null;coords.forEach(c=>{if(prev){let dx=c[0]-prev[0],dy=c[1]-prev[1],len=Math.hypot(dx,dy),ang=Math.atan2(dy,dx)*180/Math.PI,line=document.createElement('div');line.className='path-line';line.style.left=prev[0]+'%';line.style.top=prev[1]+'%';line.style.width=len+'%';line.style.transform=`rotate(${ang}deg)`;world.appendChild(line)}prev=c});coords.forEach((c,idx)=>{let named=spotIsNamed(i,idx),transfer=!!sceneTransferAt(i,idx),b=document.createElement('button');let dir=named?labelDir(idx):'';b.className=`local-spot numbered ${named?'named '+dir+' ':''}${transfer?'transfer ':''}${idx===spot?'active':''}`;b.style.setProperty('--x',c[0]+'%');b.style.setProperty('--y',c[1]+'%');b.dataset.spot=idx;b.innerHTML=`<i>${spotIcon(i,idx)}</i><b>${spotLabel(i,idx)}</b>`;world.appendChild(b)});let hc=coords[spot],hero=$('#localHero');world.appendChild(hero);hero.style.setProperty('--x',hc[0]+'%');hero.style.setProperty('--y',hc[1]+'%');panWorld(world,hc);let localInfo=$('#localMapInfo');if(localInfo)localInfo.innerHTML=rows({'位置信息':`${s[1]} · ${spotLabel(i,spot)}`,'推荐境界':i===10?'宗门弟子皆可入内':sceneReqText(i)});let npcs=localNpcs(i,spot),mobs=localMobs(i,spot);$('#localNpcList').innerHTML=npcs.length?npcs.map((x,idx)=>`<button data-local-npc="${idx}"><span>${x.name||x[0]}</span><b>💬</b></button>`).join(''):'<div class="scene-tip">此编号路点暂无NPC，请前往带汉字的关键地点。</div>';$('#localMobList').innerHTML=mobs.length?mobs.map((x,idx)=>{let info=x.dead?`复活${Math.ceil(x.reviveLeft/60000)}分`:x.type==='采集'?'':localMonsterRealm(i,spot,x,idx);return`<button data-local-mob="${idx}" class="${x.dead?'dead':''}" ${x.dead?'disabled':''}><span>${x.name||x[0]}${info?' '+info:''}</span><b>${x.dead?'☠️':x.boss?'👑':x.type==='采集'?'🌿':'🗡️'}</b></button>`}).join(''):'<div class="scene-tip">此地没有野怪，宗门事务需要逐个手动处理。</div>';document.querySelectorAll('[data-local-npc]').forEach(b=>b.onclick=()=>localMeet(+b.dataset.localNpc));document.querySelectorAll('[data-local-mob]').forEach(b=>b.onclick=()=>localHunt(+b.dataset.localMob));document.querySelectorAll('[data-spot]').forEach(b=>b.onclick=()=>{let nextSpot=+b.dataset.spot;if(useSceneTransfer(i,nextSpot))return;if(meditationSession&&nextSpot!==32)stopMeditation(true);if(i===10){let room=sectRoomRule(nextSpot);if(g.sectRank<room.need)return toast(`${room.name}尚未开放：需晋升${sectRanks[room.need][0]}`)}g.localSpot=nextSpot;pushLocalLog(`沿石子路抵达 ${spotLabel(i,g.localSpot)}。`);renderSceneMap();save()})}
 function openSceneMap(){let i=g.selectedScene??g.map;if(!sceneUnlocked(i))return toast(sceneReqText(i)+'后解锁');closeNpcDialog();g.map=i;g.localSpot=g.localSpot??0;$('#sceneMapModal').classList.add('show');pushLocalLog(`进入${mapScenes[i][1]}，区域小地图已展开。`);renderSceneMap();render();save()}
 function pushLocalLog(t){let box=$('#localMapLog');if(!box)return;box.insertAdjacentHTML('afterbegin',`<div>${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})} ${t}</div>`);while(box.children.length>40)box.lastChild.remove()}
-function localNpcs(i,spot){if(!spotIsNamed(i,spot))return[];if(i===10){if(spot===31)return[['柳如烟 大师姐','宗门广场委托'],['纳兰小师妹','疗伤与丹药回收']];if(spot===14)return[['萧火','药材委托'],['付长老','压制切磋'],['传功长老','传授大火球术与包扎']];if(spot===27)return[['邱长老','紫云峰委托']];let role=sectTitle(),special={0:[`山门执事`,`为${role}核验身份、派发巡山外务`],6:[g.sectRank>=1?'传功长老':'讲经弟子',g.sectRank>=1?'讲经传法':'外门早课'],12:[g.sectRank>=2?'内务执事':'值守弟子',g.sectRank>=2?'领差记功':'看守堂门'],19:['白执事','宗门事务咨询'],23:[g.sectRank>=1?'守阁长老':'守阁弟子',g.sectRank>=1?'抄录秘典':'守阁引路'],32:[g.sectRank>=4?'太玄掌教':g.sectRank>=2?'护峰道童':'巡峰弟子',g.sectRank>=4?'掌教议事':'山峰传令']};return[special[spot]||['山门执事','引路']]}let special=[['驿站掌柜','补给'],['黑市商人','交易'],['洞府残魂','传承'],['巡山妖将','情报'],['秘宝商人','交易']];return[special[[0,6,14,23,32].indexOf(spot)]||special[0]]}
+function localNpcs(i,spot){if(!spotIsNamed(i,spot))return[];if(i===10){if(spot===31)return[['柳如烟 大师姐','宗门广场委托'],['纳兰小师妹','疗伤与丹药回收']];if(spot===14)return[['萧火','药材委托'],['付长老','压制切磋'],['传功长老','传授大火球术与包扎']];if(spot===16)return[['定光峰主','以白色装备与灵石传授主动技“暴怒”']];if(spot===27)return[['邱长老','紫云峰委托']];if(spot===32)return[['叶凡大师兄','打坐吐纳']];let role=sectTitle(),special={0:[`山门执事`,`为${role}核验身份、派发巡山外务`],6:[g.sectRank>=1?'传功长老':'讲经弟子',g.sectRank>=1?'讲经传法':'外门早课'],12:[g.sectRank>=2?'内务执事':'值守弟子',g.sectRank>=2?'领差记功':'看守堂门'],19:['白执事','宗门事务咨询'],23:[g.sectRank>=1?'守阁长老':'守阁弟子',g.sectRank>=1?'抄录秘典':'守阁引路'],33:[g.sectRank>=4?'太玄掌教':g.sectRank>=2?'护峰道童':'巡峰弟子',g.sectRank>=4?'掌教议事':'山峰传令']};return[special[spot]||['山门执事','引路']]}let special=[['驿站掌柜','补给'],['黑市商人','交易'],['洞府残魂','传承'],['巡山妖将','情报'],['秘宝商人','交易']];return[special[[0,6,14,23,32].indexOf(spot)]||special[0]]}
 // ===== 固定怪物属性表 =====
 // 所有野怪与 Boss 的战斗数值都在这里手动维护。
 // 字段：hp=生命，mp=法力，attack=攻击，defense=防御，realm=显示境界，icon=战斗图标。
@@ -362,6 +369,31 @@ function localMobs(i,spot){if(i===10)return[];let monsterPools=[
 ['凝露草','青灵花','山参'],['月见草','幽兰叶','梦露花'],['火莲草','赤砂芝','地心菇'],['珊瑚草','水灵藻','海心莲'],['妖王花','血藤芽','骨灵芝'],['煞气草','铁叶兰','战场苔'],['碎星草','虚空苔','银砂花'],['黑莲叶','魔息草','碑影花'],['引雷石','雷鸣草','云根花'],['仙露草','问心莲','天门芝']
 ];let monsters=monsterPools[i]||monsterPools[0],herbs=herbPools[i]||herbPools[0],hour=Math.floor(Date.now()/3600000),seed=`${i}:${spot}:${hour}`,monsterCount=1+Math.floor(stableRand(seed+':monsterCount')*3),herbCount=Math.floor(stableRand(seed+':herbCount')*3),monsterOrder=monsters.map((_,idx)=>idx).sort((a,b)=>stableRand(seed+':m:'+a)-stableRand(seed+':m:'+b)),herbOrder=herbs.map((_,idx)=>idx).sort((a,b)=>stableRand(seed+':h:'+a)-stableRand(seed+':h:'+b)),list=monsterOrder.slice(0,monsterCount).map(idx=>makeMonster(monsters[idx][0],monsters[idx][1])),boss=spotBosses[`${i}:${spot}`];if(boss)list.unshift(makeMonster(boss[0],boss[1],true));list=list.map(m=>withMobState(i,spot,m));herbOrder.slice(0,herbCount).forEach(idx=>{let h=herbs[idx];if(!gatherLeft(i,spot,h))list.push(makeHerb(h))});return list}
 function addTrophy(name,count=1){g.trophies=g.trophies||{};let ok=addBagItem({type:'material',name,qty:count,sell:35,max:99,desc:'妖兽材料，可在道具栏售卖。'});if(ok)g.trophies[name]=(g.trophies[name]||0)+count;return ok}
+
+// ===== 洞府残魂：当前小地图妖兽材料跑环 =====
+// 每张战斗地图有4种普通妖兽材料。玩家按顺序每次提交其中一种×10，完成一环后自动进入下一环。
+const caveSoulMaterialPools=[
+ ['山魈爪','石鼠皮','青竹节','虫甲'],
+ ['狐狸皮','树心木','蝶粉','狼牙'],
+ ['赤炎角','火羽','火晶壳','炎魔核'],
+ ['虾壳','蟹钳','龟甲','蛇胆'],
+ ['血藤','荒骨','毒囊','妖花粉'],
+ ['魂晶','尸甲','煞珠','残刃'],
+ ['影尘','星砂','裂片','古铜片'],
+ ['魔魂灰','黑莲瓣','魔焰石','碑屑'],
+ ['雷晶','云皮','电须','雷羽'],
+ ['仙甲片','仙羽','金甲碎片','仙尘']
+];
+function caveSoulReward(area){let major=Math.max(0,Math.min(realms.length-1,Math.floor((maps[area]?.[1]||0)/4))),initialIndex=major*4;return Math.max(1,Math.floor(100*Math.pow(1.72,initialIndex)*.45))}
+function caveSoulLoop(area){g.caveSoulLoops=g.caveSoulLoops||{};let q=g.caveSoulLoops[area];if(!q||!Number.isInteger(q.step))q=g.caveSoulLoops[area]={step:0,cycles:0};let pool=caveSoulMaterialPools[area]||[];q.step=((q.step%Math.max(1,pool.length))+Math.max(1,pool.length))%Math.max(1,pool.length);return q}
+function caveSoulGuide(area){let q=caveSoulLoop(area),pool=caveSoulMaterialPools[area]||[],material=pool[q.step]||'未知材料',have=bagItemCountByName(material),reward=caveSoulReward(area);return{q,pool,material,have,reward}}
+function submitCaveSoulLoop(area){let x=caveSoulGuide(area);if(!x.pool.length)return toast('此地没有可供跑环的妖兽材料');if(x.have<10)return toast(`${x.material}不足10份`);if(!takeBagItemsByName(x.material,10))return toast('材料扣除失败');g.cult+=x.reward;x.q.step++;let completedCycle=false;if(x.q.step>=x.pool.length){x.q.step=0;x.q.cycles=(x.q.cycles||0)+1;completedCycle=true}let next=x.pool[x.q.step];pushLocalLog(`洞府残魂收下${x.material}×10，跑环修为+${fmt(x.reward)}。`);showNpcResult(completedCycle?'跑环一轮完成':'跑环任务完成',`上交：${x.material} ×10\n固定修为 +${fmt(x.reward)}\n${completedCycle?`已完成第 ${x.q.cycles} 轮全部材料。\n`:''}下一环：${next} ×10`,'good');renderSceneMap();render();save();return true}
+
+// ===== 定光峰主动技：暴怒 =====
+function whiteEquipmentCount(){return(g.bag||[]).reduce((n,it)=>n+(it?.type==='equipment'&&(it.quality||equipQuality[it.name]||1)===1?(it.qty||1):0),0)}
+function takeWhiteEquipment(amount=5){let left=amount;for(let i=(g.bag||[]).length-1;i>=0&&left>0;i--){let it=g.bag[i];if(it?.type==='equipment'&&(it.quality||equipQuality[it.name]||1)===1){let take=Math.min(left,it.qty||1);if((it.qty||1)>take)it.qty-=take;else g.bag.splice(i,1);left-=take}}return left===0}
+function makeRageSkill(){return{name:'暴怒',icon:'😡',desc:'主动技：接下来3个回合，自身基础攻击力×1.5（不包含装备加成）',kind:'active',rageSkill:true}}
+function learnRageSkill(){ensureSkillLayout();if(g.rageLearned||(g.activeSkills||[]).some(sk=>sk.name==='暴怒')||(g.skillReserve||[]).some(sk=>sk.name==='暴怒'))return toast('你已经学会暴怒');if(whiteEquipmentCount()<5)return toast('白色装备不足5件');if(g.stones<200)return toast('灵石不足200');if(!takeWhiteEquipment(5))return toast('白色装备扣除失败');g.stones-=200;let sk=makeRageSkill();if(g.activeSkills.length<5)g.activeSkills.push(sk);else g.skillReserve.push(sk);g.rageLearned=true;pushLocalLog('向定光峰主提交白色装备×5与灵石×200，学会主动技“暴怒”。');showNpcResult('定光峰传法',`白色装备 -5\n灵石 -200\n学会主动技：暴怒\n效果：施放后，接下来3个回合基础攻击力×1.5；装备与被动技能的攻击加成不参与该倍率。\n技能已加入主动栏或备用栏。`,'good');renderSkillHud();renderSceneMap();render();save()}
 
 // ===== 柳如烟大师姐：宗门广场材料回收任务 =====
 // 任务只检查背包中的妖兽材料，防止卖掉材料后仍然能提交。
@@ -599,7 +631,7 @@ function renderTaskPanel(){
     let done=(g.bossKills?.[0]||0)>(g.qiuQuest.baseKill||0);
     html+=taskCard('邱长老：紫云峰试炼',`目标：接取后击败青云山麓Boss山魈王 ${done?'1/1':'0/1'}；奖励：心灵控制器、2级修为丹×5、灵石×1000`,`<button class="btn" data-task-submit="qiu">提交</button><button class="btn ghost" data-task-abandon="qiu">放弃</button>`);
   }
-  let inSquare=(g.selectedScene??g.map)===10&&activeSpot()===2;
+  let inSquare=(g.selectedScene??g.map)===10&&activeSpot()===31;
   if(inSquare&&!g.sectSisterQuest){
     html+=taskCard('可接：柳如烟材料回收','选择一个境界委托，随机回收妖兽材料×5，奖励对应等级修为丹。',sisterQuestRealms.map((q,i)=>`<button class="btn ghost" data-task-accept-sister="${i}">${q.name}</button>`).join(''));
   }
@@ -631,7 +663,98 @@ function submitSisterQuest(){
   save();
   return true;
 }
-function dropEquip(name,boss=false){let table=boss?[[1,1],[2,.2],[3,.1],[4,.03],[5,.005]]:[[1,.2],[2,.1],[3,.03],[4,.005]],tries=boss?4:1,drops=[];for(let t=0;t<tries;t++){table.forEach(r=>{let q=r[0];if(Math.random()<r[1]){let slot=equipSlots[Math.floor(Math.random()*equipSlots.length)],equipName=equipBaseName(q,slot),item=normalizeEquip({name:equipName,quality:q,slot,powerLevel:g.map+q,sell:q*220});item.desc=equipEffect(item);drops.push(equipName);addBagItem(item)}})}return drops}
+function realmNameIndex(text=''){
+  for(let r=0;r<realms.length;r++)for(let st=0;st<stages.length;st++){
+    if(text.includes(realms[r])&&text.includes(stages[st]))return r*4+st;
+  }
+  return realmIndex();
+}
+
+// ==================== 装备掉落参数（可直接修改） ====================
+// 装备总爆率固定：
+// 普通怪物：判定 1 次，每次 20% 概率掉落装备。
+// Boss：判定 4 次，每次 80% 概率掉落装备。
+const EQUIPMENT_DROP_CONFIG={
+  normalChance:.20,
+  bossChance:.80,
+  normalRolls:1,
+  bossRolls:4
+};
+
+// ==================== 装备品质概率（建议只修改这里） ====================
+// 每个小地图都可以分别设置普通怪物和 Boss 的品质概率。
+// 数组顺序固定为：[白装, 绿装, 蓝装, 紫装, 橙装]。
+// 数字可以直接写百分比，例如 [70,20,8,1.8,.2]。
+// 每组数字不必严格相加等于100，程序会自动按比例换算。
+// 品质概率不再根据玩家境界或怪物境界自动改变，完全以这里填写的数值为准。
+const EQUIPMENT_QUALITY_CONFIG=[
+  {name:'青云山麓', normal:[78,18,4,0,0], boss:[50,30,15,5,0]},
+  {name:'幽月森林', normal:[71,21,8,0,0],boss:[40,30,20,10,0]},
+  {name:'赤炎秘境', normal:[65,25,9.5,.5,0], boss:[35,34,20,10.5,.5]},
+  {name:'东海龙宫', normal:[58,27,14,1,0],   boss:[30,30,26,13,1]},
+  {name:'万妖古域', normal:[51,29,18,2,0],      boss:[26.5,27,30,15,1.5]},
+  {name:'天渊战场', normal:[45,30,22,2.9,.1],  boss:[21,25,30,19,2]},
+  {name:'虚空遗迹', normal:[40,31,25,3.8,.2], boss:[16,22,31,23,2.5]},
+  {name:'仙魔战场', normal:[34,30,31,4.7,.3],      boss:[11,24,31,28,3]},
+  {name:'九天雷域', normal:[29,30,35,5.6,.4],      boss:[7,14,39,32,3.5]},
+  {name:'仙界天门', normal:[24,30,39,6.5,.5],     boss:[4,10,45,35,4]},
+  // 太玄宗通常没有野怪，此项用于宗门特殊战斗。
+  {name:'太玄宗',   normal:[78,18,3.5,.45,.05], boss:[58,28,11,2.7,.3]}
+];
+
+// 读取某个小地图的品质概率。
+// boss=false 读取普通怪物概率，boss=true 读取 Boss 概率。
+function equipmentQualityRates(areaIndex=0,boss=false){
+  let fallback={name:'默认区域',normal:[70,22,6,1.8,.2],boss:[45,30,18,6,1]};
+  let area=EQUIPMENT_QUALITY_CONFIG[areaIndex]||fallback;
+  let rates=(boss?area.boss:area.normal).map(n=>Math.max(0,Number(n)||0));
+  // 防止误把所有概率都改成0。
+  if(!rates.some(n=>n>0))rates=[100,0,0,0,0];
+  return {areaName:area.name,rates};
+}
+
+// 按上方填写的五档概率抽取装备品质。
+function rollEquipmentQuality(areaIndex=0,boss=false){
+  let {rates}=equipmentQualityRates(areaIndex,boss);
+  let total=rates.reduce((sum,n)=>sum+n,0);
+  let roll=Math.random()*total;
+  for(let i=0;i<rates.length;i++){
+    roll-=rates[i];
+    if(roll<=0)return i+1;
+  }
+  return 1;
+}
+
+// 装备掉落规则：总爆率与判定次数固定，品质概率由当前小地图配置决定。
+function getEquipmentDropRule(areaIndex=0,boss=false){
+  let quality=equipmentQualityRates(areaIndex,boss);
+  return{
+    areaName:quality.areaName,
+    rolls:boss?EQUIPMENT_DROP_CONFIG.bossRolls:EQUIPMENT_DROP_CONFIG.normalRolls,
+    dropChance:boss?EQUIPMENT_DROP_CONFIG.bossChance:EQUIPMENT_DROP_CONFIG.normalChance,
+    qualityRates:quality.rates
+  };
+}
+
+function dropEquip(name,boss=false,monsterRealm='',areaIndex=0){
+  let rule=getEquipmentDropRule(areaIndex,boss),drops=[];
+  let monsterLevel=Math.max(0,realmNameIndex(monsterRealm));
+  for(let t=0;t<rule.rolls;t++){
+    if(Math.random()>=rule.dropChance)continue;
+    let q=rollEquipmentQuality(areaIndex,boss);
+    let slot=equipSlots[Math.floor(Math.random()*equipSlots.length)];
+    let equipName=equipBaseName(q,slot);
+    let item=normalizeEquip({
+      name:equipName,quality:q,slot,
+      powerLevel:Math.max(1,monsterLevel+q),
+      sell:q*220
+    });
+    item.desc=`由${monsterRealm||'未知境界'}的${name}在${rule.areaName}掉落。`+equipEffect(item);
+    drops.push(equipName);
+    addBagItem(item);
+  }
+  return drops;
+}
 function battleMonsterIcon(name=''){if(/龙|蛟/.test(name))return'🐉';if(/狐/.test(name))return'🦊';if(/蝶|鸟|鸦|鹤/.test(name))return'🦋';if(/树|藤|花|竹/.test(name))return'🌳';if(/炎|火|熔|赤/.test(name))return'🔥';if(/雷|电/.test(name))return'⚡';if(/鬼|魂|尸|魔|巫/.test(name))return'👹';if(/龟|蛇|虾|蟹/.test(name))return'🐢';if(/狼/.test(name))return'🐺';return'👺'}
 function battleEnemyStats(target,area=g.selectedScene??g.map,spot=activeSpot(),idx=0){
   // 宗门切磋不是野怪，继续使用独立的切磋数值。
@@ -673,11 +796,13 @@ function battlePct(v,m){return Math.max(0,Math.min(100,(m? v/m:0)*100))+'%'}
 function battleLog(t){if(!battleState)return;battleState.log.unshift(t);battleState.log=battleState.log.slice(0,30)}
 function battleFx(side,t,heal=false){let el=$(side==='player'?'#battlePlayerFx':'#battleEnemyFx');if(!el)return;el.textContent=t;el.classList.remove('pop','heal');if(heal)el.classList.add('heal');void el.offsetWidth;el.classList.add('pop')}
 function renderBattle(){let b=battleState;if(!b)return;let t=b.target;$('#battleTitle').textContent=(t.boss?'Boss战：':'战斗：')+t.name;$('#battleRoundText').textContent='第'+b.round+'回合';$('#battlePlayerName').textContent='你';$('#battlePlayerLevel').textContent=realmText();$('#battleEnemyName').textContent=t.name;$('#battleEnemyLevel').textContent=b.enemy.realm;$('#battleEnemyFigure').textContent=b.enemy.icon;$('#battlePlayerHp').style.width=battlePct(b.player.hp,b.player.maxHp);$('#battlePlayerMp').style.width=battlePct(b.player.mp,b.player.maxMp);$('#battleEnemyHp').style.width=battlePct(b.enemy.hp,b.enemy.maxHp);$('#battleEnemyMp').style.width=battlePct(b.enemy.mp,b.enemy.maxMp);$('#battleEnemyHpText').textContent=`生命 ${fmt(b.enemy.hp)}/${fmt(b.enemy.maxHp)}`;$('#battleEnemyMpText').textContent=`法力 ${fmt(b.enemy.mp)}/${fmt(b.enemy.maxMp)}`;ensureSkillLayout();let skills=g.activeSkills||[];$('#battleSkillBar').innerHTML=Array.from({length:5},(_,i)=>{let sk=skills[i],cost=sk?battleSkillCost(sk,i):0,disabled=!sk||b.player.mp<cost;return`<button class="battle-skill" data-battle-skill="${i}" ${disabled?'disabled':''}><b>${sk?(sk.icon||'✨')+' '+sk.name:'空'}</b><small>${sk?`耗蓝${cost} · ${sk.desc||'主动技'}`:'技能书激活'}</small></button>`}).join('');document.querySelectorAll('[data-battle-skill]').forEach(btn=>btn.onclick=()=>battlePlayerTurn(+btn.dataset.battleSkill));$('#battleLog').innerHTML=b.log.map(x=>`<div>${x}</div>`).join('')}
-function battleSkillCost(sk,i){if(!sk)return 0;if(sk.bandageLevel||/包扎/.test(sk.name))return bandageConfig(sk.bandageLevel||parseInt(sk.name)||1).cost;if(sk.bigFireballLevel||/大火球术/.test(sk.name))return bigFireballConfig(sk.bigFireballLevel||parseInt(sk.name)||1).cost;if(/回春/.test(sk.name))return 24;if(/雷/.test(sk.name))return 30;if(/冰/.test(sk.name))return 22;if(/御风/.test(sk.name))return 18;return 20+i*3}
+function battleSkillCost(sk,i){if(!sk)return 0;if(sk.rageSkill||sk.name==='暴怒')return 0;if(sk.bandageLevel||/包扎/.test(sk.name))return bandageConfig(sk.bandageLevel||parseInt(sk.name)||1).cost;if(sk.bigFireballLevel||/大火球术/.test(sk.name))return bigFireballConfig(sk.bigFireballLevel||parseInt(sk.name)||1).cost;if(/回春/.test(sk.name))return 24;if(/雷/.test(sk.name))return 30;if(/冰/.test(sk.name))return 22;if(/御风/.test(sk.name))return 18;return 20+i*3}
 function battleSkillEffect(sk,idx=0){
   let b=battleState,st=statTotal(),name=sk?.name||'普通攻击',cost=sk?battleSkillCost(sk,idx):0;
   if(sk&&b.player.mp<cost)return false;
   if(sk)b.player.mp-=cost;
+  let isRage=!!(sk&&(sk.rageSkill||name==='暴怒'));
+  if(isRage){b.player.rageTurns=3;battleFx('player','暴怒',true);battleLog('你催动暴怒，接下来3个回合基础攻击力×1.5。');return true}
   let isBandage=!!(sk&&(sk.bandageLevel||/包扎/.test(name)));
   if(isBandage){
     let c=bandageConfig(sk.bandageLevel||parseInt(name)||1),before=b.player.hp;
@@ -686,7 +811,8 @@ function battleSkillEffect(sk,idx=0){
     battleFx('player','+'+actual,true);battleLog(`你施展${name}，消耗 ${cost} 点法力，回复 ${actual} 点生命。`);return true
   }
   let isBigFireball=!!(sk&&(sk.bigFireballLevel||/大火球术/.test(name))),baseMultiplier=isBigFireball?bigFireballConfig(sk.bigFireballLevel||parseInt(name)||1).multiplier:(sk?1.35:1);
-  let dmg=Math.max(1,Math.floor(st.attack*baseMultiplier+Math.random()*st.attack*.45-b.enemy.defense*.45)),note='';
+  let rageActive=(b.player.rageTurns||0)>0,baseAttack=Number(g.attack)||0,extraAttack=Math.max(0,st.attack-baseAttack),effectiveAttack=baseAttack*(rageActive?1.5:1)+extraAttack;
+  let dmg=Math.max(1,Math.floor(effectiveAttack*baseMultiplier+Math.random()*effectiveAttack*.45-b.enemy.defense*.45)),note=rageActive?'暴怒基础攻击×1.5':'';
   if(isBigFireball){note=`基础攻击×${baseMultiplier.toFixed(1)}`}
   else if(/火/.test(name)){dmg=Math.floor(dmg*1.25);note='火焰灼身'}
   else if(/冰/.test(name)){dmg=Math.floor(dmg*1.05);b.enemy.slow=1;note='寒气迟滞'}
@@ -694,14 +820,15 @@ function battleSkillEffect(sk,idx=0){
   else if(/回春/.test(name)){let heal=Math.floor(b.player.maxHp*.22+st.mana*.04);b.player.hp=Math.min(b.player.maxHp,b.player.hp+heal);dmg=Math.floor(dmg*.45);note=`回春+${heal}`}
   else if(/御风/.test(name)){b.player.wind=1;dmg=Math.floor(dmg*.75);note='身法提升'}
   if(Math.random()*100<st.crit){dmg=Math.floor(dmg*1.55);note+=(note?'，':'')+'暴击'}
-  b.enemy.hp=Math.max(0,b.enemy.hp-dmg);battleFx('enemy','-'+dmg);battleLog(`你施展${name}，造成 ${dmg} 点伤害${note?'（'+note+'）':''}。`);return true
+  if(rageActive)b.player.rageTurns=Math.max(0,(b.player.rageTurns||0)-1);
+  b.enemy.hp=Math.max(0,b.enemy.hp-dmg);battleFx('enemy','-'+dmg);battleLog(`你施展${name}，造成 ${dmg} 点伤害${note?'（'+note+'）':''}${rageActive?`，暴怒剩余${b.player.rageTurns}回合`:''}。`);return true
 }
 function handleBattleDeath(enemyName){let need=realmNeed(),lost=Math.max(1,Math.floor(need*.01)),actualLost=Math.min(g.cult,lost),firstDeath=!g.deathGuideSeen;g.cult=Math.max(0,g.cult-lost);g.deaths++;if(battleState){battleState.player.hp=statTotal().hp;battleState.player.mp=statTotal().mana}closeBattle(false);g.selectedScene=10;g.map=10;g.localSpot=31;g.hp=statTotal().hp;g.mana=statTotal().mana;g.deathGuideSeen=true;pushLocalLog(`不敌${enemyName}，损失修为${fmt(actualLost)}，已被送回太玄宗·宗门广场。`);log(`小地图战斗：败于${enemyName}，损失当前境界1%修为（${fmt(actualLost)}）`,'danger');renderSceneMap();render();save();let guide=firstDeath?`师兄，你终于醒了。巡山弟子发现你倒在外面，是宗门长老护住了你的神魂。\n\n此番身死，你损失了 ${fmt(actualLost)} 点修为（当前境界修为需求的1%），现已被送回宗门广场。\n\n往后若遇强敌，记得先检查装备、技能和丹药；若胜算不高，及时逃跑也不丢人。宗门广场永远是你的退路。`:`师兄，这次损失了 ${fmt(actualLost)} 点修为（当前境界1%）。我已经托巡山弟子把你送回宗门广场了。下次遇到强敌，记得量力而行。`;openNpcDialog('纳兰小师妹',guide,[{text:'我记住了'}]);toast(`战败：损失修为 ${fmt(actualLost)}，已返回宗门广场`)}
 function battleEnemyTurn(){let b=battleState;if(!b||b.enemy.hp<=0)return;let st=statTotal(),miss=(b.player.wind&&Math.random()<.28)||(b.enemy.slow&&Math.random()<.18);if(miss){battleLog(`${b.target.name}攻势落空。`);b.player.wind=0;b.enemy.slow=0;return}let dmg=Math.max(1,Math.floor(b.enemy.attack+Math.random()*b.enemy.attack*.35-st.defense*.65));b.player.hp=Math.max(0,b.player.hp-dmg);g.hp=b.player.hp;battleFx('player','-'+dmg);battleLog(`${b.target.name}反击，造成 ${dmg} 点伤害。`);if(b.player.hp<=0){if(b.target.spar){g.sectSparAt=Date.now()+600000;b.player.hp=Math.max(1,Math.floor(statTotal().hp*.35));b.player.mp=Math.max(0,Math.floor(statTotal().mana*.35));closeBattle(false);pushLocalLog(`付长老点到即止，切磋结束。`);showNpcResult('压制切磋落败','付长老收剑而立：根基仍需打磨。\n本次切磋不获得奖励。\n切磋冷却：10分钟。','danger');renderSceneMap();render();save();return}handleBattleDeath(b.target.name)}}
 function battlePlayerTurn(skillIdx=null){let b=battleState;if(!b)return;let ok=skillIdx===null?battleSkillEffect(null):battleSkillEffect((g.activeSkills||[])[skillIdx],skillIdx);if(ok===false)return toast('法力不足');if(b.enemy.hp<=0)return finishBattleWin();battleEnemyTurn();if(battleState){b.round++;renderBattle();renderSkillHud()}}
-function finishBattleWin(){let b=battleState;if(!b)return;let target=b.target;if(target.spar){let level=target.sparLevel||0,title=['练气','筑基','金丹','元婴'][level]||'练气',gain=realmNeed()*(.012+level*.01),rep=12+level*8;closeBattle(true);g.cult+=gain;g.sectReputation+=rep;g.sectSparAt=Date.now()+600000;pushLocalLog(`与付长老压制到${title}切磋获胜，修为+${fmt(gain)}。`);showNpcResult('压制切磋获胜',`你将修为压制到${title}，在战斗中拆解付长老剑路。\n修为 +${fmt(gain)}\n宗门声望 +${rep}\n切磋冷却：10分钟`,'good');renderSceneMap();render();save();return}closeBattle(true);let result=resolveLocalTarget(target,false);pushLocalLog(`战胜${target.name}，战斗结束。`);toast(result?'战斗胜利，已结算掉落':'战斗已结束');renderSceneMap();render();save()}
+function finishBattleWin(){let b=battleState;if(!b)return;let target=b.target;if(target.spar){let level=target.sparLevel||0,title=['练气','筑基','金丹','元婴'][level]||'练气',gain=realmNeed()*(.012+level*.01),rep=12+level*8;closeBattle(true);g.cult+=gain;g.sectReputation+=rep;g.sectSparAt=Date.now()+600000;pushLocalLog(`与付长老压制到${title}切磋获胜，修为+${fmt(gain)}。`);showNpcResult('压制切磋获胜',`你将修为压制到${title}，在战斗中拆解付长老剑路。\n修为 +${fmt(gain)}\n宗门声望 +${rep}\n切磋冷却：10分钟`,'good');renderSceneMap();render();save();return}target._battleRealm=b.enemy.realm;closeBattle(true);let result=resolveLocalTarget(target,false);pushLocalLog(`战胜${target.name}，战斗结束。`);toast(result?'战斗胜利，已结算掉落':'战斗已结束');renderSceneMap();render();save()}
 function closeBattle(keep=false){if(battleState){g.hp=Math.max(1,Math.min(battleState.player.hp,battleState.player.maxHp));g.mana=Math.max(0,Math.min(battleState.player.mp,battleState.player.maxMp))}$('#battleModal').classList.remove('show');battleState=null;if(!keep)renderSkillHud()}
-function battleAuto(){let guard=0;while(battleState&&battleState.enemy.hp>0&&battleState.player.hp>0&&guard++<12){let skills=g.activeSkills||[],missing=battleState.player.maxHp-battleState.player.hp,healIdx=skills.findIndex((sk,i)=>(sk.bandageLevel||/包扎/.test(sk.name))&&missing>=Math.ceil(bandageConfig(sk.bandageLevel||parseInt(sk.name)||1).heal*.5)&&battleState.player.mp>=battleSkillCost(sk,i)),attackIdx=skills.findIndex((sk,i)=>!(sk.bandageLevel||/包扎/.test(sk.name))&&battleState.player.mp>=battleSkillCost(sk,i)),idx=healIdx>=0?healIdx:attackIdx;battlePlayerTurn(idx>=0?idx:null)}}
+function battleAuto(){let guard=0;while(battleState&&battleState.enemy.hp>0&&battleState.player.hp>0&&guard++<12){let skills=g.activeSkills||[],missing=battleState.player.maxHp-battleState.player.hp,healIdx=skills.findIndex((sk,i)=>(sk.bandageLevel||/包扎/.test(sk.name))&&missing>=Math.ceil(bandageConfig(sk.bandageLevel||parseInt(sk.name)||1).heal*.5)&&battleState.player.mp>=battleSkillCost(sk,i)),attackIdx=skills.findIndex((sk,i)=>!(sk.bandageLevel||/包扎/.test(sk.name))&&!(sk.rageSkill||sk.name==='暴怒')&&battleState.player.mp>=battleSkillCost(sk,i)),rageIdx=(battleState.player.rageTurns||0)<=0?skills.findIndex(sk=>sk.rageSkill||sk.name==='暴怒'):-1,idx=healIdx>=0?healIdx:rageIdx>=0?rageIdx:attackIdx;battlePlayerTurn(idx>=0?idx:null)}}
 function closeNpcDialog(){$('#npcDialogModal').classList.remove('show')}
 function openNpcDialog(title,text,buttons=[{text:'知道了'}]){$('#npcDialogTitle').textContent=title;$('#npcDialogText').textContent=text;$('#npcDialogActions').innerHTML=buttons.map((b,i)=>`<button class="btn ${b.alt?'alt':''} ${b.ghost?'ghost':''}" data-npc-dialog-btn="${i}">${b.text}</button>`).join('');document.querySelectorAll('[data-npc-dialog-btn]').forEach(btn=>btn.onclick=()=>{let action=buttons[+btn.dataset.npcDialogBtn];if(action?.close!==false)closeNpcDialog();action?.onClick?.()});$('#npcDialogModal').classList.add('show')}
 function showNpcResult(title,text,type='good'){openNpcDialog(title,text,[{text:'收下因果'}]);if(type)log(`小地图NPC：${title}`,type)}
@@ -825,6 +952,36 @@ let name=npc[0],difficulty=maps[i]?.[2]||1,fullHp=totalHp();
 
 if(i===10){
 let rank=sectTitle(),next=sectNextTitle(),taskCd=Math.max(0,g.sectManualTaskAt-Date.now()),lectureCd=Math.max(0,g.sectLectureAt-Date.now());
+
+
+if(name==='叶凡大师兄'){
+  if(meditationSession){
+    let elapsed=Math.floor((Date.now()-meditationSession.started)/1000),earned=Math.floor(elapsed/10);
+    openNpcDialog('叶凡大师兄',`叶凡大师兄盘膝坐在石台旁：
+“你已入定 ${elapsed} 秒，当前累计可得 ${earned} 点固定修为。离开或结束时，不足10秒的部分会舍弃。”`,[
+      {text:'结束打坐',alt:true,onClick(){stopMeditation(true)}},
+      {text:'继续打坐',ghost:true}
+    ]);
+  }else{
+    openNpcDialog('叶凡大师兄',`叶凡大师兄笑道：
+“此处灵气平稳，最适合打磨根基。是否在此打坐？每满10秒固定增加1点修为；最后不足10秒的时间不计入收益。”`,[
+      {text:'开始打坐',alt:true,onClick(){startMeditation()}},
+      {text:'暂不打坐',ghost:true}
+    ]);
+  }
+  return;
+}
+
+if(name==='定光峰主'){
+let whites=whiteEquipmentCount(),learned=g.rageLearned||(g.activeSkills||[]).some(sk=>sk.name==='暴怒')||(g.skillReserve||[]).some(sk=>sk.name==='暴怒');
+openNpcDialog('定光峰主',`定光峰主立于晨光之中，衣袂不动：\n“怒非乱心，而是将一口不平气炼成三息锋芒。若你能舍下五件白色装备，再缴二百灵石作引，我便传你此法。”\n\n主动技：暴怒\n效果：施放后，接下来3个回合基础攻击力×1.5。\n说明：只放大自身基础攻击，不包含装备与被动技能提供的攻击加成。\n\n当前白色装备：${whites}/5\n当前灵石：${fmt(g.stones)}/200\n学习状态：${learned?'已学会':'尚未学习'}`,learned?[
+{text:'谢过峰主'}
+]:[
+{text:'提交材料并学习',alt:true,onClick(){learnRageSkill()}},
+{text:'暂不学习',ghost:true}
+]);
+return;
+}
 
 if(name==='柳如烟 大师姐'){
 let quest=g.sectSisterQuest;
@@ -1069,6 +1226,15 @@ return;
 }
 }
 
+if(name==='洞府残魂'){
+let x=caveSoulGuide(i),order=x.pool.map((m,idx)=>`${idx===x.q.step?'▶':'·'} ${m}×10`).join('\n');
+openNpcDialog('洞府残魂',`残魂自破碎石壁中缓缓凝聚：\n“后来者，此地妖兽精魄散落，若你愿替我逐一寻回，我便以残存道韵助你修行。”\n\n【跑环规则】\n本地图全部妖兽材料将分批提交，每一环只需当前材料×10。完成后自动进入下一种材料；四种全部完成后开始新一轮。\n\n当前地图：${mapScenes[i][1]}\n当前第 ${(x.q.step||0)+1}/${x.pool.length} 环：${x.material} ×10\n背包已有：${x.have}/10\n单环奖励：固定修为 ${fmt(x.reward)}\n\n\n材料顺序：\n${order}\n已完成整轮：${x.q.cycles||0} 次`,[
+{text:'提交当前材料×10',alt:true,onClick(){submitCaveSoulLoop(i)}},
+{text:'稍后再来',ghost:true}
+]);
+return;
+}
+
 if(name==='巡山妖将'){
 let info=currentRegionBossInfo();
 openNpcDialog('巡山妖将',`巡山妖将把腰牌往桌上一拍：\n“此地妖气走向，我比谁都熟。给我1000灵石，我便告诉你本区域Boss的底细。”\n\n当前灵石：${fmt(g.stones)}`,[
@@ -1133,7 +1299,7 @@ pushLocalLog(`拜访${name}：${npc[1]}，修为+${fmt(gain)}，参悟+1`);
 log(`小地图NPC：${name}给予点拨`,'good');
 renderSceneMap();render();save();
 }
-function resolveLocalTarget(target,batch=false){let i=g.selectedScene??g.map,spot=activeSpot();if(!target||target.dead)return false;if(target.type==='采集'){let left=gatherLeft(i,spot,target.name);if(left){if(!batch)toast(`此处药材尚需${Math.ceil(left/60000)}分钟后再生`);return false}g.gatherCooldowns=g.gatherCooldowns||{};let amount=3+i+Math.floor(spot/12);addHerbResource(amount);g.gatherCooldowns[gatherKey(i,spot,target.name)]=Date.now()+3600000;pushLocalLog(`采集：${target.name}，药材+${amount}，已存入背包。此处药材1小时后再生。`);log(`小地图采集：${target.name}，药材+${amount}`,'good');return {type:'采集',name:target.name}}if(target.type!=='战斗')return false;g.deadMobs=g.deadMobs||{};let realName=target.originalName||target.name,cult=realmNeed()*(target.boss?0.055:(0.016+i*0.002+spot*0.00015));g.cult+=cult;g.kills++;if(target.boss){g.bossKills=g.bossKills||{};g.bossKills[i]=(g.bossKills[i]||0)+1}addTrophy(target.drop,target.boss?3:1);g.deadMobs[deadMobKey(i,spot,realName)]=Date.now()+(target.boss?30:5)*60000;let equips=dropEquip(realName,target.boss),bookDrop=Math.random()<(target.boss?.35:.025),bookText='';if(bookDrop){let book=randomSkillBook();addBagItem(book);bookText=`，获得${book.name}`}let equipText=equips.length?`，掉落${equips.join('、')}`:'，未掉落装备';pushLocalLog(`${target.boss?'Boss战':'战斗'}：${realName}，修为+${fmt(cult)}，获得${target.drop}${target.boss?'×3':''}${equipText}${bookText}。${target.boss?'30分钟':'5分钟'}后复活。`);log(`小地图战斗：${realName}，获得${target.drop}${equips.length?'，装备掉落':''}`,'good');return {type:'战斗',name:realName}}
+function resolveLocalTarget(target,batch=false){let i=g.selectedScene??g.map,spot=activeSpot();if(!target||target.dead)return false;if(target.type==='采集'){let left=gatherLeft(i,spot,target.name);if(left){if(!batch)toast(`此处药材尚需${Math.ceil(left/60000)}分钟后再生`);return false}g.gatherCooldowns=g.gatherCooldowns||{};let amount=3+i+Math.floor(spot/12);addHerbResource(amount);g.gatherCooldowns[gatherKey(i,spot,target.name)]=Date.now()+3600000;pushLocalLog(`采集：${target.name}，药材+${amount}，已存入背包。此处药材1小时后再生。`);log(`小地图采集：${target.name}，药材+${amount}`,'good');return {type:'采集',name:target.name}}if(target.type!=='战斗')return false;g.deadMobs=g.deadMobs||{};let realName=target.originalName||target.name,cult=realmNeed()*(target.boss?0.055:(0.016+i*0.002+spot*0.00015));g.cult+=cult;g.kills++;if(target.boss){g.bossKills=g.bossKills||{};g.bossKills[i]=(g.bossKills[i]||0)+1}addTrophy(target.drop,target.boss?3:1);g.deadMobs[deadMobKey(i,spot,realName)]=Date.now()+(target.boss?30:5)*60000;let monsterRealm=target._battleRealm||localMonsterRealm(i,spot,target,0);delete target._battleRealm;let equips=dropEquip(realName,target.boss,monsterRealm,i),bookDrop=Math.random()<(target.boss?.35:.025),bookText='';if(bookDrop){let book=randomSkillBook();addBagItem(book);bookText=`，获得${book.name}`}let equipText=equips.length?`，掉落${equips.join('、')}`:'，未掉落装备';pushLocalLog(`${target.boss?'Boss战':'战斗'}：${realName}，修为+${fmt(cult)}，获得${target.drop}${target.boss?'×3':''}${equipText}${bookText}。${target.boss?'30分钟':'5分钟'}后复活。`);log(`小地图战斗：${realName}，获得${target.drop}${equips.length?'，装备掉落':''}`,'good');return {type:'战斗',name:realName}}
 function localHunt(idx=0){let target=localMobs(g.selectedScene??g.map,activeSpot())[idx];if(!target)return toast('此处暂无可探索目标');if(target.dead)return toast(`${target.originalName||target.name}尚未复活`);if(target.type==='战斗')return openBattle(target,idx);let ok=resolveLocalTarget(target,false);if(!ok)return toast('此目标暂不可探索');renderSceneMap();render();save()}
 function localExploreHere(){toast('请在右侧手动选择战斗、采集或NPC事务');return true}
 function bossGateUnlocked(i){return i<=0||i>=10||(g.bossKills&&g.bossKills[i-1]>0)}function bossReqText(i){return i>0&&i<10&&!bossGateUnlocked(i)?`，且需击败${maps[i-1][0]}Boss至少1次`:''}function sceneUnlocked(i){return realmIndex()>=maps[i][1]&&bossGateUnlocked(i)}function sceneReqText(i){let m=maps[i];return `${realms[Math.floor(m[1]/4)]}${stages[m[1]%4]}可进入${bossReqText(i)}`}function renderHomeMap(){let mapEl=$('#homeMap');if(!mapEl)return;g.selectedScene=Math.max(0,Math.min(mapScenes.length-1,g.selectedScene??g.map??0));mapEl.querySelectorAll('.map-node,.map-enter-pop').forEach(n=>n.remove());mapScenes.forEach((s,i)=>{let b=document.createElement('button');b.className='map-node '+(g.selectedScene===i?'active ':'')+(sceneUnlocked(i)?'':'lock');b.style.setProperty('--x',s[4]+'%');b.style.setProperty('--y',s[5]+'%');b.dataset.scene=i;b.innerHTML=`<i>${s[0]}</i><span>${s[1]}</span>`;mapEl.appendChild(b)});let s=mapScenes[g.selectedScene],locked=!sceneUnlocked(g.selectedScene);if(!locked){let enter=document.createElement('button');enter.className='map-enter-pop';enter.style.setProperty('--x',s[4]+'%');enter.style.setProperty('--y',s[5]+'%');enter.textContent='进入';enter.onclick=goScene;mapEl.appendChild(enter)}$('#sceneIcon').textContent=s[0];$('#sceneName').textContent=s[1];$('#sceneNeed').textContent=(locked?'尚未解锁 · ':'')+sceneReqText(g.selectedScene);$('#sceneDesc').textContent=s[2];$('#sceneDrops').innerHTML=s[3].split('、').map(x=>`<span>${x}</span>`).join('');$('#goSceneBtn').disabled=locked;$('#goSceneBtn').textContent=g.selectedScene===10?'进入宗门':'进入地图';document.querySelectorAll('[data-scene]').forEach(b=>b.onclick=()=>{let i=+b.dataset.scene;g.selectedScene=i;if(!sceneUnlocked(i))toast(sceneReqText(i)+'后解锁');renderHomeMap()})}function goScene(){let i=g.selectedScene??0;if(!sceneUnlocked(i))return toast(sceneReqText(i)+'后解锁');g.map=i;log('御风前往：'+maps[i][0]+'，展开区域小地图','good');toast('进入：'+maps[i][0]);openSceneMap()}
@@ -1225,21 +1391,50 @@ showNpcResult('宗门团战',`你随太玄宗弟子出战，${win?'破阵得胜'
 renderSceneMap();render();save();return true;
 }
 function finishNewbieGuide(){
+  // 旧存档兼容：新手引导弹窗已取消。
   g.newbieGuideDone=true;
   $('#guide').classList.remove('show');
   save();
-  if(!g.prologueDone)$('#prologueModal').classList.add('show');
+}
+function showSectArrivalIntro(){
+  g.sectArrivalIntroDone=true;
+  save();
+  openNpcDialog('纳兰小师妹',`师兄，你终于到了！这里是太玄宗宗门广场，往后你可以从这里熟悉宗门、接取任务，再前往各地历练。
+
+你现在尚在练气期，若战斗受伤或法力不足，直接来宗门广场找我，我可以免费替你疗伤并恢复法力。
+
+想学习技能，就沿宗门小路前往路点14 · 练功房，找传功长老学习主动技能和疗伤技能；学会后可点击上方“技能”进行查看与装备。
+
+广场上的柳如烟大师姐负责发布宗门任务。完成任务能获得修为丹等奖励，记得先去找她聊聊。`,[
+    {text:'我明白了，先熟悉宗门'}
+  ]);
+}
+function enterSectAfterPrologue(){
+  g.selectedScene=10;
+  g.map=10;
+  g.localSpot=31;
+  $('#sceneMapModal').classList.add('show');
+  pushLocalLog('你踏入太玄宗，来到宗门广场。');
+  renderSceneMap();
+  render();
+  save();
+  showSectArrivalIntro();
 }
 function finishPrologue(skipped=false){
   g.prologueDone=true;
+  g.newbieGuideDone=true;
   g.mainQuest=g.mainQuest||'血月之仇';
   $('#prologueModal').classList.remove('show');
   log(skipped?'你略过往事，正式踏上修仙路。':'主线开启：血月之仇。调查临河镇惨案与青铜令牌的秘密。','good');
-  save();
+  enterSectAfterPrologue();
 }
 function startOpeningFlow(){
-  if(!g.newbieGuideDone){$('#guide').classList.add('show');return}
-  if(!g.prologueDone)$('#prologueModal').classList.add('show');
+  // 开局不再显示旧的新手引导，直接播放序章。
+  g.newbieGuideDone=true;
+  $('#guide').classList.remove('show');
+  if(!g.prologueDone){$('#prologueModal').classList.add('show');return}
+  // 兼容已看完序章、但尚未触发宗门接引的存档。
+  if(!g.sectArrivalIntroDone)enterSectAfterPrologue();
 }
 function bindUi(){
 $('#nav').onclick=e=>{
@@ -1253,7 +1448,7 @@ on('#skipGuide',finishNewbieGuide);
 on('#startJourney',()=>finishPrologue(false));
 on('#skipPrologue',()=>finishPrologue(true));
 on('#goSceneBtn',goScene);
-on('#closeSceneMap',()=>{closeNpcDialog();$('#sceneMapModal').classList.remove('show')});
+on('#closeSceneMap',()=>{if(meditationSession)stopMeditation(true);closeNpcDialog();$('#sceneMapModal').classList.remove('show')});
 on('#localExploreBtn',localExploreHere);
 on('#openTaskBtn',openTaskPanel);
 on('#closeTaskBtn',()=>$('#taskModal').classList.remove('show'));
