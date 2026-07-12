@@ -66,6 +66,23 @@
 .scene-side>.scene-card.people-card .npc-list button{
   min-height:31px;
 }
+@media (orientation:landscape) and (max-height:520px){
+  body{min-height:100dvh;overflow:hidden}
+  .app{height:100dvh;min-height:0;display:grid;grid-template-columns:128px minmax(0,1fr) 220px;overflow:hidden}
+  .side,.logs{height:100dvh;min-height:0;padding:10px;overflow:auto}
+  .back{margin-bottom:8px;font-size:12px}.brand{font-size:20px;letter-spacing:3px}.sub{margin-bottom:10px;font-size:10px}.save-note{display:none}
+  .nav{display:grid;gap:6px;overflow:visible}.nav button{padding:7px 8px;white-space:normal;font-size:12px}
+  .main{height:100dvh;overflow:auto;padding:10px 12px}.top{margin-bottom:8px}.realm{font-size:19px}.rate{font-size:11px}
+  .paper{padding:11px}.paper h2{font-size:19px;margin-bottom:8px}.travel-shell{grid-template-columns:minmax(330px,1.35fr) minmax(220px,.65fr);gap:9px}
+  .ink-map{min-height:calc(100dvh - 96px)}.location-card{gap:8px}.box{padding:9px}.scene-desc,.route-note{font-size:12px;line-height:1.55}
+  .logs h3{font-size:17px;margin-bottom:6px}.assistant{font-size:11px;line-height:1.45;padding:8px;margin-bottom:6px}.logbox{font-size:10px}.status{grid-template-columns:1fr;gap:5px}
+  .event-modal{padding:6px}.event-modal>div,.guide>div{max-height:calc(100dvh - 12px)}
+  .scene-map-modal>div{width:calc(100vw - 12px);height:calc(100dvh - 12px);max-height:none;overflow:hidden}
+  .scene-map-head{grid-template-columns:minmax(180px,1fr) auto;padding:6px 8px}.scene-map-title b{font-size:18px}.scene-map-title small{font-size:11px}.scene-tabs{gap:4px}.scene-tabs span,.scene-tabs button{padding:4px 8px;font-size:12px}
+  .scene-map-body{height:calc(100dvh - 122px);grid-template-columns:minmax(360px,1fr) 210px;gap:5px;padding:5px;overflow:hidden}.scene-left{min-height:0}.local-map{height:auto;min-height:0}.scene-player-hud{gap:5px}.skill-slots{grid-template-columns:repeat(10,1fr);gap:4px}.skill-slot{height:32px;font-size:10px}.vital{height:23px}.cultivation-hud{height:23px}
+  .scene-side{min-height:0;grid-template-rows:auto minmax(0,1fr) auto}.scene-card{padding:6px}.scene-card h3{font-size:13px;margin-bottom:4px}.scene-card h4{font-size:11px;margin:4px 0}.mob-list,.npc-list{max-height:none}.scene-actions{grid-template-columns:1fr 1fr}.scene-actions .btn{padding:6px 5px;font-size:12px}.scene-chat{height:54px;font-size:10px;line-height:1.35;padding:6px}
+  .battle-modal>div{width:calc(100vw - 12px);max-height:calc(100dvh - 12px)}.battle-head{padding:5px 8px}.battle-head b{font-size:18px}.battle-arena{min-height:210px;padding:8px}.fighter{top:10px}.fighter-figure{top:70px;height:105px}.fighter-figure img{max-height:118px;max-width:120px}.fighter-figure .monster{font-size:68px}.battle-skills{grid-template-columns:repeat(5,1fr);left:8px;right:8px;bottom:6px}.battle-skill{min-height:42px;font-size:11px}.battle-log{height:58px;font-size:11px}.battle-actions{padding:5px 8px}
+}
 </style>
 </head>
 <body><div class="app">
@@ -268,11 +285,11 @@ function monsterStatsTable(){
     'BOSS 山魈王':{hp:220,  mp:70,  attack:50,   defense:10,  realm:'筑基初期',       icon:'👹'},
 
     // 幽月森林
-    '月狐':       {hp:150,  mp:70,  attack:22,   defense:8,   realm:'筑基初期',       icon:'🦊'},
-    '树精':       {hp:190,  mp:60,  attack:19,   defense:13,  realm:'筑基中期',       icon:'🌳'},
-    '迷雾蝶':     {hp:135,  mp:110, attack:25,   defense:7,   realm:'筑基后期',       icon:'🦋'},
-    '夜行狼':     {hp:175,  mp:60,  attack:28,   defense:9,   realm:'筑基大圆满',     icon:'🐺'},
-    'BOSS 巨树妖':{hp:520,  mp:150, attack:42,   defense:25,  realm:'金丹初期',       icon:'🌲'},
+    '月狐':       {hp:150,  mp:70,  attack:30,   defense:13,   realm:'筑基初期',       icon:'🦊'},
+    '树精':       {hp:190,  mp:60,  attack:20,   defense:25,  realm:'筑基中期',       icon:'🌳'},
+    '迷雾蝶':     {hp:135,  mp:110, attack:35,   defense:10,   realm:'筑基后期',       icon:'🦋'},
+    '夜行狼':     {hp:125,  mp:60,  attack:40,   defense:5,   realm:'筑基大圆满',     icon:'🐺'},
+    'BOSS 巨树妖':{hp:520,  mp:150, attack:50,   defense:35,  realm:'金丹初期',       icon:'🌲'},
 
     // 赤炎秘境
     '赤炎兽':     {hp:420,  mp:140, attack:55,   defense:22,  realm:'金丹初期',       icon:'🔥'},
