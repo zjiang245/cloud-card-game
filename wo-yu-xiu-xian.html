@@ -2615,18 +2615,17 @@ function ensureXiaoLongNuExchangeModal(){
   return $('#xiaoLongNuExchangeModal');
 }
 function xiaoLongNuHerbCount(){return Math.max(g.herbs||0,bagItemCountByName('药材'))}
-function xiaoLongNuExchangeAmount(){
-  let have=xiaoLongNuHerbCount(),raw=Math.floor(Number($('#xiaoLongNuAmount')?.value)||0);
-  return Math.floor(Math.max(0,Math.min(have,raw))/100)*100;
-}
+let xiaoLongNuExchangeMode='herbToForge';
+function xiaoLongNuExchangeConfig(){return xiaoLongNuExchangeMode==='forgeToHerb'?{give:'锻造材料',get:'药材',have:g.materials||0}:{give:'药材',get:'锻造材料',have:xiaoLongNuHerbCount()}}
+function xiaoLongNuExchangeAmount(){let config=xiaoLongNuExchangeConfig(),raw=Math.floor(Number($('#xiaoLongNuAmount')?.value)||0);return Math.floor(Math.max(0,Math.min(config.have,raw))/100)*100}
 function updateXiaoLongNuExchangePreview(){
-  let amount=xiaoLongNuExchangeAmount(),materials=amount/100*30,preview=$('#xiaoLongNuExchangePreview'),button=$('#xiaoLongNuExchangeBtn');
-  if(preview)preview.textContent=`本次交付药材×${fmt(amount)}，获得锻造材料×${fmt(materials)}。`;
+  let config=xiaoLongNuExchangeConfig(),amount=xiaoLongNuExchangeAmount(),gain=amount/100*30,preview=$('#xiaoLongNuExchangePreview'),button=$('#xiaoLongNuExchangeBtn');
+  if(preview)preview.textContent=`本次交付${config.give}×${fmt(amount)}，获得${config.get}×${fmt(gain)}。`;
   if(button)button.disabled=amount<100;
 }
-function openXiaoLongNuExchange(){
-  let modal=ensureXiaoLongNuExchangeModal(),have=xiaoLongNuHerbCount(),max=Math.floor(have/100)*100,defaultAmount=max>=100?100:0;
-  $('#xiaoLongNuExchangeBody').innerHTML=`<div class="exchange-summary"><span>当前药材<br><b>${fmt(have)} 份</b></span><span>兑换比例<br><b>100 : 30</b></span></div><label>本次药材 <input id="xiaoLongNuAmount" type="number" min="100" max="${max}" step="100" value="${defaultAmount}"> <b>份</b></label><small>仅按完整百份结算。输入 300、500、1200 等数量即可一次完成多档兑换；每 100 份药材换取 30 份锻造材料。</small><div class="bag-detail" id="xiaoLongNuExchangePreview"></div>`;
+function openXiaoLongNuExchange(mode='herbToForge'){
+  xiaoLongNuExchangeMode=mode;let modal=ensureXiaoLongNuExchangeModal(),config=xiaoLongNuExchangeConfig(),max=Math.floor(config.have/100)*100,defaultAmount=max>=100?100:0;
+  $('#xiaoLongNuExchangeBody').innerHTML=`<div class="exchange-summary"><span>当前${config.give}<br><b>${fmt(config.have)} 份</b></span><span>兑换比例<br><b>100 : 30</b></span></div><label>本次${config.give} <input id="xiaoLongNuAmount" type="number" min="100" max="${max}" step="100" value="${defaultAmount}"> <b>份</b></label><small>仅按完整百份结算。输入 300、500、1200 等数量即可一次完成多档兑换；每 100 份${config.give}换取 30 份${config.get}。</small><div class="bag-detail" id="xiaoLongNuExchangePreview"></div>`;
   $('#xiaoLongNuAmount').oninput=updateXiaoLongNuExchangePreview;
   $('#xiaoLongNuExchangeBtn').onclick=exchangeWithXiaoLongNu;
   $('#xiaoLongNuExchangeCloseBtn').onclick=()=>modal.classList.remove('show');
@@ -2634,21 +2633,20 @@ function openXiaoLongNuExchange(){
   modal.classList.add('show');
 }
 function exchangeWithXiaoLongNu(){
-  let amount=xiaoLongNuExchangeAmount();
-  if(amount<100)return toast('请至少交付100份药材');
-  let materials=amount/100*30;
-  if(!takeHerbResource(amount))return toast('药材不足，请重新输入数量');
-  addForgeMaterials(materials);
+  let config=xiaoLongNuExchangeConfig(),amount=xiaoLongNuExchangeAmount(),gain=amount/100*30;
+  if(amount<100)return toast(`请至少交付100份${config.give}`);
+  if(xiaoLongNuExchangeMode==='forgeToHerb'){if(!takeForgeMaterials(amount))return toast('锻造材料不足，请重新输入数量');addHerbResource(gain)}else{if(!takeHerbResource(amount))return toast('药材不足，请重新输入数量');addForgeMaterials(gain)}
   $('#xiaoLongNuExchangeModal')?.classList.remove('show');
-  pushLocalLog(`小龙女以药材×${amount}换取锻造材料×${materials}。`);
-  showNpcResult('小龙女 · 易物完成',`交付：药材×${fmt(amount)}\n获得：锻造材料×${fmt(materials)}\n\n小龙女将海眼淬出的玄砂装入锦囊：“水府器料不多，愿它能助你炼出合手的法器。”`,'good');
+  pushLocalLog(`小龙女以${config.give}×${amount}换取${config.get}×${gain}。`);
+  showNpcResult('小龙女 · 易物完成',`交付：${config.give}×${fmt(amount)}\n获得：${config.get}×${fmt(gain)}\n\n小龙女将水府易物记入玉册：“两边的物资都能派上用场，莫让它们闲置。”`,'good');
   renderSceneMap();render();renderBag();save();
 }
 function talkXiaoLongNu(){
-  let have=xiaoLongNuHerbCount();
-  openNpcDialog('小龙女','小龙女倚在沉月水府的水晶灯旁，指尖绕着一缕寒潮。\n\n“水府用不上陆上的药材，倒是炼器峰常缺海眼玄砂。你若愿意交药材，我可替你换些锻造材料。”\n\n兑换比例：药材×100，锻造材料×30。',[
-    {text:'按数量交换',alt:true,onClick(){openXiaoLongNuExchange()}},
-    {text:`查看药材（${fmt(have)}）`,ghost:true,onClick(){showNpcResult('小龙女','“每一百份药材，便能换三十份锻造材料。数量由你自己定，凑足整百份即可。”','good')}}
+  let herbs=xiaoLongNuHerbCount(),materials=g.materials||0;
+  openNpcDialog('小龙女','小龙女倚在沉月水府的水晶灯旁，指尖绕着一缕寒潮。\n\n“药材能养灵，玄砂能炼器。你手中若有一边富余，便可在我这里换成另一边。”\n\n双向兑换比例：每100份交付材料，换取30份另一种材料。',[
+    {text:`药材换锻造材料（药材 ${fmt(herbs)}）`,alt:true,onClick(){openXiaoLongNuExchange('herbToForge')}},
+    {text:`锻造材料换药材（材料 ${fmt(materials)}）`,onClick(){openXiaoLongNuExchange('forgeToHerb')}},
+    {text:'记下比例',ghost:true,onClick(){showNpcResult('小龙女','“药材与锻造材料都可互换。每完整一百份，便换三十份另一种材料；数目可一次输入多档。”','good')}}
   ]);
 }
 
