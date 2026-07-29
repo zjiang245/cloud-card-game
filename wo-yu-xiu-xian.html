@@ -652,6 +652,13 @@
 .skill-reserve-title{margin:2px 0 -5px;padding-bottom:6px;border-bottom:1px solid #bbaa80;color:#705c32;font:700 17px "STKaiti","KaiTi",serif}
 @media(max-width:650px){#skillManageModal h2{font-size:22px}.skill-library-overview{padding:8px 9px}.skill-discipline>h3{padding:7px 8px}.skill-card{margin:6px;padding:8px}.skill-card b{font-size:12px}}
 
+/* 区域全览与新手聚焦：路线缩略图保持全局可读，开局仅提示两轮。 */
+.compact-region-info{padding:8px!important}.compact-region-info h3{margin-bottom:6px!important}.mini-map-overview{position:relative;overflow:hidden;border:1px solid #9eaf9b;border-radius:5px;background:linear-gradient(145deg,#eef1e4,#d9e5d7);box-shadow:inset 0 1px #fff9}.mini-map-overview:before{content:"";position:absolute;inset:0;background:radial-gradient(circle at 18% 24%,#fff9 0 1px,transparent 2px),radial-gradient(circle at 72% 64%,#fff8 0 1px,transparent 2px);background-size:18px 16px;opacity:.7;pointer-events:none}.mini-map-overview svg{position:relative;display:block;width:100%;aspect-ratio:1.72/1;overflow:visible}.mini-route{fill:none;stroke:#73856f;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;opacity:.9}.mini-node{fill:#f8f2dc;stroke:#617863;stroke-width:1.1;cursor:pointer;transition:r .15s ease,fill .15s ease}.mini-node.named{fill:#d7e7d4;stroke:#436749;stroke-width:1.5}.mini-node:hover{fill:#f2cf76;r:2.8}.mini-player-ring{fill:#1e5d47;stroke:#fff2be;stroke-width:1.8;filter:drop-shadow(0 1px 1px #15221888)}.mini-player-core{fill:#f8d772}.mini-guide-ring{fill:none;stroke:#d49a31;stroke-width:1.7;stroke-dasharray:3 2;transform-origin:center;animation:miniGuideSpin 2.4s linear infinite}.mini-guide-dot{fill:#b4493d;stroke:#fff4cf;stroke-width:1.2}.mini-map-caption{display:flex;justify-content:space-between;gap:6px;padding:5px 6px;background:#f8f5e9;color:#5d6c61;font-size:10px;line-height:1.35}.mini-map-caption b{display:block;color:#284a39;font-size:11px}.mini-map-caption .mini-map-target{color:#8a5d1d;text-align:right}.mini-map-caption .mini-map-target b{color:#7e4f13}.newbie-focus-overlay{position:absolute;inset:0;z-index:10;pointer-events:none;background:radial-gradient(circle 68px at var(--focus-x) var(--focus-y),transparent 0 45px,#04100be0 50px,#04100bf2 100%);animation:newbieFocusDim 1.15s ease-in-out 2}.newbie-focus-ring{position:absolute;left:var(--focus-x);top:var(--focus-y);width:100px;height:100px;border:2px solid #f5cf6b;border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 7px #f6c7512e,0 0 26px #f6d36ac8;animation:newbieFocusPulse 1.15s ease-in-out 2}.newbie-focus-note{position:absolute;left:var(--focus-x);top:calc(var(--focus-y) + 58px);min-width:154px;max-width:190px;padding:7px 9px;border:1px solid #e9c96d;border-radius:4px;background:#fff8df;color:#6a4d18;box-shadow:0 5px 14px #0008;transform:translateX(-50%);font-size:11px;line-height:1.45;text-align:center}.newbie-focus-note b{display:block;color:#315b45;font-size:13px}.newbie-focus-note:before{content:"";position:absolute;left:50%;top:-7px;border-right:7px solid transparent;border-left:7px solid transparent;border-bottom:7px solid #e9c96d;transform:translateX(-50%)}@keyframes miniGuideSpin{to{transform:rotate(360deg)}}@keyframes newbieFocusDim{50%{background:radial-gradient(circle 81px at var(--focus-x) var(--focus-y),transparent 0 57px,#04100be0 62px,#04100bf2 100%)}}@keyframes newbieFocusPulse{50%{width:120px;height:120px;box-shadow:0 0 0 12px #f6c75118,0 0 34px #f6d36ae0}}@media(max-width:650px){.mini-map-caption{font-size:9px}.mini-map-caption b{font-size:10px}.newbie-focus-note{font-size:10px}.newbie-focus-note b{font-size:12px}}
+
+.mini-player-ring{fill:#ef3028;stroke:#fff3d0;stroke-width:2.8;filter:drop-shadow(0 1px 3px #54130fcc);transform-box:fill-box;transform-origin:center;animation:miniPlayerBlink .9s ease-in-out infinite}.mini-player-core{fill:#fff4c9;transform-box:fill-box;transform-origin:center;animation:miniPlayerCoreBlink .9s ease-in-out infinite}.mini-node.transfer{fill:#7b2428;stroke:#3e1114;stroke-width:2.4;filter:drop-shadow(0 1px 1px #32101399)}@keyframes miniPlayerBlink{50%{fill:#ff6259;stroke:#fff9dd;transform:scale(1.35);filter:drop-shadow(0 0 4px #ff4940) drop-shadow(0 0 9px #ff4940aa)}}@keyframes miniPlayerCoreBlink{50%{fill:#fff;transform:scale(1.3)}}
+.newbie-focus-note span{display:block}.newbie-focus-confirm{display:block!important;min-width:104px;margin:8px auto 0;padding:4px 9px!important;opacity:0;pointer-events:none;transform:translateY(4px);transition:opacity .18s ease,transform .18s ease}.newbie-focus-overlay.confirm-ready .newbie-focus-confirm{opacity:1;pointer-events:auto;transform:translateY(0)}
+.mini-guide-ring{stroke:#f0a62f!important;stroke-width:2.3!important;transform-box:fill-box;transform-origin:center;animation:miniGuideWobble 1.05s ease-in-out infinite!important}@keyframes miniGuideWobble{0%,100%{transform:scale(1);stroke-dashoffset:0;filter:drop-shadow(0 0 1px #a75a20)}25%{transform:translateX(-1px) scale(1.18);stroke:#ffd366;stroke-dashoffset:3;filter:drop-shadow(0 0 4px #e99a2f)}50%{transform:translateY(-1px) scale(1.04);stroke-dashoffset:6;filter:drop-shadow(0 0 7px #f2b23a)}75%{transform:translateX(1px) scale(1.18);stroke:#ffd366;stroke-dashoffset:9;filter:drop-shadow(0 0 4px #e99a2f)}}
+.path-line.sect-ring-line{border-top-style:dotted;border-top-color:#f4edd2;opacity:.9}.mini-route.sect-ring-line{stroke:#73856f;stroke-width:1.7;opacity:.9}
 </style>
 </head>
 <body><div class="app">
@@ -717,9 +724,12 @@ function tribulationChance(pills=0){let info=tribulationInfo(),use=Math.max(0,Ma
 function processRealmProgress(){let changed=false,guard=0;while(g.cult>=realmNeed()&&guard++<50){let need=realmNeed();if(g.realm>=9&&g.stage>=3){g.cult=need;break}if(g.stage<3){g.cult-=need;g.stage++;growBaseStats(1.2);changed=true;log(`修为圆满，晋升至${realmText()}，自身基础属性提升20%`,'good');continue}if(g.realm<2){g.cult-=need;g.realm++;g.stage=0;growBaseStats(2);changed=true;log(`根基圆满，突破至${realmText()}，自身基础属性提升100%`,'good');continue}g.cult=need;break}if(changed){let st=statTotal();g.hp=Math.min(g.hp,st.hp);g.mana=Math.min(g.mana,st.mana);toast('境界突破：'+realmText())}return changed}
 function ensureTribulationModal(){let modal=$('#tribulationModal');if(modal)return modal;if(!$('#tribulationStyles')){let style=document.createElement('style');style.id='tribulationStyles';style.textContent=`.tribulation-modal{padding:18px;background:#071612c7;backdrop-filter:blur(7px)}.tribulation-modal>.tribulation-card{width:min(820px,94vw);max-height:calc(100vh - 36px);overflow:auto;padding:0;border:1px solid #d3ad57;border-radius:14px;background:linear-gradient(145deg,#fffdf6,#f3ead6);color:#203c31;box-shadow:0 26px 70px #0009}.tribulation-banner{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;padding:26px 30px 22px;border-bottom:1px solid #d8c9a3;background:linear-gradient(105deg,#f7f0dc,#fffcf1)}.tribulation-sigil{display:grid;place-items:center;width:54px;height:54px;border:1px solid #c39a42;border-radius:8px;background:#214f3b;color:#f9d56c;font-size:29px;box-shadow:inset 0 0 0 4px #ffffff30}.tribulation-eyebrow{display:block;margin-bottom:4px;color:#9a7938;font-size:11px;font-weight:700;letter-spacing:.14em}.tribulation-banner h2{margin:0;font:700 27px \"STKaiti\",\"KaiTi\",serif;color:#204032}.tribulation-banner h2 em{margin:0 8px;color:#b78a35;font-style:normal}.tribulation-banner p{margin:6px 0 0;color:#6d7e73;font-size:13px;line-height:1.55}.tribulation-state{padding:5px 9px;border:1px solid #d1ba83;border-radius:999px;background:#fff8df;color:#87652e;font-size:12px;white-space:nowrap}.tribulation-state.ready{border-color:#6d9b78;background:#eaf5e9;color:#286340}.tribulation-body{padding:20px 30px 26px}.tribulation-stats{display:grid;grid-template-columns:repeat(4,1fr);margin-bottom:16px;border:1px solid #d8cdb3;border-radius:10px;background:#fffdf6;overflow:hidden}.tribulation-stat{padding:14px 16px;border-right:1px solid #e1d8c3}.tribulation-stat:last-child{border:0}.tribulation-stat small{display:block;color:#78887e;font-size:12px}.tribulation-stat b{display:block;margin-top:5px;color:#244536;font-size:21px;line-height:1.1}.tribulation-stat b span{font-size:13px}.tribulation-plan{padding:17px 18px;border:1px solid #cfc2a6;border-radius:10px;background:#f9f5e8}.tribulation-plan-head{display:flex;justify-content:space-between;gap:14px;align-items:baseline;margin-bottom:13px}.tribulation-plan-head b{font:700 18px \"STKaiti\",\"KaiTi\",serif;color:#284a3a}.tribulation-plan-head span{color:#7b6a48;font-size:12px;text-align:right}.tribulation-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.tribulation-controls label{display:flex;align-items:center;gap:7px;font-size:13px;color:#52675b}.tribulation-controls input{width:76px;height:36px;padding:6px 8px;border:1px solid #a9b8aa;border-radius:7px;background:#fff;color:#234234;font-size:16px;font-weight:700;text-align:center}.tribulation-controls .btn{padding:7px 12px;border-radius:7px;font-size:13px}.tribulation-meter{height:11px;margin:17px 0 9px;border:1px solid #b6b79d;border-radius:999px;background:#e4e5db;overflow:hidden}.tribulation-meter i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#446e55,#d1a54c);transition:width .2s}.tribulation-summary{display:flex;justify-content:space-between;gap:10px;color:#6b796f;font-size:13px}.tribulation-summary b{color:#254837}.tribulation-note{margin-top:14px;padding:11px 13px;border-left:3px solid #c79c45;background:#f2ecdc;color:#68766b;font-size:12px;line-height:1.65}.tribulation-note b{color:#755b2f}.tribulation-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:20px}.tribulation-actions .btn{min-width:128px;border-radius:7px;padding:10px 14px}.tribulation-actions .btn.alt{background:linear-gradient(135deg,#9b722d,#c79a42);border-color:#9b722d}.tribulation-actions .btn:disabled{background:#c9b990;border-color:#c9b990;color:#fff}@media(max-width:650px){.tribulation-banner{grid-template-columns:auto 1fr;padding:20px}.tribulation-state{grid-column:1/-1;justify-self:start}.tribulation-body{padding:16px}.tribulation-stats{grid-template-columns:1fr 1fr}.tribulation-stat:nth-child(2){border-right:0}.tribulation-stat:nth-child(-n+2){border-bottom:1px solid #e1d8c3}.tribulation-plan-head{display:block}.tribulation-plan-head span{display:block;margin-top:4px;text-align:left}.tribulation-actions{justify-content:stretch}.tribulation-actions .btn{flex:1;min-width:0}}`;document.head.appendChild(style)}modal=document.createElement('div');modal.id='tribulationModal';modal.className='event-modal tribulation-modal';modal.innerHTML='<div class="tribulation-card"></div>';document.body.appendChild(modal);return modal}
 function renderTribulationModal(){let modal=ensureTribulationModal(),card=modal.firstElementChild,info=tribulationInfo();tribulationPillUse=Math.max(0,Math.min(Math.floor(tribulationPillUse)||0,info.available));let chance=tribulationChance(tribulationPillUse),missing=Math.max(0,info.toCertain-info.available),readyNote=info.ready?'修为圆满，天劫已可引动。':'修为尚未圆满，可先预览本境天劫所需丹药。',state=info.ready?'可以渡劫':'尚未圆满';card.innerHTML=`<div class="tribulation-banner"><div class="tribulation-sigil">⚡</div><div><span class="tribulation-eyebrow">天劫演算</span><h2>${realmText()}<em>→</em>${info.target}</h2><p>${readyNote}</p></div><span class="tribulation-state ${info.ready?'ready':''}">${state}</span></div><div class="tribulation-body"><div class="tribulation-stats"><div class="tribulation-stat"><small>基础成功率</small><b>${info.base}<span>%</span></b></div><div class="tribulation-stat"><small>当前渡劫丹</small><b>${fmt(info.available)}<span> 颗</span></b></div><div class="tribulation-stat"><small>圆满保障</small><b>${info.toCertain}<span> 颗</span></b></div><div class="tribulation-stat"><small>丹药缺口</small><b>${missing?missing:'0'}<span> 颗</span></b></div></div><section class="tribulation-plan"><div class="tribulation-plan-head"><b>本次渡劫方案</b><span>每服 1 颗渡劫丹，成功率 +5%</span></div><div class="tribulation-controls"><label>服用 <input id="tribulationPillInput" type="number" min="0" max="${info.available}" value="${tribulationPillUse}"> 颗</label><button class="btn ghost" id="tribulationCertainBtn" ${info.available<=0?'disabled':''}>补足至 100%</button></div><div class="tribulation-meter"><i style="width:${chance}%"></i></div><div class="tribulation-summary"><span>本次成功率 <b>${chance}%</b></span><span>本次消耗 <b>渡劫丹 ×${tribulationPillUse}</b></span></div></section><div class="tribulation-note"><b>渡劫规则：</b>丹药仅在本次渡劫时消耗。即使不服丹，也可凭自身根基强行渡劫；若失败，修为仍保留在当前大圆满。</div><div class="tribulation-actions"><button class="btn ghost" id="closeTribulationBtn">暂缓渡劫</button><button class="btn alt" id="startTribulationBtn" ${info.ready?'':'disabled'}>${tribulationPillUse?'服丹渡劫':'强行渡劫'} · ${chance}%</button></div></div>`;$('#tribulationPillInput').oninput=e=>{tribulationPillUse=Math.max(0,Math.min(info.available,Math.floor(+e.target.value||0)));renderTribulationModal()};$('#tribulationCertainBtn').onclick=()=>{tribulationPillUse=Math.min(info.available,info.toCertain);renderTribulationModal()};$('#startTribulationBtn').onclick=attemptTribulation;$('#closeTribulationBtn').onclick=()=>modal.classList.remove('show')}
-function openTribulationModal(){let info=tribulationInfo();if(!info.eligible)return toast('金丹期后方可引动天劫');tribulationPillUse=Math.min(tribulationPillUse,info.available);renderTribulationModal();ensureTribulationModal().classList.add('show')}
+const renderTribulationModalWithFailureNotice=renderTribulationModal;
+renderTribulationModal=()=>{renderTribulationModalWithFailureNotice();let note=$('#tribulationModal .tribulation-note');if(note)note.innerHTML='<b>渡劫规则：</b>丹药仅在本次渡劫时消耗。即使不服丹，也可凭自身根基强行渡劫；若失败，当前大圆满修为将归零。'};
+function tribulationRequirementNotice(){let info=tribulationInfo(),need=info.need,progress=Math.min(need,Math.floor(g.cult||0));showNpcResult('渡劫条件未满足',`你当前处于${realmText()}。\n\n大境界突破需先修至本阶大圆满，并将修为积累至 ${fmt(need)}。\n当前进度：${fmt(progress)} / ${fmt(need)}。\n\n达成后可在此服用渡劫丹，每颗使本次成功率 +5%；亦可不服丹强行渡劫。若失败，本阶大圆满修为将归零。`,'danger')}
+function openTribulationModal(){let info=tribulationInfo();if(!info.eligible){showNpcResult('渡劫台未开启','金丹期之后，修士每次冲击下一大境界都需面对天劫。届时请将当前境界修至大圆满，再来此处推演渡劫方案。','good');return;}if(!info.ready){tribulationRequirementNotice();return;}tribulationPillUse=Math.min(tribulationPillUse,info.available);renderTribulationModal();ensureTribulationModal().classList.add('show')}
 function attemptTribulation(){let info=tribulationInfo();if(!info.ready)return toast('修为尚未达到当前境界大圆满，无法引动天劫');let use=Math.max(0,Math.min(Math.floor(tribulationPillUse)||0,info.available)),chance=tribulationChance(use);if(use&&!consumeTribPills(use))return toast('渡劫丹数量不足');let success=Math.random()*100<chance;$('#tribulationModal').classList.remove('show');if(success){g.cult-=info.need;g.realm++;g.stage=0;g.tribBonus=0;g.tribFails=0;growBaseStats(2);let st=statTotal();g.hp=Math.min(g.hp,st.hp);g.mana=Math.min(g.mana,st.mana);log(`渡劫成功：成功率${chance}%${use?`，消耗渡劫丹×${use}`:'，未服渡劫丹'}，晋升至${realmText()}。`,'good');showNpcResult('渡劫成功',`天雷洗髓，丹田重开。\n\n本次成功率：${chance}%\n消耗渡劫丹：${use} 颗\n境界晋升：${realmText()}\n基础属性提升100%。`,'good');toast('渡劫成功 · '+realmText())}else{g.cult=0;g.tribFails=(g.tribFails||0)+1;log(`渡劫未成：成功率${chance}%${use?`，渡劫丹×${use}已消耗`:'，本次强行渡劫'}，${realmText()}大圆满修为归零。`,'danger');showNpcResult('渡劫未成',`天劫反噬，经脉中的积累尽数散去。\n\n本次成功率：${chance}%\n消耗渡劫丹：${use} 颗\n惩罚：当前大圆满修为清零。\n\n境界未跌落，重新修炼至圆满后可再次渡劫。`,'danger');toast('渡劫未成 · 本阶修为归零')};tribulationPillUse=0;renderSceneMap();render();save()}
-function renderTribulationEntry(){let tabs=$('#sceneMapModal .scene-tabs');if(!tabs)return;let info=tribulationInfo(),btn=$('#openTribulationBtn');if(!btn){btn=document.createElement('button');btn.id='openTribulationBtn';btn.className='scene-tab-btn';tabs.prepend(btn)}btn.hidden=!info.eligible;btn.disabled=!info.ready;btn.textContent='渡劫';btn.title=info.ready?`当前成功率 ${info.base}%；每颗渡劫丹 +5%`:'需达到当前境界大圆满且修为充满后开启';btn.onclick=openTribulationModal}
+function renderTribulationEntry(){let tabs=$('#sceneMapModal .scene-tabs');if(!tabs)return;let info=tribulationInfo(),btn=$('#openTribulationBtn');if(!btn){btn=document.createElement('button');btn.id='openTribulationBtn';btn.className='scene-tab-btn';tabs.prepend(btn)}btn.hidden=!info.eligible;btn.disabled=false;btn.textContent='渡劫';btn.title=info.ready?`当前成功率 ${info.base}%；每颗渡劫丹 +5%`:'点击查看渡劫条件与当前修为进度';btn.onclick=openTribulationModal}
 function offlineSettle(){pendingOffline=0;g.offline=null;g.last=Date.now()}
 function stopMeditation(show=true){if(!meditationSession)return 0;let elapsed=Date.now()-meditationSession.started,total=Math.floor(elapsed/10000),gain=Math.max(0,total-meditationSession.awarded);if(gain>0)g.cult+=gain;let discarded=elapsed%10000;meditationSession=null;g.meditating=false;if(show){pushLocalLog(`结束打坐：共获得固定修为 ${total} 点，未满10秒的 ${Math.floor(discarded/1000)} 秒已舍弃。`);toast(`打坐结束：修为 +${total}`)}render();save();return total}
 function startMeditation(){if(meditationSession)return toast('你已经在打坐');meditationSession={started:Date.now(),awarded:0};g.meditating=true;pushLocalLog('在打坐台开始吐纳：每满10秒固定增加1点修为。');toast('开始打坐：每10秒修为+1');save()}
@@ -771,7 +781,7 @@ function forgeMaterialItem(qty){return{type:'forgeMaterial',name:'锻造材料',
 function syncForgeMaterialsBag(){g.bag=g.bag||[];let total=Math.max(0,Math.floor(g.materials||0)),items=g.bag.filter(it=>it?.type==='forgeMaterial'&&it.name==='锻造材料'),current=items.reduce((sum,it)=>sum+(it.qty||1),0);if(current===total&&items.length===(total?1:0))return true;g.bag=g.bag.filter(it=>!(it?.type==='forgeMaterial'&&it.name==='锻造材料'));if(total)g.bag.unshift(forgeMaterialItem(total));g.bagSelected=Math.min(g.bagSelected??-1,g.bag.length-1);syncBagPage();return true}
 function addForgeMaterials(amount){let gain=Math.max(0,Math.floor(Number(amount)||0));if(!gain)return 0;g.materials=(g.materials||0)+gain;syncForgeMaterialsBag();return gain}
 function takeForgeMaterials(amount){let cost=Math.max(0,Math.floor(Number(amount)||0));if((g.materials||0)<cost)return false;g.materials=Math.max(0,(g.materials||0)-cost);syncForgeMaterialsBag();return true}
-function bagUsed(){return (g.bag||[]).length}function bagFree(){return (g.bagCap||20)-bagUsed()}function itemIcon(it){return it.type==='herb'?'🌿':it.type==='forgeMaterial'?'⛏️':it.type==='material'?'📦':it.type==='equipment'?'⚔️':it.type==='skillbook'?'📘':it.type==='pill'?'💊':'🎁'}function itemSell(it){return it.type==='forgeMaterial'?0:(it.sell??(it.type==='equipment'?(it.quality||1)*220:it.type==='pill'?80:25))}
+function bagUsed(){return (g.bag||[]).length}function bagFree(){return (g.bagCap||20)-bagUsed()}function itemIcon(it){if(it?.icon)return it.icon;return it.type==='herb'?'🌿':it.type==='forgeMaterial'?'⛏️':it.type==='material'?'📦':it.type==='equipment'?'⚔️':it.type==='skillbook'?'📘':it.type==='pill'?'💊':'🎁'}function itemSell(it){return it.type==='forgeMaterial'?0:(it.sell??(it.type==='equipment'?(it.quality||1)*220:it.type==='pill'?80:25))}
 function pillEffect(it){let n=it.name||'';if(n.includes('修为')&&it.cultGain)return`使用效果：固定获得${fmt(it.cultGain)}修为。`;return pillEffects[n]||Object.keys(pillEffects).find(k=>n.includes(k))&&pillEffects[Object.keys(pillEffects).find(k=>n.includes(k))]||'使用效果：服用后获得对应丹药增益。'}
 function addBagItem(it){g.bag=g.bag||[];let qty=it.qty||1,stack=it.type!=='equipment',max=it.max||99;if(stack){for(let s of g.bag){if(s.name===it.name&&s.type===it.type&&s.qty<max){let add=Math.min(max-s.qty,qty);s.qty+=add;qty-=add;if(qty<=0)return true}}while(qty>0){if(bagFree()<=0){log(`背包已满，${it.name}未能全部拾取`,'danger');return false}let add=Math.min(max,qty);g.bag.push({...it,qty:add,max});qty-=add}return true}else{while(qty-- >0){if(bagFree()<=0){log(`背包已满，${it.name}掉落遗失`,'danger');return false}g.bag.push({...it,qty:1})}return true}}
 syncForgeMaterialsBag();
@@ -948,7 +958,7 @@ function renderSkillManage(){
 }
 function openSkillManage(){renderSkillManage();$('#skillManageModal').classList.add('show')}
 function ensureModalCloseButtons(){[['equipModal','closeEquipBtnTop','关闭'],['skillManageModal','closeSkillBtnTop','关闭']].forEach(([mid,bid,text])=>{let modal=$('#'+mid),card=modal?.firstElementChild;if(card&&!$('#'+bid)){card.insertAdjacentHTML('afterbegin',`<button class="modal-close" id="${bid}">${text}</button>`)}})}
-function renderBag(){let grid=$('#bagGrid');if(!grid)return;syncBagPage();$('#bagStoneText').textContent='灵石：'+fmt(g.stones);$('#bagCapText').textContent=`容量 ${bagUsed()}/${g.bagCap||20}`;let pages=bagPages(),start=(g.bagPage||0)*16,cells=[],cap=g.bagCap||20;for(let offset=0;offset<16;offset++){let i=start+offset,unlocked=i<cap,it=unlocked?g.bag[i]:null;if(it){cells.push(`<button class="bag-slot ${g.bagSelected===i?'active':''} ${qualityClass[it.quality||equipQuality[it.name]||0]||''}" data-bag="${i}"><b>${itemIcon(it)} ${it.name}</b><small>${it.type==='equipment'?(qualityText[it.quality||equipQuality[it.name]||1]+'装'):it.type==='herb'?'药材':it.type==='material'?'妖兽材料':it.type==='skillbook'?'技能书':'丹药'}</small>${it.qty>1?`<span class="bag-qty">${it.qty}</span>`:''}</button>`)}else if(unlocked){cells.push(`<div class="bag-slot empty unlocked-empty"><b>空</b><small>已开启</small></div>`)}else{cells.push(`<div class="bag-slot empty locked" title="扩充背包后开启"><b>🔒</b><small>未开启</small></div>`)}}grid.innerHTML=cells.join('');document.querySelectorAll('[data-bag]').forEach(b=>b.onclick=()=>{g.bagSelected=+b.dataset.bag;renderBag()});$('#bagPageText').textContent=`第${(g.bagPage||0)+1}/${pages}页`;$('#bagPrevBtn').disabled=(g.bagPage||0)<=0;$('#bagNextBtn').disabled=(g.bagPage||0)>=pages-1;let it=g.bag[g.bagSelected],sellQty=$('#sellQtyInput');if(sellQty){sellQty.max=it?(it.qty||1):1;if(!it)sellQty.value=1;else sellQty.value=Math.min(Math.max(1,+sellQty.value||1),it.qty||1)}$('#bagDetail').innerHTML=it?`<b>${it.name}</b><br>类型：${it.type==='herb'?'药材':it.type==='material'?'妖兽材料':it.type==='equipment'?'装备':it.type==='skillbook'?'技能书':'丹药'} · 数量：${it.qty||1}<br>${itemEffect(it)}<br>${bagItemExtraDesc(it)?bagItemExtraDesc(it)+'<br>':''}售卖价格：${fmt(itemSell(it))}灵石/个，当前可售${fmt(itemSell(it)*(it.qty||1))}灵石`:'请选择一个道具。';$('#useBagItemBtn').disabled=!it||it.type==='material'||it.type==='herb';$('#sellBagItemBtn').disabled=!it;$('#expandBagBtn').textContent=cap<30?'花1000灵石扩至30格':cap<40?'花2000灵石扩至40格':cap<50?'花5000灵石扩至50格':'背包已满级';$('#expandBagBtn').disabled=cap>=50}
+function renderBag(){let grid=$('#bagGrid');if(!grid)return;syncBagPage();$('#bagStoneText').textContent='灵石：'+fmt(g.stones);$('#bagCapText').textContent=`容量 ${bagUsed()}/${g.bagCap||20}`;let pages=bagPages(),start=(g.bagPage||0)*16,cells=[],cap=g.bagCap||20;for(let offset=0;offset<16;offset++){let i=start+offset,unlocked=i<cap,it=unlocked?g.bag[i]:null;if(it){cells.push(`<button class="bag-slot ${g.bagSelected===i?'active':''} ${qualityClass[it.quality||equipQuality[it.name]||0]||''}" data-bag="${i}"><b>${itemIcon(it)} ${it.name}</b><small>${it.type==='equipment'?(qualityText[it.quality||equipQuality[it.name]||1]+'装'):it.type==='herb'?'药材':it.type==='material'?'妖兽材料':it.type==='skillbook'?'技能书':it.type==='quest'?'任务物品':'丹药'}</small>${it.qty>1?`<span class="bag-qty">${it.qty}</span>`:''}</button>`)}else if(unlocked){cells.push(`<div class="bag-slot empty unlocked-empty"><b>空</b><small>已开启</small></div>`)}else{cells.push(`<div class="bag-slot empty locked" title="扩充背包后开启"><b>🔒</b><small>未开启</small></div>`)}}grid.innerHTML=cells.join('');document.querySelectorAll('[data-bag]').forEach(b=>b.onclick=()=>{g.bagSelected=+b.dataset.bag;renderBag()});$('#bagPageText').textContent=`第${(g.bagPage||0)+1}/${pages}页`;$('#bagPrevBtn').disabled=(g.bagPage||0)<=0;$('#bagNextBtn').disabled=(g.bagPage||0)>=pages-1;let it=g.bag[g.bagSelected],sellQty=$('#sellQtyInput');if(sellQty){sellQty.max=it?(it.qty||1):1;if(!it)sellQty.value=1;else sellQty.value=Math.min(Math.max(1,+sellQty.value||1),it.qty||1)}$('#bagDetail').innerHTML=it?`<b>${it.name}</b><br>类型：${it.type==='herb'?'药材':it.type==='material'?'妖兽材料':it.type==='equipment'?'装备':it.type==='skillbook'?'技能书':it.type==='quest'?'任务物品':'丹药'} · 数量：${it.qty||1}<br>${itemEffect(it)}<br>${bagItemExtraDesc(it)?bagItemExtraDesc(it)+'<br>':''}售卖价格：${fmt(itemSell(it))}灵石/个，当前可售${fmt(itemSell(it)*(it.qty||1))}灵石`:'请选择一个道具。';$('#useBagItemBtn').disabled=!it||it.type==='material'||it.type==='herb';$('#sellBagItemBtn').disabled=!it;$('#expandBagBtn').textContent=cap<30?'花1000灵石扩至30格':cap<40?'花2000灵石扩至40格':cap<50?'花5000灵石扩至50格':'背包已满级';$('#expandBagBtn').disabled=cap>=50}
 const baseRenderBag=renderBag;
 renderBag=()=>{syncForgeMaterialsBag();baseRenderBag();document.querySelectorAll('[data-bag]').forEach(button=>{let it=g.bag[+button.dataset.bag];if(it?.type==='forgeMaterial'){let label=button.querySelector('small');if(label)label.textContent='锻造材料';}});let it=g.bag[g.bagSelected];if(it?.type==='forgeMaterial'){$('#bagDetail').innerHTML=`<b>⛏️ 锻造材料</b><br>类型：炼器资源 · 数量：${fmt(it.qty||0)}<br>${itemEffect(it)}`;$('#useBagItemBtn').disabled=true;$('#sellBagItemBtn').disabled=true;}}
 function changeBagPage(delta){g.bagPage=Math.max(0,Math.min((g.bagPage||0)+delta,bagPages()-1));g.bagSelected=-1;renderBag()}
@@ -956,6 +966,22 @@ function sortBag(){let source=[...(g.bag||[])],merged=[],rank={skillbook:0,pill:
 function useBagItem(){let idx=g.bagSelected,it=g.bag[idx];if(!it)return;if(it.type==='herb')return toast('药材不能直接使用，可用于任务、疗伤或炼制');if(it.type==='material')return toast('妖兽材料不能使用，只能售卖');if(it.type==='skillbook'){if(learnSkillBook(it))removeBagQty(idx,1);render();renderBag();renderSkillHud();save();return}if(it.type==='pill'){if(it.name==='小还丹'||it.name==='大还丹'){let regen=it.name==='大还丹'?30:10;g.nextBattleRegen=regen;toast('服用'+it.name+'，下次战斗每回合恢复'+regen+'点生命')}else if(it.name.includes('回春')){let heal=20+(rootKind()==='木'?4:0);g.hp=Math.min(totalHp(),g.hp+heal);toast(`使用回春丹，生命+${heal}`)}else if(it.name.includes('修为')){let gain=it.cultGain||realmNeed()*.18;g.cult+=gain;toast(`服用${it.name}，修为+${fmt(gain)}`)}else if(it.name.includes('渡劫')){g.tribBonus+=.12;toast('使用渡劫丹，渡劫成功率提升')}else{g.activeBoostUntil=Math.max(Date.now(),g.activeBoostUntil)+600000;toast('服用五行增幅丹，修炼速度提升')}if(it.key&&g[it.key]>0)g[it.key]--;removeBagQty(idx,1)}else if(it.type==='equipment'){let item=normalizeEquip(it),slot=item.slot,old=g.gear[slot],oldPower=power();g.gear[slot]=item;if(old)addBagItem(old);let diff=power()-oldPower;g.hp=Math.min(totalHp(),g.hp);toast(`装备${item.name}，战力${diff>=0?'+':''}${diff}`);log(`装备${qualityText[item.quality]}色${equipSlotNames[slot]}：${item.name}${old?'，旧装备已放回背包':''}`,'good');removeBagQty(idx,1)}render();renderBag();save()}
 const baseUseBagItem=useBagItem;
 useBagItem=()=>{let it=g.bag[g.bagSelected];if(it?.type==='pill'&&it.name.includes('渡劫'))return toast('渡劫丹请在小地图顶部“渡劫”中选择服用数量');return baseUseBagItem()};
+const useBagItemWithColdJade=useBagItem;
+useBagItem=()=>{
+  let it=g.bag[g.bagSelected],quest=g.suQingxueQuest;
+  if(it?.type==='quest'&&it.key==='thousandYearColdJade'){
+    if(!quest?.active)return toast('千年寒玉已不再回应海眼。');
+    if(quest.dragonDefeated)return toast('暗蛟龙已伏诛，寒玉不必再用。');
+    if(quest.dragonSummoned)return toast('暗蛟龙已经被逼出，正在东海龙宫·海眼盘踞。');
+    quest.stage='dragon';quest.dragonSummoned=true;
+    removeBagQty(g.bagSelected,1);
+    pushLocalLog('【寒灯寻主】千年寒玉化作冰芒，暗蛟龙已在东海龙宫·海眼现身。');
+    showNpcResult('千年寒玉','寒玉入海，海眼深处传来怒吼。暗蛟龙已显出踪迹，现可前往东海龙宫·海眼，在“妖兽 / 灵草”栏挑战它。','good');
+    renderTaskPanel();renderSceneMap();render();renderBag();save();
+    return;
+  }
+  return useBagItemWithColdJade();
+};
 function sellBagItem(){let idx=g.bagSelected,it=g.bag[idx];if(!it)return;if(it.type==='forgeMaterial')return toast('锻造材料不可出售');let want=Math.floor(+($('#sellQtyInput')?.value||1));let qty=it.type==='equipment'?1:Math.max(1,Math.min(want||1,it.qty||1)),value=itemSell(it)*qty;g.stones+=value;if(it.key&&g[it.key])g[it.key]=Math.max(0,g[it.key]-qty);toast(`售卖${it.name}×${qty}，灵石+${fmt(value)}`);log(`售卖道具：${it.name}×${qty}，获得${fmt(value)}灵石`,'good');removeBagQty(idx,qty);if(!g.bag[g.bagSelected])g.bagSelected=-1;render();renderBag();save()}
 function sellEquipmentByQuality(){let q=+($('#sellQualitySelect')?.value||1),sold=0,value=0;g.bag=(g.bag||[]).filter(it=>{if(it.type==='equipment'&&(it.quality||equipQuality[it.name]||1)===q){sold++;value+=itemSell(it);return false}return true});if(!sold)return toast(`背包里没有${qualityText[q]}装`);g.stones+=value;g.bagSelected=-1;syncBagPage();toast(`售卖${qualityText[q]}装×${sold}，灵石+${fmt(value)}`);log(`批量售卖${qualityText[q]}色装备×${sold}，获得${fmt(value)}灵石`,'good');render();renderBag();save()}
 function expandBag(){let cap=g.bagCap||20,cost=cap<30?1000:cap<40?2000:cap<50?5000:0,next=cap<30?30:cap<40?40:cap<50?50:cap;if(!cost)return toast('背包已满级');if(g.stones<cost)return toast('灵石不足');g.stones-=cost;g.bagCap=next;syncBagPage();toast(`背包扩充至${next}格`);render();renderBag();save()}
@@ -1018,6 +1044,74 @@ function spotLabel(i,idx){let m=keySpotMap(i);return m[idx]?.[1]||String(idx).pa
 function spotIcon(i,idx){let m=keySpotMap(i);return m[idx]?.[0]||String(idx).padStart(2,'0')}
 function spotIsNamed(i,idx){return !!keySpotMap(i)[idx]}
 function activeSpot(){let coords=routeCoords(g.selectedScene??g.map);return Math.max(0,Math.min(coords.length-1,g.localSpot??0))}
+function localMapRingLinks(i){return i===0?[[2,22]]:i===2?[[7,35]]:i===3?[[1,20]]:i===6?[[15,35]]:(i>=1&&i<=10?[[1,35]]:[])}
+function mapOverviewTarget(i){
+  if((g.transmissionGuideActive||g.transmissionElderGuidePending||((g.mainQuestStage||0)===0&&!g.transmissionElderGuideCompleted))&&i===10)return{map:10,spot:14,label:'新手指引 · 练功房',ring:true};
+  let target=currentGuidedRoute?.();
+  return target&&target.map===i?{...target,ring:false,label:target.boss?'主线目标 · 首领':`主线目标 · ${spotLabel(i,target.spot)}`} :null;
+}
+function renderLocalMapOverview(i,spot){
+  let box=$('#localMapInfo');if(!box)return;
+  let heading=box.closest('.compact-region-info')?.querySelector('h3');if(heading)heading.textContent='区域全览';
+  let coords=routeCoords(i),target=mapOverviewTarget(i),points=coords.map(p=>`${p[0]},${p[1]}`).join(' '),nodes=coords.map((p,idx)=>`<circle class="mini-node ${spotIsNamed(i,idx)?'named':''}" data-mini-spot="${idx}" cx="${p[0]}" cy="${p[1]}" r="${spotIsNamed(i,idx)?2.2:1.45}" title="${spotLabel(i,idx)}"></circle>`).join('');
+  let here=coords[spot],targetMark=target?coords[target.spot]:null,targetSvg=targetMark?`${target.ring?`<circle class="mini-guide-ring" cx="${targetMark[0]}" cy="${targetMark[1]}" r="5.2"></circle>`:''}<circle class="mini-guide-dot" cx="${targetMark[0]}" cy="${targetMark[1]}" r="2.4"></circle>`:'';
+  box.innerHTML=`<div class="mini-map-overview"><svg viewBox="0 0 100 100" role="img" aria-label="${mapScenes[i][1]}路线全览"><polyline class="mini-route" points="${points}"></polyline>${nodes}${targetSvg}<circle class="mini-player-ring" cx="${here[0]}" cy="${here[1]}" r="3.25"></circle><circle class="mini-player-core" cx="${here[0]}" cy="${here[1]}" r="1.15"></circle></svg><div class="mini-map-caption"><span><b>当前位置</b>${mapScenes[i][1]} · ${spotLabel(i,spot)}</span>${target?`<span class="mini-map-target"><b>${target.label}</b>${spotLabel(i,target.spot)}</span>`:`<span class="mini-map-target"><b>路线全览</b>点击路点移动</span>`}</div></div>`;
+  box.querySelectorAll('[data-mini-spot]').forEach(node=>node.onclick=()=>moveLocalSpot(i,+node.dataset.miniSpot));
+}
+let transmissionGuideTimer=null;
+function startTransmissionTutorial(){
+  if(g.transmissionGuideSeen)return;
+  clearTimeout(transmissionGuideTimer);
+  g.transmissionGuideActive=true;
+  g.transmissionElderGuidePending=true;
+  g.transmissionElderGuideCompleted=false;
+  g.transmissionGuideConfirmReady=false;
+  pushLocalLog('【新手指引】前往路点14·练功房，向传功长老莫天河学习第一门主动功法。');
+  renderSceneMap();save();
+}
+function finishTransmissionTutorial(){
+  clearTimeout(transmissionGuideTimer);transmissionGuideTimer=null;
+  g.transmissionGuideActive=false;
+  g.transmissionGuideSeen=true;
+  g.transmissionGuideConfirmReady=false;
+  pushLocalLog('【新手指引】已确认练功房位置。前往路点14，向传功长老莫天河请教术法。');
+  renderSceneMap();save();
+}
+function renderTransmissionTutorial(i,spot){
+  let canvas=$('#localMapCanvas'),world=$('#localMapWorld');if(!canvas||!world)return;
+  let old=canvas.querySelector('.newbie-focus-overlay');
+  if(!g.transmissionGuideActive||g.transmissionGuideSeen||i!==10){old?.remove();return;}
+  let target=routeCoords(10)[14];panWorld(world,target);
+  let left=parseFloat(world.style.left)||0,top=parseFloat(world.style.top)||0,x=target[0]*1.9+left,y=target[1]*1.7+top;
+  if(!old){
+    old=document.createElement('div');
+    old.className='newbie-focus-overlay';
+    old.innerHTML='<div class="newbie-focus-ring"></div><div class="newbie-focus-note"><b>先去练功房</b><span>路点14，向传功长老学习术法</span><button type="button" class="btn newbie-focus-confirm">我明白了</button></div>';
+    canvas.appendChild(old);
+    old.querySelector('.newbie-focus-confirm').onclick=finishTransmissionTutorial;
+  }
+  old.style.setProperty('--focus-x',x+'%');old.style.setProperty('--focus-y',y+'%');
+  old.classList.toggle('confirm-ready',!!g.transmissionGuideConfirmReady);
+  if(!g.transmissionGuideConfirmReady&&!transmissionGuideTimer){
+    transmissionGuideTimer=setTimeout(()=>{transmissionGuideTimer=null;g.transmissionGuideConfirmReady=true;renderTransmissionTutorial(g.selectedScene??g.map,activeSpot());save();},2350);
+  }
+}
+const renderLocalMapOverviewWithTransferMarks=renderLocalMapOverview;
+renderLocalMapOverview=(i,spot)=>{
+  renderLocalMapOverviewWithTransferMarks(i,spot);
+  let links=localMapRingLinks(i);
+  links.forEach(([from,to])=>{let svg=$('#localMapInfo svg'),coords=routeCoords(i),a=coords[from],b=coords[to];if(svg&&a&&b){let line=document.createElementNS('http://www.w3.org/2000/svg','line');line.classList.add('mini-route','sect-ring-line');line.setAttribute('x1',a[0]);line.setAttribute('y1',a[1]);line.setAttribute('x2',b[0]);line.setAttribute('y2',b[1]);svg.insertBefore(line,svg.firstChild);}});
+  $('#localMapInfo')?.querySelectorAll('[data-mini-spot]').forEach(node=>{
+    let transfer=!!sceneTransferAt(i,+node.dataset.miniSpot);
+    node.classList.toggle('transfer',transfer);
+    if(transfer)node.setAttribute('r','2.8');
+  });
+};
+function renderSectRingConnection(i){
+  let links=localMapRingLinks(i);
+  let world=$('#localMapWorld'),coords=routeCoords(i);if(!world)return;
+  links.forEach(([from,to])=>{let a=coords[from],b=coords[to];if(!a||!b)return;let aspect=world.clientWidth?world.clientHeight/world.clientWidth:1,dx=b[0]-a[0],dy=(b[1]-a[1])*aspect,line=document.createElement('div');line.className='path-line sect-ring-line';line.style.left=a[0]+'%';line.style.top=a[1]+'%';line.style.width=Math.hypot(dx,dy)+'%';line.style.transform=`rotate(${Math.atan2(dy,dx)*180/Math.PI}deg)`;world.insertBefore(line,world.firstChild);});
+}
 function panWorld(world,coord){let left=Math.max(-90,Math.min(0,50-coord[0]*1.9)),top=Math.max(-70,Math.min(0,50-coord[1]*1.7));world.style.left=left+'%';world.style.top=top+'%'}
 function stableRand(seed){let h=2166136261;for(let c of String(seed)){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return(h>>>0)/4294967296}
 function recommendedMonsterMajor(i){let req=maps[i]?.[1]||0;return Math.max(0,Math.min(realms.length-1,Math.floor(req/4)))}
@@ -1035,11 +1129,11 @@ function npcQuestIcon(name){
     if(!chosenMaster&&name==='掌教 林玄一')return '❗️';
     if(chosenMaster&&name===chosenMaster.elder)return '❗️';
   }
-  // 主线任务人物也接入状态图标：下一环可推进为❗️，进行中为❓，可复命为💬。
+  // 图标语义：❗️可接/可推进，❓进行中，⭕️条件完成待提交，💬已结案后的普通对话。
   if(name==='巡峰弟子'){
     if(mainStage===0)return '❗️';
     if(mainStage===2)return '❓';
-    if(mainStage===3)return '💬';
+    if(mainStage===3)return '⭕️';
   }
   if(name==='外务执事 白景川'){
     if(mainStage===1)return '❗️';
@@ -1048,62 +1142,62 @@ function npcQuestIcon(name){
   if(name==='掌教 林玄一'){
     if(mainStage===4)return '❗️';
     if(mainStage===5||mainStage===7)return '❓';
-    if(mainStage===6||mainStage===8)return '💬';
+    if(mainStage===6||mainStage===8)return '⭕️';
     if(mainStage===12)return '❗️';
-    if([14,16,20,24,26].includes(mainStage))return '💬';
+    if([14,16,20,24,26].includes(mainStage))return '⭕️';
     if([13,15,17,19,21,23].includes(mainStage))return '❓';
   }
   if(name==='执事弟子'){
     let a=disciplineQuest('shiyan'),b=disciplineQuest('niuwu');
     if(a.claimed&&b.claimed)return '💬';
-    if((a.done&&!a.claimed)||(b.done&&!b.claimed))return '💬';
+    if((a.done&&!a.claimed)||(b.done&&!b.claimed))return '⭕️';
     if((a.active&&!a.done)||(b.active&&!b.done))return '❓';
     return '❗️';
   }
   if(name==='器童 石砚'){
     let q=disciplineQuest('shiyan');
-    return q.active&&!q.claimed?(q.done?'💬':'❗️'):'💬';
+    return q.active&&!q.claimed?(q.done?'⭕️':'❗️'):'💬';
   }
   if(name==='泼皮 牛五'){
     let q=disciplineQuest('niuwu');
-    return q.active&&!q.claimed?(q.done?'💬':'❗️'):'💬';
+    return q.active&&!q.claimed?(q.done?'⭕️':'❗️'):'💬';
   }
   if(name==='大师姐 柳如烟'){
     let q=g.sectSisterQuest;
     if(!q)return '❗️';
-    return bagItemCountByName(q.material)>=q.need?'💬':'❓';
+    return bagItemCountByName(q.material)>=q.need?'⭕️':'❓';
   }
   if(name==='掌教 林玄一'&&[4,6,8].includes(mainStage))return '❗️';
   if(name==='小师妹 纳兰清月'){
     if(realmIndex()<=1||g.nalanQuestDone)return '💬';
     if(!g.nalanQuest)return '❗️';
-    return pillCountByName('回春丹','healPills')>=10&&bagItemCountByName('石鼠皮')>=10?'💬':'❓';
+    return pillCountByName('回春丹','healPills')>=10&&bagItemCountByName('石鼠皮')>=10?'⭕️':'❓';
   }
   if(name==='浪子 柳杰仁')return hasFlowerSeekingSkill()?'💬':'❗️';
   if(name==='千年狐王'||name==='夜行狼王'||name==='千年古树'){
     let disputes=forestDisputeState(),id=name==='千年狐王'?'fox':name==='夜行狼王'?'wolf':'tree';
     if(id==='tree')return disputes.fox.claimed&&disputes.wolf.claimed&&!disputes.tree.done&&[0,5].includes(disputes.tree.stage)?'❗️':'💬';
     let q=disputes[id];
-    if(q.active&&!q.claimed)return q.kills>=8?'💬':'❓';
+    if(q.active&&!q.claimed)return q.kills>=8?'⭕️':'❓';
     if(q.claimed&&((id==='fox'&&[1,3].includes(disputes.tree.stage))||(id==='wolf'&&[2,4].includes(disputes.tree.stage))))return '❗️';
     return q.claimed?'💬':'❗️';
   }
   if(name==='药堂弟子 萧火'){
     if(g.xiaoHuoQuest?.done)return '💬';
     if(!g.xiaoHuoQuest)return '❗️';
-    return Math.max(g.herbs||0,bagItemCountByName('药材'))>=1000?'💬':'❓';
+    return Math.max(g.herbs||0,bagItemCountByName('药材'))>=1000?'⭕️':'❓';
   }
   if(name==='紫云峰长老 邱紫山'){
     if(g.qiuQuest?.done)return '💬';
     if(!g.qiuQuest)return '❗️';
-    return (g.bossKills?.[0]||0)>(g.qiuQuest.baseKill||0)?'💬':'❓';
+    return (g.bossKills?.[0]||0)>(g.qiuQuest.baseKill||0)?'⭕️':'❓';
   }
   if(name==='太上长老 苏青雪'){
     if(mainStage===9)return '❗️';
-    if([11,18,22,25].includes(mainStage))return '💬';
+    if([11,18,22,25].includes(mainStage))return '⭕️';
     if(g.suQingxueQuestDone)return '💬';
     if(!g.suQingxueQuest)return g.realm>=4?'❗️':'💬';
-    return (g.bossKills?.[3]||0)>(g.suQingxueQuest.baseKill||0)?'💬':'❓';
+    return (g.bossKills?.[3]||0)>(g.suQingxueQuest.baseKill||0)?'⭕️':'❓';
   }
   return '💬';
 }
@@ -1159,6 +1253,9 @@ renderSceneMap=()=>{
   document.querySelectorAll('#localMobList [data-local-mob]').forEach((button,idx)=>{
     if(mobs[idx]?.mining){let icon=button.querySelector('b');if(icon)icon.textContent='🪨';}
   });
+  renderSectRingConnection(i);
+  renderLocalMapOverview(i,spot);
+  renderTransmissionTutorial(i,spot);
 };
 function openSceneMap(){let i=g.selectedScene??g.map;if(!sceneUnlocked(i))return toast(sceneReqText(i)+'后解锁');closeNpcDialog();g.map=i;g.localSpot=g.localSpot??0;$('#sceneMapModal').classList.add('show');pushLocalLog(`进入${mapScenes[i][1]}，区域小地图已展开。`);renderSceneMap();render();save()}
 function pushLocalLog(t){let box=$('#localMapLog');if(!box)return;box.insertAdjacentHTML('afterbegin',`<div>${new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})} ${t}</div>`);while(box.children.length>40)box.lastChild.remove()}
@@ -1179,6 +1276,14 @@ localNpcs=(i,spot)=>{
   if((i===0&&spot===32)||(i===2&&spot===32)||(i===4&&spot===14))return [['太玄宗矿脉监管','监管矿脉，说明采矿规矩'],...npcs];
   if(i===10&&spot===34&&(g.mainQuestFinaleDone||(g.mainQuestStage||0)>=27)){
     return [['原宗主 玄霄真人','自天门归来，重掌巡天旧令'],...npcs];
+  }
+  return npcs;
+};
+const localNpcsWithTurtleMinister=localNpcs;
+localNpcs=(i,spot)=>{
+  let npcs=localNpcsWithTurtleMinister(i,spot);
+  if(i===3&&spot===14&&!npcs.some(npc=>(npc.name||npc[0])==='双面龟丞相')){
+    npcs=[['双面龟丞相','镇守龟丞相府，知晓海眼的隐秘'],...npcs];
   }
   return npcs;
 };
@@ -1221,6 +1326,7 @@ function monsterStatsTable(){
     '老海龟':normal({hp:1650,mp:380,attack:280,defense:98,realm:'元婴后期'},'laohai-gui','龟甲'),
     '海蛇':normal({hp:1050,mp:520,attack:330,defense:50,realm:'元婴大圆满'},'haishe','蛇胆'),
     'BOSS 龙太子':boss({hp:9200,mp:1200,attack:445,defense:145,realm:'化神初期'},'assets/boss-portraits/long-taizi.png','龙鳞玉令'),
+    '暗蛟龙':boss({hp:19200,mp:1200,attack:645,defense:345,realm:'化神大圆满',icon:'🐉'},'','暗蛟逆鳞'),
     '血藤妖':normal({hp:3100,mp:900,attack:340,defense:135,realm:'化神初期'},'xueteng-yao','血藤'),
     '荒骨狼':normal({hp:2700,mp:720,attack:390,defense:120,realm:'化神中期'},'huanggu-lang','荒骨'),
     '毒雾虫':normal({hp:2550,mp:1250,attack:365,defense:112,realm:'化神后期'},'duwu-chong','毒囊'),
@@ -1300,6 +1406,15 @@ const baseLocalMobs=localMobs;
 localMobs=(i,spot)=>{
   let mobs=baseLocalMobs(i,spot),site=miningSite(i,spot);
   if(site)mobs.unshift({name:`${site.name}·采矿点`,type:'采集',mining:true,site});
+  return mobs;
+};
+const localMobsWithDarkDragon=localMobs;
+localMobs=(i,spot)=>{
+  let mobs=localMobsWithDarkDragon(i,spot),quest=g.suQingxueQuest;
+  if(i===3&&spot===32&&quest?.active&&quest.dragonSummoned&&!quest.dragonDefeated){
+    let dragon=withMobState(i,spot,{...makeMonster('暗蛟龙','暗蛟逆鳞',true),darkDragon:true});
+    if(!mobs.some(m=>(m.originalName||m.name)==='暗蛟龙'))mobs.unshift(dragon);
+  }
   return mobs;
 };
 function miningKey(site=miningSession?.site||miningSite()){return site?`mine:${site.name}`:''}
@@ -1905,8 +2020,8 @@ function renderTaskPanel(){
   let mq=mainQuestInfo();
   html+=taskCard(mq.title,mq.body,'');
   if(g.suQingxueQuest&&!g.suQingxueQuestDone){
-    let killed=(g.bossKills?.[3]||0)>(g.suQingxueQuest.baseKill||0);
-    html+=taskCard('太上长老苏青雪：寒灯寻主',killed?'已从东海龙宫夺回冰魄命灯，返回掌教内殿向苏青雪复命。':`前往东海龙宫击败Boss龙太子，寻找失踪宗主的冰魄命灯 ${killed?'1/1':'0/1'}。`,'');
+    let q=g.suQingxueQuest,body=q.dragonDefeated?'暗蛟龙已伏诛，返回掌教内殿向苏青雪复命。':q.dragonSummoned?'暗蛟龙已被千年寒玉逼出，前往东海龙宫·海眼击败它。':q.jadeGiven?'在“道具”中使用千年寒玉，将暗蛟龙逼出海眼。':'前往东海龙宫·龟丞相府，与双面龟丞相交谈，查明海眼异动。';
+    html+=taskCard('太上长老苏青雪：寒灯寻主',body,'');
   }
   if(g.sectSisterQuest){
     let q=g.sectSisterQuest,have=bagItemCountByName(q.material);
@@ -2217,7 +2332,7 @@ function applyWitheringWoodTurn(b){
   }
   return b.enemy.hp<=0;
 }
-async function battlePlayerTurn(skillIdx=null){let b=battleState;if(!b||battleBusy)return;battleBusy=true;setBattleControlsDisabled(true);try{let regen=b.player.regenPerRound||0;if(regen){let before=b.player.hp;b.player.hp=Math.min(b.player.maxHp,b.player.hp+regen);let actual=b.player.hp-before;if(actual){battleFx('player','+'+actual,true);battleLog('丹药药力流转，恢复 '+actual+' 点生命。')}}if(applyWitheringWoodTurn(b)){renderBattle();finishBattleWin();return}if((b.player.skipTurns||0)>0){b.player.skipTurns--;battleLog('浪里寻花的余势未平，你本回合无法行动。');renderBattle();await waitBattle(180);await battleEnemyTurn();if(battleState){tickBattleCooldowns(b);b.round++;renderBattle();renderSkillHud()}return}if(skillIdx===null)await playNormalAttackAnimation('player');let ok=skillIdx===null?await battleSkillEffect(null):await battleSkillEffect((g.activeSkills||[])[skillIdx],skillIdx);if(ok===false)return renderBattle();renderBattle();if(b.enemy.hp<=0){finishBattleWin();return}await waitBattle(180);await battleEnemyTurn();if(battleState){tickBattleCooldowns(b);b.round++;renderBattle();renderSkillHud()}}finally{battleBusy=false;if(battleState)setBattleControlsDisabled(false)}}
+async function battlePlayerTurn(skillIdx=null){let b=battleState;if(!b||battleBusy)return;battleBusy=true;setBattleControlsDisabled(true);try{let regen=b.player.regenPerRound||0;if(regen){let before=b.player.hp;b.player.hp=Math.min(b.player.maxHp,b.player.hp+regen);let actual=b.player.hp-before;if(actual){battleFx('player','+'+actual,true);battleLog('丹药药力流转，恢复 '+actual+' 点生命。')}}if(applyWitheringWoodTurn(b)){renderBattle();finishBattleWin();return}if((b.player.skipTurns||0)>0){b.player.skipTurns--;battleLog(b.player.skipReason||'浪里寻花的余势未平，你本回合无法行动。');delete b.player.skipReason;renderBattle();await waitBattle(180);await battleEnemyTurn();if(battleState){tickBattleCooldowns(b);b.round++;renderBattle();renderSkillHud()}return}if(skillIdx===null)await playNormalAttackAnimation('player');let ok=skillIdx===null?await battleSkillEffect(null):await battleSkillEffect((g.activeSkills||[])[skillIdx],skillIdx);if(ok===false)return renderBattle();renderBattle();if(b.enemy.hp<=0){finishBattleWin();return}await waitBattle(180);await battleEnemyTurn();if(battleState){tickBattleCooldowns(b);b.round++;renderBattle();renderSkillHud()}}finally{battleBusy=false;if(battleState)setBattleControlsDisabled(false)}}
 function finishBattleWin(){let b=battleState;if(!b)return;let target=b.target;if(target.discipline)return finishDisciplineBattle(target.discipline);if(target.spar){let level=target.sparLevel||0,title=['练气','筑基','金丹','元婴'][level]||'练气',gain=realmNeed()*(.012+level*.01),rep=12+level*8;closeBattle(true);g.cult+=gain;g.sectReputation+=rep;g.sectSparAt=Date.now()+600000;pushLocalLog(`与练功长老 付云山压制到${title}切磋获胜，修为+${fmt(gain)}。`);showNpcResult('压制切磋获胜',`你将修为压制到${title}，在战斗中拆解练功长老 付云山剑路。\n修为 +${fmt(gain)}\n宗门声望 +${rep}\n切磋冷却：10分钟`,'good');renderSceneMap();render();save();return}target._battleRealm=b.enemy.realm;closeBattle(true);let result=resolveLocalTarget(target,false);pushLocalLog(`战胜${target.name}，战斗结束。`);toast(result?'战斗胜利，已结算掉落':'战斗已结束');renderSceneMap();render();save()}
 function closeBattle(keep=false){battleBusy=false;setBattleControlsDisabled(false);if(battleState){g.hp=Math.max(1,Math.min(battleState.player.hp,battleState.player.maxHp));g.mana=Math.max(0,Math.min(battleState.player.mp,battleState.player.maxMp))}resetBattleHeroFrame();$('#battleModal').classList.remove('show');battleState=null;if(!keep)renderSkillHud()}
 async function battleAuto(){if(battleBusy)return;let guard=0;while(battleState&&battleState.enemy.hp>0&&battleState.player.hp>0&&guard++<12){let skills=g.activeSkills||[],missing=battleState.player.maxHp-battleState.player.hp,woodIdx=!(battleState.player.witheringWood?.turns)&&skills.findIndex((sk,i)=>(sk.witheringWood||sk.name==='枯木逢春')&&missing>=Math.ceil(battleState.player.maxHp*.2)&&battleState.player.mp>=battleSkillCost(sk,i)),healIdx=skills.findIndex((sk,i)=>(sk.bandageLevel||/包扎/.test(sk.name))&&missing>=Math.ceil(bandageConfig(sk.bandageLevel||parseInt(sk.name)||1).heal*.5)&&battleState.player.mp>=battleSkillCost(sk,i)),attackIdx=skills.findIndex((sk,i)=>!(sk.bandageLevel||/包扎/.test(sk.name))&&!(sk.witheringWood||sk.name==='枯木逢春')&&!(sk.rageSkill||sk.name==='暴怒')&&battleState.player.mp>=battleSkillCost(sk,i)),rageIdx=(battleState.player.rageTurns||0)<=0?skills.findIndex(sk=>sk.rageSkill||sk.name==='暴怒'):-1,idx=woodIdx>=0?woodIdx:healIdx>=0?healIdx:rageIdx>=0?rageIdx:attackIdx;await battlePlayerTurn(idx>=0?idx:null);await waitBattle(120)}}
@@ -2346,6 +2461,12 @@ function talkBigFireballTraining(){
   ]);
 }
 function talkToTransmissionElder(){
+  if(g.transmissionElderGuidePending||((g.mainQuestStage||0)===0&&!g.transmissionElderGuideCompleted)){
+    g.transmissionElderGuidePending=false;
+    g.transmissionElderGuideCompleted=true;
+    pushLocalLog('【新手指引】已拜见传功长老，练功房路线标记解除。');
+    renderSceneMap();save();
+  }
   let fire=g.bigFireballLevel||0,bandage=g.bandageLevel||0;
   openNpcDialog('传功长老 莫天河',`传功长老 莫天河道：“攻守相济，方能走得长远。你想修习哪门术法？”\n\n大火球术：当前${fire?fire+'级':'未学习'}\n包扎：当前${bandage?bandage+'级':'未学习'}（每次学习或升级花费200灵石）`,[
     {text:`${fire?'升级':'学习'}大火球术`,alt:true,onClick(){talkBigFireballTraining()}},
@@ -2411,12 +2532,44 @@ function talkTieWufeng(){
     {text:'暂不炼器',ghost:true}
   ]);
 }
+function talkTwoFacedTurtleMinister(){
+  let quest=g.suQingxueQuest;
+  if(!quest?.active||g.suQingxueQuestDone){
+    showNpcResult('双面龟丞相','左首缓缓点头：“海眼的潮声已比从前安静。”\n\n右首低声补道：“但龙宫水脉仍需有人守望，莫让旧祸再起。”','good');
+    return;
+  }
+  if(!quest.jadeGiven){
+    openNpcDialog('双面龟丞相','左首沉声道：“海眼里有一条暗蛟龙，常年搅乱水脉。”\n\n右首轻叹：“寻常修士找不到它的藏身之地，纵有神通也只能扑空。苏长老既托你而来，老夫便将这块千年寒玉交给你。它承过冰魄命灯的寒息，投入海眼便能逼那孽龙现形。”',[
+      {text:'收下千年寒玉',alt:true,onClick(){
+        let jade={type:'quest',key:'thousandYearColdJade',name:'千年寒玉',qty:1,max:1,sell:0,icon:'❄️',desc:'龟丞相府所赠的千年寒玉。请在道具中使用，可逼出藏于东海龙宫海眼的暗蛟龙。'};
+        if(!addBagItem(jade))return showNpcResult('背包已满','请先腾出一个背包格，再来领取千年寒玉。','danger');
+        quest.jadeGiven=true;quest.stage='jade';
+        pushLocalLog('【寒灯寻主】双面龟丞相赠予千年寒玉，暗蛟龙的藏身之地已有破解之法。');
+        showNpcResult('获得千年寒玉','千年寒玉已放入背包。请在“道具”中使用它，暗蛟龙便会出现在东海龙宫·海眼的妖兽栏。','good');
+        renderTaskPanel();renderSceneMap();render();save();
+      }},
+      {text:'稍后再取',ghost:true}
+    ]);
+    return;
+  }
+  if(!quest.dragonSummoned){
+    showNpcResult('双面龟丞相','左首望向海眼：“寒玉已在你手中。”\n\n右首提醒道：“在道具中将它祭入海眼，暗蛟龙便无处藏身。”','good');
+    return;
+  }
+  if(!quest.dragonDefeated){
+    showNpcResult('双面龟丞相','左首抬起眉梢：“海眼的浊潮翻涌，暗蛟龙果然现身。”\n\n右首郑重叮嘱：“那孽龙凶悍，且会以龙吟震慑神魂。请去海眼将它斩除。”','danger');
+    return;
+  }
+  showNpcResult('双面龟丞相','左首长舒一口气：“海眼水脉已复清明。”\n\n右首拱手道：“暗蛟既除，快将宗主的线索带回太玄宗吧。”','good');
+}
+
 function localMeet(idx=0){
 syncMainQuestProgress();
 let i=g.selectedScene??g.map,spot=activeSpot(),npc=localNpcs(i,spot)[idx];
 if(!npc)return toast('此路点暂无NPC');
 let name=npc[0],difficulty=maps[i]?.[2]||1,fullHp=totalHp();
 
+if(name==='双面龟丞相'){talkTwoFacedTurtleMinister();return;}
 if(name==='千年狐王'){talkForestFox();return;}
 if(name==='夜行狼王'){talkForestWolf();return;}
 if(name==='千年古树'){talkAncientTree();return;}
@@ -2858,13 +3011,13 @@ if(name==='太上长老 苏青雪'){
     '沉月水府、龙鳞玉令、血月暗印……这些线索像一张网。宗主追着它们去了东海，从此再没有回来。'
   ];
   let line=worryLines[Math.floor(Math.random()*worryLines.length)];
-  let killed=g.suQingxueQuest&&(g.bossKills?.[3]||0)>(g.suQingxueQuest.baseKill||0);
+  let dragonDefeated=!!(g.suQingxueQuest&&(g.suQingxueQuest.dragonDefeated||g.suQingxueQuest.done));
   if(g.suQingxueQuestDone){
     showNpcResult('太上长老 苏青雪',`苏青雪望着重新燃起的冰魄命灯，眉间寒意终于散去几分。\n\n“命灯未灭，宗主尚在人世。你替太玄宗寻回了最重要的一线希望。待水府封印可破之日，我会与你一同去接他回来。”\n\n你已获得并可学习被动技能书《千里冰封》。`,'good');
     return;
   }
-  if(killed){
-    openNpcDialog('太上长老 苏青雪',`你取出从龙太子手中夺回的冰魄命灯。原本黯淡的灯芯在苏青雪掌心亮起一线幽蓝。\n\n“是他的气息……命灯未灭，宗主果然还活着。灯焰指向沉月水府最深处，那里应当就是他被困之地。”\n\n苏青雪郑重取出一卷冰纹玉册：“此法本是我为寻他所创。今日赠你，愿它护你走到水府尽头。”`,[
+  if(dragonDefeated){
+    openNpcDialog('太上长老 苏青雪',`你将暗蛟逆鳞与海眼中浮起的冰魄残焰交给苏青雪。原本黯淡的命灯在她掌心亮起一线幽蓝。\n\n“是他的气息……命灯未灭，宗主果然还活着。暗蛟看守的正是沉月水府外层水脉，灯焰已指向阵眼最深处。”\n\n苏青雪郑重取出一卷冰纹玉册：“此法本是我为寻他所创。今日赠你，愿它护你走到水府尽头。”`,[
       {text:'领取《千里冰封》技能书',alt:true,onClick(){
         let book={type:'skillbook',name:'千里冰封技能书',qty:1,max:1,sell:0,skill:{name:'千里冰封',icon:'❄️',desc:'被动：生命+1000、防御+80',kind:'passive'},desc:'太上长老苏青雪所授。学习后激活被动技能：生命+1000、防御+80。'};
         if(!addBagItem(book))return showNpcResult('背包已满','请先清理至少一个背包格，再来领取《千里冰封》技能书。','danger');
@@ -2879,8 +3032,9 @@ if(name==='太上长老 苏青雪'){
     return;
   }
   if(g.suQingxueQuest){
-    openNpcDialog('太上长老 苏青雪',`${line}\n\n“你已接下寒灯寻主之托。去东海龙宫击败龙太子。它掌中的龙鳞玉令曾与宗主命灯同时出现，冰魄命灯极可能就藏在它的水府宝库中。”`,[
-      {text:'我会带回命灯',alt:true},
+    let q=g.suQingxueQuest,progress=q.dragonSummoned?'暗蛟龙已在海眼现身，去将它斩除。':q.jadeGiven?'千年寒玉已在背包，使用它可逼出暗蛟龙。':'先去东海龙宫·龟丞相府，向双面龟丞相求取千年寒玉。';
+    openNpcDialog('太上长老 苏青雪',`${line}\n\n“你已接下寒灯寻主之托。${progress} 暗蛟龙盘踞海眼多年，它守着通往沉月水府的暗潮；只有理清这条水脉，命灯才会指向宗主真正所在。”`,[
+      {text:'我会查清海眼',alt:true},
       {text:'询问宗主往事',ghost:true,onClick(){showNpcResult('苏青雪的回忆','“宗主从不畏强敌，却最怕宗门弟子因他而死。十二年前临河镇出事后，他便一直暗中追查玄月使。或许这一次失踪，也与那场旧火有关。”','good')}}
     ]);
     return;
@@ -2889,12 +3043,12 @@ if(name==='太上长老 苏青雪'){
     showNpcResult('太上长老 苏青雪',`${line}\n\n苏青雪看了看你的修为，轻声道：“此事牵涉化神层次的海族与古水府。你心意虽诚，却还承受不起那里的因果。待你突破化神，再来找我。”\n\n接取条件：境界达到化神初期。`,'danger');
     return;
   }
-  openNpcDialog('太上长老 苏青雪',`${line}\n\n苏青雪转身望向殿中一盏熄灭多年的冰灯：\n\n“宗主离山前，将本命冰魄分出一缕制成命灯。后来东海龙宫传出消息，龙太子得到了一盏不会融化的蓝色古灯。我怀疑那就是宗主的冰魄命灯。”\n\n“你已入化神，可愿替我去东海龙宫，击败龙太子，寻回命灯？只要灯焰重燃，我们便能确认宗主是否尚在人世。”`,[
+  openNpcDialog('太上长老 苏青雪',`${line}\n\n苏青雪转身望向殿中一盏熄灭多年的冰灯：\n\n“宗主离山前，将本命冰魄分出一缕制成命灯。命灯的寒意一路断在东海海眼，那里藏着一条暗蛟龙，常年搅乱水脉，也遮住了宗主留下的踪迹。”\n\n“你已入化神，可愿替我去东海龙宫的龟丞相府，向双面龟丞相求取破局之法？只要海眼重归清明，我们便能确认宗主是否尚在人世。”`,[
     {text:'接取任务：寒灯寻主',alt:true,onClick(){
-      g.suQingxueQuest={active:true,done:false,baseKill:g.bossKills?.[3]||0};
+      g.suQingxueQuest={active:true,done:false,stage:'turtle',jadeGiven:false,dragonSummoned:false,dragonDefeated:false};
       log('接取太上长老任务：寒灯寻主。','good');
-      pushLocalLog('【太上长老任务】前往东海龙宫击败龙太子，寻找失踪宗主的冰魄命灯。');
-      showNpcResult('寒灯寻主',`任务目标：前往东海龙宫，击败Boss龙太子。\n任务线索：龙太子宝库中的冰魄命灯。\n完成后返回掌教内殿向苏青雪复命。\n\n奖励：被动技能书《千里冰封》\n效果：生命+1000，防御+80。`,'good');
+      pushLocalLog('【太上长老任务】前往东海龙宫·龟丞相府，向双面龟丞相查探海眼中的暗蛟龙。');
+      showNpcResult('寒灯寻主',`任务目标：前往东海龙宫·龟丞相府，与双面龟丞相交谈。\n任务线索：海眼暗蛟龙遮蔽了冰魄命灯的去向。\n完成海眼之战后，返回掌教内殿向苏青雪复命。\n\n奖励：被动技能书《千里冰封》\n效果：生命+1000，防御+80。`,'good');
       renderTaskPanel();renderSceneMap();render();save();
     }},
     {text:'容我准备',ghost:true}
@@ -2947,7 +3101,9 @@ openNpcDialog('掌教 林玄一',`赤铜密简遇到青铜令牌后自行展开�
 “玄月东行，沉月水府。”
 “龙鳞为令，血脉为钥。”
 
-掌教沉声道：“玄月使已转往东海。临河镇惨案并未结束，你父亲留下的令牌，很可能也是开启沉月水府的钥匙之一。”`,[
+掌教沉声道：“玄月使已转往东海。临河镇惨案并未结束，你父亲留下的令牌，很可能也是开启沉月水府的钥匙之一。”
+
+他又将一枚裂纹金丹置于案上：“你已亲见金丹层次的凶险。从金丹开始，突破下一大境界不再只靠积累修为。须先将本阶修至大圆满，再于小地图的渡劫台引动天劫。每服用一颗渡劫丹，本次成功率便提高 5%；丹药不足仍可强行渡劫，但失败会使本阶大圆满修为尽散。”`,[
 {text:'收下密简',alt:true,onClick(){let advanced=advanceMainQuest(9,'第三章完成：赤铜密简显示玄月使已前往东海沉月水府。');if(advanced)rewardMainQuestStep('returnHeadmasterWithBrief',10);g.mainQuestChapter3Done=true;g.stones+=2500;addFixedCultPill(3,1000,3);log('主线第三章完成：赤焰追凶。获得灵石2500、3级修为丹×3。','good');pushLocalLog('【主线】第三章完成：玄月使的行踪指向东海沉月水府。');showNpcResult('第三章完成·玄月东行',`你已完成前三章主线。\n\n奖励：灵石×2500\n奖励：3级修为丹×3\n\n新线索：东海、沉月水府、龙鳞玉令。`,'good');renderTaskPanel();renderSceneMap();render();save();}},
 {text:'再看一遍密简',ghost:true}
 ]);
@@ -3191,7 +3347,7 @@ function showSectArrivalIntro(){
           openNpcDialog('小师妹 纳兰清月',`至于你怀中的青铜令牌……先去路点33 · 宗主峰外殿，找巡峰弟子辨认。
 
 宗主峰外殿已对外门弟子开放，巡峰弟子身旁会出现❗️提示。`,[
-            {text:'明白了，我这就去'}
+            {text:'明白了，我这就去',onClick(){startTransmissionTutorial();}}
           ]);
         }}
       ]);
@@ -3291,7 +3447,7 @@ function bossMechanicProfile(target,area){
   return{name:p[0],multiplier:p[1],minorName:p[2],minorMultiplier:p[3]};
 }
 function setupBossMechanic(b){
-  if(!b?.target?.boss||b.enemy.bossMechanic)return;
+  if(!b?.target?.boss||b.target.darkDragon||b.enemy.bossMechanic)return;
   let profile=bossMechanicProfile(b.target,b.area);
   let maxMp=b.enemy.maxMp||b.enemy.mp||0,mpCost=Math.max(1,Math.ceil(maxMp*.3)),minorCost=Math.max(1,Math.ceil(maxMp*.1)),manaRegen=Math.max(1,Math.ceil(maxMp*.08));
   b.enemy.bossMechanic={...profile,mpCost,minorCost,manaRegen,countdown:2,charging:false,intent:'两回合后施展'};
@@ -3396,6 +3552,81 @@ battleEnemyTurn=async function(){
   }
   renderBattle();
   return baseBossEnemyTurn();
+};
+
+const baseNpcQuestIconWithColdJade=npcQuestIcon;
+npcQuestIcon=name=>{
+  let quest=g.suQingxueQuest;
+  if(name==='双面龟丞相'){
+    if(!quest?.active||g.suQingxueQuestDone)return '💬';
+    return quest.jadeGiven?'💬':'❗️';
+  }
+  if(name==='太上长老 苏青雪'&&quest?.active&&!g.suQingxueQuestDone){
+    return quest.dragonDefeated?'⭕️':'❓';
+  }
+  return baseNpcQuestIconWithColdJade(name);
+};
+
+const resolveLocalTargetWithDarkDragon=resolveLocalTarget;
+resolveLocalTarget=(target,batch=false)=>{
+  let result=resolveLocalTargetWithDarkDragon(target,batch);
+  if(result?.type==='战斗'&&target?.darkDragon){
+    let quest=g.suQingxueQuest;
+    if(quest?.active&&!quest.dragonDefeated){
+      quest.dragonDefeated=true;quest.done=true;quest.stage='return';
+      pushLocalLog('【寒灯寻主】暗蛟龙伏诛，海眼水脉复归清明；请返回太玄宗向苏青雪复命。');
+      log('太上长老任务：暗蛟龙已伏诛。','good');
+      showNpcResult('海眼澄明','暗蛟龙沉入海眼，冰魄残焰自暗潮中升起。失踪宗主的线索终于重现，快回太玄宗向苏青雪复命。','good');
+      renderTaskPanel();
+    }
+  }
+  return result;
+};
+
+function darkDragonDamagePlayer(b,damage,summary){
+  let result=absorbBattleDamage(b,damage);
+  g.hp=b.player.hp;
+  battleFx('player',result.hpDamage?'-'+result.hpDamage:'盾挡',result.hpDamage===0);
+  battleLog(`${summary}${result.blocked?`，护盾吸收${result.blocked}点`:''}${result.hpDamage?`，生命受到${result.hpDamage}点伤害`:'，生命未受伤害'}。`);
+  if(b.player.hp<=0){handleBattleDeath(b.target.name);return false;}
+  return true;
+}
+const battleEnemyTurnWithDarkDragon=battleEnemyTurn;
+battleEnemyTurn=async function(){
+  let b=battleState;
+  if(!b?.target?.darkDragon)return battleEnemyTurnWithDarkDragon();
+  if((b.enemy.skipTurns||0)>0)return battleEnemyTurnWithDarkDragon();
+  if(b.enemy.hp<5000&&b.enemy.mp>=200){
+    b.enemy.mp-=200;
+    await playNormalAttackAnimation('enemy');
+    if(battleState!==b)return;
+    let before=b.enemy.hp;
+    b.enemy.hp=Math.min(b.enemy.maxHp,b.enemy.hp+5000);
+    battleFx('enemy','+'+(b.enemy.hp-before),true);
+    battleLog('暗蛟龙施展「鲸吞」，消耗200点法力，吞纳海眼灵潮恢复'+(b.enemy.hp-before)+'点生命。');
+    renderBattle();
+    return;
+  }
+  let turn=b.enemy.darkDragonCycle||0;
+  b.enemy.darkDragonCycle=(turn+1)%3;
+  if(turn===0&&b.enemy.mp>=250){
+    b.enemy.mp-=250;
+    await playNormalAttackAnimation('enemy');
+    if(battleState!==b)return;
+    let damage=Math.max(1,Math.floor(b.enemy.hp*.1));
+    if(darkDragonDamagePlayer(b,damage,`暗蛟龙施展「蛟龙出海」，消耗250点法力，以自身剩余生命的10%化作${damage}点潮压`))renderBattle();
+    return;
+  }
+  if(turn===1&&b.enemy.mp>=300){
+    b.enemy.mp-=300;
+    await playNormalAttackAnimation('enemy');
+    if(battleState!==b)return;
+    let stunned=Math.random()<.35;
+    if(stunned){b.player.skipTurns=Math.max(1,b.player.skipTurns||0);b.player.skipReason='腾蛟之鸣震荡神魂，你本回合无法行动。';}
+    if(darkDragonDamagePlayer(b,200,`暗蛟龙施展「腾蛟之鸣」，消耗300点法力，造成200点伤害${stunned?'并使你陷入眩晕':''}`))renderBattle();
+    return;
+  }
+  return battleEnemyTurnWithDarkDragon();
 };
 
 function bossSpotForMap(map){let key=Object.keys(spotBosses).find(x=>Number(x.split(':')[0])===Number(map));return key==null?null:Number(key.split(':')[1])}
