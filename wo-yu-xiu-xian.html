@@ -4713,6 +4713,401 @@ renderBattleStatusEffects=function(){
   if(wound?.turns>0&&box){box.hidden=false;box.insertAdjacentHTML('beforeend',`<span class="battle-status-chip control">雷系创伤 ${wound.turns}回合</span>`)}
 };
 
+// ===== 东海龙宫 · 沉月水府：水府守护者与惊涛拍岸 =====
+function waterPalaceQuest(){return g.waterPalaceQuest||(g.waterPalaceQuest={learned:false})}
+function hasTidalShoreSkill(){return(g.activeSkills||[]).some(sk=>sk?.tidalShore||sk?.name==='惊涛拍岸')||(g.skillReserve||[]).some(sk=>sk?.tidalShore||sk?.name==='惊涛拍岸')}
+function makeTidalShoreSkill(){return{name:'惊涛拍岸',icon:'🌊',kind:'active',element:'water',tidalShore:true,mpCost:10000,desc:'水系主动技：消耗10000MP，造成普通攻击伤害×2.5，并附加水系创伤5回合；创伤期间敌人受到的水系伤害×2。'}}
+function learnTidalShore(){
+  let quest=waterPalaceQuest(),shells=bagItemCountByName('虾壳');
+  if(quest.learned||hasTidalShoreSkill())return toast('你已经领悟惊涛拍岸');
+  if(shells<50)return toast(`虾壳不足：${fmt(shells)}/50`);
+  if(!takeBagItemsByName('虾壳',50))return toast('虾壳扣除失败，请整理背包后重试');
+  ensureSkillLayout();
+  let skill=makeTidalShoreSkill();
+  if((g.activeSkills||[]).length<5)g.activeSkills.push(skill);else g.skillReserve.push(skill);
+  quest.learned=true;
+  pushLocalLog('向水府守护者交付虾壳×50，领悟水系主动技「惊涛拍岸」。');
+  showNpcResult('惊涛拍岸','水府守护者将五十枚虾壳投入月潮池，水纹骤起，如巨浪拍向断崖。\n\n交付：虾壳 ×50\n学会水系主动技：惊涛拍岸\n\n消耗法力：10000\n效果：普通攻击伤害×2.5，并令敌人陷入5回合水系创伤；创伤期间受到的水系伤害×2。\n\n技能已加入主动栏或备用栏。','good');
+  renderSkillHud();renderBag();renderSceneMap();render();save();
+}
+function talkWaterPalaceGuardian(){
+  let quest=waterPalaceQuest(),shells=bagItemCountByName('虾壳');
+  if(quest.learned||hasTidalShoreSkill())return showNpcResult('水府守护者','水府守护者立于月潮池畔：“惊涛已记住你的灵息。水系创伤未散时，再起水法，便能令旧浪重叠。”','good');
+  openNpcDialog('水府守护者',`沉月水府的月潮池前，守护者以水甲执戟而立。\n\n“虾兵甲壳中藏着东海潮汐的细纹。交付五十枚虾壳，我便以月潮池为引，传你一式惊涛拍岸。”\n\n当前虾壳：${fmt(shells)} / 50\n\n惊涛拍岸：消耗10000点法力，造成普通攻击伤害×2.5；命中后留下5回合水系创伤，使敌人受到的水系伤害翻倍。`,[{text:'交付虾壳×50，领悟惊涛拍岸',alt:true,onClick(){learnTidalShore()}},{text:'暂不交付',ghost:true}]);
+}
+const localNpcsWithWaterPalaceGuardian=localNpcs;
+localNpcs=function(i,spot){let npcs=localNpcsWithWaterPalaceGuardian(i,spot);if(i===3&&spot===45&&!npcs.some(npc=>(npc.name||npc[0])==='水府守护者'))npcs=[...npcs,['水府守护者','镇守月潮池，愿以虾壳传授水系秘术']];return npcs};
+const localMeetWithWaterPalaceGuardian=localMeet;
+localMeet=function(idx=0){let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];if(name==='水府守护者')return talkWaterPalaceGuardian();return localMeetWithWaterPalaceGuardian(idx)};
+const npcQuestIconWithWaterPalaceGuardian=npcQuestIcon;
+npcQuestIcon=function(name,mapIndex,spot){if(name==='水府守护者')return waterPalaceQuest().learned||hasTidalShoreSkill()?'💬':'📕';return npcQuestIconWithWaterPalaceGuardian(name,mapIndex,spot)};
+
+const battleSkillCostWithTidalShore=battleSkillCost;
+battleSkillCost=function(sk,i){if(sk?.tidalShore||sk?.name==='惊涛拍岸'){let cost=10000;return hasDonghuangBell()?Math.max(1,Math.ceil(cost*.7)):cost}return battleSkillCostWithTidalShore(sk,i)};
+function isWaterSkill(skill){return !!skill&&skillThemeClass(skill)==='theme-water'}
+const battleSkillEffectWithTidalShore=battleSkillEffect;
+battleSkillEffect=async function(sk,idx=0){
+  let isTidalShore=sk?.tidalShore||sk?.name==='惊涛拍岸';
+  if(!isTidalShore){
+    let b=battleState,before=b?.enemy?.hp||0,result=await battleSkillEffectWithTidalShore(sk,idx);
+    let wound=b?.enemy?.waterWound;
+    if(result!==false&&b&&battleState===b&&isWaterSkill(sk)&&wound?.turns>0&&before>b.enemy.hp){
+      let extra=Math.min(b.enemy.hp,before-b.enemy.hp);
+      if(extra>0){b.enemy.hp=Math.max(0,b.enemy.hp-extra);battleFx('enemy','-'+fmt(extra));battleLog(`水系创伤引爆，额外造成${fmt(extra)}点水系伤害。`)}
+    }
+    return result;
+  }
+  let b=battleState,reason=battleSkillBlockReason(sk,idx,b);
+  if(reason){toast(reason);return false}
+  let cost=battleSkillCost(sk,idx),st=statTotal();
+  b.player.mp=Math.max(0,b.player.mp-cost);
+  await playHeroFrames('palmStrike',[130,150,220,230],{lunge:true});
+  let baseAttack=Number(g.attack)||0,extraAttack=Math.max(0,Number(st.attack||0)-baseAttack),effectiveAttack=baseAttack*(b.player.attackMultiplier||1)+extraAttack;
+  let normalHit=Math.max(1,Math.floor(effectiveAttack+Math.random()*effectiveAttack*.45-b.enemy.defense*.45));
+  let woundActive=(b.enemy.waterWound?.turns||0)>0,damage=Math.floor(normalHit*2.5*(woundActive?2:1));
+  b.enemy.hp=Math.max(0,b.enemy.hp-damage);
+  b.enemy.waterWound={turns:5,fresh:true};
+  battleFx('enemy','-'+fmt(damage));
+  battleLog(`你施展惊涛拍岸，消耗${fmt(cost)}点法力，造成普通攻击伤害×2.5${woundActive?'，水系创伤使本次水伤翻倍':''}，并附加水系创伤5回合。`);
+  return true;
+};
+const battleEnemyTurnWithWaterWound=battleEnemyTurn;
+battleEnemyTurn=async function(){
+  let b=battleState,result=await battleEnemyTurnWithWaterWound();
+  let wound=b?.enemy?.waterWound;
+  if(b&&battleState===b&&wound?.turns>0){
+    if(wound.fresh)delete wound.fresh;
+    else {wound.turns=Math.max(0,wound.turns-1);if(!wound.turns){delete b.enemy.waterWound;battleLog('敌方的水系创伤逐渐消散。')}}
+  }
+  return result;
+};
+const renderBattleStatusEffectsWithWaterWound=renderBattleStatusEffects;
+renderBattleStatusEffects=function(){
+  renderBattleStatusEffectsWithWaterWound();
+  let wound=battleState?.enemy?.waterWound,box=$('#battleStatusStrip');
+  if(wound?.turns>0&&box){box.hidden=false;box.insertAdjacentHTML('beforeend',`<span class="battle-status-chip formation">水系创伤 ${wound.turns}回合</span>`)}
+};
+
+// ===== 九天雷域 · 淬体石与引雷台 =====
+let bodyTemperingSession=null;
+function ensureBodyTemperingModal(){let modal=$('#bodyTemperingModal');if(modal)return modal;modal=document.createElement('div');modal.id='bodyTemperingModal';modal.className='event-modal liquid-meditation-modal';modal.innerHTML='<div><h2>淬体石 · 锤炼体魄</h2><div class="event-result">雷域罡风掠过石面，筋骨在一次次震荡中逐渐坚韧。</div><div class="progress"><i id="bodyTemperingProgressFill"></i></div><div class="progress-text"><span id="bodyTemperingProgressText">准备淬体</span><b id="bodyTemperingYieldText">本次累计：防御+0.0</b></div><div class="actions"><button class="btn ghost" id="stopBodyTemperingBtn">退出淬体</button></div></div>';document.body.appendChild(modal);$('#stopBodyTemperingBtn').onclick=()=>stopBodyTempering();return modal}
+function renderBodyTemperingProgress(){if(!bodyTemperingSession)return;let now=Date.now();while(now>=bodyTemperingSession.nextAt){g.defense=(Number(g.defense)||0)+.5;bodyTemperingSession.yield+=.5;bodyTemperingSession.nextAt+=3000;pushLocalLog(`淬体石锤炼：防御 +0.5（累计+${bodyTemperingSession.yield.toFixed(1)}）`);renderSceneMap();render();save()}let left=Math.max(0,bodyTemperingSession.nextAt-now),fill=$('#bodyTemperingProgressFill'),text=$('#bodyTemperingProgressText'),yieldText=$('#bodyTemperingYieldText');if(fill)fill.style.width=Math.max(0,Math.min(100,(1-left/3000)*100))+'%';if(text)text.textContent=`下一次淬体：${(left/1000).toFixed(1)} 秒`;if(yieldText)yieldText.textContent=`本次累计：防御+${bodyTemperingSession.yield.toFixed(1)}`}
+function startBodyTempering(){let i=g.selectedScene??g.map;if(i!==8||activeSpot()!==6)return toast('请前往九天雷域 · 淬体石锤炼体魄');if(bodyTemperingSession)return true;if(localExploreSession)stopLocalExplore('进入淬体石');if(meditationSession)stopMeditation(false);if(miningSession)stopAutoMining();if(liquidMeditationSession)stopLiquidMeditation();if(swordArraySession)stopSwordArrayMeditation();if(residualMonumentSession)stopResidualMonumentMeditation();bodyTemperingSession={yield:0,nextAt:Date.now()+3000,timer:null};let modal=ensureBodyTemperingModal();modal.classList.add('show');bodyTemperingSession.timer=setInterval(renderBodyTemperingProgress,100);renderBodyTemperingProgress();pushLocalLog('进入淬体石锤炼：每3秒永久获得0.5点防御。');save();return true}
+function stopBodyTempering(){if(!bodyTemperingSession)return;clearInterval(bodyTemperingSession.timer);let total=bodyTemperingSession.yield;bodyTemperingSession=null;$('#bodyTemperingModal')?.classList.remove('show');pushLocalLog(`离开淬体石，本次永久获得防御 +${total.toFixed(1)}。`);renderSceneMap();render();save()}
+function talkBodyTemperingStone(){if(bodyTemperingSession)return openNpcDialog('淬体石',`淬体石仍在震荡你的筋骨。\n\n本次累计：防御 +${bodyTemperingSession.yield.toFixed(1)}\n每3秒永久获得0.5点防御。`,[{text:'结束淬体',alt:true,onClick(){stopBodyTempering()}},{text:'继续淬体',ghost:true}]);openNpcDialog('淬体石','一块遍布雷纹的黑石立在雷池边缘，靠近时便有罡风锤炼周身。\n\n可在此自动淬体，每3秒永久获得0.5点防御，随时可退出。',[{text:'开始淬体',alt:true,onClick(){startBodyTempering()}},{text:'暂不淬体',ghost:true}])}
+function thunderPlatformQuest(){return g.thunderPlatformQuest||(g.thunderPlatformQuest={lightningLearned:false,fireLearned:false})}
+function hasLightningFlashSkill(){return(g.activeSkills||[]).some(sk=>sk?.lightningFlash||sk?.name==='电闪雷鸣')||(g.skillReserve||[]).some(sk=>sk?.lightningFlash||sk?.name==='电闪雷鸣')}
+function hasWildfireSkill(){return(g.activeSkills||[]).some(sk=>sk?.wildfire||sk?.name==='烈火燎原')||(g.skillReserve||[]).some(sk=>sk?.wildfire||sk?.name==='烈火燎原')}
+function makeLightningFlashSkill(){return{name:'电闪雷鸣',icon:'⚡',kind:'active',element:'lightning',lightningFlash:true,mpCost:70000,desc:'雷系主动技：消耗70000MP，造成普通攻击伤害×3.5；敌方有雷系创伤时，麻痹其1回合。施放后冷却1回合。'}}
+function makeWildfireSkill(){return{name:'烈火燎原',icon:'🔥',kind:'active',element:'fire',wildfire:true,mpCost:75000,desc:'火系主动技：消耗75000MP，造成普通攻击伤害×3.5，并附加火系创伤3回合；创伤期间敌人受到的火系伤害×2。'}}
+function learnThunderPlatformSkill(kind){
+  let quest=thunderPlatformQuest(),isLightning=kind==='lightning',known=isLightning?(quest.lightningLearned||hasLightningFlashSkill()):(quest.fireLearned||hasWildfireSkill()),name=isLightning?'电闪雷鸣':'烈火燎原',skill=isLightning?makeLightningFlashSkill():makeWildfireSkill();
+  if(known)return toast(`你已经学会${name}`);
+  if((g.stones||0)<150000)return toast(`灵石不足：学习${name}需要150000灵石`);
+  g.stones-=150000;ensureSkillLayout();
+  if((g.activeSkills||[]).length<5)g.activeSkills.push(skill);else g.skillReserve.push(skill);
+  if(isLightning)quest.lightningLearned=true;else quest.fireLearned=true;
+  pushLocalLog(`在引雷台支付灵石×150000，学会${skill.element==='fire'?'火系':'雷系'}主动技「${name}」。`);
+  showNpcResult(name,`消耗：灵石 ×150000\n学会${skill.element==='fire'?'火系':'雷系'}主动技：${name}\n\n${skill.desc}\n\n技能已加入主动栏或备用栏。`,'good');
+  renderSkillHud();renderSceneMap();render();save();
+}
+function talkThunderLord(){let quest=thunderPlatformQuest();if(quest.lightningLearned||hasLightningFlashSkill())return showNpcResult('雷公','雷公收起引雷锤：“电闪雷鸣已在你经脉中奔走。敌人若已有雷伤，便以麻痹封住它的动作。”','good');openNpcDialog('雷公',`雷公立于引雷台最高处，引雷锤每一次落下，云层便裂出一道金白电芒。\n\n“交付十五万灵石，我传你电闪雷鸣。若敌人已被雷伤缠身，此术能令其麻痹一回合。”\n\n价格：灵石 ×150000\n当前灵石：${fmt(g.stones||0)}`,[{text:'支付15万灵石，学习电闪雷鸣',alt:true,onClick(){learnThunderPlatformSkill('lightning')}},{text:'暂不学习',ghost:true}])}
+function talkFireMother(){let quest=thunderPlatformQuest();if(quest.fireLearned||hasWildfireSkill())return showNpcResult('火母','火母掌间的焰轮渐渐收拢：“烈火燎原已传于你。待火伤未散，再施火法便能让余烬重燃。”','good');openNpcDialog('火母',`火母端坐在引雷台的赤铜火环中，雷火在她身后交织成一片火云。\n\n“交付十五万灵石，我传你烈火燎原。火伤留在敌身三回合，其间后续火法皆可借势翻倍。”\n\n价格：灵石 ×150000\n当前灵石：${fmt(g.stones||0)}`,[{text:'支付15万灵石，学习烈火燎原',alt:true,onClick(){learnThunderPlatformSkill('fire')}},{text:'暂不学习',ghost:true}])}
+const localNpcsWithThunderPlatform=localNpcs;
+localNpcs=function(i,spot){let npcs=localNpcsWithThunderPlatform(i,spot);if(i===8&&spot===6&&!npcs.some(npc=>(npc.name||npc[0])==='淬体石'))npcs=[...npcs,['淬体石','雷纹黑石可反复锤炼体魄']];if(i===8&&spot===14){if(!npcs.some(npc=>(npc.name||npc[0])==='雷公'))npcs=[...npcs,['雷公','执引雷锤，传授雷系攻伐之术']];if(!npcs.some(npc=>(npc.name||npc[0])==='火母'))npcs=[...npcs,['火母','掌赤铜火环，传授火系焚杀号令']]}return npcs};
+const localMeetWithThunderPlatform=localMeet;
+localMeet=function(idx=0){let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];if(name==='淬体石')return talkBodyTemperingStone();if(name==='雷公')return talkThunderLord();if(name==='火母')return talkFireMother();return localMeetWithThunderPlatform(idx)};
+const npcQuestIconWithThunderPlatform=npcQuestIcon;
+npcQuestIcon=function(name,mapIndex,spot){let quest=thunderPlatformQuest();if(name==='雷公')return quest.lightningLearned||hasLightningFlashSkill()?'💬':'📕';if(name==='火母')return quest.fireLearned||hasWildfireSkill()?'💬':'📕';if(name==='淬体石')return '💬';return npcQuestIconWithThunderPlatform(name,mapIndex,spot)};
+
+const battleSkillCostWithThunderPlatform=battleSkillCost;
+battleSkillCost=function(sk,i){if(sk?.lightningFlash||sk?.name==='电闪雷鸣'){let cost=70000;return hasDonghuangBell()?Math.max(1,Math.ceil(cost*.7)):cost}if(sk?.wildfire||sk?.name==='烈火燎原'){let cost=75000;return hasDonghuangBell()?Math.max(1,Math.ceil(cost*.7)):cost}return battleSkillCostWithThunderPlatform(sk,i)};
+const battleSkillBlockReasonWithThunderPlatform=battleSkillBlockReason;
+battleSkillBlockReason=function(skill,index,b=battleState){if((skill?.lightningFlash||skill?.name==='电闪雷鸣')&&(b?.player?.cooldowns?.lightningFlash||0)>0)return `冷却中（${b.player.cooldowns.lightningFlash}回合）`;return battleSkillBlockReasonWithThunderPlatform(skill,index,b)};
+function normalBattleHit(b,st,multiplier){let baseAttack=Number(g.attack)||0,extraAttack=Math.max(0,Number(st.attack||0)-baseAttack),effectiveAttack=baseAttack*(b.player.attackMultiplier||1)+extraAttack,normal=Math.max(1,Math.floor(effectiveAttack+Math.random()*effectiveAttack*.45-b.enemy.defense*.45));return Math.max(1,Math.floor(normal*multiplier))}
+function isFireSkill(skill){return !!skill&&skillThemeClass(skill)==='theme-fire'}
+const battleSkillEffectWithThunderPlatform=battleSkillEffect;
+battleSkillEffect=async function(sk,idx=0){
+  let isLightningFlash=sk?.lightningFlash||sk?.name==='电闪雷鸣',isWildfire=sk?.wildfire||sk?.name==='烈火燎原';
+  if(!isLightningFlash&&!isWildfire){
+    let b=battleState,before=b?.enemy?.hp||0,result=await battleSkillEffectWithThunderPlatform(sk,idx);
+    let wound=b?.enemy?.fireWound;
+    if(result!==false&&b&&battleState===b&&isFireSkill(sk)&&wound?.turns>0&&before>b.enemy.hp){let extra=Math.min(b.enemy.hp,before-b.enemy.hp);if(extra>0){b.enemy.hp=Math.max(0,b.enemy.hp-extra);battleFx('enemy','-'+fmt(extra));battleLog(`火系创伤引爆，额外造成${fmt(extra)}点火系伤害。`)}}
+    return result;
+  }
+  let b=battleState,reason=battleSkillBlockReason(sk,idx,b);
+  if(reason){toast(reason);return false}
+  let cost=battleSkillCost(sk,idx),st=statTotal();
+  b.player.mp=Math.max(0,b.player.mp-cost);
+  if(isWildfire)await playFireballAnimation();else await playHeroFrames('palmStrike',[130,150,220,230],{lunge:true});
+  if(isLightningFlash){
+    let thunderWound=(b.enemy.thunderWound?.turns||0)>0,damage=normalBattleHit(b,st,3.5)*(thunderWound?2:1);
+    b.enemy.hp=Math.max(0,b.enemy.hp-damage);b.player.cooldowns.lightningFlash=2;
+    if(thunderWound)b.enemy.skipTurns=Math.max(1,b.enemy.skipTurns||0);
+    battleFx('enemy','-'+fmt(damage));battleLog(`你施展电闪雷鸣，消耗${fmt(cost)}点法力，造成普通攻击伤害×3.5${thunderWound?'，雷系创伤使本次雷伤翻倍并麻痹敌人1回合':''}；下回合进入冷却。`);
+    return true;
+  }
+  let fireWound=(b.enemy.fireWound?.turns||0)>0,damage=normalBattleHit(b,st,3.5)*(fireWound?2:1);
+  b.enemy.hp=Math.max(0,b.enemy.hp-damage);b.enemy.fireWound={turns:3,fresh:true};
+  battleFx('enemy','-'+fmt(damage));battleLog(`你施展烈火燎原，消耗${fmt(cost)}点法力，造成普通攻击伤害×3.5${fireWound?'，火系创伤使本次火伤翻倍':''}，并附加火系创伤3回合。`);
+  return true;
+};
+const battleEnemyTurnWithFireWound=battleEnemyTurn;
+battleEnemyTurn=async function(){let b=battleState,result=await battleEnemyTurnWithFireWound();let wound=b?.enemy?.fireWound;if(b&&battleState===b&&wound?.turns>0){if(wound.fresh)delete wound.fresh;else{wound.turns=Math.max(0,wound.turns-1);if(!wound.turns){delete b.enemy.fireWound;battleLog('敌方的火系创伤逐渐熄灭。')}}}return result};
+const renderBattleStatusEffectsWithFireWound=renderBattleStatusEffects;
+renderBattleStatusEffects=function(){renderBattleStatusEffectsWithFireWound();let wound=battleState?.enemy?.fireWound,box=$('#battleStatusStrip');if(wound?.turns>0&&box){box.hidden=false;box.insertAdjacentHTML('beforeend',`<span class="battle-status-chip rage">火系创伤 ${wound.turns}回合</span>`)}};
+const finishLocalMoveWithBodyTempering=finishLocalMove;
+finishLocalMove=function(i,nextSpot){if(bodyTemperingSession&&(i!==8||nextSpot!==6))stopBodyTempering();return finishLocalMoveWithBodyTempering(i,nextSpot)};
+const goSceneWithBodyTempering=goScene;
+goScene=function(){if(bodyTemperingSession)stopBodyTempering();return goSceneWithBodyTempering()};
+
+// ===== 九天雷域 · 云霄栈道：木君与云霄 =====
+function cloudPathQuest(){return g.cloudPathQuest||(g.cloudPathQuest={woodLearned:false,riverLearned:false})}
+function hasVerdantGrowthSkill(){return(g.activeSkills||[]).some(sk=>sk?.verdantGrowth||sk?.name==='百草丰茂')||(g.skillReserve||[]).some(sk=>sk?.verdantGrowth||sk?.name==='百草丰茂')}
+function hasYellowRiverArraySkill(){return(g.activeSkills||[]).some(sk=>sk?.yellowRiverArray||sk?.name==='九曲黄河阵')||(g.skillReserve||[]).some(sk=>sk?.yellowRiverArray||sk?.name==='九曲黄河阵')}
+function makeVerdantGrowthSkill(){return{name:'百草丰茂',icon:'🌿',kind:'active',element:'wood',verdantGrowth:true,mpCost:75000,desc:'木系主动技：消耗75000MP，获得木系加成4回合；加成期间自身受到的木系回复效果×2。'}}
+function makeYellowRiverArraySkill(){return{name:'九曲黄河阵',icon:'〰️',kind:'active',yellowRiverArray:true,mpCost:100000,desc:'无属性主动技：消耗100000MP，获得黄河标记3回合；标记期间自身控制技能的禁行动效果延长1回合。'}}
+function learnCloudPathSkill(kind){
+  let quest=cloudPathQuest(),isWood=kind==='wood',known=isWood?(quest.woodLearned||hasVerdantGrowthSkill()):(quest.riverLearned||hasYellowRiverArraySkill()),name=isWood?'百草丰茂':'九曲黄河阵',skill=isWood?makeVerdantGrowthSkill():makeYellowRiverArraySkill();
+  if(known)return toast(`你已经学会${name}`);
+  if((g.stones||0)<150000)return toast(`灵石不足：学习${name}需要150000灵石`);
+  g.stones-=150000;ensureSkillLayout();
+  if((g.activeSkills||[]).length<5)g.activeSkills.push(skill);else g.skillReserve.push(skill);
+  if(isWood)quest.woodLearned=true;else quest.riverLearned=true;
+  pushLocalLog(`在云霄栈道支付灵石×150000，学会主动技「${name}」。`);
+  showNpcResult(name,`消耗：灵石 ×150000\n学会${isWood?'木系':'无属性'}主动技：${name}\n\n${skill.desc}\n\n技能已加入主动栏或备用栏。`,'good');
+  renderSkillHud();renderSceneMap();render();save();
+}
+function talkWoodLord(){let quest=cloudPathQuest();if(quest.woodLearned||hasVerdantGrowthSkill())return showNpcResult('木君','木君轻抚栈道旁的新芽：“百草丰茂已在你周身生根。木灵未散时，每一缕回春之息都会更为充盈。”','good');openNpcDialog('木君',`云霄栈道上，木君以藤蔓凝作法袍，脚下却开满不合时节的灵草。\n\n“交付十五万灵石，我传你百草丰茂。木灵护持四回合，期间一切木系回春之术皆会倍增。”\n\n价格：灵石 ×150000\n当前灵石：${fmt(g.stones||0)}`,[{text:'支付15万灵石，学习百草丰茂',alt:true,onClick(){learnCloudPathSkill('wood')}},{text:'暂不学习',ghost:true}])}
+function talkCloudSovereign(){let quest=cloudPathQuest();if(quest.riverLearned||hasYellowRiverArraySkill())return showNpcResult('云霄','云霄拂袖，九曲黄河阵的水纹隐入云海：“阵意留在你识海。待你再施禁制，河势自会替你多留一息。”','good');openNpcDialog('云霄',`云霄立在栈道尽头，云海在其足下化作九道迂回河湾。\n\n“交付十五万灵石，我传你九曲黄河阵。黄河标记维持三回合，期间你施加的禁行动效果会额外延长一回合。”\n\n价格：灵石 ×150000\n当前灵石：${fmt(g.stones||0)}`,[{text:'支付15万灵石，学习九曲黄河阵',alt:true,onClick(){learnCloudPathSkill('river')}},{text:'暂不学习',ghost:true}])}
+const localNpcsWithCloudPath=localNpcs;
+localNpcs=function(i,spot){let npcs=localNpcsWithCloudPath(i,spot);if(i===8&&spot===23){if(!npcs.some(npc=>(npc.name||npc[0])==='木君'))npcs=[...npcs,['木君','掌万木回春之息，传授木系增益之法']];if(!npcs.some(npc=>(npc.name||npc[0])==='云霄'))npcs=[...npcs,['云霄','演九曲河势，传授延长禁制之阵']]}return npcs};
+const localMeetWithCloudPath=localMeet;
+localMeet=function(idx=0){let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];if(name==='木君')return talkWoodLord();if(name==='云霄')return talkCloudSovereign();return localMeetWithCloudPath(idx)};
+const npcQuestIconWithCloudPath=npcQuestIcon;
+npcQuestIcon=function(name,mapIndex,spot){let quest=cloudPathQuest();if(name==='木君')return quest.woodLearned||hasVerdantGrowthSkill()?'💬':'📕';if(name==='云霄')return quest.riverLearned||hasYellowRiverArraySkill()?'💬':'📕';return npcQuestIconWithCloudPath(name,mapIndex,spot)};
+
+const battleSkillCostWithCloudPath=battleSkillCost;
+battleSkillCost=function(sk,i){if(sk?.verdantGrowth||sk?.name==='百草丰茂'){let cost=75000;return hasDonghuangBell()?Math.max(1,Math.ceil(cost*.7)):cost}if(sk?.yellowRiverArray||sk?.name==='九曲黄河阵'){let cost=100000;return hasDonghuangBell()?Math.max(1,Math.ceil(cost*.7)):cost}return battleSkillCostWithCloudPath(sk,i)};
+function isWoodSkill(skill){return !!skill&&skillThemeClass(skill)==='theme-wood'}
+const battleSkillEffectWithCloudPath=battleSkillEffect;
+battleSkillEffect=async function(sk,idx=0){
+  let isVerdant=sk?.verdantGrowth||sk?.name==='百草丰茂',isRiver=sk?.yellowRiverArray||sk?.name==='九曲黄河阵';
+  if(!isVerdant&&!isRiver){
+    let b=battleState,beforeHp=b?.player?.hp||0,beforeSkip=b?.enemy?.skipTurns||0,result=await battleSkillEffectWithCloudPath(sk,idx);
+    if(result!==false&&b&&battleState===b){
+      if((b.player.woodBlessing?.turns||0)>0&&isWoodSkill(sk)&&b.player.hp>beforeHp){let recovery=b.player.hp-beforeHp,extra=Math.min(b.player.maxHp-b.player.hp,recovery);if(extra>0){b.player.hp+=extra;battleFx('player','+'+fmt(extra),true);battleLog(`木系加成催生灵息，额外恢复${fmt(extra)}点生命。`)}}
+      if((b.player.yellowRiver?.turns||0)>0&&(b.enemy.skipTurns||0)>beforeSkip){b.enemy.skipTurns+=1;battleLog('黄河标记引动阵势，敌方禁行动额外延长1回合。')}
+    }
+    return result;
+  }
+  let b=battleState,reason=battleSkillBlockReason(sk,idx,b);
+  if(reason){toast(reason);return false}
+  let cost=battleSkillCost(sk,idx);b.player.mp=Math.max(0,b.player.mp-cost);
+  if(isVerdant){await playHeroFrames('witheringWood',[150,220,300,260]);b.player.woodBlessing={turns:4,fresh:true};battleFx('player','木灵加成',true);battleLog(`你施展百草丰茂，消耗${fmt(cost)}点法力，获得木系加成4回合。`);return true}
+  await playHeroFrames('palmStrike',[130,150,220,230],{lunge:true});b.player.yellowRiver={turns:3,fresh:true};battleFx('player','黄河标记',true);battleLog(`你施展九曲黄河阵，消耗${fmt(cost)}点法力，获得黄河标记3回合。`);return true;
+};
+const applyWitheringWoodTurnWithVerdantGrowth=applyWitheringWoodTurn;
+applyWitheringWoodTurn=function(b){let before=b?.player?.hp||0,result=applyWitheringWoodTurnWithVerdantGrowth(b);if(result||!b||battleState!==b||(b.player.woodBlessing?.turns||0)<=0||b.player.hp<=before)return result;let recovery=b.player.hp-before,extra=Math.min(b.player.maxHp-b.player.hp,recovery);if(extra>0){b.player.hp+=extra;battleFx('player','+'+fmt(extra),true);battleLog(`木系加成催生灵息，额外恢复${fmt(extra)}点生命。`)}return result};
+const battleEnemyTurnWithCloudPath= battleEnemyTurn;
+battleEnemyTurn=async function(){let b=battleState,result=await battleEnemyTurnWithCloudPath();if(b&&battleState===b){for(let key of ['woodBlessing','yellowRiver']){let effect=b.player[key];if(!effect?.turns)continue;if(effect.fresh)delete effect.fresh;else{effect.turns=Math.max(0,effect.turns-1);if(!effect.turns){delete b.player[key];battleLog(key==='woodBlessing'?'木系加成逐渐散去。':'黄河标记逐渐散去。')}}}}return result};
+const renderBattleStatusEffectsWithCloudPath=renderBattleStatusEffects;
+renderBattleStatusEffects=function(){renderBattleStatusEffectsWithCloudPath();let b=battleState,box=$('#battleStatusStrip');if(!b||!box)return;if((b.player.woodBlessing?.turns||0)>0){box.hidden=false;box.insertAdjacentHTML('beforeend',`<span class="battle-status-chip wood">木系加成 ${b.player.woodBlessing.turns}回合</span>`)}if((b.player.yellowRiver?.turns||0)>0){box.hidden=false;box.insertAdjacentHTML('beforeend',`<span class="battle-status-chip formation">黄河标记 ${b.player.yellowRiver.turns}回合</span>`)}};
+
+// ===== 仙界天门 · 问心桥：南宫问心与昆仑镜 =====
+function hasKunlunMirror(){return !!artifactState().kunlunMirror}
+function kunlunMirrorArtifact(){return{name:'昆仑镜',icon:'镜',effect:'每次战斗可抵挡一次致命一击，触发后保留1点生命。'}}
+function nangongQuizState(){return g.nangongQuiz||(g.nangongQuiz={completed:false,streak:0,asked:[]})}
+const nangongQuizQuestions=[
+  {q:'人体正常体温通常约为多少摄氏度？',correct:'37摄氏度左右',wrong:['20摄氏度左右','50摄氏度左右']},
+  {q:'一天有多少小时？',correct:'24小时',wrong:['12小时','36小时']},
+  {q:'植物进行光合作用主要需要什么？',correct:'阳光',wrong:['月光','金属']},
+  {q:'我国法定货币的基本单位是什么？',correct:'元',wrong:['两','贯']},
+  {q:'地球绕太阳公转一周大约需要多久？',correct:'一年',wrong:['一个月','十年']},
+  {q:'水在标准大气压下的沸点是多少？',correct:'100摄氏度',wrong:['0摄氏度','50摄氏度']},
+  {q:'红绿灯中，通常表示“可以通行”的颜色是什么？',correct:'绿色',wrong:['红色','黄色']},
+  {q:'刷牙时，建议每次刷牙的时间约为多久？',correct:'两分钟左右',wrong:['十秒左右','二十分钟左右']},
+  {q:'下列哪一种属于可再生能源？',correct:'太阳能',wrong:['煤炭','石油']},
+  {q:'人类呼吸时吸入空气的主要目的是什么？',correct:'获取氧气',wrong:['获取二氧化碳','获取氮气']}
+];
+function shuffledChoices(question){return[{text:question.correct,correct:true},{text:question.wrong[0],correct:false},{text:question.wrong[1],correct:false}].sort(()=>Math.random()-.5)}
+function grantKunlunMirror(){let state=nangongQuizState(),artifacts=artifactState();if(artifacts.kunlunMirror||state.completed)return toast('昆仑镜已认你为主');artifacts.kunlunMirror={...kunlunMirrorArtifact(),obtainedAt:Date.now()};state.completed=true;state.streak=0;state.asked=[];pushLocalLog('南宫问心认可你的心境，授予四大神器之一「昆仑镜」。');showNpcResult('昆仑镜','问心桥上的云雾尽散，一面古镜自桥下昆仑虚影中浮起，镜中映出你始终未改的道心。\n\n获得特殊神器：昆仑镜\n效果：每次战斗可抵挡一次致命一击，触发后保留1点生命。\n\n可在“装备”功能的四大神器栏查看。','good');renderEquipModal();renderSceneMap();render();save()}
+function askNangongQuestion(){
+  let state=nangongQuizState();
+  if(state.completed||hasKunlunMirror())return grantKunlunMirror();
+  let available=nangongQuizQuestions.map((question,index)=>({question,index})).filter(({index})=>!state.asked.includes(index));
+  if(!available.length){state.asked=[];available=nangongQuizQuestions.map((question,index)=>({question,index}));}
+  let picked=available[Math.floor(Math.random()*available.length)],question=picked.question;
+  state.asked.push(picked.index);
+  let choices=shuffledChoices(question).map(choice=>({text:choice.text,alt:choice.correct,onClick(){
+    if(!choice.correct){state.streak=0;state.asked=[];pushLocalLog('问心桥问答失误，道心试炼从头再来。');showNpcResult('问心未过','南宫问心微微摇头：“答案不在记忆里，而在你是否真正明白自己走过的路。”\n\n本次连对中断。可再次向我发起问心挑战。','danger');save();return}
+    state.streak++;
+    if(state.streak>=5)return grantKunlunMirror();
+    pushLocalLog(`问心桥答对一题：当前连续正确 ${state.streak}/5。`);askNangongQuestion();save();
+  }}));
+  openNpcDialog('南宫问心',`问心桥上，南宫问心负手而立。\n\n第 ${state.streak+1} 题 / 连续答对 5 题\n\n${question.q}`,choices);
+}
+function talkNangongWenxin(){let state=nangongQuizState();if(state.completed||hasKunlunMirror())return showNpcResult('南宫问心','南宫问心望向桥下云海：“昆仑镜已映过你的本心。往后即便临绝境，也莫忘最初为何执剑。”','good');openNpcDialog('南宫问心','问心桥上，南宫问心以指轻叩桥栏。\n\n“道行可借外物，心境却不能。这里有一场百科问答：每题一真二伪，须连续答对五题。若中途失误，随时可以重新挑战。”',[{text:'开始问心挑战',alt:true,onClick(){let q=nangongQuizState();q.streak=0;q.asked=[];askNangongQuestion()}},{text:'暂不挑战',ghost:true}])}
+const localNpcsWithNangongWenxin=localNpcs;
+localNpcs=function(i,spot){let npcs=localNpcsWithNangongWenxin(i,spot);if(i===9&&spot===14&&!npcs.some(npc=>(npc.name||npc[0])==='南宫问心'))npcs=[...npcs,['南宫问心','镇守问心桥，以五问试炼修士道心']];return npcs};
+const localMeetWithNangongWenxin=localMeet;
+localMeet=function(idx=0){let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];if(name==='南宫问心')return talkNangongWenxin();return localMeetWithNangongWenxin(idx)};
+const npcQuestIconWithNangongWenxin=npcQuestIcon;
+npcQuestIcon=function(name,mapIndex,spot){if(name==='南宫问心')return hasKunlunMirror()?'💬':'❗️';return npcQuestIconWithNangongWenxin(name,mapIndex,spot)};
+const renderArtifactSlotsWithKunlunMirror=renderArtifactSlots;
+renderArtifactSlots=function(){let artifacts=artifactState(),slots=[artifacts.fuxiQin?{...artifacts.fuxiQin,obtained:true}:{name:'伏羲琴',obtained:false},artifacts.donghuangBell?{...artifacts.donghuangBell,obtained:true}:{name:'东皇钟',obtained:false},artifacts.kunlunMirror?{...artifacts.kunlunMirror,obtained:true}:{name:'昆仑镜',obtained:false},{name:'未现世',obtained:false}];return `<section class="artifact-section artifact-corner"><div class="artifact-heading"><h3>四大神器</h3><small>独立于六种常规装备</small></div><div class="artifact-grid">${slots.map(item=>`<div class="artifact-slot ${item.obtained?'obtained':'unsealed'}" title="${item.obtained?item.effect:'尚待机缘'}"><b>${item.obtained?`${item.icon||''} `:''}${item.name}</b><small>${item.effect||''}</small></div>`).join('')}</div></section>`};
+const absorbBattleDamageWithKunlunMirror=absorbBattleDamage;
+absorbBattleDamage=function(b,damage){let beforeHp=Math.max(0,b?.player?.hp||0),result=absorbBattleDamageWithKunlunMirror(b,damage);if(b&&b.player.hp<=0&&hasKunlunMirror()&&!b.player.kunlunMirrorUsed){b.player.hp=1;b.player.kunlunMirrorUsed=true;result={...result,hpDamage:Math.max(0,beforeHp-1),prevented:true};battleLog('昆仑镜映照生机，抵挡了一次致命伤害。')}return result};
+const renderBattleStatusEffectsWithKunlunMirror=renderBattleStatusEffects;
+renderBattleStatusEffects=function(){renderBattleStatusEffectsWithKunlunMirror();let b=battleState,box=$('#battleStatusStrip');if(b&&box&&hasKunlunMirror()&&!b.player.kunlunMirrorUsed){box.hidden=false;box.insertAdjacentHTML('beforeend','<span class="battle-status-chip shield">昆仑镜·护命</span>')}};
+
+// ===== 仙界天门 · 仙门石阶：登天梯与仙风袍 =====
+function celestialLadderState(){return g.celestialLadder||(g.celestialLadder={active:false,level:0,completed:false,rewardPending:false,rewardClaimed:false})}
+function celestialLadderNeed(level){return Math.max(0,Math.floor(level||0)*2)}
+function isXianfengArmor(item){let equip=normalizeEquip(item);return !!(equip?.xianfengArmor||equip?.name==='仙风袍')}
+function xianfengArmorRealmReady(){return realmIndex()>=realmNameIndex('合体中期')}
+function makeXianfengArmor(){return normalizeEquip({name:'仙风袍',quality:6,slot:'armor',powerLevel:realmNameIndex('合体中期')+6,sell:0,special:true,xianfengArmor:true,absorbedCount:0,requiredRealm:'合体中期',bonus:{hp:1500000,defense:100000},desc:'红色品质防具。仅合体中期及以上可佩戴；基础效果：生命+1500000、防御+100000。可在炼器峰长老铁无锋处吸收其他防具，每次继承被吸收装备全部属性的3%。'})}
+function ensureCelestialLadderStyles(){if($('#celestialLadderStyles'))return;let style=document.createElement('style');style.id='celestialLadderStyles';style.textContent=`.celestial-ladder-modal>div{width:min(560px,94vw);max-height:min(780px,92vh);display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;gap:10px;padding:18px 20px;background:linear-gradient(180deg,#f8f4e8,#e9f0e7);border:2px solid #b99a55;color:#284437;box-shadow:0 22px 55px #13221899}.celestial-ladder-modal h2{margin:0;color:#785a21;font:700 29px "STKaiti","KaiTi",serif}.celestial-ladder-summary{display:flex;justify-content:space-between;gap:9px;padding:10px 12px;border:1px solid #bfaf80;background:#fffaf0;font-size:13px}.celestial-ladder-summary b{color:#845e1f}.celestial-ladder-track{position:relative;display:grid;gap:4px;min-height:0;padding:8px 18px;overflow:auto;background:linear-gradient(90deg,#edf3e8,#fffdf5 48%,#edf3e8);border:1px solid #b4c0af}.celestial-ladder-track:before{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;background:#c4a45c;transform:translateX(-50%)}.ladder-node{position:relative;z-index:1;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:9px;min-height:31px;color:#7c867d;font-size:12px}.ladder-node i{display:grid;place-items:center;width:28px;height:28px;border:2px solid #aeb7a6;border-radius:50%;background:#f5f3ea;color:#647368;font-style:normal;font-weight:800}.ladder-node span{text-align:right}.ladder-node small{color:#87948a}.ladder-node.current i{border-color:#bd8933;background:#3d7154;color:#fff7d7;box-shadow:0 0 0 4px #d8b76455}.ladder-node.current span{color:#385d46;font-weight:800}.ladder-node.cleared i{border-color:#7ca47f;background:#e4f0dd;color:#346242}.ladder-node.next i{border-color:#bd8933;color:#8a6320}.ladder-node.next span{color:#79591f;font-weight:800}.celestial-ladder-actions{display:flex;justify-content:center;gap:9px}.celestial-ladder-actions .btn{min-width:138px}@media(max-width:650px){.celestial-ladder-modal>div{padding:14px}.celestial-ladder-modal h2{font-size:25px}.celestial-ladder-summary{font-size:12px}.ladder-node{font-size:11px}}`;document.head.appendChild(style)}
+function ensureCelestialLadderModal(){let modal=$('#celestialLadderModal');if(modal)return modal;ensureCelestialLadderStyles();modal=document.createElement('div');modal.id='celestialLadderModal';modal.className='event-modal celestial-ladder-modal';modal.innerHTML='<div><h2>登天梯</h2><div class="celestial-ladder-summary"><span id="celestialLadderStageText"></span><span id="celestialLadderAptitudeText"></span></div><div class="celestial-ladder-track" id="celestialLadderTrack"></div><div class="celestial-ladder-actions"><button class="btn alt" id="climbCelestialLadderBtn">登上一阶</button><button class="btn ghost" id="leaveCelestialLadderBtn">离开天梯</button></div></div>';document.body.appendChild(modal);$('#climbCelestialLadderBtn').onclick=()=>climbCelestialLadder();$('#leaveCelestialLadderBtn').onclick=()=>leaveCelestialLadder();return modal}
+function renderCelestialLadder(){let state=celestialLadderState(),track=$('#celestialLadderTrack'),stage=$('#celestialLadderStageText'),aptitude=$('#celestialLadderAptitudeText'),climb=$('#climbCelestialLadderBtn');if(!track)return;let level=Math.max(0,Math.min(100,state.level||0)),next=Math.min(100,level+1);stage.textContent=level>=100?'已至第100阶 · 天游尽头':`当前第 ${level} 阶 · 下一阶 ${next}`;aptitude.textContent=`当前根骨：${fmt(g.aptitude||0)} · 下一阶需求：${fmt(celestialLadderNeed(next))}`;track.innerHTML=Array.from({length:101},(_,index)=>{let cls=index<level?'cleared':index===level?'current':index===next?'next':'';return `<div class="ladder-node ${cls}"><span>${index===0?'起始':`第 ${index} 阶`}</span><i>${index}</i><small>${index===0?'根骨需求 0':`根骨 ${celestialLadderNeed(index)}`}</small></div>`}).reverse().join('');let current=track.querySelector('.current');current?.scrollIntoView({block:'center'});climb.disabled=level>=100;climb.textContent=level>=100?'已至天梯尽头':`登上第 ${next} 阶`}
+function enterCelestialLadder(){let state=celestialLadderState();if(state.rewardPending)return claimXianfengArmor();if(state.rewardClaimed)return showNpcResult('登天梯','仙风袍已归于你身。天梯仍立在云端，但其尽头的机缘已经认主。','good');state.active=true;state.level=0;closeNpcDialog();let modal=ensureCelestialLadderModal();modal.classList.add('show');renderCelestialLadder();pushLocalLog('踏入仙门石阶的登天梯：从第0阶开始逐阶登临。');save()}
+function leaveCelestialLadder(message='你主动离开登天梯，返回仙门石阶。'){let state=celestialLadderState();state.active=false;state.level=0;$('#celestialLadderModal')?.classList.remove('show');g.selectedScene=9;g.map=9;g.localSpot=6;pushLocalLog(message);renderSceneMap();render();save()}
+function expelCelestialLadder(need){let state=celestialLadderState();state.active=false;state.level=0;$('#celestialLadderModal')?.classList.remove('show');g.selectedScene=9;g.map=9;g.localSpot=0;pushLocalLog(`登天梯排斥：根骨不足${fmt(need)}，被传送回仙界天门·接引亭。`);toast(`根骨不足${fmt(need)}，被登天梯传送而出`);renderSceneMap();render();save()}
+function claimXianfengArmor(){let state=celestialLadderState();if(state.rewardClaimed)return toast('仙风袍已领取');if(bagFree()<=0)return toast('背包已满，无法领取仙风袍');if(!addBagItem(makeXianfengArmor()))return toast('背包已满，仙风袍暂无法收取');state.rewardPending=false;state.rewardClaimed=true;state.completed=true;pushLocalLog('登天梯第100阶奖励：获得红色品质防具「仙风袍」。');showNpcResult('仙风袍','你踏上第100阶，云海尽头的天风凝成一袭赤金长袍，落入掌中。\n\n获得红色品质防具：仙风袍\n基础属性：生命 +1500000、防御 +100000\n佩戴门槛：合体中期\n成长：可在太玄宗炼器峰的铁无锋处吸收其他防具，每次继承被吸收装备全部属性的3%。','good');renderBag();renderSceneMap();render();save()}
+function completeCelestialLadder(){let state=celestialLadderState();state.active=false;state.level=100;state.completed=true;$('#celestialLadderModal')?.classList.remove('show');if(bagFree()<=0){state.rewardPending=true;g.selectedScene=9;g.map=9;g.localSpot=6;pushLocalLog('登天梯已至百阶，但背包已满；仙风袍暂由登天梯保管。');showNpcResult('天梯尽头','你已登临第100阶，云海中的仙风袍正在等待认主。\n\n背包已满，请清理出一个空位后回到仙门石阶，与登天梯对话领取奖励。','good');renderSceneMap();render();save();return}claimXianfengArmor()}
+function climbCelestialLadder(){let state=celestialLadderState();if(!state.active)return;if(state.level>=100)return completeCelestialLadder();let next=state.level+1,need=celestialLadderNeed(next);if((g.aptitude||0)<need)return expelCelestialLadder(need);state.level=next;pushLocalLog(`登天梯：登上第${next}阶（根骨需求${need}）。`);if(next>=100)return completeCelestialLadder();renderCelestialLadder();save()}
+function talkCelestialLadder(){let state=celestialLadderState();if(state.rewardPending)return openNpcDialog('登天梯','云海深处传来钟鸣：你已走完百阶，仙风袍仍悬在天风之中。腾出一个背包格，它便会落入你手。',[{text:'领取仙风袍',alt:true,onClick(){claimXianfengArmor()}},{text:'暂不领取',ghost:true}]);if(state.rewardClaimed)return showNpcResult('登天梯','百阶尽头的云海向你缓缓散开。仙风袍已认主，往后若要令它承载更多器纹，可去太玄宗炼器峰寻铁无锋。','good');openNpcDialog('登天梯','仙门石阶尽头，一道笔直天梯没入云海。\n\n从第0阶起步，最高第100阶。每上升一阶，根骨需求提高2点；根骨不足时，天梯会将你强制传送出仙门石阶。\n\n登临第100阶可获得红色防具「仙风袍」。',[{text:'踏入登天梯',alt:true,onClick(){enterCelestialLadder()}},{text:'暂不登阶',ghost:true}])}
+const localNpcsWithCelestialLadder=localNpcs;
+localNpcs=function(i,spot){let npcs=localNpcsWithCelestialLadder(i,spot);if(i===9&&spot===6&&!npcs.some(npc=>(npc.name||npc[0])==='登天梯'))npcs=[...npcs,['登天梯','直入云海的百阶天梯，以根骨筛选登临者']];return npcs};
+const localMeetWithCelestialLadder=localMeet;
+localMeet=function(idx=0){let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];if(name==='登天梯')return talkCelestialLadder();return localMeetWithCelestialLadder(idx)};
+const npcQuestIconWithCelestialLadder=npcQuestIcon;
+npcQuestIcon=function(name,mapIndex,spot){let state=celestialLadderState();if(name==='登天梯')return state.rewardPending?'⭕️':state.rewardClaimed?'💬':'❗️';return npcQuestIconWithCelestialLadder(name,mapIndex,spot)};
+function xianfengAbsorbCandidates(){return(g.bag||[]).map((item,index)=>({item:normalizeEquip(item),index})).filter(x=>x.item?.slot==='armor'&&!isXianfengArmor(x.item)).sort((a,b)=>gearScore(b.item)-gearScore(a.item))}
+function openXianfengAbsorbMenu(){let armor=normalizeEquip(g.gear?.armor);if(!isXianfengArmor(armor))return toast('请先在装备功能中佩戴仙风袍');let choices=xianfengAbsorbCandidates();if(!choices.length)return showNpcResult('炼器长老 铁无锋','铁无锋望向仙风袍：“天风器纹尚无可纳之甲。将多余防具放入背包后再来。”','good');let options=choices.map(({item,index})=>{let gain=Object.entries(equipAttrs(item)).filter(([,value])=>value).map(([key,value])=>`${({hp:'生命',mana:'法力',attack:'攻击',defense:'防御',agility:'身法',crit:'暴击'}[key])}+${Math.floor(value*.03)}${key==='crit'?'%':''}`).join('，');return{text:`吸收${qualityText[item.quality]}色${item.name}${gain?`（${gain}）`:''}`,alt:true,onClick(){absorbArmorIntoXianfeng(index)}}});options.push({text:'暂不吸收',ghost:true});openNpcDialog('炼器长老 铁无锋',`铁无锋以炉火托起仙风袍：“此袍由天风凝成，选择一件背包中的防具，它将继承其全部属性的3%，被吸收的防具会消失。”\n\n仙风袍已吸收防具：${armor.absorbedCount||0}件`,options)}
+function absorbArmorIntoXianfeng(index){let armor=normalizeEquip(g.gear?.armor),source=normalizeEquip(g.bag?.[index]);if(!isXianfengArmor(armor))return toast('请先佩戴仙风袍');if(!source||source.slot!=='armor'||isXianfengArmor(source))return toast('请选择背包中的其他防具');let before={...equipAttrs(armor)},sourceAttrs=equipAttrs(source),bonus={...(armor.bonus||{})};Object.entries(sourceAttrs).forEach(([key,value])=>bonus[key]=(bonus[key]||0)+value*.03);armor.bonus=bonus;armor.absorbedCount=(armor.absorbedCount||0)+1;g.gear.armor=armor;removeBagQty(index,1);let after=equipAttrs(armor);pushLocalLog(`仙风袍吸收${qualityText[source.quality]}色防具「${source.name}」，继承其属性的3%。`);showNpcResult('仙风袍淬炼完成',`仙风袍吸收了${qualityText[source.quality]}色防具「${source.name}」。\n\n本次继承（3%）：${formatForgeAttributeDelta(before,after)}\n累计吸收：${armor.absorbedCount}件防具。`,'good');renderEquipModal();renderBag();renderSceneMap();render();save()}
+const useBagItemWithXianfengArmor=useBagItem;
+useBagItem=function(){let item=normalizeEquip(g.bag?.[g.bagSelected]);if(isXianfengArmor(item)&&!xianfengArmorRealmReady())return toast('仙风袍需达到合体中期后才能佩戴');return useBagItemWithXianfengArmor()};
+const equipBagItemByIndexWithXianfengArmor=equipBagItemByIndex;
+equipBagItemByIndex=function(index){let item=normalizeEquip(g.bag?.[index]);if(isXianfengArmor(item)&&!xianfengArmorRealmReady())return toast('仙风袍需达到合体中期后才能佩戴');return equipBagItemByIndexWithXianfengArmor(index)};
+const forgeSelectedEquipWithXianfengArmor=forgeSelectedEquip;
+forgeSelectedEquip=function(){if(isXianfengArmor(g.gear?.[g.selectedEquipSlot||'weapon']))return toast('仙风袍不可常规强化，请在炼器峰吸收其他防具成长');return forgeSelectedEquipWithXianfengArmor()};
+const talkTieWufengWithXianfengArmor=talkTieWufeng;
+talkTieWufeng=function(){let bracer=normalizeEquip(g.gear?.bracer),boots=normalizeEquip(g.gear?.boots),helmet=normalizeEquip(g.gear?.helmet),armor=normalizeEquip(g.gear?.armor),options=[];if(isTianjingBracer(bracer))options.push({text:'淬炼天晶腕甲',alt:true,onClick(){openTianjingAbsorbMenu()}});if(isQuetianBoots(boots))options.push({text:'淬炼阙天靴',alt:true,onClick(){openQuetianAbsorbMenu()}});if(isHuangtianHelmet(helmet))options.push({text:'淬炼荒天盔',alt:true,onClick(){openHuangtianAbsorbMenu()}});if(isXianfengArmor(armor))options.push({text:'淬炼仙风袍',alt:true,onClick(){openXianfengAbsorbMenu()}});if(!options.length)return talkTieWufengWithXianfengArmor();options.push({text:'照常炼器',onClick(){talkTieWufengWithTianjingBracer()}},{text:'暂不处理',ghost:true});openNpcDialog('炼器长老 铁无锋','铁无锋望向你身上的赤色器纹：“这些红色装备皆非寻常矿火可强行锻炼，唯有吞纳同部位器纹，才能继续成长。”',options)};
+
+// ===== 仙界天门 · 南天影壁：南天帝君与根骨丹 =====
+function rootBonePillItem(qty=1){return{type:'pill',name:'根骨丹',qty,max:99,icon:'🟤',sell:50000,rootBonePill:true,desc:'使用效果：永久增加1点根骨。'}}
+function buyRootBonePill(){
+  if((g.stones||0)<100000)return toast('灵石不足：兑换根骨丹需要100000灵石');
+  if(!addBagItem(rootBonePillItem(1)))return toast('背包已满，无法收取根骨丹');
+  g.stones-=100000;
+  pushLocalLog('南天帝君兑换：灵石×100000，获得根骨丹×1。');
+  showNpcResult('根骨丹','消耗：灵石 ×100000\n获得：根骨丹 ×1\n\n使用后永久增加1点根骨。','good');
+  renderBag();renderSceneMap();render();save();
+}
+function talkSouthernHeavenEmperor(){openNpcDialog('南天帝君',`南天影壁前，帝君的法相自金云中垂眸。\n\n“根骨是登天之基。十万灵石换一枚根骨丹，服之可使根骨增长一分。”\n\n兑换比例：灵石 ×100000 → 根骨丹 ×1\n当前灵石：${fmt(g.stones||0)}\n当前根骨：${fmt(g.aptitude||0)}`,[{text:'兑换根骨丹（10万灵石）',alt:true,onClick(){buyRootBonePill()}},{text:'暂不兑换',ghost:true}])}
+const localNpcsWithSouthernHeavenEmperor=localNpcs;
+localNpcs=function(i,spot){let npcs=localNpcsWithSouthernHeavenEmperor(i,spot);if(i===9&&spot===23&&!npcs.some(npc=>(npc.name||npc[0])==='南天帝君'))npcs=[...npcs,['南天帝君','镇守南天影壁，可用灵石兑换根骨丹']];return npcs};
+const localMeetWithSouthernHeavenEmperor=localMeet;
+localMeet=function(idx=0){let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];if(name==='南天帝君')return talkSouthernHeavenEmperor();return localMeetWithSouthernHeavenEmperor(idx)};
+const itemEffectWithRootBonePill=itemEffect;
+itemEffect=function(item){if(item?.rootBonePill||item?.name==='根骨丹')return '使用效果：永久增加1点根骨。';return itemEffectWithRootBonePill(item)};
+const useBagItemWithRootBonePill=useBagItem;
+useBagItem=function(){let idx=g.bagSelected,item=g.bag?.[idx];if(item?.rootBonePill||item?.name==='根骨丹'){g.aptitude=(Number(g.aptitude)||0)+1;removeBagQty(idx,1);pushLocalLog(`服用根骨丹，根骨 +1（当前${fmt(g.aptitude)}）。`);toast(`服用根骨丹，根骨 +1（当前${fmt(g.aptitude)}）`);render();renderBag();renderSceneMap();save();return}return useBagItemWithRootBonePill()};
+const canUseAllBagItemWithRootBonePill=canUseAllBagItem;
+canUseAllBagItem=function(item){return !!(item?.rootBonePill||item?.name==='根骨丹')||canUseAllBagItemWithRootBonePill(item)};
+const useAllBagItemWithRootBonePill=useAllBagItem;
+useAllBagItem=function(){let idx=g.bagSelected,item=g.bag?.[idx];if(item?.rootBonePill||item?.name==='根骨丹'){let qty=Math.max(1,item.qty||1);g.aptitude=(Number(g.aptitude)||0)+qty;removeBagQty(idx,qty);pushLocalLog(`批量服用根骨丹×${qty}，根骨 +${qty}（当前${fmt(g.aptitude)}）。`);toast(`服用根骨丹×${qty}，根骨 +${qty}`);render();renderBag();renderSceneMap();save();return}return useAllBagItemWithRootBonePill()};
+
+// ===== 仙界天门 · 南天影壁：北极帝君与仙王剑 =====
+function northEmperorState(){return g.northEmperor||(g.northEmperor={swordClaimed:false})}
+function isXianwangSword(item){let equip=normalizeEquip(item);return !!(equip?.xianwangSword||equip?.name==='仙王剑')}
+function xianwangSwordRealmReady(){return realmIndex()>=realmNameIndex('合体中期')}
+function makeXianwangSword(){return normalizeEquip({name:'仙王剑',quality:6,slot:'weapon',powerLevel:realmNameIndex('合体中期')+6,sell:0,special:true,xianwangSword:true,absorbedCount:0,requiredRealm:'合体中期',bonus:{attack:500000,crit:1},desc:'红色品质法器。仅合体中期及以上可佩戴；基础效果：攻击+500000、暴击+1%。可在炼器峰长老铁无锋处吸收其他法器装备，每次继承被吸收装备全部属性的3%。'})}
+function exchangeXianwangSword(){
+  let state=northEmperorState(),orange=equipmentQualityCount(5),herbs=Math.max(g.herbs||0,bagItemCountByName('药材')),materials=g.materials||0;
+  if(state.swordClaimed)return toast('仙王剑已兑换');
+  if(materials<2000)return toast(`锻造材料不足：${fmt(materials)}/2,000`);
+  if(herbs<2000)return toast(`药材不足：${fmt(herbs)}/2,000`);
+  if((g.stones||0)<200000)return toast('灵石不足：需要200000灵石');
+  if(orange<5)return toast(`橙色品质装备不足：${orange}/5`);
+  if(bagFree()<=0)return toast('背包已满，无法收取仙王剑');
+  if(!takeForgeMaterials(2000)||!takeHerbResource(2000)||!takeEquipmentByQuality(5,5)){return toast('祭品扣除失败，请重新检查背包')}
+  g.stones-=200000;
+  if(!addBagItem(makeXianwangSword()))return toast('背包已满，仙王剑暂无法收取');
+  state.swordClaimed=true;
+  pushLocalLog('北极帝君收下锻造材料、药材、灵石与橙装祭品，赐下红色法器「仙王剑」。');
+  showNpcResult('仙王剑','消耗：锻造材料 ×2000\n消耗：药材 ×2000\n消耗：灵石 ×200000\n消耗：橙色品质装备 ×5\n\n获得红色品质法器：仙王剑\n基础属性：攻击 +500000、暴击 +1%\n佩戴门槛：合体中期\n成长：可在太玄宗炼器峰的铁无锋处吸收其他法器，每次继承被吸收装备全部属性的3%。','good');
+  renderBag();renderSceneMap();render();save();
+}
+function talkNorthEmperor(){let state=northEmperorState(),orange=equipmentQualityCount(5),herbs=Math.max(g.herbs||0,bagItemCountByName('药材')),materials=g.materials||0;if(state.swordClaimed)return showNpcResult('北极帝君','北极帝君闭目立于影壁之前：“仙王剑既已择主，欲令其继续承载百器锋芒，可去太玄宗炼器峰寻铁无锋。”','good');openNpcDialog('北极帝君',`北极帝君的法相自南天影壁另一侧显现，掌中一柄赤金古剑映出万丈剑光。\n\n“以两千锻造材料、两千药材、二十万灵石与五件橙色品质装备为祭，便可换取仙王剑。”\n\n锻造材料：${fmt(materials)} / 2,000\n药材：${fmt(herbs)} / 2,000\n灵石：${fmt(g.stones||0)} / 200,000\n橙色装备：${orange} / 5`,[{text:'献祭材料，兑换仙王剑',alt:true,onClick(){exchangeXianwangSword()}},{text:'暂不兑换',ghost:true}])}
+const localNpcsWithNorthEmperor=localNpcs;
+localNpcs=function(i,spot){let npcs=localNpcsWithNorthEmperor(i,spot);if(i===9&&spot===23&&!npcs.some(npc=>(npc.name||npc[0])==='北极帝君'))npcs=[...npcs,['北极帝君','镇守影壁北面，愿以高阶祭品赐下仙王剑']];return npcs};
+const localMeetWithNorthEmperor=localMeet;
+localMeet=function(idx=0){let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];if(name==='北极帝君')return talkNorthEmperor();return localMeetWithNorthEmperor(idx)};
+function xianwangSwordAbsorbCandidates(){return(g.bag||[]).map((item,index)=>({item:normalizeEquip(item),index})).filter(x=>x.item?.slot==='weapon'&&!isXianwangSword(x.item)).sort((a,b)=>gearScore(b.item)-gearScore(a.item))}
+function openXianwangSwordAbsorbMenu(){let weapon=normalizeEquip(g.gear?.weapon);if(!isXianwangSword(weapon))return toast('请先在装备功能中佩戴仙王剑');let choices=xianwangSwordAbsorbCandidates();if(!choices.length)return showNpcResult('炼器长老 铁无锋','铁无锋抚过仙王剑锋：“剑中仙纹尚无可纳之器。将多余法器放入背包后再来。”','good');let options=choices.map(({item,index})=>{let gain=Object.entries(equipAttrs(item)).filter(([,value])=>value).map(([key,value])=>`${({hp:'生命',mana:'法力',attack:'攻击',defense:'防御',agility:'身法',crit:'暴击'}[key])}+${Math.floor(value*.03)}${key==='crit'?'%':''}`).join('，');return{text:`吸收${qualityText[item.quality]}色${item.name}${gain?`（${gain}）`:''}`,alt:true,onClick(){absorbWeaponIntoXianwangSword(index)}}});options.push({text:'暂不吸收',ghost:true});openNpcDialog('炼器长老 铁无锋',`铁无锋将仙王剑悬于炉心：“此剑可纳万器锋芒。选择一件背包中的法器，仙王剑将继承其全部属性的3%，被吸收的法器会消失。”\n\n仙王剑已吸收法器：${weapon.absorbedCount||0}件`,options)}
+function absorbWeaponIntoXianwangSword(index){let weapon=normalizeEquip(g.gear?.weapon),source=normalizeEquip(g.bag?.[index]);if(!isXianwangSword(weapon))return toast('请先佩戴仙王剑');if(!source||source.slot!=='weapon'||isXianwangSword(source))return toast('请选择背包中的其他法器');let before={...equipAttrs(weapon)},sourceAttrs=equipAttrs(source),bonus={...(weapon.bonus||{})};Object.entries(sourceAttrs).forEach(([key,value])=>bonus[key]=(bonus[key]||0)+value*.03);weapon.bonus=bonus;weapon.absorbedCount=(weapon.absorbedCount||0)+1;g.gear.weapon=weapon;removeBagQty(index,1);let after=equipAttrs(weapon);pushLocalLog(`仙王剑吸收${qualityText[source.quality]}色法器「${source.name}」，继承其属性的3%。`);showNpcResult('仙王剑淬炼完成',`仙王剑吸收了${qualityText[source.quality]}色法器「${source.name}」。\n\n本次继承（3%）：${formatForgeAttributeDelta(before,after)}\n累计吸收：${weapon.absorbedCount}件法器。`,'good');renderEquipModal();renderBag();renderSceneMap();render();save()}
+const useBagItemWithXianwangSword=useBagItem;
+useBagItem=function(){let item=normalizeEquip(g.bag?.[g.bagSelected]);if(isXianwangSword(item)&&!xianwangSwordRealmReady())return toast('仙王剑需达到合体中期后才能佩戴');return useBagItemWithXianwangSword()};
+const equipBagItemByIndexWithXianwangSword=equipBagItemByIndex;
+equipBagItemByIndex=function(index){let item=normalizeEquip(g.bag?.[index]);if(isXianwangSword(item)&&!xianwangSwordRealmReady())return toast('仙王剑需达到合体中期后才能佩戴');return equipBagItemByIndexWithXianwangSword(index)};
+const forgeSelectedEquipWithXianwangSword=forgeSelectedEquip;
+forgeSelectedEquip=function(){if(isXianwangSword(g.gear?.[g.selectedEquipSlot||'weapon']))return toast('仙王剑不可常规强化，请在炼器峰吸收其他法器成长');return forgeSelectedEquipWithXianwangSword()};
+const talkTieWufengWithXianwangSword=talkTieWufeng;
+talkTieWufeng=function(){let weapon=normalizeEquip(g.gear?.weapon),bracer=normalizeEquip(g.gear?.bracer),boots=normalizeEquip(g.gear?.boots),helmet=normalizeEquip(g.gear?.helmet),armor=normalizeEquip(g.gear?.armor),options=[];if(isXianwangSword(weapon))options.push({text:'淬炼仙王剑',alt:true,onClick(){openXianwangSwordAbsorbMenu()}});if(isTianjingBracer(bracer))options.push({text:'淬炼天晶腕甲',alt:true,onClick(){openTianjingAbsorbMenu()}});if(isQuetianBoots(boots))options.push({text:'淬炼阙天靴',alt:true,onClick(){openQuetianAbsorbMenu()}});if(isHuangtianHelmet(helmet))options.push({text:'淬炼荒天盔',alt:true,onClick(){openHuangtianAbsorbMenu()}});if(isXianfengArmor(armor))options.push({text:'淬炼仙风袍',alt:true,onClick(){openXianfengAbsorbMenu()}});if(!options.length)return talkTieWufengWithXianwangSword();options.push({text:'照常炼器',onClick(){talkTieWufengWithTianjingBracer()}},{text:'暂不处理',ghost:true});openNpcDialog('炼器长老 铁无锋','铁无锋望向你身上的赤色器纹：“这些红色装备皆非寻常矿火可强行锻炼，唯有吞纳同部位器纹，才能继续成长。”',options)};
+
+// ===== 仙界天门 · 仙门石阶：西方极乐佛与轩辕剑 =====
+function xuanyuanSwordQuest(){return g.xuanyuanSwordQuest||(g.xuanyuanSwordQuest={accepted:false,defeated:false,claimed:false})}
+function hasXuanyuanSword(){return !!artifactState().xuanyuanSword}
+function xuanyuanSwordArtifact(){return{name:'轩辕剑',icon:'剑',effect:'自身造成的最终伤害×1.5。'}}
+function grantXuanyuanSword(){
+  let quest=xuanyuanSwordQuest(),artifacts=artifactState();
+  if(quest.claimed||artifacts.xuanyuanSword)return toast('轩辕剑已认主');
+  artifacts.xuanyuanSword={...xuanyuanSwordArtifact(),obtainedAt:Date.now()};
+  quest.defeated=true;quest.claimed=true;
+  pushLocalLog('守门仙将败退，西方极乐佛赐下四大神器之一「轩辕剑」。');
+  showNpcResult('轩辕剑','守门仙将放下旧日天规，西方极乐佛自云海中拈花而笑，一柄古剑落入你的识海。\n\n获得特殊神器：轩辕剑\n效果：自身最终伤害 ×1.5\n\n可在“装备”功能的四大神器栏查看。','good');
+  renderEquipModal();renderSceneMap();render();save();
+}
+function talkWesternBlissBuddha(){
+  let quest=xuanyuanSwordQuest();
+  if(quest.claimed||hasXuanyuanSword())return showNpcResult('西方极乐佛','西方极乐佛端坐莲台：“轩辕剑已随你心意而动。愿你持锋而不恃锋，以剑止戈。”','good');
+  if(quest.defeated)return grantXuanyuanSword();
+  if(quest.accepted)return showNpcResult('西方极乐佛','西方极乐佛望向飞升台方向：“守门仙将仍受旧天规束缚。前往仙界天门·飞升台，战胜它，便可归来取剑。”','good');
+  openNpcDialog('西方极乐佛','仙门石阶旁，西方极乐佛端坐金莲。\n\n“守门仙将被旧天规困在飞升台前，剑锋只认旧主，不辨来者。你若能战胜它，便证明已可执掌轩辕之锋。”\n\n任务目标：前往仙界天门·飞升台，击败守门仙将。\n任务奖励：四大神器之一「轩辕剑」\n效果：自身最终伤害×1.5。',[{text:'接取诛将任务',alt:true,onClick(){quest.accepted=true;pushLocalLog('接取西方极乐佛委托：前往飞升台，战胜守门仙将。');closeNpcDialog();renderSceneMap();render();save();toast('已接取任务：前往飞升台击败守门仙将')}},{text:'暂不接取',ghost:true}]);
+}
+const localNpcsWithWesternBlissBuddha=localNpcs;
+localNpcs=function(i,spot){let npcs=localNpcsWithWesternBlissBuddha(i,spot);if(i===9&&spot===6&&!npcs.some(npc=>(npc.name||npc[0])==='西方极乐佛'))npcs=[...npcs,['西方极乐佛','端坐仙门石阶，以守门仙将试炼执剑之人']];return npcs};
+const localMeetWithWesternBlissBuddha=localMeet;
+localMeet=function(idx=0){let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];if(name==='西方极乐佛')return talkWesternBlissBuddha();return localMeetWithWesternBlissBuddha(idx)};
+const npcQuestIconWithWesternBlissBuddha=npcQuestIcon;
+npcQuestIcon=function(name,mapIndex,spot){if(name==='西方极乐佛'){let quest=xuanyuanSwordQuest();return quest.claimed||hasXuanyuanSword()?'💬':quest.accepted?'❓':'❗️'}return npcQuestIconWithWesternBlissBuddha(name,mapIndex,spot)};
+
+const resolveLocalTargetWithXuanyuanSword=resolveLocalTarget;
+resolveLocalTarget=function(target,batch=false){
+  let result=resolveLocalTargetWithXuanyuanSword(target,batch),quest=xuanyuanSwordQuest(),name=target?.originalName||target?.name;
+  if(result?.type==='战斗'&&quest.accepted&&!quest.claimed&&(g.selectedScene??g.map)===9&&name==='BOSS 守门仙将'){
+    quest.defeated=true;
+    if(!batch)grantXuanyuanSword();else save();
+  }
+  return result;
+};
+
+const renderArtifactSlotsWithXuanyuanSword=renderArtifactSlots;
+renderArtifactSlots=function(){let artifacts=artifactState(),slots=[artifacts.fuxiQin?{...artifacts.fuxiQin,obtained:true}:{name:'伏羲琴',obtained:false},artifacts.donghuangBell?{...artifacts.donghuangBell,obtained:true}:{name:'东皇钟',obtained:false},artifacts.kunlunMirror?{...artifacts.kunlunMirror,obtained:true}:{name:'昆仑镜',obtained:false},artifacts.xuanyuanSword?{...artifacts.xuanyuanSword,obtained:true}:{name:'轩辕剑',obtained:false}];return `<section class="artifact-section artifact-corner"><div class="artifact-heading"><h3>四大神器</h3><small>独立于六种常规装备</small></div><div class="artifact-grid">${slots.map(item=>`<div class="artifact-slot ${item.obtained?'obtained':'unsealed'}" title="${item.obtained?item.effect:'尚待机缘'}"><b>${item.obtained?`${item.icon||''} `:''}${item.name}</b><small>${item.effect||''}</small></div>`).join('')}</div></section>`};
+
+function applyXuanyuanSwordDamage(b,beforeHp){
+  if(!b||!hasXuanyuanSword()||beforeHp<=b.enemy.hp)return 0;
+  let raw=Math.max(0,beforeHp-b.enemy.hp),finalDamage=Math.max(1,Math.floor(raw*1.5)),extra=Math.min(Math.max(0,b.enemy.hp),Math.max(0,finalDamage-raw));
+  if(extra>0){b.enemy.hp=Math.max(0,b.enemy.hp-extra);battleFx('enemy','-'+fmt(extra));battleLog(`轩辕剑剑意加持，额外造成${fmt(extra)}点最终伤害。`)}
+  return extra;
+}
+const battleSkillEffectWithXuanyuanSword=battleSkillEffect;
+battleSkillEffect=async function(sk,idx=0){let b=battleState,beforeHp=b?.enemy?.hp||0,result=await battleSkillEffectWithXuanyuanSword(sk,idx);if(result!==false&&b&&battleState===b)applyXuanyuanSwordDamage(b,beforeHp);return result};
+const applyWitheringWoodTurnWithXuanyuanSword=applyWitheringWoodTurn;
+applyWitheringWoodTurn=function(b){let beforeHp=b?.enemy?.hp||0,result=applyWitheringWoodTurnWithXuanyuanSword(b);if(b&&battleState===b)applyXuanyuanSwordDamage(b,beforeHp);return result};
+
 function bindUi(){
 $('#nav').onclick=e=>{
 let b=e.target.closest('button');if(!b)return;
@@ -4725,7 +5120,7 @@ on('#skipGuide',finishNewbieGuide);
 on('#startJourney',()=>$('#prologueModal').dataset.mode==='finale'?finishFinaleScroll():finishPrologue(false));
 on('#skipPrologue',()=>$('#prologueModal').dataset.mode==='finale'?finishFinaleScroll():finishPrologue(true));
 on('#goSceneBtn',goScene);
-on('#closeSceneMap',()=>{if(localExploreSession)stopLocalExplore('收起地图');if(meditationSession)stopMeditation(true);if(miningSession)stopAutoMining();if(liquidMeditationSession)stopLiquidMeditation();if(swordArraySession)stopSwordArrayMeditation();if(residualMonumentSession)stopResidualMonumentMeditation();closeNpcDialog();$('#sceneMapModal').classList.remove('show')});
+on('#closeSceneMap',()=>{if(localExploreSession)stopLocalExplore('收起地图');if(meditationSession)stopMeditation(true);if(miningSession)stopAutoMining();if(liquidMeditationSession)stopLiquidMeditation();if(swordArraySession)stopSwordArrayMeditation();if(residualMonumentSession)stopResidualMonumentMeditation();if(bodyTemperingSession)stopBodyTempering();closeNpcDialog();$('#sceneMapModal').classList.remove('show')});
 on('#localExploreBtn',localExploreHere);
 on('#openTaskBtn',openTaskPanel);
 on('#closeTaskBtn',()=>$('#taskModal').classList.remove('show'));
