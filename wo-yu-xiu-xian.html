@@ -663,6 +663,8 @@
 .path-line.sect-ring-line{border-top-style:dotted;border-top-color:#f4edd2;opacity:.9}.mini-route.sect-ring-line{stroke:#73856f;stroke-width:1.7;opacity:.9}
 /* ===== 沉月水府易物与战斗侧栏操作 ===== */
 .xiao-longnu-exchange{display:grid;gap:12px}.xiao-longnu-exchange .exchange-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px}.xiao-longnu-exchange .exchange-summary span{padding:10px;border:1px solid #c8b27a;border-radius:7px;background:#fffaf0;color:#365044}.xiao-longnu-exchange label{display:grid;grid-template-columns:auto minmax(110px,1fr) auto;align-items:center;gap:9px;padding:12px;border:1px dashed #c3ad78;background:#fffdf6;color:#365044}.xiao-longnu-exchange input{width:100%;padding:9px;border:1px solid #b9a06d;border-radius:6px;background:#fff;color:#294235;font:700 16px Georgia,serif}.xiao-longnu-exchange small{color:#67776d;line-height:1.6}.explore-settings{display:grid;gap:9px}.explore-settings label{display:grid;grid-template-columns:22px 1fr;gap:9px;align-items:start;padding:11px;border:1px solid #66877c55;border-radius:8px;background:#f9f5e8;color:#294235;cursor:pointer}.explore-settings input{width:18px;height:18px;accent-color:#2f715b}.explore-settings b{display:block;font-size:15px}.explore-settings small{display:block;margin-top:4px;color:#6a786d;line-height:1.55}.battle-title-sr{display:none}.battle-head:after{display:none}.battle-head>.battle-actions.battle-actions-head{position:relative;z-index:2;display:flex;justify-content:flex-start;gap:6px;padding:0;border:0;background:transparent}.battle-head>.battle-actions.battle-actions-head .btn{min-width:68px;padding:7px 10px;font-size:14px;line-height:1}.battle-head>.battle-actions.battle-actions-head #battleNormalBtn{border-color:#57c8ea;background:linear-gradient(180deg,#2a5868,#183842)}.battle-head>.battle-actions.battle-actions-head #battleAutoBtn{border-color:#efbd4d;background:linear-gradient(180deg,#8e6524,#5b3e19)}.battle-head>.battle-actions.battle-actions-head #battleRunBtn{border-color:#e7756e;background:linear-gradient(180deg,#66383c,#3d2428)}.side .nav,.main>.top{display:none}@media(max-width:650px){.xiao-longnu-exchange label{grid-template-columns:1fr;gap:5px}.explore-settings label{padding:9px}.explore-settings b{font-size:14px}.battle-head>.battle-actions.battle-actions-head{gap:4px}.battle-head>.battle-actions.battle-actions-head .btn{min-width:45px;padding:6px 5px;font-size:12px}}
+/* Developer monster controls */
+#devModal>div{width:min(760px,94vw);max-height:92vh;overflow:auto}#devModal .dev-grid{max-height:34vh}.dev-monster-tools{margin-top:14px;padding:12px;border:1px solid #b6c1b4;border-radius:8px;background:#f4f7f1}.dev-monster-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:9px}.dev-monster-head b{color:#315844;font-size:15px}.dev-monster-head small{color:#6f7e73;font-size:11px}.dev-monster-editor{display:grid;grid-template-columns:1.25fr repeat(4,minmax(72px,1fr)) 1fr;gap:7px;align-items:end}.dev-monster-editor label{display:grid;gap:4px;color:#64756c;font-size:11px}.dev-monster-editor input,.dev-monster-editor select{width:100%;padding:8px;border:1px solid #aeb7ad;border-radius:6px;background:#fff;color:#26392e}.dev-monster-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.dev-monster-actions .btn{padding:7px 10px;font-size:12px}@media(max-width:650px){#devModal{padding:8px}#devModal .dev-grid{grid-template-columns:repeat(2,1fr);max-height:28vh}.dev-monster-head{align-items:flex-start;flex-direction:column}.dev-monster-editor{grid-template-columns:repeat(2,minmax(0,1fr))}.dev-monster-editor label:first-child{grid-column:1/-1}.dev-monster-actions .btn{flex:1}}
 </style>
 <style>
 .toast{z-index:1000}
@@ -1065,9 +1067,60 @@ function expandBag(){let cap=g.bagCap||20,cost=cap<30?1000:cap<40?2000:cap<50?50
 
 function updateRecommendation(){let info=tribulationInfo(),text;if(info.ready)text=`${realmText()}已经圆满，渡劫基础成功率${info.base}%，服用${info.toCertain}颗渡劫丹可达100%。`;else if(g.hp<statTotal().hp*.35)text='气血偏低，建议在小地图找小师妹 纳兰清月或驿站掌柜疗伤。';else if(g.sectSisterQuest||g.nalanQuest)text='你有进行中的小地图任务，可点击“任务”查看进度或提交。';else text=`当前地图：${maps[g.map][0]}。建议进入小地图手动战斗、采集或处理宗门事务。`;let assistant=$('#assistantText');if(assistant)assistant.textContent=text;$('#aiMessage').textContent='智能体：'+text}
 const devNumbers=[['cult','当前修为'],['stones','灵石'],['hp','当前生命'],['maxHp','生命上限'],['mana','法力值'],['attack','攻击力'],['defense','防御力'],['agility','身法'],['crit','暴击率'],['aptitude','根骨'],['rootMul','灵根倍率'],['materials','锻造材料'],['herbs','药材'],['fragments','装备碎片'],['scrolls','功法残卷'],['jades','灵玉'],['healPills','回春丹'],['tribPills','渡劫丹'],['cultPills','修为丹'],['sectContribution','宗门贡献'],['sectReputation','宗门声望']];
+function devMonsterNames(){return Object.keys(MONSTER_STATS||{}).filter(name=>MONSTER_STATS[name]?.hp!==undefined)}
+function renderDevMonsterEditor(name){
+  let box=$('#devMonsterFields'),names=devMonsterNames();
+  if(!box||!names.length)return;
+  name=names.includes(name)?name:(names[0]||'');
+  let stats=getMonsterStats(name)||{},options=names.map(item=>`<option value="${item}" ${item===name?'selected':''}>${item}</option>`).join('');
+  box.innerHTML=`<label>妖兽<select id="devMonsterName">${options}</select></label><label>生命<input id="devMonsterHp" type="number" min="1" step="any" value="${stats.hp??1}"></label><label>法力<input id="devMonsterMp" type="number" min="0" step="any" value="${stats.mp??0}"></label><label>攻击<input id="devMonsterAttack" type="number" min="1" step="any" value="${stats.attack??1}"></label><label>防御<input id="devMonsterDefense" type="number" min="0" step="any" value="${stats.defense??0}"></label><label>境界<input id="devMonsterRealm" value="${stats.realm||'练气初期'}"></label>`;
+  $('#devMonsterName').onchange=e=>renderDevMonsterEditor(e.target.value);
+}
+function refreshDevMobs(){
+  if(!g.devMode)return;
+  let count=Object.keys(g.deadMobs||{}).length;
+  g.deadMobs={};
+  renderSceneMap();render();save();
+  log(`开发者模式：已刷新${count}个妖兽复活计时`,'good');
+  toast(count?`已刷新${count}个死亡妖兽`:'当前没有处于死亡状态的妖兽');
+}
+function applyDevMonsterStats(){
+  if(!g.devMode)return;
+  let name=$('#devMonsterName')?.value,base=MONSTER_STATS?.[name];
+  if(!name||!base)return;
+  let read=(id,min)=>Math.max(min,clamp(Number($(id)?.value)));
+  g.devMonsterOverrides=g.devMonsterOverrides||{};
+  g.devMonsterOverrides[name]={hp:read('#devMonsterHp',1),mp:read('#devMonsterMp',0),attack:read('#devMonsterAttack',1),defense:read('#devMonsterDefense',0),realm:$('#devMonsterRealm')?.value.trim()||base.realm};
+  renderDevMonsterEditor(name);renderSceneMap();render();save();
+  log(`开发者模式：已修正妖兽「${name}」属性`,'good');
+  toast(`${name} 属性已保存`);
+}
+function resetDevMonsterStats(){
+  if(!g.devMode)return;
+  let name=$('#devMonsterName')?.value;
+  if(!name)return;
+  if(g.devMonsterOverrides)delete g.devMonsterOverrides[name];
+  renderDevMonsterEditor(name);renderSceneMap();render();save();
+  toast(`${name} 已恢复默认属性`);
+}
+function ensureDevMonsterTools(){
+  let modal=$('#devModal'),tools=$('#devMonsterTools');
+  if(!modal)return;
+  if(!tools){
+    tools=document.createElement('section');
+    tools.id='devMonsterTools';
+    tools.className='dev-monster-tools';
+    tools.innerHTML='<div class="dev-monster-head"><div><b>妖兽调试</b><small>属性修改会保存，并在之后的战斗中生效。</small></div><button class="btn alt" id="refreshMobsDev">一键刷新妖兽</button></div><div class="dev-monster-editor" id="devMonsterFields"></div><div class="dev-monster-actions"><button class="btn" id="saveMonsterStatsDev">保存妖兽属性</button><button class="btn ghost" id="resetMonsterStatsDev">恢复所选妖兽默认属性</button></div>';
+    modal.querySelector('.actions')?.before(tools);
+    $('#refreshMobsDev').onclick=refreshDevMobs;
+    $('#saveMonsterStatsDev').onclick=applyDevMonsterStats;
+    $('#resetMonsterStatsDev').onclick=resetDevMonsterStats;
+  }
+  renderDevMonsterEditor($('#devMonsterName')?.value);
+}
 function openRedeem(){if(g.devMode)return openDevMode();$('#redeemInput').value='';$('#redeemModal').classList.add('show');setTimeout(()=>$('#redeemInput').focus(),80)}
 function redeemCode(){let code=$('#redeemInput').value.trim().toLowerCase();if(code!=='jzhnb')return toast('兑换码无效');g.devMode=true;$('#redeemBtn').textContent='开发者面板';$('#redeemModal').classList.remove('show');save();toast('开发者模式已开启');openDevMode()}
-function openDevMode(){if(!g.devMode)return;let realmOptions=realms.map((x,i)=>`<option value="${i}" ${g.realm===i?'selected':''}>${x}</option>`).join(''),stageOptions=stages.map((x,i)=>`<option value="${i}" ${g.stage===i?'selected':''}>${x}</option>`).join('');$('#devFields').innerHTML=`<label class="dev-field">大境界<select data-dev-select="realm">${realmOptions}</select></label><label class="dev-field">境界阶段<select data-dev-select="stage">${stageOptions}</select></label><label class="dev-field">灵根名称<input data-dev-text="root" value="${g.root}"></label>`+devNumbers.map(([k,label])=>`<label class="dev-field">${label}<input type="number" step="any" data-dev-number="${k}" value="${g[k]??0}"></label>`).join('');$('#devModal').classList.add('show')}
+function openDevMode(){if(!g.devMode)return;let realmOptions=realms.map((x,i)=>`<option value="${i}" ${g.realm===i?'selected':''}>${x}</option>`).join(''),stageOptions=stages.map((x,i)=>`<option value="${i}" ${g.stage===i?'selected':''}>${x}</option>`).join('');$('#devFields').innerHTML=`<label class="dev-field">大境界<select data-dev-select="realm">${realmOptions}</select></label><label class="dev-field">境界阶段<select data-dev-select="stage">${stageOptions}</select></label><label class="dev-field">灵根名称<input data-dev-text="root" value="${g.root}"></label>`+devNumbers.map(([k,label])=>`<label class="dev-field">${label}<input type="number" step="any" data-dev-number="${k}" value="${g[k]??0}"></label>`).join('');ensureDevMonsterTools();$('#devModal').classList.add('show')}
 function applyDevMode(){if(!g.devMode)return;document.querySelectorAll('[data-dev-number]').forEach(el=>{let v=Number(el.value);if(Number.isFinite(v))g[el.dataset.devNumber]=clamp(v)});g.realm=Math.max(0,Math.min(9,+document.querySelector('[data-dev-select="realm"]').value||0));g.stage=Math.max(0,Math.min(3,+document.querySelector('[data-dev-select="stage"]').value||0));g.root=document.querySelector('[data-dev-text="root"]').value.trim()||'自定义灵根';g.maxHp=Math.max(1,g.maxHp);g.hp=Math.min(g.maxHp,g.hp);sanitize();save();render();$('#devModal').classList.remove('show');log('开发者模式：手动数值已应用','good');toast('开发者数值已保存')}
 function hydrateFreshState(base){base.selectedScene=base.map??0;base.sect='太玄宗';Object.assign(base,{sectRank:0,sectReputation:0,sectLevel:1,sectExp:0,sectRealmAt:0,sectWarAt:0,sectTasks:0,sectManualTaskAt:0,sectOfficeTaskAt:0,sectLectureAt:0,sectSparAt:0,sectTreasurySelected:0,sectTreasuryTab:'丹药',sectSisterQuest:null,nalanQuest:null,xiaoHuoQuest:null,qiuQuest:null});Object.assign(base,{alchemyLevel:1,alchemyExp:0,selectedRecipe:0,activeBoostUntil:0,healPills:0,cultPills:0,boostPills:0});Object.assign(base,{sectPermanentBuys:{},marketHour:-1,marketStock:[],marketManualHour:-1,gatherCooldowns:{},deadMobs:{},bossKills:{},trophies:{},bag:[],bagCap:20,bagSelected:-1,bagPage:0,passiveSkills:[],activeSkills:[],skillReserve:[],selectedEquipSlot:'weapon',skillSchemaV2:true,defaultActiveSkillsGranted:false,bigFireballLevel:0,caveSoulLoops:{},rageLearned:false});return base}
 function resetDevGame(){if(!g.devMode)return;if(!confirm('确定要一键重置到刚开局状态吗？当前存档、背包、装备、宗门贡献、地图击杀等都会清空；开发者模式会保留。'))return;g=hydrateFreshState(fresh());g.devMode=true;pendingOffline=0;tickCount=0;localStorage.setItem(KEY,JSON.stringify(g));$('#redeemBtn').textContent='开发者面板';document.querySelectorAll('.event-modal.show').forEach(x=>x.classList.remove('show'));render();renderLogs();openDevMode();log('开发者模式：已一键重置为新开局状态','good');toast('已重置为刚开局状态')}
@@ -1235,7 +1288,7 @@ function panWorld(world,coord){let left=Math.max(-90,Math.min(0,50-coord[0]*1.9)
 function stableRand(seed){let h=2166136261;for(let c of String(seed)){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return(h>>>0)/4294967296}
 function recommendedMonsterMajor(i){let req=maps[i]?.[1]||0;return Math.max(0,Math.min(realms.length-1,Math.floor(req/4)))}
 function monsterStageMultiplier(stage){return Math.pow(1.05,Math.max(0,Math.min(3,stage||0)))}
-function localMonsterRealm(i,spot,m,idx){if(!m||m.type==='采集'||m.dead)return'';let fixed=getMonsterStats(m.originalName||m.name);if(m.boss)return fixed?.realm||`${realms[Math.min(realms.length-1,recommendedMonsterMajor(i)+1)]}${stages[0]}`;let stage=Math.floor(stableRand(`${i}:${spot}:${m.name}:${idx}`)*4);return`${realms[recommendedMonsterMajor(i)]}${stages[stage]}`}
+function localMonsterRealm(i,spot,m,idx){if(!m||m.type==='采集'||m.dead)return'';let name=m.originalName||m.name,fixed=getMonsterStats(name),overridden=!!g.devMonsterOverrides?.[name];if(m.boss||overridden)return fixed?.realm||`${realms[Math.min(realms.length-1,recommendedMonsterMajor(i)+1)]}${stages[0]}`;let stage=Math.floor(stableRand(`${i}:${spot}:${m.name}:${idx}`)*4);return`${realms[recommendedMonsterMajor(i)]}${stages[stage]}`}
 function transferGuideText(from,to){
   let target=mapScenes[to][1],req=sceneReqText(to);
   return `前方通往${target}的界门尚未响应。\n\n你在大地图上还没有取得进入${target}的资格，需要先满足：${req}。\n\n请留在${mapScenes[from][1]}继续修炼、挑战首领；等大地图上的${target}解锁后，再回到这个传送路点通行。`;
@@ -1517,7 +1570,8 @@ function monsterStatsTable(){
 }
 const MONSTER_STATS=monsterStatsTable();
 function getMonsterStats(name){
-  return MONSTER_STATS[name]||null;
+  let base=MONSTER_STATS[name]||null,override=g.devMonsterOverrides?.[name];
+  return base?(override?{...base,...override}:base):null;
 }
 function monsterCultivationReward(area,boss=false){
   let place=maps[area]?.[0],reward=MONSTER_STATS.cultivationRewards?.[place]||MONSTER_STATS.cultivationRewards?.['青云山麓'];
@@ -2354,7 +2408,7 @@ function battleEnemyStats(target,area=g.selectedScene??g.map,spot=activeSpot(),i
     fixed={realm:'练气初期',hp:60,mp:30,attack:8,defense:2,portrait:''};
   }
   // Boss 保留属性表中的固定境界与固定属性。
-  if(target.boss)return{...fixed,stage:0,multiplier:1};
+  if(target.boss||g.devMonsterOverrides?.[name])return{...fixed,stage:0,multiplier:1};
   // 普通怪物在当前地图推荐大境界内随机初期/中期/后期/大圆满。
   // monsterStatsTable() 中填写的数值统一视为该地图推荐境界“初期”的基础属性。
   // 与小地图列表使用同一套稳定随机规则，保证显示境界与实际战斗属性一致。
