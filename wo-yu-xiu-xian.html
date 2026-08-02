@@ -1754,6 +1754,8 @@ const sisterQuestRealms=[
   {name:'元婴',level:4,gain:10000},
   {name:'化神',level:5,gain:100000}
 ];
+function sisterQuestExtras(quest){let level=Math.max(1,Math.floor(quest?.level||1));return{materials:quest?.forgeMaterials??level*10,contribution:quest?.contributionReward??level*30,reputation:quest?.reputationReward??level*10}}
+function sisterQuestRewardText(quest,detail=false){let extra=sisterQuestExtras(quest);return `${quest.level}级修为丹 ×2${detail?`\n每粒效果：修为 +${fmt(quest.gain)}`:''}\n锻造材料 ×${extra.materials}\n宗门贡献 +${extra.contribution}\n宗门声望 +${extra.reputation}`}
 // 每个委托境界只会要求该境界对应地图中的怪物材料。
 // 练气=青云山麓，筑基=幽月森林，金丹=赤炎秘境，元婴=东海龙宫，化神=万妖古域。
 const sisterQuestMaterialPools={
@@ -1879,7 +1881,8 @@ function disciplineQuestStatus(id){
 }
 function acceptSisterQuest(q){
   let material=randomSisterQuestMaterial(q);
-  g.sectSisterQuest={realm:q.name,level:q.level,gain:q.gain,material,need:5};
+  let extra=sisterQuestExtras(q);
+  g.sectSisterQuest={realm:q.name,level:q.level,gain:q.gain,material,need:5,forgeMaterials:extra.materials,contributionReward:extra.contribution,reputationReward:extra.reputation};
   pushLocalLog(`柳如烟发布${q.name}委托：回收${material}×5。`);
   save();
 }
@@ -2057,14 +2060,14 @@ function completeXiaoHuoQuest(){
     name:'红火莲花',
     quality:3,
     slot:'treasure',
-    bonus:{mana:150,agility:7,hp:150,crit:5},
+    bonus:{mana:250,agility:7,hp:250,crit:5},
     sell:3200,
-    desc:'萧火以异火莲种炼成的特殊法宝。基础法力+150，身法+7，生命+150,暴击+5。'
+    desc:'萧火以异火莲种炼成的特殊法宝。基础法力+250，身法+7，生命+250,暴击+5。'
   });
   addBagItem(eq);
   g.xiaoHuoQuest={active:true,done:true};
   pushLocalLog('萧火收下药材1000份，赠予特殊法宝：红火莲花。');
-  showNpcResult('萧火委托完成','上交：药材×1000\n获得：蓝色特殊法宝「红火莲花」\n效果：法力+150，身法+7，生命+150，暴击+5\n奖励已放入背包。','good');
+  showNpcResult('萧火委托完成','上交：药材×1000\n获得：蓝色特殊法宝「红火莲花」\n效果：法力+250，身法+7，生命+250，暴击+5\n奖励已放入背包。','good');
   renderSceneMap();render();save();
   return true;
 }
@@ -2081,9 +2084,9 @@ function completeQiuQuest(){
     name:'心灵控制器',
     quality:4,
     slot:'helmet',
-    bonus:{hp:100,mana:250,defense:20},
+    bonus:{hp:200,mana:250,defense:20},
     sell:5200,
-    desc:'紫云峰秘藏的特殊头部装备。基础生命+100，法力+50，防御+20。'
+    desc:'紫云峰秘藏的特殊头部装备。基础生命+200，法力+250，防御+20。'
   });
   addBagItem(eq);
   addFixedCultPill(2,100,5);
@@ -2249,8 +2252,8 @@ function renderTaskPanel(){
     html+=taskCard('太上长老苏青雪：寒灯寻主',body,'');
   }
   if(g.sectSisterQuest){
-    let q=g.sectSisterQuest,have=bagItemCountByName(q.material);
-    html+=taskCard(`柳如烟：${q.realm}材料回收`,`目标：${q.material} ${have}/${q.need}；奖励：${q.level}级修为丹×2`,`<button class="btn" data-task-submit="sister">提交</button><button class="btn ghost" data-task-abandon="sister">放弃</button>`);
+    let q=g.sectSisterQuest,have=bagItemCountByName(q.material),extra=sisterQuestExtras(q);
+    html+=taskCard(`柳如烟：${q.realm}材料回收`,`目标：${q.material} ${have}/${q.need}；奖励：${q.level}级修为丹×2、锻造材料×${extra.materials}、贡献+${extra.contribution}、声望+${extra.reputation}`,`<button class="btn" data-task-submit="sister">提交</button><button class="btn ghost" data-task-abandon="sister">放弃</button>`);
   }
   if(g.nalanQuest){
     let heal=pillCountByName('回春丹','healPills'),skin=bagItemCountByName('石鼠皮');
@@ -2273,7 +2276,7 @@ function renderTaskPanel(){
   if(forestDisputes.fox.claimed&&forestDisputes.wolf.claimed&&!forestDisputes.tree.done)html+=taskCard('千年古树：幽月调停',`调停进度：${forestDisputes.tree.stage}/5；前往古树洞府、妖狐巢穴与月下草径传达双方条件。每次关键对话奖励修为+200、灵石+200。`,'');
   let inSquare=(g.selectedScene??g.map)===10&&activeSpot()===31;
   if(inSquare&&!g.sectSisterQuest){
-    html+=taskCard('可接：柳如烟材料回收','选择一个境界委托，随机回收妖兽材料×5，奖励对应等级修为丹。',sisterQuestRealms.map((q,i)=>`<button class="btn ghost" data-task-accept-sister="${i}">${q.name}</button>`).join(''));
+    html+=taskCard('可接：柳如烟材料回收','选择一个境界委托，随机回收妖兽材料×5，奖励对应等级修为丹、锻造材料、宗门贡献与声望。',sisterQuestRealms.map((q,i)=>`<button class="btn ghost" data-task-accept-sister="${i}">${q.name}</button>`).join(''));
   }
   if(inSquare&&!g.nalanQuest&&!g.nalanQuestDone&&realmIndex()>1){
     html+=taskCard('可接：小师妹 纳兰清月委托','高于练气中期可接。提交回春丹×10、石鼠皮×10，奖励紫色法器×1、2级修为丹×2。',`<button class="btn" data-task-accept-nalan="1">接取</button>`);
@@ -2296,10 +2299,14 @@ function submitSisterQuest(){
   if(!quest)return false;
   if(bagItemCountByName(quest.material)<quest.need)return toast(`${quest.material}不足，暂时无法提交`);
   if(!takeBagItemsByName(quest.material,quest.need))return toast('材料扣除失败，请重新打开背包检查');
+  let extra=sisterQuestExtras(quest);
   addFixedCultPill(quest.level,quest.gain,2);
+  addForgeMaterials(extra.materials);
+  g.sectContribution+=extra.contribution;
+  g.sectReputation+=extra.reputation;
   g.sectSisterQuest=null;
-  pushLocalLog(`柳如烟验收${quest.material}×${quest.need}，发放${quest.level}级修为丹×2。`);
-  showNpcResult('宗门委托完成',`上交：${quest.material} ×${quest.need}\n获得：${quest.level}级修为丹 ×2\n奖励已放入背包。`,'good');
+  pushLocalLog(`柳如烟验收${quest.material}×${quest.need}，发放${quest.level}级修为丹×2、锻造材料×${extra.materials}、宗门贡献+${extra.contribution}、宗门声望+${extra.reputation}。`);
+  showNpcResult('宗门委托完成',`上交：${quest.material} ×${quest.need}\n获得：${sisterQuestRewardText(quest,true)}\n奖励已放入背包。`,'good');
   renderSceneMap();
   render();
   save();
@@ -2975,16 +2982,8 @@ if(name==='大师姐 柳如烟'){
 let quest=g.sectSisterQuest;
 if(quest){
   let have=bagItemCountByName(quest.material);
-  openNpcDialog('大师姐 柳如烟',`大师姐轻声道：师弟，宗门广场的回收任务还记得吧？\n\n当前任务：${quest.realm}委托\n需要：${quest.material} × ${quest.need}\n背包已有：${have} / ${quest.need}\n奖励：${quest.level}级修为丹 ×2`,[
-    {text:'提交材料',onClick(){
-      if(bagItemCountByName(quest.material)<quest.need)return toast(`${quest.material}不足，暂时无法提交`);
-      if(!takeBagItemsByName(quest.material,quest.need))return toast('材料扣除失败，请重新打开背包检查');
-      addFixedCultPill(quest.level,quest.gain,2);
-      g.sectSisterQuest=null;
-      pushLocalLog(`柳如烟验收${quest.material}×${quest.need}，发放${quest.level}级修为丹×2。`);
-      showNpcResult('宗门委托完成',`上交：${quest.material} ×${quest.need}\n获得：${quest.level}级修为丹 ×2\n效果：每粒修为 +${fmt(quest.gain)}\n奖励已放入背包。`,'good');
-      renderSceneMap();render();save();
-    }},
+  openNpcDialog('大师姐 柳如烟',`大师姐轻声道：师弟，宗门广场的回收任务还记得吧？\n\n当前任务：${quest.realm}委托\n需要：${quest.material} × ${quest.need}\n背包已有：${have} / ${quest.need}\n奖励：${sisterQuestRewardText(quest,true)}`,[
+    {text:'提交材料',onClick(){submitSisterQuest()}},
     {text:'放弃任务',ghost:true,onClick(){
       g.sectSisterQuest=null;
       showNpcResult('已放弃委托','大师姐点点头：无妨，修行路远，待你准备好再来接新的委托。','danger');
@@ -2994,14 +2993,13 @@ if(quest){
   ]);
   return;
 }
-openNpcDialog('大师姐 柳如烟','柳如烟含笑道：宗门广场常收妖兽材料，你可先选择一个境界委托。\n境界越高，奖励的修为丹等级越高。',sisterQuestRealms.map(q=>({
+openNpcDialog('大师姐 柳如烟','柳如烟含笑道：宗门广场常收妖兽材料，你可先选择一个境界委托。\n境界越高，修为丹、锻造材料、宗门贡献与声望奖励都会提高。',sisterQuestRealms.map(q=>({
   text:`领取${q.name}委托`,
   ghost:q.level>1,
   onClick(){
-    let material=randomSisterQuestMaterial(q);
-    g.sectSisterQuest={realm:q.name,level:q.level,gain:q.gain,material,need:5};
-    pushLocalLog(`柳如烟发布${q.name}委托：回收${material}×5。`);
-    showNpcResult('已领取宗门委托',`任务境界：${q.name}\n目标：回收 ${material} ×5\n奖励：${q.level}级修为丹 ×2\n每粒效果：修为 +${fmt(q.gain)}\n\n完成后回宗门广场找柳如烟提交。`,'good');
+    acceptSisterQuest(q);
+    let quest=g.sectSisterQuest;
+    showNpcResult('已领取宗门委托',`任务境界：${q.name}\n目标：回收 ${quest.material} ×5\n奖励：${sisterQuestRewardText(quest,true)}\n\n完成后回宗门广场找柳如烟提交。`,'good');
     renderSceneMap();save();
   }
 })).concat([{text:'暂不领取',ghost:true}]));
