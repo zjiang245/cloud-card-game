@@ -668,6 +668,47 @@
 .toast{z-index:1000}
 .warehouse-modal>div{width:min(980px,96vw)}.warehouse-note{margin-bottom:12px;padding:9px 11px;border:1px solid #b9c8bd;border-radius:8px;background:#f7f3e7;color:#52665a;font-size:13px}.warehouse-layout{display:grid;grid-template-columns:1fr 1fr;gap:12px}.warehouse-layout section{min-width:0;padding:10px;border:1px solid #b9c8bd;border-radius:8px;background:#fbfaf3}.warehouse-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;color:#294c3c}.warehouse-head span{font-size:12px;color:#6a786d}.warehouse-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(5,64px);gap:6px}.warehouse-slot{position:relative;min-width:0;padding:4px;border:1px solid #b7c5ba;border-radius:6px;background:#fffdf7;color:#284436;text-align:center;cursor:pointer;overflow:hidden}.warehouse-slot b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:11px}.warehouse-slot small{display:block;margin-top:3px;color:#758178;font-size:10px}.warehouse-slot span{position:absolute;right:3px;bottom:3px;padding:1px 4px;border-radius:5px;background:#315f48;color:#fff;font-size:10px}.warehouse-slot.empty{display:grid;place-items:center;border-style:dashed;background:#f1f3eb;color:#a0aaa1}.warehouse-slot.active{outline:2px solid #d2a846;background:#fff4cf}.warehouse-page{display:flex;justify-content:center;align-items:center;gap:7px;margin-top:8px}.warehouse-page .btn{padding:5px 8px;font-size:12px}.warehouse-page b{min-width:42px;text-align:center;font-size:12px;color:#486052}.warehouse-transfer{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:12px}.warehouse-transfer label{display:flex;align-items:center;gap:6px;color:#425b4d;font-size:13px}.warehouse-transfer input{width:86px;padding:7px;border:1px solid #adbbb0;border-radius:6px;background:#fff;color:#26392e}@media(max-width:650px){.warehouse-layout{grid-template-columns:1fr}.warehouse-grid{grid-template-rows:repeat(5,58px)}.warehouse-slot b{font-size:10px}}
 </style>
+<style>
+/* Task ledger: a compact dossier rather than a generic shop list. */
+#taskModal{padding:14px;z-index:88}
+#taskModal>.task-ledger{width:min(850px,96vw);max-height:min(800px,92vh);padding:0;overflow:hidden;border:1px solid #c8aa61;border-radius:8px;background:#f5f0e2;color:#263c31;box-shadow:0 26px 72px #0c1c16aa}
+.task-ledger-head{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:18px 22px 16px;border-bottom:1px solid #b99c5d;background:linear-gradient(105deg,#173e32,#245541);color:#fff4c8}
+.task-ledger-head h2{margin:0;font:700 31px "STKaiti","KaiTi",serif;letter-spacing:2px;color:#fff0bc;text-shadow:0 2px 10px #06150e88}
+.task-ledger-close{flex:0 0 auto;border:1px solid #d5b96f;border-radius:4px;padding:7px 13px;background:#ffffff12;color:#fff4cf;font-weight:700;cursor:pointer}
+.task-ledger-close:hover{background:#ffffff24}
+.task-ledger-body{padding:14px 18px 18px;background:linear-gradient(90deg,#ece7d6 0,#fbf9f0 12%,#fbf9f0 88%,#ece7d6 100%)}
+.task-overview{display:grid;grid-template-columns:repeat(3,1fr);margin-bottom:14px;border-top:1px solid #c9b581;border-bottom:1px solid #c9b581;background:#f8f4e7}
+.task-overview span{min-width:0;padding:9px 13px;border-right:1px solid #d8caa4}
+.task-overview span:last-child{border-right:0}.task-overview small{display:block;margin-bottom:3px;color:#7b715c;font-size:11px}.task-overview b{display:block;overflow:hidden;color:#315845;font-size:15px;text-overflow:ellipsis;white-space:nowrap}
+.task-list{display:grid;gap:9px;max-height:min(590px,65vh);padding:2px;overflow:auto}
+.task-dossier{position:relative;display:grid;grid-template-columns:70px minmax(0,1fr) auto;gap:12px;align-items:start;padding:13px 14px;border:1px solid #c5c4b4;border-left:4px solid #6b8f77;border-radius:5px;background:#fffdf6;box-shadow:0 4px 10px #38452d12;overflow:hidden}
+.task-dossier:after{content:"";position:absolute;right:-36px;bottom:-38px;width:116px;height:116px;border:1px solid #4c715733;border-radius:50%;box-shadow:0 0 0 9px #4c71570d;pointer-events:none}
+.task-dossier.main{border-color:#c9ad62;border-left-color:#b47a25;background:linear-gradient(105deg,#fff8df,#fffef8 64%)}
+.task-dossier.available{border-left-color:#4b8298;background:linear-gradient(105deg,#eff8f7,#fffef9 64%)}
+.task-dossier-label{position:relative;z-index:1;display:inline-flex;justify-content:center;align-items:center;min-height:27px;padding:4px 7px;border:1px solid #8cad99;border-radius:3px;background:#edf4eb;color:#3d6650;font-size:11px;font-weight:800;letter-spacing:1px;white-space:nowrap}
+.task-dossier.main .task-dossier-label{border-color:#c69a42;background:#805b20;color:#fff4cc}.task-dossier.available .task-dossier-label{border-color:#77a8b7;background:#e6f3f3;color:#2d6977}
+.task-dossier-copy{position:relative;z-index:1;min-width:0}.task-dossier-copy b{display:block;color:#294838;font:700 17px "STKaiti","KaiTi",serif;line-height:1.45}.task-dossier-copy p{margin:5px 0 0;color:#586d61;font-size:13px;line-height:1.65;white-space:pre-line}.task-dossier-actions{position:relative;z-index:1;display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px;max-width:230px}.task-dossier-actions .btn{border-radius:4px;padding:6px 10px;font-size:12px}
+.task-empty{padding:20px;border:1px dashed #adbaad;background:#f5f6ee;color:#718075;text-align:center}
+@media(max-width:650px){#taskModal{padding:7px}#taskModal>.task-ledger{width:calc(100vw - 14px)!important;max-height:calc(100dvh - 14px)}.task-ledger-head{padding:14px 15px}.task-ledger-head h2{font-size:27px}.task-ledger-body{padding:11px}.task-overview span{padding:8px 7px}.task-overview small{font-size:10px}.task-overview b{font-size:12px}.task-list{max-height:calc(100dvh - 180px);gap:7px}.task-dossier{grid-template-columns:56px minmax(0,1fr);gap:9px;padding:11px 10px}.task-dossier-copy b{font-size:15px}.task-dossier-copy p{font-size:12px;line-height:1.55}.task-dossier-actions{grid-column:1/-1;justify-content:flex-start;max-width:none;padding-top:2px}.task-dossier-actions .btn{padding:6px 9px;font-size:11px}}
+</style>
+<style>
+/* Sect dossier: structured authority, resources, rooms, and affairs. */
+#sectLedgerModal{z-index:90;background:#07130ed1;padding:14px}
+#sectLedgerModal>.sect-ledger-panel{width:min(860px,96vw);max-height:min(810px,92vh);padding:0;overflow:auto;border:1px solid #c9ad69;border-radius:8px;background:#f4f0e3;color:#263d31;box-shadow:0 28px 78px #06110ddd}
+.sect-ledger-head{display:flex;justify-content:space-between;align-items:center;gap:14px;padding:16px 21px;border-bottom:1px solid #b99b61;background:#173d31;color:#fff0c2}.sect-ledger-head h2{margin:0;color:#fff0be;font:700 30px "STKaiti","KaiTi",serif;letter-spacing:2px}.sect-ledger-head button{border:1px solid #d3b971;border-radius:4px;padding:7px 13px;background:#ffffff12;color:#fff4d2;font-weight:700;cursor:pointer}
+.sect-ledger-body{padding:16px 18px 20px;background:linear-gradient(90deg,#ece6d4,#fbf9f0 12%,#fbf9f0 88%,#ece6d4)}
+.sect-identity{display:grid;grid-template-columns:62px minmax(0,1fr) auto;gap:13px;align-items:center;padding:13px 14px;border:1px solid #c8b783;background:#fffaf0}.sect-emblem{width:58px;height:58px;overflow:hidden;border:2px solid #c4a657;border-radius:50%;background:#285b46;box-shadow:0 3px 10px #18382a55,inset 0 0 0 4px #ffffff26}.sect-emblem img{display:block;width:100%;height:100%;object-fit:cover;object-position:center}.sect-identity small{display:block;color:#7b705b;font-size:11px}.sect-identity b{display:block;margin-top:2px;color:#294b3a;font:700 22px "STKaiti","KaiTi",serif}.sect-rank{padding:6px 10px;border:1px solid #b68b37;border-radius:3px;background:#fff2c9;color:#75521b;font-size:12px;font-weight:800;white-space:nowrap}
+.sect-promotion{margin-top:10px;padding:11px 13px;border-left:3px solid #b88832;background:#f7f1df}.sect-promotion-top{display:flex;justify-content:space-between;gap:10px;color:#52685b;font-size:12px}.sect-promotion-top b{color:#315a45}.sect-progress{height:8px;margin-top:8px;background:#d7d5c8;overflow:hidden}.sect-progress i{display:block;height:100%;background:linear-gradient(90deg,#497d61,#c4a14e);transition:width .25s}
+.sect-metrics{display:grid;grid-template-columns:repeat(3,1fr);margin-top:12px;border:1px solid #c9c4af;background:#fffdf6}.sect-metric{min-width:0;padding:10px 12px;border-right:1px solid #dad3bf}.sect-metric:last-child{border-right:0}.sect-metric small{display:block;color:#7b796d;font-size:11px}.sect-metric b{display:block;margin-top:4px;color:#2e5944;font-size:18px}.sect-metric em{font-style:normal;color:#9b7429;font-size:11px}
+.sect-ledger-grid{display:grid;grid-template-columns:1.1fr .9fr;gap:12px;margin-top:12px}.sect-ledger-section{min-width:0;border-top:2px solid #668b75;background:#fffdf6}.sect-ledger-section h3{margin:0;padding:9px 11px;border-bottom:1px solid #d7d0ba;color:#315642;font:700 18px "STKaiti","KaiTi",serif}.sect-room-list,.sect-affair-list{display:grid}.sect-room,.sect-affair{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:9px 11px;border-bottom:1px solid #e2dcc9}.sect-room:last-child,.sect-affair:last-child{border-bottom:0}.sect-room b,.sect-affair b{color:#395b49;font-size:13px}.sect-room small,.sect-affair small{display:block;margin-top:2px;color:#7b8177;font-size:11px}.sect-room span,.sect-affair span{flex:0 0 auto;padding:3px 6px;border:1px solid #a8b9aa;border-radius:3px;background:#edf3e9;color:#54705e;font-size:10px;white-space:nowrap}.sect-room.lock span,.sect-affair.wait span{border-color:#d3bf91;background:#fff6df;color:#88662d}.sect-ledger-actions{display:flex;justify-content:flex-end;gap:8px;margin-top:13px}.sect-ledger-actions .btn{border-radius:4px}
+@media(max-width:650px){#sectLedgerModal{padding:7px}.sect-ledger-head{padding:14px}.sect-ledger-head h2{font-size:26px}.sect-ledger-body{padding:11px}.sect-identity{grid-template-columns:52px minmax(0,1fr)}.sect-emblem{width:48px;height:48px;font-size:27px}.sect-identity b{font-size:19px}.sect-rank{grid-column:1/-1;justify-self:start}.sect-metrics{grid-template-columns:1fr}.sect-metric{border-right:0;border-bottom:1px solid #dad3bf}.sect-metric:last-child{border-bottom:0}.sect-ledger-grid{grid-template-columns:1fr;gap:10px}.sect-room,.sect-affair{padding:8px 9px}.sect-ledger-actions{justify-content:stretch}.sect-ledger-actions .btn{flex:1}}
+
+/* Attribute sheet: dense combat-readout inspired by classic martial stat sheets. */
+#attrModal{z-index:90;background:#050908d5;padding:14px}#attrModal>div{width:min(680px,96vw);max-height:92vh;padding:0;overflow:auto;border:1px solid #9c7c3a;border-radius:4px;background:#171916;color:#e7e1d0;box-shadow:0 24px 72px #000c}#attrModal h2{margin:0;padding:15px 19px;border-bottom:1px solid #7f683b;background:linear-gradient(90deg,#2a2b24,#181a17);color:#e9cb80;font:700 27px "STKaiti","KaiTi",serif;letter-spacing:2px}#attrModalGrid.attr-combat-sheet{display:grid;grid-template-columns:1fr 1fr;gap:0;padding:0;background:#171916}#attrModal .actions{justify-content:flex-end;margin:0;padding:10px 14px;border-top:1px solid #4b483d;background:#111310}#attrModal .actions .btn{border-color:#8f7746;background:#27271f;color:#ebd292;border-radius:3px}
+.attr-section{min-width:0;padding:13px 18px 14px;border-bottom:1px solid #49483f;background:linear-gradient(90deg,#1d1e1a,#151714 72%,#1c1d19)}#attrModalGrid .attr-section.status{display:block!important;grid-column:1/-1!important;width:100%;box-sizing:border-box}#attrModalGrid .attr-section.status .attr-section-head{display:block!important;margin:0 0 9px}#attrModalGrid .attr-section.status .attr-stat-columns{width:100%;margin:0;grid-template-columns:repeat(2,minmax(0,1fr))}.attr-section.defense{border-right:1px solid #49483f}.attr-section:last-child{border-bottom:0}.attr-section-head{display:flex;align-items:center;gap:8px;margin-bottom:9px;color:#d9b866}.attr-section-head b{font:700 17px "STKaiti","KaiTi",serif}.attr-stat-columns{display:grid;grid-template-columns:1fr 1fr;gap:0 26px}.attr-section:not(.status) .attr-stat-columns{grid-template-columns:1fr}.attr-stat{display:grid;grid-template-columns:minmax(66px,auto) 1fr;align-items:baseline;gap:7px;padding:3px 0;color:#b4b2a8;font-size:12px;line-height:1.32}.attr-stat span{white-space:nowrap}.attr-stat b{color:#f1eee2;font:700 14px "SFMono-Regular",Menlo,monospace;letter-spacing:0;text-align:left}.attr-stat b.up{color:#58bc88}.attr-stat b.warn,.attr-stat b.hp{color:#f06a63}.attr-stat b.mp{color:#5ebdec}.attr-stat b.gold{color:#e5bd61}.attr-stat .attr-sub{margin-left:4px;color:#83867e;font:400 10px Arial,sans-serif}.attr-source-strip{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:11px 18px;border-top:1px solid #575143;background:#121410;color:#aaa996;font-size:11px;line-height:1.55}.attr-source-strip b{display:block;color:#d2b76d;font-size:11px}.attr-source-strip span{color:#cac6b7}
+@media(max-width:650px){#attrModal{padding:7px}#attrModal h2{padding:13px 14px;font-size:24px}#attrModalGrid.attr-combat-sheet{grid-template-columns:repeat(2,minmax(0,1fr))}.attr-section{padding:10px 9px}.attr-section.defense{border-right:1px solid #49483f}.attr-section.status{grid-column:1/-1}.attr-section.status .attr-stat-columns{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 8px}.attr-stat{grid-template-columns:1fr;padding:3px 0;font-size:10px}.attr-stat b{font-size:11px;overflow-wrap:anywhere}.attr-stat .attr-sub{display:block;margin:2px 0 0;font-size:8px}.attr-section-head{margin-bottom:7px}.attr-section-head b{font-size:15px}.attr-section-head small{font-size:8px}.attr-source-strip{grid-template-columns:1fr;padding:10px 13px;gap:6px}}
+
+</style>
 </head>
 <body><div class="app">
 <aside class="side"><a class="back" href="index.html">← 游戏大厅</a><div class="brand">我欲修仙</div><div class="sub">手动历练 · 问道长生</div><nav class="nav" id="nav"><button data-tab="home" class="active">首页</button></nav><div class="save-note">手动战斗与宗门事务存档</div></aside>
@@ -775,7 +816,7 @@ function equipAttrs(it){it=normalizeEquip(it);
 function gearBonus(slot=null){let sum={hp:0,mana:0,attack:0,defense:0,agility:0,crit:0};let arr=slot?[g.gear?.[slot]]:equipSlots.map(k=>g.gear?.[k]);arr.forEach(it=>{let a=equipAttrs(it);Object.keys(sum).forEach(k=>sum[k]+=a[k])});return sum}
 function passiveSkillBonus(){let sum={hp:0,mana:0,attack:0,defense:0,agility:0,crit:0};(g.passiveSkills||[]).forEach(sk=>{let text=`${sk?.name||''} ${sk?.desc||''}`;let rules=[['attack',/攻击\s*\+\s*(\d+)/g],['defense',/防御\s*\+\s*(\d+)/g],['agility',/(?:身法|敏捷)\s*\+\s*(\d+)/g],['crit',/暴击\s*\+\s*(\d+)/g],['hp',/(?:生命上限|生命)\s*\+\s*(\d+)/g],['mana',/(?:法力上限|法力)\s*\+\s*(\d+)/g]];rules.forEach(([key,re])=>{for(let m;(m=re.exec(text));)sum[key]+=Number(m[1])||0})});return sum}
 function statTotal(){let b=gearBonus(),p=passiveSkillBonus(),bonus={};Object.keys(b).forEach(k=>bonus[k]=(b[k]||0)+(p[k]||0));return{hp:g.maxHp+bonus.hp,mana:(g.baseMana||80)+bonus.mana,attack:g.attack+bonus.attack,defense:g.defense+bonus.defense,agility:g.agility+bonus.agility,crit:Math.max(0,Math.min(40,(g.crit||0)+bonus.crit)),bonus,passiveBonus:p}}
-function dodgeChance(agility=0,extra=0){let bonus=Math.max(0,Number(extra)||0),cap=bonus>0?0.65:0.5;return Math.max(0,Math.min(cap,(Math.max(0,Number(agility)||0)/1000)+bonus))}
+function dodgeChance(agility=0,extra=0){let bonus=Math.max(0,Number(extra)||0),cap=bonus>0?0.65:0.5;return Math.max(0,Math.min(cap,(Math.max(0,Number(agility)||0)/100000)+bonus))}
 function formationBuffs(){return g.formationBuffs||(g.formationBuffs={mist:0,blood:0,spirit:0})}
 function formationBattleState(){let buffs=formationBuffs(),state={mist:(buffs.mist||0)>0,blood:(buffs.blood||0)>0,spirit:(buffs.spirit||0)>0};Object.keys(state).forEach(key=>{if(state[key])buffs[key]=Math.max(0,(buffs[key]||0)-1)});return state}
 function formationRemainingText(){let b=formationBuffs(),parts=[];if(b.mist)parts.push(`迷雾阵${b.mist}战`);if(b.blood)parts.push(`血煞阵${b.blood}战`);if(b.spirit)parts.push(`聚灵阵${b.spirit}战`);return parts.length?parts.join('、'):'暂无生效阵法'}
@@ -1430,48 +1471,48 @@ function monsterStatsTable(){
     '树精':normal({hp:490,mp:60,attack:49,defense:23,realm:'筑基中期'},'shujing','树心木'),
     '迷雾蝶':normal({hp:335,mp:110,attack:55,defense:17,realm:'筑基后期'},'miwudie','蝶粉'),
     '夜行狼':normal({hp:275,mp:60,attack:58,defense:19,realm:'筑基大圆满'},'yexinglang','狼牙'),
-    'BOSS 巨树妖':boss({hp:1520,mp:150,attack:150,defense:60,realm:'金丹初期'},'assets/boss-portraits/jushu-yao.png','巨树妖心'),
-    '赤炎兽':normal({hp:920,mp:140,attack:155,defense:60,realm:'金丹初期'},'chiyan-shou','赤炎角'),
-    '火鸦':normal({hp:950,mp:190,attack:163,defense:55,realm:'金丹中期'},'huoya','火羽'),
-    '岩浆虫':normal({hp:1110,mp:120,attack:130,defense:70,realm:'金丹后期'},'yanjiang-chong','火晶壳'),
-    '炎魔':normal({hp:480,mp:210,attack:170,defense:65,realm:'金丹大圆满'},'yanmo','炎魔核'),
-    'BOSS 熔岩领主':boss({hp:3450,mp:420,attack:280,defense:100,realm:'元婴初期'},'assets/boss-portraits/rongyan-lingzhu.png','熔岩核心'),
-    '虾兵':normal({hp:1100,mp:340,attack:300,defense:55,realm:'元婴初期'},'xiabing','虾壳'),
-    '蟹将':normal({hp:1350,mp:300,attack:325,defense:75,realm:'元婴中期'},'xiejiang','蟹钳'),
-    '老海龟':normal({hp:1650,mp:380,attack:280,defense:98,realm:'元婴后期'},'laohai-gui','龟甲'),
-    '海蛇':normal({hp:1050,mp:520,attack:330,defense:50,realm:'元婴大圆满'},'haishe','蛇胆'),
-    'BOSS 龙太子':boss({hp:9200,mp:1200,attack:445,defense:145,realm:'化神初期'},'assets/boss-portraits/long-taizi.png','龙鳞玉令'),
-    '暗蛟龙':boss({hp:19200,mp:1200,attack:645,defense:345,realm:'化神大圆满',icon:'🐉'},'','暗蛟逆鳞'),
-    '血藤妖':normal({hp:3100,mp:900,attack:340,defense:135,realm:'化神初期'},'xueteng-yao','血藤'),
-    '荒骨狼':normal({hp:2700,mp:720,attack:390,defense:120,realm:'化神中期'},'huanggu-lang','荒骨'),
-    '毒雾虫':normal({hp:2550,mp:1250,attack:365,defense:112,realm:'化神后期'},'duwu-chong','毒囊'),
-    '妖王花':normal({hp:3500,mp:1400,attack:330,defense:165,realm:'化神大圆满'},'yaowang-hua','妖花粉'),
-    'BOSS 巫妖王':boss({hp:19800,mp:3200,attack:710,defense:310,realm:'炼虚初期'},'assets/boss-portraits/wuyao-wang.png','巫妖王骨冠'),
-    '战魂':normal({hp:7600,mp:2300,attack:780,defense:300,realm:'炼虚初期'},'zhanhun','魂晶'),
-    '铁甲尸':normal({hp:9200,mp:1800,attack:720,defense:420,realm:'炼虚中期'},'tiejia-shi','尸甲'),
-    '煞灵':normal({hp:7000,mp:3200,attack:860,defense:285,realm:'炼虚后期'},'shaling','煞珠'),
-    '断剑鬼':normal({hp:8200,mp:2600,attack:920,defense:340,realm:'炼虚大圆满'},'duanjian-gui','残刃'),
-    'BOSS 古战神残魂':boss({hp:35000,mp:7000,attack:1450,defense:720,realm:'合体初期'},'assets/boss-portraits/guzhanshen-canhun.png','战神残魂'),
-    '虚空影':normal({hp:19000,mp:6500,attack:1900,defense:720,realm:'合体初期'},'xukong-ying','影尘'),
-    '星砂虫':normal({hp:21500,mp:6000,attack:1750,defense:880,realm:'合体中期'},'xingsha-chong','星砂'),
-    '裂隙怪':normal({hp:18000,mp:8200,attack:2150,defense:690,realm:'合体后期'},'liexi-guai','裂片'),
-    '遗迹守卫':normal({hp:24500,mp:7000,attack:1850,defense:1050,realm:'合体大圆满'},'yiji-shouwei','古铜片'),
-    'BOSS 虚空吞灵':boss({hp:68000,mp:19000,attack:3300,defense:1750,realm:'大乘初期'},'assets/boss-portraits/xukong-tunling.png','虚空灵核'),
-    '魔修残魂':normal({hp:52000,mp:16000,attack:4300,defense:1650,realm:'大乘初期'},'moxiu-canhun','魔魂灰'),
-    '黑莲妖':normal({hp:61000,mp:19000,attack:4050,defense:2050,realm:'大乘中期'},'heilian-yao','黑莲瓣'),
-    '魔焰鬼':normal({hp:49000,mp:23000,attack:4950,defense:1500,realm:'大乘后期'},'moyan-gui','魔焰石'),
-    '残碑灵':normal({hp:67000,mp:18500,attack:4450,defense:2300,realm:'大乘大圆满'},'canbei-ling','碑屑'),
-    'BOSS 堕仙魔君':boss({hp:185000,mp:52000,attack:7600,defense:3900,realm:'渡劫初期'},'assets/boss-portraits/duoxian-mojun.png','魔君残印'),
-    '雷灵':normal({hp:145000,mp:48000,attack:9800,defense:3700,realm:'渡劫初期'},'leiling','雷晶'),
-    '云兽':normal({hp:170000,mp:42000,attack:9100,defense:4550,realm:'渡劫中期'},'yunshou','云皮'),
-    '电光虫':normal({hp:132000,mp:62000,attack:11200,defense:3450,realm:'渡劫后期'},'dianguang-chong','电须'),
-    '雷鸟':normal({hp:155000,mp:58000,attack:12100,defense:3900,realm:'渡劫大圆满'},'leiniao','雷羽'),
-    'BOSS 雷劫真君':boss({hp:450000,mp:145000,attack:18500,defense:7600,realm:'天仙初期'},'assets/boss-portraits/leijie-zhenjun.png','雷劫道晶'),
-    '天门守卫':normal({hp:360000,mp:120000,attack:23500,defense:9200,realm:'天仙初期'},'tianmen-shouwei','仙甲片'),
-    '仙鹤':normal({hp:315000,mp:155000,attack:26500,defense:8400,realm:'天仙中期'},'xianhe','仙羽'),
-    '金甲力士':normal({hp:430000,mp:110000,attack:24800,defense:12500,realm:'天仙后期'},'jinjia-lishi','金甲碎片'),
-    '天兵残影':normal({hp:385000,mp:180000,attack:29200,defense:9700,realm:'天仙大圆满'},'tianbing-canying','仙尘'),
-    'BOSS 守门仙将':boss({hp:1200000,mp:420000,attack:45000,defense:21000,realm:'天仙大圆满'},'assets/boss-portraits/shoumen-xianjiang.png','仙将令牌')
+    'BOSS 巨树妖':boss({hp:1520,mp:150,attack:250,defense:160,realm:'金丹初期'},'assets/boss-portraits/jushu-yao.png','巨树妖心'),
+    '赤炎兽':normal({hp:920,mp:140,attack:155,defense:160,realm:'金丹初期'},'chiyan-shou','赤炎角'),
+    '火鸦':normal({hp:950,mp:190,attack:163,defense:155,realm:'金丹中期'},'huoya','火羽'),
+    '岩浆虫':normal({hp:1110,mp:120,attack:130,defense:170,realm:'金丹后期'},'yanjiang-chong','火晶壳'),
+    '炎魔':normal({hp:780,mp:210,attack:170,defense:165,realm:'金丹大圆满'},'yanmo','炎魔核'),
+    'BOSS 熔岩领主':boss({hp:6450,mp:420,attack:680,defense:300,realm:'元婴初期'},'assets/boss-portraits/rongyan-lingzhu.png','熔岩核心'),
+    '虾兵':normal({hp:4100,mp:340,attack:600,defense:550,realm:'元婴初期'},'xiabing','虾壳'),
+    '蟹将':normal({hp:3350,mp:300,attack:725,defense:750,realm:'元婴中期'},'xiejiang','蟹钳'),
+    '老海龟':normal({hp:3650,mp:380,attack:630,defense:980,realm:'元婴后期'},'laohai-gui','龟甲'),
+    '海蛇':normal({hp:4050,mp:520,attack:630,defense:500,realm:'元婴大圆满'},'haishe','蛇胆'),
+    'BOSS 龙太子':boss({hp:9200,mp:1200,attack:1445,defense:1450,realm:'化神初期'},'assets/boss-portraits/long-taizi.png','龙鳞玉令'),
+    '暗蛟龙':boss({hp:39200,mp:1200,attack:2645,defense:1450,realm:'化神大圆满',icon:'🐉'},'','暗蛟逆鳞'),
+    '血藤妖':normal({hp:13100,mp:900,attack:1340,defense:1350,realm:'化神初期'},'xueteng-yao','血藤'),
+    '荒骨狼':normal({hp:12700,mp:720,attack:1390,defense:1200,realm:'化神中期'},'huanggu-lang','荒骨'),
+    '毒雾虫':normal({hp:12550,mp:1250,attack:1365,defense:1120,realm:'化神后期'},'duwu-chong','毒囊'),
+    '妖王花':normal({hp:13500,mp:1400,attack:1330,defense:1650,realm:'化神大圆满'},'yaowang-hua','妖花粉'),
+    'BOSS 巫妖王':boss({hp:29800,mp:3200,attack:2710,defense:1310,realm:'炼虚初期'},'assets/boss-portraits/wuyao-wang.png','巫妖王骨冠'),
+    '战魂':normal({hp:7600,mp:2300,attack:7800,defense:3000,realm:'炼虚初期'},'zhanhun','魂晶'),
+    '铁甲尸':normal({hp:9200,mp:1800,attack:7200,defense:4200,realm:'炼虚中期'},'tiejia-shi','尸甲'),
+    '煞灵':normal({hp:7000,mp:3200,attack:8600,defense:2850,realm:'炼虚后期'},'shaling','煞珠'),
+    '断剑鬼':normal({hp:8200,mp:2600,attack:9200,defense:3400,realm:'炼虚大圆满'},'duanjian-gui','残刃'),
+    'BOSS 古战神残魂':boss({hp:77000,mp:7000,attack:14500,defense:7200,realm:'合体初期'},'assets/boss-portraits/guzhanshen-canhun.png','战神残魂'),
+    '虚空影':normal({hp:40000,mp:6500,attack:19000,defense:7200,realm:'合体初期'},'xukong-ying','影尘'),
+    '星砂虫':normal({hp:40500,mp:6000,attack:17500,defense:8800,realm:'合体中期'},'xingsha-chong','星砂'),
+    '裂隙怪':normal({hp:39000,mp:8200,attack:21500,defense:6900,realm:'合体后期'},'liexi-guai','裂片'),
+    '遗迹守卫':normal({hp:48500,mp:7000,attack:1850,defense:10500,realm:'合体大圆满'},'yiji-shouwei','古铜片'),
+    'BOSS 虚空吞灵':boss({hp:168000,mp:19000,attack:43000,defense:17500,realm:'大乘初期'},'assets/boss-portraits/xukong-tunling.png','虚空灵核'),
+    '魔修残魂':normal({hp:102000,mp:16000,attack:43000,defense:16500,realm:'大乘初期'},'moxiu-canhun','魔魂灰'),
+    '黑莲妖':normal({hp:111000,mp:19000,attack:40500,defense:20500,realm:'大乘中期'},'heilian-yao','黑莲瓣'),
+    '魔焰鬼':normal({hp:100000,mp:23000,attack:49500,defense:15000,realm:'大乘后期'},'moyan-gui','魔焰石'),
+    '残碑灵':normal({hp:127000,mp:18500,attack:44500,defense:23000,realm:'大乘大圆满'},'canbei-ling','碑屑'),
+    'BOSS 堕仙魔君':boss({hp:185000,mp:52000,attack:76000,defense:29000,realm:'渡劫初期'},'assets/boss-portraits/duoxian-mojun.png','魔君残印'),
+    '雷灵':normal({hp:245000,mp:48000,attack:98000,defense:37000,realm:'渡劫初期'},'leiling','雷晶'),
+    '云兽':normal({hp:270000,mp:42000,attack:91000,defense:45500,realm:'渡劫中期'},'yunshou','云皮'),
+    '电光虫':normal({hp:232000,mp:62000,attack:112000,defense:34500,realm:'渡劫后期'},'dianguang-chong','电须'),
+    '雷鸟':normal({hp:255000,mp:58000,attack:121000,defense:39000,realm:'渡劫大圆满'},'leiniao','雷羽'),
+    'BOSS 雷劫真君':boss({hp:850000,mp:145000,attack:185000,defense:76000,realm:'天仙初期'},'assets/boss-portraits/leijie-zhenjun.png','雷劫道晶'),
+    '天门守卫':normal({hp:360000,mp:120000,attack:235000,defense:92000,realm:'天仙初期'},'tianmen-shouwei','仙甲片'),
+    '仙鹤':normal({hp:315000,mp:155000,attack:265000,defense:84000,realm:'天仙中期'},'xianhe','仙羽'),
+    '金甲力士':normal({hp:430000,mp:110000,attack:248000,defense:125000,realm:'天仙后期'},'jinjia-lishi','金甲碎片'),
+    '天兵残影':normal({hp:385000,mp:180000,attack:292000,defense:97000,realm:'天仙大圆满'},'tianbing-canying','仙尘'),
+    'BOSS 守门仙将':boss({hp:2000000,mp:420000,attack:450000,defense:210000,realm:'天仙大圆满'},'assets/boss-portraits/shoumen-xianjiang.png','仙将令牌')
   };
 }
 const MONSTER_STATS=monsterStatsTable();
@@ -1810,7 +1851,7 @@ function completeNalanQuest(){
     name:equipBaseName(4,'weapon'),
     quality:4,
     slot:'weapon',
-    powerLevel:Math.max(4,g.realm+4),
+    powerLevel:Math.max(1,realmNameIndex('筑基初期')+4),
     sell:1200
   });
   weapon.desc='小师妹 纳兰清月委托奖励。'+equipEffect(weapon);
@@ -2024,8 +2065,22 @@ function currentRegionBossInfo(){
   }
   return null;
 }
-function taskCard(title,body,actions=''){
-  return `<div class="item"><span><b>${title}</b><small>${body}</small></span><div class="actions">${actions}</div></div>`;
+function ensureTaskLedger(){
+  let modal=$('#taskModal'),ledger=modal?.firstElementChild;
+  if(!ledger||ledger.classList.contains('task-ledger'))return;
+  let heading=ledger.querySelector('h2'),close=$('#closeTaskBtn'),list=$('#taskList');
+  if(!heading||!close||!list)return;
+  heading.textContent='任务卷宗';
+  close.className='task-ledger-close';
+  let head=document.createElement('div');head.className='task-ledger-head';head.append(heading,close);
+  let body=document.createElement('div');body.className='task-ledger-body';
+  let overview=document.createElement('div');overview.className='task-overview';overview.id='taskOverview';
+  list.className='task-list';body.append(overview,list);
+  ledger.className='task-ledger';ledger.replaceChildren(head,body);
+}
+function taskCard(title,body,actions='',kind='side'){
+  let available=/^可接：/.test(title),label=kind==='main'?'主线':available?'可接':'支线',style=`${kind==='main'?'main ':''}${available?'available':''}`.trim();
+  return `<article class="task-dossier ${style}"><span class="task-dossier-label">${label}</span><div class="task-dossier-copy"><b>${title}</b><p>${body}</p></div>${actions?`<div class="task-dossier-actions">${actions}</div>`:''}</article>`;
 }
 const lateMainBossSteps={
   10:{map:3,base:'mainQuestBoss4Base',next:11,title:'第四章·沉月灯影（二）：龙宫取令',body:'前往东海龙宫路点23，击败Boss龙太子，夺回龙鳞玉令与冰魄残焰。',start:'第四章推进：龙鳞玉令在东海龙宫，前往击败龙太子。',complete:'龙太子败亡，龙鳞玉令中的冰魄残焰重燃。返回太玄宗掌教内殿，向苏青雪复命。'},
@@ -2131,9 +2186,10 @@ function finishLateMainDialogue(stage,rewardKey,message,title,body){
   return advanced;
 }
 function renderTaskPanel(){
+  ensureTaskLedger();
   let html='';
   let mq=mainQuestInfo();
-  html+=taskCard(mq.title,mq.body,'');
+  html+=taskCard(mq.title,mq.body,'','main');
   if(g.suQingxueQuest&&!g.suQingxueQuestDone){
     let q=g.suQingxueQuest,body=q.dragonDefeated?'暗蛟龙已伏诛，返回掌教内殿向苏青雪复命。':q.dragonSummoned?'暗蛟龙已被千年寒玉逼出，前往东海龙宫·海眼击败它。':q.jadeGiven?'在“道具”中使用千年寒玉，将暗蛟龙逼出海眼。':'前往东海龙宫·龟丞相府，与双面龟丞相交谈，查明海眼异动。';
     html+=taskCard('太上长老苏青雪：寒灯寻主',body,'');
@@ -2168,8 +2224,10 @@ function renderTaskPanel(){
   if(inSquare&&!g.nalanQuest&&!g.nalanQuestDone&&realmIndex()>1){
     html+=taskCard('可接：小师妹 纳兰清月委托','高于练气中期可接。提交回春丹×10、石鼠皮×10，奖励紫色法器×1、2级修为丹×2。',`<button class="btn" data-task-accept-nalan="1">接取</button>`);
   }
-  if(!html)html='<div class="item">当前没有可接或进行中的任务。前往太玄宗 · 宗门广场可查看宗门委托。</div>';
+  if(!html)html='<div class="task-empty">当前没有可接或进行中的任务。前往太玄宗 · 宗门广场可查看宗门委托。</div>';
   $('#taskList').innerHTML=html;
+  let total=(html.match(/task-dossier/g)||[]).length,available=(html.match(/task-dossier available/g)||[]).length,stage=Math.min(27,g.mainQuestStage||0),overview=$('#taskOverview');
+  if(overview)overview.innerHTML=`<span><small>当前境界</small><b>${realmText()}</b></span><span><small>进行卷宗</small><b>${total} 项${available?` · 可接 ${available}`:''}</b></span><span><small>主线推进</small><b>${stage}/27</b></span>`;
   document.querySelectorAll('[data-task-accept-sister]').forEach(b=>b.onclick=()=>{acceptSisterQuest(sisterQuestRealms[+b.dataset.taskAcceptSister]);renderTaskPanel();renderSceneMap()});
   document.querySelectorAll('[data-task-accept-nalan]').forEach(b=>b.onclick=()=>{acceptNalanQuest();renderTaskPanel();renderSceneMap()});
   document.querySelectorAll('[data-task-abandon]').forEach(b=>b.onclick=()=>{let k=b.dataset.taskAbandon;if(k==='sister')g.sectSisterQuest=null;else if(k==='nalan')g.nalanQuest=null;else if(k==='xiao')g.xiaoHuoQuest=null;else if(k==='qiu')g.qiuQuest=null;toast('任务已放弃');renderTaskPanel();renderSceneMap();save()});
@@ -3531,12 +3589,37 @@ $('#equipDetail').innerHTML=`<b>${equipSlotIcons[slot]} ${equipSlotNames[slot]}<
 $('#forgeInfo').innerHTML=rows({'当前部位':equipSlotNames[slot],'装备状态':it?`${qualityText[it.quality]}色 ${it.name}`:'空','强化消耗':it?`锻造材料×${forgeMaterialCost(it)}`:'请先装备','淬炼层数':g.temper,'灵玉镶嵌':g.jadeSlots});
 }
 function renderEquipSlots(){document.querySelectorAll('[data-equip-slot]').forEach(btn=>{let slot=btn.dataset.equipSlot,it=g.gear?.[slot];btn.classList.remove('q1','q2','q3','q4','q5','q6');if(it)btn.classList.add('q'+it.quality);btn.classList.toggle('active',(g.selectedEquipSlot||'weapon')===slot);btn.querySelector('small').textContent=it?`${qualityText[it.quality]}·${it.name.slice(0,4)}`:'空';btn.onclick=()=>{g.selectedEquipSlot=slot;renderGear()}})}
-function renderAttrModal(){let st=statTotal(),need=realmNeed(),pct=Math.min(100,Math.max(0,g.cult/need*100)),dodge=dodgeChance(st.agility);$('#attrModalGrid').innerHTML=Object.entries({'境界':realmText(),'下境进度':`${fmt(g.cult)} / ${fmt(need)}（${pct.toFixed(1)}%）`,'生命':`${Math.floor(g.hp)}/${Math.floor(st.hp)}`,'法力':Math.floor(st.mana),'攻击':Math.floor(st.attack),'防御':Math.floor(st.defense),'身法':Math.floor(st.agility),'闪避':`${(dodge*100).toFixed(1)}%（身法÷1000，上限50%）`,'暴击':Math.floor(st.crit)+'%','根骨':g.aptitude,'战力':power()}).map(([k,v])=>`<div class="mini"><small>${k}</small><b>${v}</b></div>`).join('');$('#attrModalNote').innerHTML=`灵根：${g.root}<br>${rootEffect()}<br>装备属性已计入总属性。`}
-function unequipEquipSlot(slot){let it=g.gear?.[slot];if(!it)return false;if(!addBagItem(it))return toast('背包已满，无法卸下装备'),false;g.gear[slot]=null;g.selectedEquipSlot=slot;toast(`已卸下${it.name}`);render();renderEquipModal();save();return true}
+function renderAttrModal(){
+  let st=statTotal(),bonus=st.bonus||{},need=realmNeed(),pct=Math.min(100,Math.max(0,g.cult/need*100)),dodge=dodgeChance(st.agility),finalDamage=hasXuanyuanSword()?150:100;
+  let row=(label,value,tone='',sub='')=>`<div class="attr-stat"><span>${label}</span><b class="${tone}">${value}${sub?`<em class="attr-sub">${sub}</em>`:''}</b></div>`;
+  let section=(kind,title,detail,rows)=>`<section class="attr-section ${kind}"><header class="attr-section-head"><b>${title}</b>${detail?`<small>${detail}</small>`:''}</header><div class="attr-stat-columns">${rows.join('')}</div></section>`;
+  $('#attrModalGrid').classList.add('attr-combat-sheet');
+  $('#attrModalGrid').innerHTML=[
+    section('status','状态','',[
+      row('当前境界',realmText(),'gold'),row('修为进度',`${fmt(g.cult)} / ${fmt(need)}`,'',`${pct.toFixed(1)}%`),
+      row('生命',`${fmt(Math.floor(g.hp||0))} / ${fmt(Math.floor(st.hp||0))}`,'hp'),row('法力',`${fmt(Math.floor(g.mana||0))} / ${fmt(Math.floor(st.mana||0))}`,'mp'),
+      row('灵根',g.root||'未定'),row('根骨',fmt(g.aptitude||0),'gold')
+    ]),
+    section('defense','防御','',[
+      row('防御',fmt(Math.floor(st.defense||0)),'up'),row('身法',fmt(Math.floor(st.agility||0)),'up'),
+      row('闪避',`${(dodge*100).toFixed(2)}%`,'up','身法÷100000'),row('闪避上限','50%','gold'),
+      row('装备生命',`+${fmt(Math.floor(bonus.hp||0))}`,'up'),row('装备法力',`+${fmt(Math.floor(bonus.mana||0))}`,'up')
+    ]),
+    section('attack','进攻','',[
+      row('攻击',fmt(Math.floor(st.attack||0)),'warn'),row('暴击',`${Math.min(40,Math.floor(st.crit||0))}%`,'warn'),
+      row('暴击上限','40%','gold'),row('最终伤害',`${finalDamage}%`,finalDamage>100?'warn':''),
+      row('装备攻击',`+${fmt(Math.floor(bonus.attack||0))}`,'up'),row('装备暴击',`+${Math.floor(bonus.crit||0)}%`,'up')
+    ])
+  ].join('');
+  $('#attrModalNote').className='attr-source-strip';
+  $('#attrModalNote').innerHTML=`<div><b>灵根加成</b><span>${rootEffect()}</span></div><div><b>综合战力</b><span>${fmt(power())} · 装备与已激活神器属性已计入。</span></div>`;
+}
+let equipModalPendingUnequip=null;
+function unequipEquipSlot(slot){let it=g.gear?.[slot];if(!it)return false;if(!addBagItem(it))return toast('背包已满，无法卸下装备'),false;equipModalPendingUnequip=null;g.gear[slot]=null;g.selectedEquipSlot=slot;toast(`已卸下${it.name}`);render();renderEquipModal();save();return true}
 function bestEquipCandidates(slot){return(g.bag||[]).map((it,idx)=>({it:normalizeEquip(it),idx})).filter(x=>x.it&&x.it.type==='equipment'&&x.it.slot===slot).sort((a,b)=>gearScore(b.it)-gearScore(a.it)).slice(0,2)}
-function equipBagItemByIndex(idx){let it=normalizeEquip(g.bag[idx]);if(!it||it.type!=='equipment')return toast('该物品不是装备');let slot=it.slot,old=g.gear?.[slot];removeBagQty(idx,1);g.gear[slot]=it;if(old)addBagItem(old);g.selectedEquipSlot=slot;toast(`已装备${it.name}`);render();renderEquipModal();save()}
-function equipModalDetail(slot){let it=g.gear?.[slot],a=gearBonus(slot);if(it)return `<b>${equipSlotIcons[slot]} ${equipSlotNames[slot]}</b><br>${qualityText[it.quality]}色 · ${it.name} · 强化+${it.enhance||0}<br>${equipEffect(it)}<br><br>本部位加成：${Object.entries(a).filter(x=>x[1]).map(([k,v])=>({hp:'生命',mana:'法力',attack:'攻击',defense:'防御',agility:'身法',crit:'暴击'}[k]+'+'+Math.floor(v)+(k==='crit'?'%':''))).join('，')||'无'}<div class="actions"><button class="btn ghost" data-modal-unequip="${slot}">卸下此装备</button></div><small>提示：点击小人身上的已穿戴装备，也会直接卸下。</small>`;let cand=bestEquipCandidates(slot),choices=cand.length?`<div class="equip-choice">${cand.map(x=>`<button data-equip-candidate="${x.idx}"><b>${qualityText[x.it.quality]}·${x.it.name}</b><br><small>${equipEffect(x.it)} · 评分 ${Math.floor(gearScore(x.it))}</small></button>`).join('')}</div>`:'<div class="bag-detail">背包里暂无适合此部位的装备。</div>';return `<b>${equipSlotIcons[slot]} ${equipSlotNames[slot]}</b><br>当前部位为空。<br>下面是背包中最适合的两个候选装备：${choices}`}
-function renderEquipModal(){renderGear();let slot=g.selectedEquipSlot||'weapon';$('#equipModalContent').innerHTML=`<div class="equip-panel"><div class="paper-doll"><div class="doll-body"><img class="figure-avatar" src="assets/figure1/figure1.png" alt="修士形象"></div>${equipSlots.map(s=>{let it=g.gear?.[s],q=it?' q'+it.quality:'';return`<button class="equip-slot ${s}${q} ${slot===s?'active':''}" data-modal-equip-slot="${s}">${equipSlotNames[s]}<small>${it?qualityText[it.quality]+'·'+it.name.slice(0,4):'空'}</small></button>`}).join('')}</div><div class="equip-stats"><div class="box"><h3>总属性</h3><div>${gearRows()}</div></div><div class="equip-detail">${equipModalDetail(slot)}</div></div></div>`;document.querySelectorAll('[data-modal-equip-slot]').forEach(b=>b.onclick=()=>{let s=b.dataset.modalEquipSlot;g.selectedEquipSlot=s;if(g.gear?.[s])unequipEquipSlot(s);else renderEquipModal()});document.querySelectorAll('[data-modal-unequip]').forEach(b=>b.onclick=()=>unequipEquipSlot(b.dataset.modalUnequip));document.querySelectorAll('[data-equip-candidate]').forEach(b=>b.onclick=()=>equipBagItemByIndex(+b.dataset.equipCandidate))}
+function equipBagItemByIndex(idx){let it=normalizeEquip(g.bag[idx]);if(!it||it.type!=='equipment')return toast('该物品不是装备');let slot=it.slot,old=g.gear?.[slot];removeBagQty(idx,1);g.gear[slot]=it;if(old)addBagItem(old);equipModalPendingUnequip=null;g.selectedEquipSlot=slot;toast(`已装备${it.name}`);render();renderEquipModal();save()}
+function equipModalDetail(slot){let it=g.gear?.[slot],a=gearBonus(slot);if(it)return `<b>${equipSlotIcons[slot]} ${equipSlotNames[slot]}</b><br>${qualityText[it.quality]}色 · ${it.name} · 强化+${it.enhance||0}<br>${equipEffect(it)}<br><br>本部位加成：${Object.entries(a).filter(x=>x[1]).map(([k,v])=>({hp:'生命',mana:'法力',attack:'攻击',defense:'防御',agility:'身法',crit:'暴击'}[k]+'+'+Math.floor(v)+(k==='crit'?'%':''))).join('，')||'无'}<small>提示：点击已穿戴装备后，再点击同一件装备即可卸下。</small>`;let cand=bestEquipCandidates(slot),choices=cand.length?`<div class="equip-choice">${cand.map(x=>`<button data-equip-candidate="${x.idx}"><b>${qualityText[x.it.quality]}·${x.it.name}</b><br><small>${equipEffect(x.it)} · 评分 ${Math.floor(gearScore(x.it))}</small></button>`).join('')}</div>`:'<div class="bag-detail">背包里暂无适合此部位的装备。</div>';return `<b>${equipSlotIcons[slot]} ${equipSlotNames[slot]}</b><br>当前部位为空。<br>下面是背包中最适合的两个候选装备：${choices}`}
+function renderEquipModal(){renderGear();let slot=g.selectedEquipSlot||'weapon';$('#equipModalContent').innerHTML=`<div class="equip-panel"><div class="paper-doll"><div class="doll-body"><img class="figure-avatar" src="assets/figure1/figure1.png" alt="修士形象"></div>${equipSlots.map(s=>{let it=g.gear?.[s],q=it?' q'+it.quality:'';return`<button class="equip-slot ${s}${q} ${slot===s?'active':''}" data-modal-equip-slot="${s}">${equipSlotNames[s]}<small>${it?qualityText[it.quality]+'·'+it.name.slice(0,4):'空'}</small></button>`}).join('')}</div><div class="equip-stats"><div class="box"><h3>总属性</h3><div>${gearRows()}</div></div><div class="equip-detail">${equipModalDetail(slot)}</div></div></div>`;document.querySelectorAll('[data-modal-equip-slot]').forEach(b=>b.onclick=()=>{let s=b.dataset.modalEquipSlot;if(!g.gear?.[s]){equipModalPendingUnequip=null;g.selectedEquipSlot=s;renderEquipModal();return}if(equipModalPendingUnequip===s){equipModalPendingUnequip=null;unequipEquipSlot(s);return}g.selectedEquipSlot=s;equipModalPendingUnequip=s;renderEquipModal();toast('再点击一次卸下装备')});document.querySelectorAll('[data-equip-candidate]').forEach(b=>b.onclick=()=>equipBagItemByIndex(+b.dataset.equipCandidate))}
 function openSectOverview(){let rank=sectRanks[Math.min(5,g.sectRank)],next=sectRanks[Math.min(5,g.sectRank+1)],realmLeft=Math.max(0,Math.ceil((g.sectRealmAt+1800000-Date.now())/1000)),warLeft=Math.max(0,Math.ceil((g.sectWarAt+600000-Date.now())/1000)),taskLeft=Math.max(0,Math.ceil((g.sectManualTaskAt-Date.now())/1000)),officeLeft=Math.max(0,Math.ceil((g.sectOfficeTaskAt-Date.now())/1000));openNpcDialog('太玄宗宗门册',`宗门：${g.sect}\n身份称呼：太玄宗${rank[0]}\n宗门贡献：${fmt(g.sectContribution)}\n宗门声望：${fmt(g.sectReputation)}\n升迁要求：${g.sectRank>=5?'已至最高职位':`${fmt(next[1])}声望，可晋升${next[0]}`}\n宗门等级：${g.sectLevel}级\n宗门建设：${fmt(g.sectExp)}/${fmt(g.sectLevel*500)}\n当前职责：${sectDutyText()}\n已开放房间：${sectUnlockedRooms().join('、')}\n山门差事：${taskLeft?taskLeft+'秒后可再领':'可手动前往宗门广场（路点31）'}\n执事差役：${officeLeft?officeLeft+'秒后可再领':'可手动前往西执事厅'}\n宗门秘境：${realmLeft?realmLeft+'秒后可再进':'可向东执事厅咨询'}\n宗门团战：${warLeft?warLeft+'秒后可再战':'可向东执事厅咨询'}\n当前权限：${sectPermissionText()}`,[{text:'收起宗门册'}])}
 function buySectGood(i){
 let x=sectGoods[i];
@@ -5108,6 +5191,66 @@ battleSkillEffect=async function(sk,idx=0){let b=battleState,beforeHp=b?.enemy?.
 const applyWitheringWoodTurnWithXuanyuanSword=applyWitheringWoodTurn;
 applyWitheringWoodTurn=function(b){let beforeHp=b?.enemy?.hp||0,result=applyWitheringWoodTurnWithXuanyuanSword(b);if(b&&battleState===b)applyXuanyuanSwordDamage(b,beforeHp);return result};
 
+// 未获得的神器不预告名称，保持机缘探索感。
+const renderArtifactSlotsWithHiddenUnobtained=renderArtifactSlots;
+renderArtifactSlots=function(){
+  let artifacts=artifactState(),slots=[artifacts.fuxiQin?{...artifacts.fuxiQin,obtained:true}:{obtained:false},artifacts.donghuangBell?{...artifacts.donghuangBell,obtained:true}:{obtained:false},artifacts.kunlunMirror?{...artifacts.kunlunMirror,obtained:true}:{obtained:false},artifacts.xuanyuanSword?{...artifacts.xuanyuanSword,obtained:true}:{obtained:false}];
+  return `<section class="artifact-section artifact-corner"><div class="artifact-heading"><h3>四大神器</h3><small>独立于六种常规装备</small></div><div class="artifact-grid">${slots.map(item=>`<div class="artifact-slot ${item.obtained?'obtained':'unsealed'}" title="${item.obtained?item.effect:'机缘未至'}"><b>${item.obtained?`${item.icon||''} ${item.name}`:'封印中'}</b><small>${item.obtained?item.effect:'尚待机缘'}</small></div>`).join('')}</div></section>`;
+};
+
+function formatSectCountdown(seconds){
+  if(!seconds)return '可办理';
+  let minutes=Math.floor(seconds/60),remain=seconds%60;
+  return minutes?`${minutes}分${remain}秒`:`${remain}秒`;
+}
+function ensureSectLedgerModal(){
+  let modal=$('#sectLedgerModal');
+  if(modal)return modal;
+  modal=document.createElement('div');
+  modal.id='sectLedgerModal';
+  modal.className='event-modal';
+  modal.innerHTML='<div class="sect-ledger-panel"></div>';
+  document.body.appendChild(modal);
+  return modal;
+}
+function renderSectLedger(){
+  let modal=ensureSectLedgerModal(),panel=modal.querySelector('.sect-ledger-panel');
+  let rankIndex=Math.min(5,Math.max(0,g.sectRank||0));
+  let rank=sectRanks[rankIndex]||['外门弟子',0],next=sectRanks[Math.min(5,rankIndex+1)]||rank;
+  let reputation=Math.max(0,g.sectReputation||0),rankFloor=rank[1]||0,rankNeed=next[1]||rankFloor;
+  let promotion=Math.round(rankIndex>=5?100:Math.max(0,Math.min(100,(reputation-rankFloor)/Math.max(1,rankNeed-rankFloor)*100)));
+  let sectLevel=Math.max(1,g.sectLevel||1),construction=Math.max(0,g.sectExp||0),constructionNeed=sectLevel*500;
+  let taskLeft=Math.max(0,Math.ceil(((g.sectManualTaskAt||0)-Date.now())/1000));
+  let officeLeft=Math.max(0,Math.ceil(((g.sectOfficeTaskAt||0)-Date.now())/1000));
+  let realmLeft=Math.max(0,Math.ceil(((g.sectRealmAt||0)+1800000-Date.now())/1000));
+  let warLeft=Math.max(0,Math.ceil(((g.sectWarAt||0)+600000-Date.now())/1000));
+  let affairs=[
+    {name:'山门差事',place:'宗门广场 · 路点31',left:taskLeft},
+    {name:'执事差役',place:'西执事厅',left:officeLeft},
+    {name:'宗门秘境',place:'东执事厅',left:realmLeft},
+    {name:'宗门团战',place:'东执事厅',left:warLeft}
+  ];
+  let rooms=sectUnlockedRooms();
+  let roomHtml=rooms.map(room=>{
+    let unlocked=room.includes('已开'),name=room.replace(/[（(].*$/,'');
+    return `<div class="sect-room ${unlocked?'':'lock'}"><div><b>${name}</b><small>${unlocked?'辖域已开放':'提升职位后开放'}</small></div><span>${unlocked?'已开放':'待开放'}</span></div>`;
+  }).join('');
+  let affairHtml=affairs.map(affair=>`<div class="sect-affair ${affair.left?'wait':''}"><div><b>${affair.name}</b><small>${affair.place}</small></div><span>${formatSectCountdown(affair.left)}</span></div>`).join('');
+  let promotionText=rankIndex>=5?'已至最高职位':`距离晋升 ${next[0]} 还需 ${fmt(Math.max(0,rankNeed-reputation))} 声望`;
+  panel.innerHTML=`<header class="sect-ledger-head"><h2>太玄宗宗门册</h2><button type="button" id="closeSectLedgerBtn">收起</button></header>
+    <div class="sect-ledger-body">
+      <section class="sect-identity"><div class="sect-emblem"><img src="assets/tai-xuan-sect-token.png" alt="太玄宗令牌"></div><div><small>太玄宗 · 宗门身份</small><b>太玄宗${rank[0]}</b><small>${sectDutyText()} · ${sectPermissionText()}</small></div><span class="sect-rank">${rankIndex>=5?'最高职位':'第 '+(rankIndex+1)+' 阶'}</span></section>
+      <section class="sect-promotion"><div class="sect-promotion-top"><b>职位升迁</b><span>${promotionText}</span></div><div class="sect-progress"><i style="width:${promotion}%"></i></div></section>
+      <section class="sect-metrics"><div class="sect-metric"><small>宗门贡献</small><b>${fmt(g.sectContribution||0)}</b><em>可用于宝库兑换</em></div><div class="sect-metric"><small>宗门声望</small><b>${fmt(reputation)}</b><em>职位晋升凭证</em></div><div class="sect-metric"><small>宗门建设</small><b>${sectLevel} 级</b><em>${fmt(construction)} / ${fmt(constructionNeed)}</em></div></section>
+      <div class="sect-ledger-grid"><section class="sect-ledger-section"><h3>宗门辖域</h3><div class="sect-room-list">${roomHtml}</div></section><section class="sect-ledger-section"><h3>宗门事务</h3><div class="sect-affair-list">${affairHtml}</div></section></div>
+    </div>`;
+  let close=()=>modal.classList.remove('show');
+  $('#closeSectLedgerBtn').onclick=close;
+}
+openSectOverview=function(){
+  renderSectLedger();
+  $('#sectLedgerModal').classList.add('show');
+};
 function bindUi(){
 $('#nav').onclick=e=>{
 let b=e.target.closest('button');if(!b)return;
@@ -5126,9 +5269,9 @@ on('#openTaskBtn',openTaskPanel);
 on('#closeTaskBtn',()=>$('#taskModal').classList.remove('show'));
 on('#openAttrBtn',()=>{renderAttrModal();$('#attrModal').classList.add('show')});
 on('#closeAttrBtn',()=>$('#attrModal').classList.remove('show'));
-on('#openEquipBtn',()=>{renderEquipModal();$('#equipModal').classList.add('show')});
-on('#closeEquipBtn',()=>$('#equipModal').classList.remove('show'));
-on('#closeEquipBtnTop',()=>$('#equipModal').classList.remove('show'));
+on('#openEquipBtn',()=>{equipModalPendingUnequip=null;renderEquipModal();$('#equipModal').classList.add('show')});
+on('#closeEquipBtn',()=>{equipModalPendingUnequip=null;$('#equipModal').classList.remove('show')});
+on('#closeEquipBtnTop',()=>{equipModalPendingUnequip=null;$('#equipModal').classList.remove('show')});
 on('#openBagBtn',openBag);
 on('#closeBagBtn',()=>$('#bagModal').classList.remove('show'));
 on('#useBagItemBtn',useBagItem);
