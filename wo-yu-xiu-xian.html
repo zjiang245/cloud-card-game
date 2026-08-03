@@ -651,6 +651,7 @@
 #skillManageModal [data-skill-off]{border-color:#ad4d43!important;background:linear-gradient(180deg,#fff1eb,#f7d8ce)!important;color:#8d3029!important;font-weight:800;box-shadow:inset 0 1px #fff8,0 1px 3px #6b231d33}
 #skillManageModal [data-skill-off]:hover{background:linear-gradient(180deg,#ffdcd0,#efb4a6)!important;color:#71221c!important;filter:none}
 .skill-reserve-title{margin:2px 0 -5px;padding-bottom:6px;border-bottom:1px solid #bbaa80;color:#705c32;font:700 17px "STKaiti","KaiTi",serif}
+#skillManageModal .skill-discipline{padding:4px;border:1px solid #42685b;background:linear-gradient(145deg,#1d382f,#11261f);box-shadow:inset 0 0 0 1px #90aa9b66,0 4px 12px #13211b28}#skillManageModal .skill-discipline>h3{margin:-4px -4px 5px;padding:9px 11px;border:0;border-bottom:1px solid #78998c;background:linear-gradient(90deg,#2b5144,#1d3b32);color:#f0e3ba;box-shadow:inset 0 -1px #0005}#skillManageModal .skill-discipline.active-discipline>h3{background:linear-gradient(90deg,#24505a,#193a40);color:#c9eef0}#skillManageModal .skill-discipline>h3 small{color:#c0d0c6}#skillManageContent>.skill-manage-grid:last-child{padding:5px;border:1px solid #42685b;background:linear-gradient(145deg,#1d382f,#11261f);box-shadow:inset 0 0 0 1px #90aa9b66,0 4px 12px #13211b28}#skillManageModal .skill-card:not(.empty-card){margin:7px;border:1px solid var(--skill-edge,#c8c6b0);box-shadow:0 0 0 2px #2d4d42,0 5px 12px #00000028;background:linear-gradient(135deg,var(--skill-tint,#edf5eb) 0%,var(--skill-wash,#fffdf5) 45%,var(--skill-tint,#edf5eb) 100%)}#skillManageModal .skill-card.empty-card{margin:7px;border-color:#6b877a;background:#314c42;color:#c0ccc5;box-shadow:0 0 0 2px #2d4d42,inset 0 0 0 1px #a0b4a533}#skillManageModal .skill-card.empty-card small{color:#b0c0b7}#skillManageModal .skill-reserve-title{margin-top:4px;padding:8px 10px;border:1px solid #42685b;border-bottom:0;background:#1a352c;color:#f0d886}
 @media(max-width:650px){#skillManageModal h2{font-size:22px}.skill-library-overview{padding:8px 9px}.skill-discipline>h3{padding:7px 8px}.skill-card{margin:6px;padding:8px}.skill-card b{font-size:12px}}
 
 /* 区域全览与新手聚焦：路线缩略图保持全局可读，开局仅提示两轮。 */
@@ -710,6 +711,20 @@
 #attrModal{z-index:90;background:#050908d5;padding:14px}#attrModal>div{width:min(680px,96vw);max-height:92vh;padding:0;overflow:auto;border:1px solid #9c7c3a;border-radius:4px;background:#171916;color:#e7e1d0;box-shadow:0 24px 72px #000c}#attrModal h2{margin:0;padding:15px 19px;border-bottom:1px solid #7f683b;background:linear-gradient(90deg,#2a2b24,#181a17);color:#e9cb80;font:700 27px "STKaiti","KaiTi",serif;letter-spacing:2px}#attrModalGrid.attr-combat-sheet{display:grid;grid-template-columns:1fr 1fr;gap:0;padding:0;background:#171916}#attrModal .actions{justify-content:flex-end;margin:0;padding:10px 14px;border-top:1px solid #4b483d;background:#111310}#attrModal .actions .btn{border-color:#8f7746;background:#27271f;color:#ebd292;border-radius:3px}
 .attr-section{min-width:0;padding:13px 18px 14px;border-bottom:1px solid #49483f;background:linear-gradient(90deg,#1d1e1a,#151714 72%,#1c1d19)}#attrModalGrid .attr-section.status{display:block!important;grid-column:1/-1!important;width:100%;box-sizing:border-box}#attrModalGrid .attr-section.status .attr-section-head{display:block!important;margin:0 0 9px}#attrModalGrid .attr-section.status .attr-stat-columns{width:100%;margin:0;grid-template-columns:repeat(2,minmax(0,1fr))}.attr-section.defense{border-right:1px solid #49483f}.attr-section:last-child{border-bottom:0}.attr-section-head{display:flex;align-items:center;gap:8px;margin-bottom:9px;color:#d9b866}.attr-section-head b{font:700 17px "STKaiti","KaiTi",serif}.attr-stat-columns{display:grid;grid-template-columns:1fr 1fr;gap:0 26px}.attr-section:not(.status) .attr-stat-columns{grid-template-columns:1fr}.attr-stat{display:grid;grid-template-columns:minmax(66px,auto) 1fr;align-items:baseline;gap:7px;padding:3px 0;color:#b4b2a8;font-size:12px;line-height:1.32}.attr-stat span{white-space:nowrap}.attr-stat b{color:#f1eee2;font:700 14px "SFMono-Regular",Menlo,monospace;letter-spacing:0;text-align:left}.attr-stat b.up{color:#58bc88}.attr-stat b.warn,.attr-stat b.hp{color:#f06a63}.attr-stat b.mp{color:#5ebdec}.attr-stat b.gold{color:#e5bd61}.attr-stat .attr-sub{margin-left:4px;color:#83867e;font:400 10px Arial,sans-serif}.attr-source-strip{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:11px 18px;border-top:1px solid #575143;background:#121410;color:#aaa996;font-size:11px;line-height:1.55}.attr-source-strip b{display:block;color:#d2b76d;font-size:11px}.attr-source-strip span{color:#cac6b7}
 @media(max-width:650px){#attrModal{padding:7px}#attrModal h2{padding:13px 14px;font-size:24px}#attrModalGrid.attr-combat-sheet{grid-template-columns:repeat(2,minmax(0,1fr))}.attr-section{padding:10px 9px}.attr-section.defense{border-right:1px solid #49483f}.attr-section.status{grid-column:1/-1}.attr-section.status .attr-stat-columns{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 8px}.attr-stat{grid-template-columns:1fr;padding:3px 0;font-size:10px}.attr-stat b{font-size:11px;overflow-wrap:anywhere}.attr-stat .attr-sub{display:block;margin:2px 0 0;font-size:8px}.attr-section-head{margin-bottom:7px}.attr-section-head b{font-size:15px}.attr-section-head small{font-size:8px}.attr-source-strip{grid-template-columns:1fr;padding:10px 13px;gap:6px}}
+
+/* 山魈洞·最难试炼：作者气机遮蔽与多段术式动画。 */
+#battleModal.author-trial .fighter.enemy .battle-bar{display:none}
+#battleModal.author-trial .fighter.enemy:after{content:"气机遮蔽";display:inline-block;margin:7px 0 0;padding:3px 8px;border:1px solid #6eb9bd66;border-radius:3px;background:#071c2399;color:#94e5e2;font-size:10px;font-weight:800;letter-spacing:2px}
+#battleModal.author-trial .fighter.enemy{border-color:#4ea9ae;box-shadow:inset 0 0 24px #30aab322,0 0 18px #1fbbc833}
+#battleEnemyFigure.author-skill-frame{position:relative;display:grid;place-items:end center;width:100%;height:100%;overflow:visible;isolation:isolate}
+#battleEnemyFigure.author-skill-frame .author-figure{position:relative;z-index:2;display:block;height:286px;max-width:290px;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 18px 14px #0009);animation:authorFrameMotion .68s cubic-bezier(.2,.78,.2,1) both}
+#battleEnemyFigure.author-skill-frame .author-aura{position:absolute;z-index:1;right:3%;bottom:4%;width:76%;aspect-ratio:1;border-radius:50%;opacity:.72;filter:blur(5px);animation:authorAuraPulse .68s ease-out both}
+#battleEnemyFigure.author-skill-frame[data-author-action="soul"] .author-aura{background:radial-gradient(circle,#b9fffb88 0 8%,#25c4ce55 26%,#0a526466 52%,transparent 72%);box-shadow:0 0 28px #27d9df,0 0 64px #1d8798}
+#battleEnemyFigure.author-skill-frame[data-author-action="heaven"] .author-aura{background:radial-gradient(circle,#fff6b48c 0 8%,#edbc4a66 29%,#874a1e66 54%,transparent 72%);box-shadow:0 0 28px #f3b941,0 0 64px #a65428}
+#battleEnemyFigure.author-skill-frame[data-author-action="ghost"] .author-aura{background:radial-gradient(circle,#ebc8ff8a 0 8%,#9a5fda66 29%,#45186a77 54%,transparent 72%);box-shadow:0 0 28px #b06eff,0 0 64px #6225a0}
+@keyframes authorFrameMotion{0%{transform:translateX(0) scale(1);filter:brightness(.88)}32%{transform:translateX(-8%) translateY(-5px) scale(1.035);filter:brightness(1.25)}64%{transform:translateX(-22%) translateY(-9px) scale(1.085);filter:brightness(1.4) drop-shadow(0 0 13px #6cf7f5)}100%{transform:translateX(0) scale(1);filter:brightness(1)}}
+@keyframes authorAuraPulse{0%{opacity:0;transform:scale(.35)}42%{opacity:.9;transform:scale(1.1)}100%{opacity:0;transform:scale(1.42)}}
+@media(max-width:650px){#battleEnemyFigure.author-skill-frame .author-figure{height:175px;max-width:165px}#battleModal.author-trial .fighter.enemy:after{margin-top:4px;font-size:8px}}
 
 </style>
 </head>
@@ -1870,7 +1885,7 @@ function takePillByName(name,key,qty){
   return true;
 }
 const disciplineQuestDefs={
-  shiyan:{name:'惩戒石砚',target:'器童 石砚',reward:150,reputation:50,contribution:200,icon:'⚒️',stats:{realm:'练气初期',hp:200,mp:20,attack:100,defense:2,icon:'⚒️',portrait:'assets/npc-portraits/battle-shiyan.png'}},
+  shiyan:{name:'惩戒石砚',target:'器童 石砚',reward:150,reputation:50,contribution:200,icon:'⚒️',stats:{realm:'练气初期',hp:200,mp:20,attack:75,defense:2,icon:'⚒️',portrait:'assets/npc-portraits/battle-shiyan.png'}},
   niuwu:{name:'惩戒牛五',target:'泼皮 牛五',reward:400,reputation:100,contribution:400,icon:'👊',stats:{realm:'筑基中期',hp:1000,mp:20,attack:150,defense:2,icon:'👊',portrait:'assets/npc-portraits/battle-niuwu.png'}}
 };
 function disciplineQuest(id){
@@ -5588,8 +5603,10 @@ const localNpcsWithBountyBoard=localNpcs;
 localNpcs=function(i,spot){
   let npcs=localNpcsWithBountyBoard(i,spot);
   if(i===10&&spot===37&&!npcs.some(npc=>(npc.name||npc[0])==='悬赏榜'))npcs=[...npcs,['悬赏榜','太玄宗发布的缉拿与清剿悬赏']];
-  if(i===2&&spot===23&&bountyQuest('dali').status==='active'&&!npcs.some(npc=>(npc.name||npc[0])==='蟊贼 牛大力'))npcs=[...npcs,['蟊贼 牛大力','盘踞炎魔洞的通缉蟊贼']];
-  if(i===3&&spot===23&&bountyQuest('carp').status==='active'&&!npcs.some(npc=>(npc.name||npc[0])==='蟊贼 鲤鱼精'))npcs=[...npcs,['蟊贼 鲤鱼精','藏身龙宫偏殿的通缉水妖']];
+  if(i===2&&spot===23&&!npcs.some(npc=>(npc.name||npc[0])==='蟊贼 牛大力'))npcs=[...npcs,['蟊贼 牛大力','盘踞炎魔洞的通缉蟊贼']];
+  if(i===3&&spot===23){
+    if(!npcs.some(npc=>(npc.name||npc[0])==='蟊贼 鲤鱼精'))npcs=[...npcs,['蟊贼 鲤鱼精','常驻龙宫偏殿的通缉水妖']];
+  }
   return npcs;
 };
 const localMeetWithBountyBoard=localMeet;
@@ -5649,6 +5666,214 @@ renderTaskPanel=function(){
     return taskCard(`悬赏榜：${def.title}`,status==='done'?`目标已完成，返回太玄宗·凉亭领取奖励：${bountyRewardText(def)}。`:`目标：前往${def.place}击败${def.target}。奖励：${bountyRewardText(def)}。`,'');
   });
   if(cards.length)list.insertAdjacentHTML('beforeend',cards.join(''));
+};
+
+// ===== 万妖古域 · 万妖洞：火焰独角兽 =====
+function flameUnicornQuest(){
+  let quest=g.flameUnicornQuest;
+  if(!quest||typeof quest!=='object')quest=g.flameUnicornQuest={active:false,completed:false};
+  if(typeof quest.active!=='boolean')quest.active=!quest.completed;
+  return quest;
+}
+function tianhuoHuihuiSkill(){
+  return{name:'天火晖晖',icon:'🔥',kind:'passive',element:'fire',tianhuoHuihui:true,fireDamageBonus:.08,desc:'被动：装备后，火属性主动技能伤害额外增加8%。'};
+}
+function hasTianhuoHuihuiEquipped(){
+  return(g.passiveSkills||[]).some(skill=>skill&&(skill.tianhuoHuihui||skill.name==='天火晖晖'));
+}
+function flameUnicornBook(){
+  return{type:'skillbook',name:'天火晖晖技能书',qty:1,max:1,sell:1200,icon:'🔥',skill:tianhuoHuihuiSkill(),desc:'学习后激活火系被动技能：装备后，火属性主动技能伤害额外增加8%。'};
+}
+function flameUnicornResourceText(){
+  return`药材 ${fmt(Math.max(g.herbs||0,bagItemCountByName('药材')))}/1000，回春丹 ${fmt(pillCountByName('回春丹','healPills'))}/100`;
+}
+function flameUnicornReady(){
+  return Math.max(g.herbs||0,bagItemCountByName('药材'))>=1000&&pillCountByName('回春丹','healPills')>=100;
+}
+function talkFlameUnicorn(){
+  let quest=flameUnicornQuest();
+  if(quest.completed)return showNpcResult('火焰独角兽','赤焰已从独角兽的伤口褪去。它低下头颅致意，蹄下只余温和的火光。','good');
+  if(!quest.active){quest.active=true;pushLocalLog('火焰独角兽请求药材1000份与回春丹100枚，以续其火脉。');renderTaskPanel();save();}
+  let text=`火焰独角兽伏在万妖洞的熔岩边，鬃毛黯淡，独角裂开一道伤痕。\n\n“外来修士，我被阴煞所伤，需以千份药材与百枚回春丹续住火脉。若肯相助，吾愿以天火真意相赠。”\n\n当前持有：${flameUnicornResourceText()}`;
+  let choices=[];
+  if(flameUnicornReady())choices.push({text:'交付药材与回春丹',onClick(){
+    if(!flameUnicornReady())return toast('所需药材或回春丹不足');
+    if(!addBagItem(flameUnicornBook()))return toast('背包已满，无法收下天火晖晖技能书');
+    takeHerbResource(1000);
+    takePillByName('回春丹','healPills',100);
+    quest.completed=true;
+    g.cult=(g.cult||0)+800000;
+    pushLocalLog('救治火焰独角兽，获得修为80万与火系被动技能书「天火晖晖」。');
+    toast('获得修为80万、天火晖晖技能书');
+    showNpcResult('火焰独角兽','炽热的火息重新流过它的独角。“这缕天火真意，当助你焚尽前路迷障。”\n\n获得：修为 +80万\n获得：火系被动技能书「天火晖晖」','good');
+    renderTaskPanel();renderSceneMap();render();renderBag();save();
+  }});
+  choices.push({text:'暂且离开',ghost:true});
+  openNpcDialog('火焰独角兽',text,choices);
+}
+const localNpcsWithFlameUnicorn=localNpcs;
+localNpcs=function(i,spot){
+  let npcs=localNpcsWithFlameUnicorn(i,spot);
+  if(i===4&&spot===32&&!npcs.some(npc=>(npc.name||npc[0])==='火焰独角兽'))npcs=[...npcs,['火焰独角兽','受伤伏在万妖洞的熔岩裂隙旁']];
+  return npcs;
+};
+const localMeetWithFlameUnicorn=localMeet;
+localMeet=function(idx=0){
+  let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];
+  if(name==='火焰独角兽')return talkFlameUnicorn();
+  return localMeetWithFlameUnicorn(idx);
+};
+const npcQuestIconWithFlameUnicorn=npcQuestIcon;
+npcQuestIcon=function(name,mapIndex,spot){
+  if(name==='火焰独角兽'){let quest=flameUnicornQuest();return quest.completed||!quest.active?'💬':flameUnicornReady()?'⭕️':'❗️'}
+  return npcQuestIconWithFlameUnicorn(name,mapIndex,spot);
+};
+const renderTaskPanelWithFlameUnicorn=renderTaskPanel;
+renderTaskPanel=function(){
+  renderTaskPanelWithFlameUnicorn();
+  let quest=flameUnicornQuest(),list=$('#taskList');
+  if(!list||!quest.active||quest.completed)return;
+  let status=flameUnicornReady()?'物资已齐，可前往万妖古域·万妖洞交付。':'前往万妖古域·万妖洞，交付1000份药材与100枚回春丹。';
+  list.insertAdjacentHTML('beforeend',taskCard('火焰独角兽：续燃火脉',`${status}\n奖励：修为 +80万、火系被动技能书「天火晖晖」（装备后火属性主动技能伤害 +8%）。`,''));
+};
+const battleSkillEffectWithTianhuoHuihui=battleSkillEffect;
+battleSkillEffect=async function(sk,idx=0){
+  let battle=battleState,beforeHp=battle?.enemy?.hp||0,result=await battleSkillEffectWithTianhuoHuihui(sk,idx);
+  if(result!==false&&battle&&battleState===battle&&hasTianhuoHuihuiEquipped()&&skillThemeClass(sk)==='theme-fire'){
+    let damage=Math.max(0,beforeHp-battle.enemy.hp),extra=Math.min(Math.max(0,battle.enemy.hp),Math.floor(damage*.08));
+    if(extra>0){battle.enemy.hp=Math.max(0,battle.enemy.hp-extra);battleFx('enemy','-'+fmt(extra));battleLog(`天火晖晖加持，火系术法额外造成${fmt(extra)}点伤害。`)}
+  }
+  return result;
+};
+
+// ===== 青云山麓 · 山魈洞：神秘的作者 =====
+function mysteriousAuthorTarget(){
+  return {
+    name:'神秘的作者',
+    type:'战斗',
+    mysteriousAuthor:true,
+    customStats:{hp:2000,mp:1200,attack:200,defense:100,realm:'筑基后期',icon:'🖋️',portrait:'assets/author-animation/mysterious-author.png'}
+  };
+}
+function talkMysteriousAuthor(){
+  openNpcDialog('神秘的作者','一名墨袍修士独坐在山魈洞深处，笔锋悬在半空，四周的灵息像被写进了纸里。\n\n“这一页没有退路。若要落笔，便入我设下的最难试炼。”',[
+    {text:'进入最难试炼',alt:true,onClick(){openBattle(mysteriousAuthorTarget(),0)}},
+    {text:'暂且离开',ghost:true}
+  ]);
+}
+const localNpcsWithMysteriousAuthor=localNpcs;
+localNpcs=function(i,spot){
+  let npcs=localNpcsWithMysteriousAuthor(i,spot);
+  if(i===0&&spot===23&&!npcs.some(npc=>(npc.name||npc[0])==='神秘的作者'))npcs=[...npcs,['神秘的作者','墨卷遮面，静候敢于落笔的试炼者']];
+  return npcs;
+};
+const localMeetWithMysteriousAuthor=localMeet;
+localMeet=function(idx=0){
+  let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];
+  if(name==='神秘的作者')return talkMysteriousAuthor();
+  return localMeetWithMysteriousAuthor(idx);
+};
+const npcQuestIconWithMysteriousAuthor=npcQuestIcon;
+npcQuestIcon=function(name,mapIndex,spot){
+  if(name==='神秘的作者')return '⚔️';
+  return npcQuestIconWithMysteriousAuthor(name,mapIndex,spot);
+};
+
+let authorFrameToken=0;
+async function playAuthorSkillFrames(action){
+  let figure=$('#battleEnemyFigure');
+  if(!figure)return;
+  let token=++authorFrameToken;
+  figure.className='author-skill-frame';
+  figure.dataset.authorAction=action;
+  figure.innerHTML='<span class="author-aura"></span><img class="author-figure" src="assets/author-animation/mysterious-author.png" alt="神秘的作者">';
+  await waitBattle(680);
+  if(token===authorFrameToken&&battleState)renderBattle();
+}
+function authorTrialDefeat(b){
+  if(b.player.hp>0)return false;
+  handleBattleDeath('神秘的作者');
+  return true;
+}
+async function authorTrialSoulStrike(b){
+  await playAuthorSkillFrames('soul');
+  if(battleState!==b)return;
+  b.player.authorSkillsSealed=true;
+  battleFx('player','封技');
+  battleLog('神秘的作者施展「夺魂落魄」，你的所有主动技能被整场封禁。');
+  renderBattle();
+}
+async function authorTrialHeavenfall(b){
+  await playAuthorSkillFrames('heaven');
+  if(battleState!==b)return;
+  let loss=Math.max(1,Math.ceil(b.player.hp*.5));
+  b.player.hp=Math.max(0,b.player.hp-loss);
+  g.hp=b.player.hp;
+  battleFx('player','-'+fmt(loss));
+  battleLog(`神秘的作者施展「天地无用」，你直接失去${fmt(loss)}点生命。`);
+  renderBattle();
+  authorTrialDefeat(b);
+}
+async function authorTrialGhostCry(b){
+  await playAuthorSkillFrames('ghost');
+  if(battleState!==b)return;
+  let loss=Math.max(0,b.player.hp-1);
+  b.player.hp=1;
+  g.hp=1;
+  battleFx('player','命悬一线');
+  battleLog(`神秘的作者施展「鬼哭狼嚎」，你失去${fmt(loss)}点生命，生命被压至1点。`);
+  renderBattle();
+}
+const openBattleWithMysteriousAuthor=openBattle;
+openBattle=function(target,idx){
+  openBattleWithMysteriousAuthor(target,idx);
+  let b=battleState;
+  if(!target?.mysteriousAuthor||!b||b.target!==target)return;
+  b.authorTrial={turn:0};
+  renderBattle();
+  battleBusy=true;
+  setBattleControlsDisabled(true);
+  setTimeout(async()=>{
+    if(battleState!==b)return;
+    await battleEnemyTurn();
+    if(battleState===b){battleBusy=false;setBattleControlsDisabled(false);renderBattle();}
+  },420);
+};
+const battleSkillBlockReasonWithMysteriousAuthor=battleSkillBlockReason;
+battleSkillBlockReason=function(skill,index,b=battleState){
+  if(skill&&b?.target?.mysteriousAuthor&&b.player.authorSkillsSealed)return '夺魂落魄封禁，整场战斗无法施展主动技能';
+  return battleSkillBlockReasonWithMysteriousAuthor(skill,index,b);
+};
+const battleEnemyTurnWithMysteriousAuthor=battleEnemyTurn;
+battleEnemyTurn=async function(){
+  let b=battleState;
+  if(!b?.target?.mysteriousAuthor)return battleEnemyTurnWithMysteriousAuthor();
+  let turn=(b.authorTrial?.turn||0);
+  if(!b.authorTrial)b.authorTrial={turn:0};
+  b.authorTrial.turn=turn+1;
+  if(turn===0)return authorTrialSoulStrike(b);
+  if(turn===1)return authorTrialHeavenfall(b);
+  if(turn%2===0)return authorTrialGhostCry(b);
+  return battleEnemyTurnWithMysteriousAuthor();
+};
+const renderBattleWithMysteriousAuthor=renderBattle;
+renderBattle=function(){
+  renderBattleWithMysteriousAuthor();
+  $('#battleModal')?.classList.toggle('author-trial',!!battleState?.target?.mysteriousAuthor);
+};
+const finishBattleWinWithMysteriousAuthor=finishBattleWin;
+finishBattleWin=function(){
+  if(!battleState?.target?.mysteriousAuthor)return finishBattleWinWithMysteriousAuthor();
+  closeBattle(true);
+  pushLocalLog('山魈洞：你在神秘作者的最难试炼中撑过了最后一笔。');
+  showNpcResult('最难试炼结束','墨卷无风自合。神秘的作者收起笔锋，只留下一句：\n“这一页，你写下来了。”','good');
+  renderSceneMap();render();save();
+};
+const closeBattleWithMysteriousAuthor=closeBattle;
+closeBattle=function(keep=false){
+  $('#battleModal')?.classList.remove('author-trial');
+  authorFrameToken++;
+  return closeBattleWithMysteriousAuthor(keep);
 };
 
 function bindUi(){
