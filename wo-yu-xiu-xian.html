@@ -5496,8 +5496,159 @@ openNpcDialog=function(title,text,buttons=[{text:'知道了'}]){
     document.head.appendChild(style);
   }
   document.querySelectorAll('#npcDialogActions [data-npc-dialog-btn]').forEach(button=>{
-    if(/(?:接下|收下)因果|返回/.test(button.textContent||''))button.classList.add('npc-dialog-danger');
+    let choice=buttons[+button.dataset.npcDialogBtn],label=button.textContent||'';
+    if(choice?.ghost||/(?:接下|收下)因果|返回|暂不|离开|不切磋|知道了|告辞|稍后再来|容我准备/.test(label))button.classList.add('npc-dialog-danger');
   });
+};
+
+// ===== 太玄宗 · 凉亭：悬赏榜 =====
+const bountyBoardDefs={
+  dali:{title:'缉拿蟊贼·牛大力',target:'蟊贼 牛大力',place:'赤炎秘境·炎魔洞',reward:{cult:8000,reputation:300,contribution:500},customStats:{hp:4000,mp:1200,attack:500,defense:300,realm:'金丹后期',icon:'🗡️',portrait:'assets/monster-portraits/yanmo.png'}},
+  carp:{title:'缉拿蟊贼·鲤鱼精',target:'蟊贼 鲤鱼精',place:'东海龙宫·龙宫偏殿',reward:{cult:40000,reputation:400,contribution:1000},customStats:{hp:11000,mp:1200,attack:1500,defense:900,realm:'元婴后期',icon:'🗡️',portrait:'assets/monster-portraits/laohai-gui.png'}},
+  wolf:{title:'清剿荒骨狼',target:'荒骨狼',place:'万妖古域',reward:{cult:300000,reputation:300,contribution:500},realm:'化神大圆满'},
+  ghost:{title:'讨伐断剑鬼',target:'断剑鬼',place:'天渊战场',reward:{cult:2500000,reputation:800,contribution:1500},realm:'炼虚大圆满'}
+};
+function bountyBoardState(){
+  let state=g.bountyBoard;
+  if(!state||typeof state!=='object')state=g.bountyBoard={quests:{}};
+  state.quests=state.quests||{};
+  Object.keys(bountyBoardDefs).forEach(id=>{
+    let quest=state.quests[id];
+    if(!quest||typeof quest!=='object')state.quests[id]={status:'available'};
+    else if(!['available','active','done','claimed'].includes(quest.status))quest.status='available';
+  });
+  return state;
+}
+function bountyQuest(id){return bountyBoardState().quests[id]}
+function bountyRewardText(def){let r=def.reward;return`修为 +${fmt(r.cult)}，宗门声望 +${r.reputation}，宗门贡献 +${r.contribution}`}
+function refreshBountyBoard(){renderTaskPanel();renderSceneMap();render();save()}
+function acceptBounty(id){
+  let quest=bountyQuest(id),def=bountyBoardDefs[id];
+  if(!def||quest.status!=='available')return toast('此悬赏已接取或已完成');
+  quest.status='active';
+  pushLocalLog(`悬赏榜：已接取「${def.title}」，目标在${def.place}。`);
+  refreshBountyBoard();
+  showNpcResult('悬赏已接取',`目标：${def.target}\n地点：${def.place}\n奖励：${bountyRewardText(def)}\n\n完成后返回太玄宗·凉亭，向悬赏榜领取报酬。`,'good');
+}
+function finishBounty(id){
+  let quest=bountyQuest(id),def=bountyBoardDefs[id];
+  if(!def||quest.status!=='active')return false;
+  quest.status='done';
+  pushLocalLog(`悬赏榜：${def.title}已完成，返回太玄宗·凉亭领取报酬。`);
+  toast(`悬赏完成：返回凉亭领取${bountyRewardText(def)}`,3800);
+  refreshBountyBoard();
+  return true;
+}
+function claimBounty(id){
+  let quest=bountyQuest(id),def=bountyBoardDefs[id];
+  if(!def||quest.status!=='done')return toast('该悬赏尚未完成');
+  let reward=def.reward;
+  quest.status='claimed';
+  g.cult=clamp((g.cult||0)+reward.cult);
+  g.sectReputation=(g.sectReputation||0)+reward.reputation;
+  g.sectContribution=(g.sectContribution||0)+reward.contribution;
+  processRealmProgress();
+  pushLocalLog(`悬赏榜结算：${def.title}，${bountyRewardText(def)}。`);
+  refreshBountyBoard();
+  showNpcResult('悬赏结算',`完成：${def.title}\n\n获得：${bountyRewardText(def)}`,'good');
+}
+function openBountyBoard(){
+  let options=[];
+  Object.entries(bountyBoardDefs).forEach(([id,def])=>{
+    let status=bountyQuest(id).status;
+    if(status==='available')options.push({text:`接取：${def.title}`,onClick(){acceptBounty(id)}});
+    if(status==='done')options.push({text:`领取：${def.title}`,onClick(){claimBounty(id)}});
+  });
+  let active=Object.entries(bountyBoardDefs).filter(([id])=>bountyQuest(id).status==='active').map(([,def])=>`进行中：${def.title}，前往${def.place}`).join('\n');
+  if(!options.length)return showNpcResult('悬赏榜',active||'榜上四道悬赏均已结清，凉亭暂时恢复了清静。','good');
+  options.push({text:'暂不接榜',ghost:true});
+  openNpcDialog('悬赏榜',`凉亭石壁上悬着一卷赤金悬赏榜。每项悬赏仅可接取并完成一次。\n\n${active||'当前暂无进行中的悬赏。'}`,options);
+}
+function bountyTarget(id){
+  let def=bountyBoardDefs[id];
+  return{name:def.target,type:'战斗',bountyId:id,customStats:{...def.customStats}};
+}
+function talkBountyTarget(id){
+  let quest=bountyQuest(id),def=bountyBoardDefs[id];
+  if(quest.status!=='active')return showNpcResult(def.target,'此人已不在此处惹事。','good');
+  openNpcDialog(def.target,id==='dali'?'牛大力挥着铁棍堵在炎魔洞前，见你亮出悬赏令便啐了一口：“太玄宗的走狗，也敢来拿我？”':'鲤鱼精倚在龙宫偏殿的珊瑚柱旁，水汽绕身：“想拿我的悬赏换功名？那便拿命来试。”',[{text:'出手缉拿',onClick(){openBattle(bountyTarget(id),0)}},{text:'暂且离开',ghost:true}]);
+}
+function finishBountyTargetBattle(id){
+  let target=battleState?.target,def=bountyBoardDefs[id];
+  if(!target||!def)return;
+  closeBattle(true);
+  let soul=soulVictoryReward(true);
+  finishBounty(id);
+  let soulText=soul?`\n炼魂被动：额外修为 +${fmt(soul.cult)}，生命上限 +${soul.hpGain.toFixed(2)}`:'';
+  showNpcResult('悬赏目标已伏诛',`${def.target}已被制伏。请返回太玄宗·凉亭，向悬赏榜领取报酬。${soulText}`,'good');
+  renderSceneMap();render();save();
+}
+MONSTER_STATS['荒骨狼'].realm='化神大圆满';
+const localNpcsWithBountyBoard=localNpcs;
+localNpcs=function(i,spot){
+  let npcs=localNpcsWithBountyBoard(i,spot);
+  if(i===10&&spot===37&&!npcs.some(npc=>(npc.name||npc[0])==='悬赏榜'))npcs=[...npcs,['悬赏榜','太玄宗发布的缉拿与清剿悬赏']];
+  if(i===2&&spot===23&&bountyQuest('dali').status==='active'&&!npcs.some(npc=>(npc.name||npc[0])==='蟊贼 牛大力'))npcs=[...npcs,['蟊贼 牛大力','盘踞炎魔洞的通缉蟊贼']];
+  if(i===3&&spot===23&&bountyQuest('carp').status==='active'&&!npcs.some(npc=>(npc.name||npc[0])==='蟊贼 鲤鱼精'))npcs=[...npcs,['蟊贼 鲤鱼精','藏身龙宫偏殿的通缉水妖']];
+  return npcs;
+};
+const localMeetWithBountyBoard=localMeet;
+localMeet=function(idx=0){
+  let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];
+  if(name==='悬赏榜')return openBountyBoard();
+  if(name==='蟊贼 牛大力')return talkBountyTarget('dali');
+  if(name==='蟊贼 鲤鱼精')return talkBountyTarget('carp');
+  return localMeetWithBountyBoard(idx);
+};
+const finishBattleWinWithBountyBoard=finishBattleWin;
+finishBattleWin=function(){
+  let id=battleState?.target?.bountyId;
+  if(id)return finishBountyTargetBattle(id);
+  return finishBattleWinWithBountyBoard();
+};
+const resolveLocalTargetWithBountyBoard=resolveLocalTarget;
+resolveLocalTarget=function(target,batch=false){
+  let result=resolveLocalTargetWithBountyBoard(target,batch),name=target?.originalName||target?.name;
+  if(result?.type==='战斗'){
+    if(name==='荒骨狼'&&bountyQuest('wolf').status==='active')finishBounty('wolf');
+    if(name==='断剑鬼'&&bountyQuest('ghost').status==='active')finishBounty('ghost');
+  }
+  return result;
+};
+const localMonsterRealmWithBountyBoard=localMonsterRealm;
+localMonsterRealm=function(i,spot,m,idx){
+  let name=m?.originalName||m?.name;
+  if(name==='荒骨狼'&&bountyQuest('wolf').status==='active')return '化神大圆满';
+  if(name==='断剑鬼'&&bountyQuest('ghost').status==='active')return '炼虚大圆满';
+  return localMonsterRealmWithBountyBoard(i,spot,m,idx);
+};
+const battleEnemyStatsWithBountyBoard=battleEnemyStats;
+battleEnemyStats=function(target,area=g.selectedScene??g.map,spot=activeSpot(),idx=0){
+  let name=target?.originalName||target?.name,id=name==='荒骨狼'?'wolf':name==='断剑鬼'?'ghost':null;
+  if(id&&bountyQuest(id).status==='active'){
+    let base=getMonsterStats(name),multiplier=monsterStageMultiplier(3);
+    if(base)return {...base,hp:Math.max(1,Math.round(base.hp*multiplier)),mp:Math.max(0,Math.round(base.mp*multiplier)),attack:Math.max(1,Math.round(base.attack*multiplier)),defense:Math.max(0,Math.round(base.defense*multiplier)),realm:bountyBoardDefs[id].realm,stage:3,multiplier};
+  }
+  return battleEnemyStatsWithBountyBoard(target,area,spot,idx);
+};
+const npcQuestIconWithBountyBoard=npcQuestIcon;
+npcQuestIcon=function(name,mapIndex,spot){
+  let statuses=Object.keys(bountyBoardDefs).map(id=>bountyQuest(id).status);
+  if(name==='悬赏榜')return statuses.includes('done')?'⭕️':statuses.includes('available')?'❗️':statuses.includes('active')?'❓':'💬';
+  if(name==='蟊贼 牛大力'&&bountyQuest('dali').status==='active')return '❗️';
+  if(name==='蟊贼 鲤鱼精'&&bountyQuest('carp').status==='active')return '❗️';
+  return npcQuestIconWithBountyBoard(name,mapIndex,spot);
+};
+const renderTaskPanelWithBountyBoard=renderTaskPanel;
+renderTaskPanel=function(){
+  renderTaskPanelWithBountyBoard();
+  let list=$('#taskList');
+  if(!list)return;
+  let cards=Object.entries(bountyBoardDefs).filter(([id])=>['active','done'].includes(bountyQuest(id).status)).map(([id,def])=>{
+    let status=bountyQuest(id).status;
+    return taskCard(`悬赏榜：${def.title}`,status==='done'?`目标已完成，返回太玄宗·凉亭领取奖励：${bountyRewardText(def)}。`:`目标：前往${def.place}击败${def.target}。奖励：${bountyRewardText(def)}。`,'');
+  });
+  if(cards.length)list.insertAdjacentHTML('beforeend',cards.join(''));
 };
 
 function bindUi(){
