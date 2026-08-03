@@ -665,6 +665,7 @@
 .xiao-longnu-exchange{display:grid;gap:12px}.xiao-longnu-exchange .exchange-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px}.xiao-longnu-exchange .exchange-summary span{padding:10px;border:1px solid #c8b27a;border-radius:7px;background:#fffaf0;color:#365044}.xiao-longnu-exchange label{display:grid;grid-template-columns:auto minmax(110px,1fr) auto;align-items:center;gap:9px;padding:12px;border:1px dashed #c3ad78;background:#fffdf6;color:#365044}.xiao-longnu-exchange input{width:100%;padding:9px;border:1px solid #b9a06d;border-radius:6px;background:#fff;color:#294235;font:700 16px Georgia,serif}.xiao-longnu-exchange small{color:#67776d;line-height:1.6}.explore-settings{display:grid;gap:9px}.explore-settings label{display:grid;grid-template-columns:22px 1fr;gap:9px;align-items:start;padding:11px;border:1px solid #66877c55;border-radius:8px;background:#f9f5e8;color:#294235;cursor:pointer}.explore-settings input{width:18px;height:18px;accent-color:#2f715b}.explore-settings b{display:block;font-size:15px}.explore-settings small{display:block;margin-top:4px;color:#6a786d;line-height:1.55}.battle-title-sr{display:none}.battle-head:after{display:none}.battle-head>.battle-actions.battle-actions-head{position:relative;z-index:2;display:flex;justify-content:flex-start;gap:6px;padding:0;border:0;background:transparent}.battle-head>.battle-actions.battle-actions-head .btn{min-width:68px;padding:7px 10px;font-size:14px;line-height:1}.battle-head>.battle-actions.battle-actions-head #battleNormalBtn{border-color:#57c8ea;background:linear-gradient(180deg,#2a5868,#183842)}.battle-head>.battle-actions.battle-actions-head #battleAutoBtn{border-color:#efbd4d;background:linear-gradient(180deg,#8e6524,#5b3e19)}.battle-head>.battle-actions.battle-actions-head #battleRunBtn{border-color:#e7756e;background:linear-gradient(180deg,#66383c,#3d2428)}.side .nav,.main>.top{display:none}@media(max-width:650px){.xiao-longnu-exchange label{grid-template-columns:1fr;gap:5px}.explore-settings label{padding:9px}.explore-settings b{font-size:14px}.battle-head>.battle-actions.battle-actions-head{gap:4px}.battle-head>.battle-actions.battle-actions-head .btn{min-width:45px;padding:6px 5px;font-size:12px}}
 /* Developer monster controls */
 #devModal>div{width:min(760px,94vw);max-height:92vh;overflow:auto}#devModal .dev-grid{max-height:34vh}.dev-monster-tools{margin-top:14px;padding:12px;border:1px solid #b6c1b4;border-radius:8px;background:#f4f7f1}.dev-monster-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:9px}.dev-monster-head b{color:#315844;font-size:15px}.dev-monster-head small{color:#6f7e73;font-size:11px}.dev-monster-editor{display:grid;grid-template-columns:1.25fr repeat(4,minmax(72px,1fr)) 1fr;gap:7px;align-items:end}.dev-monster-editor label{display:grid;gap:4px;color:#64756c;font-size:11px}.dev-monster-editor input,.dev-monster-editor select{width:100%;padding:8px;border:1px solid #aeb7ad;border-radius:6px;background:#fff;color:#26392e}.dev-monster-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.dev-monster-actions .btn{padding:7px 10px;font-size:12px}@media(max-width:650px){#devModal{padding:8px}#devModal .dev-grid{grid-template-columns:repeat(2,1fr);max-height:28vh}.dev-monster-head{align-items:flex-start;flex-direction:column}.dev-monster-editor{grid-template-columns:repeat(2,minmax(0,1fr))}.dev-monster-editor label:first-child{grid-column:1/-1}.dev-monster-actions .btn{flex:1}}
+#npcDialogActions .npc-dialog-choice{border-color:#4d8462!important;background:linear-gradient(180deg,#4f8b66,#2f6446)!important;color:#fff9e5!important;box-shadow:inset 0 1px #ffffff45,0 2px 5px #183b2780}#npcDialogActions .npc-dialog-choice:hover{border-color:#7fb18b!important;background:linear-gradient(180deg,#609d75,#397451)!important;filter:brightness(1.06)}#npcDialogActions .npc-dialog-choice:disabled{border-color:#94a99a!important;background:#708276!important;color:#dce5dc!important;box-shadow:none}.danchi-quantity-picker{display:grid;grid-template-columns:auto minmax(90px,1fr) auto;align-items:center;gap:8px;margin-top:12px;padding:10px 12px;border:1px solid #b8c8b9;border-radius:6px;background:#f5faef;color:#31533e;font-weight:700}.danchi-quantity-picker input{width:100%;min-width:0;padding:7px 8px;border:1px solid #7fa185;border-radius:4px;background:#fff;color:#244634;font:700 16px Georgia,serif}.danchi-quantity-picker small{color:#667b69;font-weight:600}@media(max-width:600px){.danchi-quantity-picker{grid-template-columns:1fr 82px;gap:6px}.danchi-quantity-picker small{grid-column:1/-1}}
 </style>
 <style>
 .toast{z-index:1000}
@@ -1558,10 +1559,10 @@ function monsterStatsTable(){
     '青竹妖':normal({hp:70,mp:40,attack:14,defense:4,realm:'练气后期'},'qingzhu-yao','青竹节'),
     '岩甲虫':normal({hp:100,mp:30,attack:10,defense:7,realm:'练气大圆满'},'yanjia-chong','虫甲'),
     'BOSS 山魈王':boss({hp:220,mp:70,attack:50,defense:10,realm:'筑基初期'},'assets/boss-portraits/shanxiao-wang.png','山魈王角'),
-    '月狐':normal({hp:350,mp:70,attack:52,defense:18,realm:'筑基初期'},'yuehu','狐狸皮'),
-    '树精':normal({hp:490,mp:60,attack:49,defense:23,realm:'筑基中期'},'shujing','树心木'),
-    '迷雾蝶':normal({hp:335,mp:110,attack:55,defense:17,realm:'筑基后期'},'miwudie','蝶粉'),
-    '夜行狼':normal({hp:275,mp:60,attack:58,defense:19,realm:'筑基大圆满'},'yexinglang','狼牙'),
+    '月狐':normal({hp:400,mp:70,attack:72,defense:18,realm:'筑基初期'},'yuehu','狐狸皮'),
+    '树精':normal({hp:550,mp:60,attack:69,defense:23,realm:'筑基中期'},'shujing','树心木'),
+    '迷雾蝶':normal({hp:345,mp:110,attack:75,defense:17,realm:'筑基后期'},'miwudie','蝶粉'),
+    '夜行狼':normal({hp:325,mp:60,attack:80,defense:19,realm:'筑基大圆满'},'yexinglang','狼牙'),
     'BOSS 巨树妖':boss({hp:1520,mp:150,attack:250,defense:160,realm:'金丹初期'},'assets/boss-portraits/jushu-yao.png','巨树妖心'),
     '赤炎兽':normal({hp:920,mp:140,attack:155,defense:160,realm:'金丹初期'},'chiyan-shou','赤炎角'),
     '火鸦':normal({hp:950,mp:190,attack:163,defense:155,realm:'金丹中期'},'huoya','火羽'),
@@ -1572,38 +1573,38 @@ function monsterStatsTable(){
     '蟹将':normal({hp:3350,mp:300,attack:725,defense:750,realm:'元婴中期'},'xiejiang','蟹钳'),
     '老海龟':normal({hp:3650,mp:380,attack:630,defense:980,realm:'元婴后期'},'laohai-gui','龟甲'),
     '海蛇':normal({hp:4050,mp:520,attack:630,defense:500,realm:'元婴大圆满'},'haishe','蛇胆'),
-    'BOSS 龙太子':boss({hp:9200,mp:1200,attack:1445,defense:1450,realm:'化神初期'},'assets/boss-portraits/long-taizi.png','龙鳞玉令'),
-    '暗蛟龙':boss({hp:39200,mp:1200,attack:2645,defense:1450,realm:'化神大圆满',icon:'🐉'},'','暗蛟逆鳞'),
+    'BOSS 龙太子':boss({hp:19200,mp:1200,attack:2000,defense:1400,realm:'化神初期'},'assets/boss-portraits/long-taizi.png','龙鳞玉令'),
+    '暗蛟龙':boss({hp:40200,mp:1200,attack:3645,defense:2450,realm:'化神大圆满',icon:'🐉'},'','暗蛟逆鳞'),
     '血藤妖':normal({hp:13100,mp:900,attack:1340,defense:1350,realm:'化神初期'},'xueteng-yao','血藤'),
     '荒骨狼':normal({hp:12700,mp:720,attack:1390,defense:1200,realm:'化神中期'},'huanggu-lang','荒骨'),
     '毒雾虫':normal({hp:12550,mp:1250,attack:1365,defense:1120,realm:'化神后期'},'duwu-chong','毒囊'),
     '妖王花':normal({hp:13500,mp:1400,attack:1330,defense:1650,realm:'化神大圆满'},'yaowang-hua','妖花粉'),
-    'BOSS 巫妖王':boss({hp:29800,mp:3200,attack:2710,defense:1310,realm:'炼虚初期'},'assets/boss-portraits/wuyao-wang.png','巫妖王骨冠'),
-    '战魂':normal({hp:7600,mp:2300,attack:7800,defense:3000,realm:'炼虚初期'},'zhanhun','魂晶'),
-    '铁甲尸':normal({hp:9200,mp:1800,attack:7200,defense:4200,realm:'炼虚中期'},'tiejia-shi','尸甲'),
-    '煞灵':normal({hp:7000,mp:3200,attack:8600,defense:2850,realm:'炼虚后期'},'shaling','煞珠'),
-    '断剑鬼':normal({hp:8200,mp:2600,attack:9200,defense:3400,realm:'炼虚大圆满'},'duanjian-gui','残刃'),
-    'BOSS 古战神残魂':boss({hp:77000,mp:7000,attack:14500,defense:7200,realm:'合体初期'},'assets/boss-portraits/guzhanshen-canhun.png','战神残魂'),
-    '虚空影':normal({hp:40000,mp:6500,attack:19000,defense:7200,realm:'合体初期'},'xukong-ying','影尘'),
-    '星砂虫':normal({hp:40500,mp:6000,attack:17500,defense:8800,realm:'合体中期'},'xingsha-chong','星砂'),
-    '裂隙怪':normal({hp:39000,mp:8200,attack:21500,defense:6900,realm:'合体后期'},'liexi-guai','裂片'),
-    '遗迹守卫':normal({hp:48500,mp:7000,attack:1850,defense:10500,realm:'合体大圆满'},'yiji-shouwei','古铜片'),
-    'BOSS 虚空吞灵':boss({hp:168000,mp:19000,attack:43000,defense:17500,realm:'大乘初期'},'assets/boss-portraits/xukong-tunling.png','虚空灵核'),
-    '魔修残魂':normal({hp:102000,mp:16000,attack:43000,defense:16500,realm:'大乘初期'},'moxiu-canhun','魔魂灰'),
-    '黑莲妖':normal({hp:111000,mp:19000,attack:40500,defense:20500,realm:'大乘中期'},'heilian-yao','黑莲瓣'),
-    '魔焰鬼':normal({hp:100000,mp:23000,attack:49500,defense:15000,realm:'大乘后期'},'moyan-gui','魔焰石'),
-    '残碑灵':normal({hp:127000,mp:18500,attack:44500,defense:23000,realm:'大乘大圆满'},'canbei-ling','碑屑'),
-    'BOSS 堕仙魔君':boss({hp:185000,mp:52000,attack:76000,defense:29000,realm:'渡劫初期'},'assets/boss-portraits/duoxian-mojun.png','魔君残印'),
-    '雷灵':normal({hp:245000,mp:48000,attack:98000,defense:37000,realm:'渡劫初期'},'leiling','雷晶'),
-    '云兽':normal({hp:270000,mp:42000,attack:91000,defense:45500,realm:'渡劫中期'},'yunshou','云皮'),
-    '电光虫':normal({hp:232000,mp:62000,attack:112000,defense:34500,realm:'渡劫后期'},'dianguang-chong','电须'),
-    '雷鸟':normal({hp:255000,mp:58000,attack:121000,defense:39000,realm:'渡劫大圆满'},'leiniao','雷羽'),
-    'BOSS 雷劫真君':boss({hp:850000,mp:145000,attack:185000,defense:76000,realm:'天仙初期'},'assets/boss-portraits/leijie-zhenjun.png','雷劫道晶'),
-    '天门守卫':normal({hp:360000,mp:120000,attack:235000,defense:92000,realm:'天仙初期'},'tianmen-shouwei','仙甲片'),
-    '仙鹤':normal({hp:315000,mp:155000,attack:265000,defense:84000,realm:'天仙中期'},'xianhe','仙羽'),
-    '金甲力士':normal({hp:430000,mp:110000,attack:248000,defense:125000,realm:'天仙后期'},'jinjia-lishi','金甲碎片'),
-    '天兵残影':normal({hp:385000,mp:180000,attack:292000,defense:97000,realm:'天仙大圆满'},'tianbing-canying','仙尘'),
-    'BOSS 守门仙将':boss({hp:10000000,mp:420000,attack:550000,defense:310000,realm:'天仙大圆满'},'assets/boss-portraits/shoumen-xianjiang.png','仙将令牌')
+    'BOSS 巫妖王':boss({hp:88800,mp:3200,attack:6900,defense:3800,realm:'炼虚初期'},'assets/boss-portraits/wuyao-wang.png','巫妖王骨冠'),
+    '战魂':normal({hp:57600,mp:2300,attack:6800,defense:3000,realm:'炼虚初期'},'zhanhun','魂晶'),
+    '铁甲尸':normal({hp:59200,mp:1800,attack:6200,defense:4200,realm:'炼虚中期'},'tiejia-shi','尸甲'),
+    '煞灵':normal({hp:50000,mp:3200,attack:6000,defense:3800,realm:'炼虚后期'},'shaling','煞珠'),
+    '断剑鬼':normal({hp:48200,mp:2600,attack:7200,defense:2900,realm:'炼虚大圆满'},'duanjian-gui','残刃'),
+    'BOSS 古战神残魂':boss({hp:217000,mp:7000,attack:19000,defense:8200,realm:'合体初期'},'assets/boss-portraits/guzhanshen-canhun.png','战神残魂'),
+    '虚空影':normal({hp:240000,mp:6500,attack:19000,defense:7200,realm:'合体初期'},'xukong-ying','影尘'),
+    '星砂虫':normal({hp:240500,mp:6000,attack:17500,defense:8800,realm:'合体中期'},'xingsha-chong','星砂'),
+    '裂隙怪':normal({hp:239000,mp:8200,attack:21500,defense:6900,realm:'合体后期'},'liexi-guai','裂片'),
+    '遗迹守卫':normal({hp:188500,mp:7000,attack:18500,defense:10500,realm:'合体大圆满'},'yiji-shouwei','古铜片'),
+    'BOSS 虚空吞灵':boss({hp:968000,mp:19000,attack:43000,defense:17500,realm:'大乘初期'},'assets/boss-portraits/xukong-tunling.png','虚空灵核'),
+    '魔修残魂':normal({hp:1020000,mp:16000,attack:43000,defense:16500,realm:'大乘初期'},'moxiu-canhun','魔魂灰'),
+    '黑莲妖':normal({hp:1110000,mp:19000,attack:40500,defense:20500,realm:'大乘中期'},'heilian-yao','黑莲瓣'),
+    '魔焰鬼':normal({hp:1000000,mp:23000,attack:49500,defense:15000,realm:'大乘后期'},'moyan-gui','魔焰石'),
+    '残碑灵':normal({hp:1270000,mp:18500,attack:44500,defense:23000,realm:'大乘大圆满'},'canbei-ling','碑屑'),
+    'BOSS 堕仙魔君':boss({hp:5850000,mp:52000,attack:96000,defense:40000,realm:'渡劫初期'},'assets/boss-portraits/duoxian-mojun.png','魔君残印'),
+    '雷灵':normal({hp:5245000,mp:48000,attack:98000,defense:37000,realm:'渡劫初期'},'leiling','雷晶'),
+    '云兽':normal({hp:5570000,mp:42000,attack:91000,defense:45500,realm:'渡劫中期'},'yunshou','云皮'),
+    '电光虫':normal({hp:5232000,mp:62000,attack:112000,defense:34500,realm:'渡劫后期'},'dianguang-chong','电须'),
+    '雷鸟':normal({hp:4955000,mp:58000,attack:121000,defense:39000,realm:'渡劫大圆满'},'leiniao','雷羽'),
+    'BOSS 雷劫真君':boss({hp:18500000,mp:145000,attack:185000,defense:76000,realm:'天仙初期'},'assets/boss-portraits/leijie-zhenjun.png','雷劫道晶'),
+    '天门守卫':normal({hp:13600000,mp:120000,attack:235000,defense:92000,realm:'天仙初期'},'tianmen-shouwei','仙甲片'),
+    '仙鹤':normal({hp:13150000,mp:155000,attack:265000,defense:84000,realm:'天仙中期'},'xianhe','仙羽'),
+    '金甲力士':normal({hp:14300000,mp:110000,attack:248000,defense:125000,realm:'天仙后期'},'jinjia-lishi','金甲碎片'),
+    '天兵残影':normal({hp:13850000,mp:180000,attack:292000,defense:97000,realm:'天仙大圆满'},'tianbing-canying','仙尘'),
+    'BOSS 守门仙将':boss({hp:20000000,mp:420000,attack:550000,defense:310000,realm:'天仙大圆满'},'assets/boss-portraits/shoumen-xianjiang.png','仙将令牌')
   };
 }
 const MONSTER_STATS=monsterStatsTable();
@@ -2648,7 +2649,7 @@ const npcDialogPortraits={
   '紫云峰评语':'qiu-zishan','掌教法旨':'lin-xuanyi','太玄宗宗门册':'lin-xuanyi','牛五':'niuwu','石砚':'shiyan','异火已成':'xiao-huo'
 };
 function npcPortraitFor(title){let label=String(title||'');let key=Object.keys(npcDialogPortraits).find(name=>label===name)||Object.keys(npcDialogPortraits).find(name=>label.includes(name));return key?`assets/npc-portraits/${npcDialogPortraits[key]}.png`:''}
-function openNpcDialog(title,text,buttons=[{text:'知道了'}]){let portrait=npcPortraitFor(title),card=$('#npcDialogCard'),image=$('#npcDialogPortrait');$('#npcDialogTitle').textContent=title;$('#npcDialogText').textContent=text;if(card)card.classList.toggle('has-portrait',!!portrait);if(image){image.src=portrait||'';image.alt=portrait?`${title}人物特写`:''}$('#npcDialogActions').innerHTML=buttons.map((b,i)=>`<button class="btn ${b.alt?'alt':''} ${b.ghost?'ghost':''}" data-npc-dialog-btn="${i}">${b.text}</button>`).join('');document.querySelectorAll('[data-npc-dialog-btn]').forEach(btn=>btn.onclick=()=>{let action=buttons[+btn.dataset.npcDialogBtn];if(action?.close!==false)closeNpcDialog();action?.onClick?.()});$('#npcDialogModal').classList.add('show')}
+function openNpcDialog(title,text,buttons=[{text:'知道了'}]){let portrait=npcPortraitFor(title),card=$('#npcDialogCard'),image=$('#npcDialogPortrait');$('#npcDialogTitle').textContent=title;$('#npcDialogText').textContent=text;if(card)card.classList.toggle('has-portrait',!!portrait);if(image){image.src=portrait||'';image.alt=portrait?`${title}人物特写`:''}$('#npcDialogActions').innerHTML=buttons.map((b,i)=>`<button class="btn npc-dialog-choice" data-npc-dialog-btn="${i}">${b.text}</button>`).join('');document.querySelectorAll('[data-npc-dialog-btn]').forEach(btn=>btn.onclick=()=>{let action=buttons[+btn.dataset.npcDialogBtn];if(action?.close!==false)closeNpcDialog();action?.onClick?.()});$('#npcDialogModal').classList.add('show')}
 function showNpcResult(title,text,type='good'){openNpcDialog(title,text,[{text:'收下因果'}]);if(type)log(`小地图NPC：${title}`,type)}
 function merchantEquip(quality,source='merchant'){let slot=equipSlots[Math.floor(Math.random()*equipSlots.length)],level=Math.max(1,g.map+quality+Math.floor(Math.random()*3)),item=normalizeEquip({name:equipBaseName(quality,slot),quality,slot,powerLevel:level,sell:quality*320});item.desc=(source==='merchant'?'秘宝商人货品。':'奇珍异宝。');return item}
 function buyMerchantGoods(price,pool){if(g.stones<price){toast('灵石不足');return false}let roll=Math.random(),sum=0,reward=pool[pool.length-1];for(let item of pool){sum+=item[1];if(roll<sum){reward=item;break}}g.stones-=price;let got,rewardText='';if(reward[0]==='skillbook'){got=randomSkillBook();rewardText=`技能书：${got.name}`}else{got=merchantEquip(reward[0],'merchant');rewardText=`${qualityText[got.quality]}色${equipSlotNames[got.slot]}：${got.name}`}if(!addBagItem(got)){g.stones+=price;toast('背包已满，购买取消');return false}pushLocalLog(`秘宝商人出手：花费${fmt(price)}灵石，购得${rewardText}。`);showNpcResult('秘宝交易成功',`花费 ${fmt(price)} 灵石。\n获得 ${rewardText}。`,'good');return true}
@@ -2782,18 +2783,42 @@ function exchangeQinghePill(){
   showNpcResult('丹童青禾 · 丹药兑换','交付：药材×20\n获得：回春丹×1','good');
   renderSceneMap();render();save();
 }
-function exchangeDanchiPill(name,cost){
-  const have=Math.max(g.herbs||0,bagItemCountByName('药材'));
-  if(have<cost)return toast('药材不足：'+have+'/'+cost);
+function exchangeDanchiPill(name,cost,qty=1){
+  qty=Math.floor(Number(qty));
+  if(!Number.isFinite(qty)||qty<1)return toast('请输入至少1枚的兑换数量');
+  const have=Math.max(g.herbs||0,bagItemCountByName('药材')),totalCost=cost*qty;
+  if(have<totalCost)return toast(`药材不足：${fmt(have)}/${fmt(totalCost)}`);
   const key=name==='渡劫丹'?'tribPills':null;
-  const pill={type:'pill',name,qty:1,max:99,sell:name==='渡劫丹'?130:120,desc:pillEffects[name]||'丹阁炼制的灵丹。'};
+  const pill={type:'pill',name,qty,max:99,sell:name==='渡劫丹'?130:120,desc:pillEffects[name]||'丹阁炼制的灵丹。'};
   if(key)pill.key=key;
+  const stackSpace=(g.bag||[]).filter(item=>item?.type===pill.type&&item.name===pill.name).reduce((sum,item)=>sum+Math.max(0,pill.max-(item.qty||1)),0)+bagFree()*pill.max;
+  if(stackSpace<qty)return toast('背包空间不足，无法容纳这些丹药');
+  if(!takeHerbResource(totalCost))return toast('药材扣除失败，请整理背包后再试');
   if(!addBagItem(pill))return toast('背包已满，无法兑换'+name);
-  if(!takeHerbResource(cost))return toast('药材扣除失败，请整理背包后再试');
-  if(key)g[key]=(g[key]||0)+1;
-  pushLocalLog('丹尘子以药材×'+cost+'兑换'+name+'×1。');
-  showNpcResult('炼丹长老 丹尘子 · 丹药兑换','交付：药材×'+cost+'\n获得：'+name+'×1','good');
+  if(key)g[key]=(g[key]||0)+qty;
+  pushLocalLog(`丹尘子以药材×${totalCost}兑换${name}×${qty}。`);
+  showNpcResult('炼丹长老 丹尘子 · 丹药兑换',`交付：药材×${totalCost}\n获得：${name}×${qty}`,'good');
   renderSceneMap();render();save();
+}
+function talkDanchi(){
+  let herbs=Math.max(g.herbs||0,bagItemCountByName('药材'));
+  openNpcDialog('炼丹长老 丹尘子','丹尘子捻须道：\n“丹阁以药材换丹，药力各有用途。”\n\n小还丹：下次战斗每回合恢复10点生命\n渡劫丹：本次渡劫成功率提升\n大还丹：下次战斗每回合恢复30点生命\n\n当前药材：'+herbs+' 份',[
+    {text:'兑换小还丹',onClick(){openDanchiExchange('小还丹',50)}},
+    {text:'兑换渡劫丹',onClick(){openDanchiExchange('渡劫丹',100)}},
+    {text:'兑换大还丹',onClick(){openDanchiExchange('大还丹',200)}},
+    {text:'暂不兑换',ghost:true}
+  ]);
+}
+function openDanchiExchange(name,cost){
+  let herbs=Math.max(g.herbs||0,bagItemCountByName('药材')),max=Math.floor(herbs/cost);
+  openNpcDialog('炼丹长老 丹尘子','',[
+    {text:'确认兑换',alt:true,close:false,onClick(){exchangeDanchiPill(name,cost,$('#danchiExchangeQty')?.value)}},
+    {text:'返回丹方',close:false,onClick(){talkDanchi()}},
+    {text:'暂不兑换',ghost:true}
+  ]);
+  $('#npcDialogText').innerHTML=`${name}：每枚消耗药材×${cost}\n当前药材：${fmt(herbs)} 份，可兑换 ${fmt(max)} 枚。<label class="danchi-quantity-picker"><span>兑换数目</span><input id="danchiExchangeQty" type="number" inputmode="numeric" min="1" max="${Math.max(1,max)}" value="1"><small>共消耗药材：<b id="danchiExchangeCost">${fmt(cost)}</b></small></label>`;
+  let input=$('#danchiExchangeQty'),costText=$('#danchiExchangeCost');
+  input?.addEventListener('input',()=>{let qty=Math.max(1,Math.floor(Number(input.value)||1));costText.textContent=fmt(cost*qty)});
 }
 const forgeMaterialCosts=[0,100,500,1000,2000,5000];
 function forgeMaterialCost(it){return it?forgeMaterialCosts[Math.max(1,Math.min(5,it.quality||1))]:0}
@@ -2969,13 +2994,7 @@ let rank=sectTitle(),next=sectNextTitle(),taskCd=Math.max(0,g.sectManualTaskAt-D
 if(name==='阵法长老 顾玄机'){talkGuXuanji();return;}
 if(name==='阵童 阿衍'){showNpcResult('阵童 阿衍','阿衍抱着一摞阵旗：“长老正在校验护宗大阵，我先带你认清天机峰各处阵门，莫要误踩生门与惊门。”','good');return;}
 if(name==='炼丹长老 丹尘子'){
-let herbs=Math.max(g.herbs||0,bagItemCountByName('药材'));
-openNpcDialog('炼丹长老 丹尘子','丹尘子捻须道：\n“丹阁以药材换丹，药力各有用途。”\n\n小还丹：下次战斗每回合恢复10点生命\n渡劫丹：本次渡劫成功率提升\n大还丹：下次战斗每回合恢复30点生命\n\n当前药材：'+herbs+' 份',[
-{text:'药材×50换小还丹',alt:true,onClick(){exchangeDanchiPill('小还丹',50)}},
-{text:'药材×100换渡劫丹',onClick(){exchangeDanchiPill('渡劫丹',100)}},
-{text:'药材×200换大还丹',onClick(){exchangeDanchiPill('大还丹',200)}},
-{text:'暂不兑换',ghost:true}
-]);
+talkDanchi();
 return;
 }
 if(name==='丹童 青禾'){
@@ -4184,7 +4203,7 @@ talkTieWufeng=function(){
   ]);
 };
 
-const xiaoYanStats={hp:1900,mp:1200,attack:345,defense:105,realm:'金丹初期',icon:'🔥'};
+const xiaoYanStats={hp:3900,mp:1200,attack:435,defense:255,realm:'金丹中期',icon:'🔥'};
 let xiaoYanPursuitTimer=null;
 function xiaoYanHuntActive(){return !!g.xiaoYanHunt?.active}
 function xiaoYanBlocksMovement(){return xiaoYanHuntActive()&&g.xiaoYanHunt?.phase==='pursuitDialog'}
@@ -4252,12 +4271,19 @@ finishBattleWin=function(){
 };
 const handleBattleDeathWithXiaoYan=handleBattleDeath;
 handleBattleDeath=function(enemyName){
-  if(battleState?.target?.xiaoYan){
-    clearTimeout(xiaoYanPursuitTimer);xiaoYanPursuitTimer=null;
-    g.xiaoYanHunt={active:false,resolved:'playerDefeated',finishedAt:Date.now()};
-    pushLocalLog('【萧焱追杀】你被萧焱击败一次，追杀至此结束。');
-  }
-  return handleBattleDeathWithXiaoYan(enemyName);
+  if(!battleState?.target?.xiaoYan)return handleBattleDeathWithXiaoYan(enemyName);
+  clearTimeout(xiaoYanPursuitTimer);xiaoYanPursuitTimer=null;
+  g.xiaoYanHunt={active:false,resolved:'playerDefeated',finishedAt:Date.now()};
+  let need=realmNeed(),lost=Math.max(1,Math.floor(need*.01)),actualLost=Math.min(g.cult,lost),st=statTotal();
+  g.cult=Math.max(0,g.cult-lost);g.deaths++;
+  if(battleState){battleState.player.hp=st.hp;battleState.player.mp=st.mana}
+  closeBattle(false);
+  g.selectedScene=2;g.map=2;g.localSpot=14;g.hp=st.hp;g.mana=st.mana;g.deathGuideSeen=true;
+  pushLocalLog(`【萧焱追杀】你被萧焱击败一次，损失修为${fmt(actualLost)}，在地火炉外醒来。`);
+  log(`小地图战斗：败于萧焱，损失当前境界1%修为（${fmt(actualLost)}）`,'danger');
+  renderSceneMap();render();save();
+  openNpcDialog('地火炉 · 劫后余生',`地火的余温将你从昏厥中唤醒。萧焱见你已无力再战，冷笑着离去，追杀至此暂告一段落。\n\n本次损失修为：${fmt(actualLost)}\n你已回到赤炎秘境 · 地火炉。`,[{text:'收束心神'}]);
+  toast(`战败：损失修为 ${fmt(actualLost)}，已返回地火炉`);
 };
 const useSceneTransferWithXiaoYan=useSceneTransfer;
 useSceneTransfer=function(i,spot){
@@ -5362,6 +5388,104 @@ openSectOverview=function(){
   renderSectLedger();
   $('#sectLedgerModal').classList.add('show');
 };
+// ===== 太玄宗 · 紫云峰：沈墨离遗失的手链 =====
+function normalizeHerbBagStacks(){
+  g.bag=(g.bag||[]).map(item=>item&&item.name==='药材'?{...item,type:'herb',icon:item.icon||'🌿',max:999}:item);
+}
+normalizeHerbBagStacks();
+const addHerbResourceWithLargeStack=addHerbResource;
+addHerbResource=function(amount){
+  g.herbs=(g.herbs||0)+amount;
+  return addBagItem({type:'herb',name:'药材',qty:amount,max:999,sell:6,icon:'🌿',desc:'基础药材，可用于宗门委托、疗伤与后续炼制。'});
+};
+const renderBagWithGemStone=renderBag;
+renderBag=function(){
+  normalizeHerbBagStacks();
+  renderBagWithGemStone();
+  let stoneText=$('#bagStoneText');
+  if(stoneText)stoneText.textContent='💎 灵石：'+fmt(g.stones||0);
+};
+
+function shenMoliQuest(){
+  let quest=g.shenMoliQuest;
+  if(!quest||typeof quest!=='object')quest=g.shenMoliQuest={stage:0,outcome:null};
+  quest.stage=Math.max(0,Math.min(5,Math.floor(Number(quest.stage)||0)));
+  return quest;
+}
+function refreshShenMoliQuest(){renderSceneMap();render();save()}
+function grantShenMoliCult(amount,reason){
+  g.cult=clamp((g.cult||0)+amount);
+  processRealmProgress();
+  pushLocalLog(`沈墨离的手链：${reason}，修为 +${amount}。`);
+}
+function startShenMoliQuest(){
+  let quest=shenMoliQuest();
+  quest.stage=1;
+  pushLocalLog('接取支线：沈墨离遗失的手链。前往打坐台向大师兄叶凡打听。');
+  refreshShenMoliQuest();
+  showNpcResult('遗失的手链','已接取支线任务。\n\n前往太玄宗打坐台，向大师兄叶凡询问手链的下落。','good');
+}
+function talkShenMoli(){
+  let quest=shenMoliQuest();
+  if(quest.stage===0)return openNpcDialog('紫云峰弟子 沈墨离','沈墨离按着空荡荡的腕间，神色焦急：\n“我那条手链不见了。最后一次见到它，是在打坐台附近。你能替我寻一寻吗？”',[{text:'答应帮她寻找手链',onClick(){startShenMoliQuest()}},{text:'暂不接取',ghost:true}]);
+  if(quest.stage===1)return showNpcResult('紫云峰弟子 沈墨离','“手链最后是在打坐台附近见到的。大师兄叶凡常在那边静修，或许他知道些什么。”','good');
+  if(quest.stage===2)return showNpcResult('紫云峰弟子 沈墨离','“叶凡师兄提到了陈长生？那便去太玄宗04找他问个明白。若他真拿了我的东西，可不能再让他敷衍过去。”','good');
+  if(quest.stage===3){quest.stage=4;grantShenMoliCult(33,'向沈墨离复命');refreshShenMoliQuest()}
+  if(quest.stage===4)return openNpcDialog('紫云峰弟子 沈墨离','沈墨离听完经过，眸中寒意渐起：\n“陈长生分明是在故意藏匿我的财物。我要去找他讨个说法。你愿意站在哪一边？”',[{text:'支持她讨回手链',onClick(){resolveShenMoliQuest('support')}},{text:'劝她暂且阻拦复仇',onClick(){resolveShenMoliQuest('block')}},{text:'容我再想想',ghost:true}]);
+  return showNpcResult('紫云峰弟子 沈墨离',quest.outcome==='support'?'陈长生已被发现藏匿手链。沈墨离向你一揖，心中郁结终于消散。':'陈长生已主动归还手链。沈墨离将这段风波记在心里，也记下了你的劝解。','good');
+}
+function talkYeFanForShenMoli(){
+  let quest=shenMoliQuest();
+  if(quest.stage!==1)return false;
+  quest.stage=2;grantShenMoliCult(33,'向叶凡打听手链');refreshShenMoliQuest();
+  showNpcResult('大师兄 叶凡','修为 +33\n\n叶凡略作回想：“我见陈长生拿着一条手链从石阶边过去。他常在太玄宗04静修，你去问他便是。”','good');
+  return true;
+}
+function talkChenForShenMoli(){
+  let quest=shenMoliQuest();
+  if(quest.stage!==2)return false;
+  quest.stage=3;grantShenMoliCult(44,'向陈长生询问手链');refreshShenMoliQuest();
+  showNpcResult('二师兄 陈长生','修为 +44\n\n陈长生蹙眉道：“我并未见过什么手链，莫要再来打扰我修炼。”\n\n系统提示：返回紫云峰，向沈墨离复命。','good');
+  return true;
+}
+function resolveShenMoliQuest(outcome){
+  let quest=shenMoliQuest();
+  if(quest.stage!==4)return;
+  if(outcome==='block'&&!addBagItem(rootBonePillItem(2)))return toast('背包已满，无法收取陈长生赠予的根骨丹');
+  quest.stage=5;quest.outcome=outcome;
+  if(outcome==='support'){
+    g.sectReputation=(g.sectReputation||0)+200;
+    pushLocalLog('沈墨离追查出陈长生藏匿手链，宗门声望 +200。');
+    refreshShenMoliQuest();
+    return showNpcResult('手链风波','陈长生最终被发现藏匿了手链。沈墨离取回失物，对你郑重致谢。\n\n获得：宗门声望 +200','good');
+  }
+  pushLocalLog('沈墨离接受劝阻。数日后陈长生主动归还手链，并赠予根骨丹×2。');
+  refreshShenMoliQuest();
+  return showNpcResult('手链风波','沈墨离看在你的面子上暂且按下怒火。数日后，陈长生主动归还了手链，并托人送来赔礼。\n\n获得：根骨丹 ×2','good');
+}
+const localNpcsWithShenMoli=localNpcs;
+localNpcs=function(i,spot){
+  let npcs=localNpcsWithShenMoli(i,spot);
+  if(i===10&&spot===27&&!npcs.some(npc=>(npc.name||npc[0])==='紫云峰弟子 沈墨离'))npcs=[...npcs,['紫云峰弟子 沈墨离','遗失手链，正在紫云峰四处打听消息']];
+  return npcs;
+};
+const localMeetWithShenMoli=localMeet;
+localMeet=function(idx=0){
+  let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];
+  if(name==='紫云峰弟子 沈墨离')return talkShenMoli();
+  if(name==='大师兄 叶凡'&&talkYeFanForShenMoli())return;
+  if(name==='二师兄 陈长生'&&talkChenForShenMoli())return;
+  return localMeetWithShenMoli(idx);
+};
+const npcQuestIconWithShenMoli=npcQuestIcon;
+npcQuestIcon=function(name,mapIndex,spot){
+  let quest=shenMoliQuest();
+  if(name==='紫云峰弟子 沈墨离')return quest.stage===0?'❗️':quest.stage===3||quest.stage===4?'⭕️':quest.stage===5?'💬':'❓';
+  if(name==='大师兄 叶凡'&&quest.stage===1)return '❗️';
+  if(name==='二师兄 陈长生'&&quest.stage===2)return '❗️';
+  return npcQuestIconWithShenMoli(name,mapIndex,spot);
+};
+
 function bindUi(){
 $('#nav').onclick=e=>{
 let b=e.target.closest('button');if(!b)return;
