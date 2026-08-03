@@ -5486,6 +5486,20 @@ npcQuestIcon=function(name,mapIndex,spot){
   return npcQuestIconWithShenMoli(name,mapIndex,spot);
 };
 
+const openNpcDialogWithRedReturnChoices=openNpcDialog;
+openNpcDialog=function(title,text,buttons=[{text:'知道了'}]){
+  openNpcDialogWithRedReturnChoices(title,text,buttons);
+  if(!$('#npcDialogDangerStyles')){
+    let style=document.createElement('style');
+    style.id='npcDialogDangerStyles';
+    style.textContent='#npcDialogActions .npc-dialog-choice.npc-dialog-danger{border-color:#c95752!important;background:linear-gradient(180deg,#a84b48,#713337)!important;color:#fff7ec!important;box-shadow:inset 0 1px #ffffff3d,0 2px 5px #4c171b80!important}#npcDialogActions .npc-dialog-choice.npc-dialog-danger:hover{border-color:#ef9188!important;background:linear-gradient(180deg,#bf5b55,#87383d)!important;filter:brightness(1.06)}';
+    document.head.appendChild(style);
+  }
+  document.querySelectorAll('#npcDialogActions [data-npc-dialog-btn]').forEach(button=>{
+    if(/(?:接下|收下)因果|返回/.test(button.textContent||''))button.classList.add('npc-dialog-danger');
+  });
+};
+
 function bindUi(){
 $('#nav').onclick=e=>{
 let b=e.target.closest('button');if(!b)return;
