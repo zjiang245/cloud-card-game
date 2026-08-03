@@ -5513,6 +5513,8 @@ openNpcDialog=function(title,text,buttons=[{text:'知道了'}]){
   document.querySelectorAll('#npcDialogActions [data-npc-dialog-btn]').forEach(button=>{
     let choice=buttons[+button.dataset.npcDialogBtn],label=button.textContent||'';
     if(choice?.ghost||/(?:接下|收下)因果|返回|暂不|离开|不切磋|知道了|告辞|稍后再来|容我准备/.test(label))button.classList.add('npc-dialog-danger');
+    if(title==='外务执事 白景川'&&label!=='告辞')button.classList.remove('npc-dialog-danger');
+    if(title==='大师姐 柳如烟'&&label!=='暂不领取')button.classList.remove('npc-dialog-danger');
   });
 };
 
