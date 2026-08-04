@@ -851,7 +851,7 @@ function forgeMaterialItem(qty){return{type:'forgeMaterial',name:'锻造材料',
 function syncForgeMaterialsBag(){g.bag=g.bag||[];let total=Math.max(0,Math.floor(g.materials||0)),items=g.bag.filter(it=>it?.type==='forgeMaterial'&&it.name==='锻造材料'),current=items.reduce((sum,it)=>sum+(it.qty||1),0);if(current===total&&items.length===(total?1:0))return true;g.bag=g.bag.filter(it=>!(it?.type==='forgeMaterial'&&it.name==='锻造材料'));if(total)g.bag.unshift(forgeMaterialItem(total));g.bagSelected=Math.min(g.bagSelected??-1,g.bag.length-1);syncBagPage();return true}
 function addForgeMaterials(amount){let gain=Math.max(0,Math.floor(Number(amount)||0));if(!gain)return 0;g.materials=(g.materials||0)+gain;syncForgeMaterialsBag();return gain}
 function takeForgeMaterials(amount){let cost=Math.max(0,Math.floor(Number(amount)||0));if((g.materials||0)<cost)return false;g.materials=Math.max(0,(g.materials||0)-cost);syncForgeMaterialsBag();return true}
-function bagUsed(){return (g.bag||[]).length}function bagFree(){return (g.bagCap||20)-bagUsed()}function itemIcon(it){if(it?.icon)return it.icon;return it.type==='herb'?'🌿':it.type==='forgeMaterial'?'⛏️':it.type==='material'?'📦':it.type==='equipment'?'⚔️':it.type==='skillbook'?'📘':it.type==='pill'?'💊':'🎁'}function itemSell(it){return it.type==='forgeMaterial'?0:(it.sell??(it.type==='equipment'?(it.quality||1)*220:it.type==='pill'?80:25))}
+function bagUsed(){return (g.bag||[]).length}function bagFree(){return (g.bagCap||20)-bagUsed()}function itemIcon(it){if(it?.icon)return it.icon;return it.type==='herb'?'🌿':it.type==='forgeMaterial'?'⛏️':it.type==='material'?'📦':it.type==='equipment'?'⚔️':it.type==='skillbook'?'📘':it.type==='quest'?'📜':it.type==='pill'?'💊':'🎁'}function itemSell(it){return it.type==='forgeMaterial'||it.type==='quest'?0:(it.sell??(it.type==='equipment'?(it.quality||1)*220:it.type==='pill'?80:25))}
 function pillEffect(it){let n=it.name||'';if(n.includes('修为')&&it.cultGain)return`使用效果：固定获得${fmt(it.cultGain)}修为。`;return pillEffects[n]||Object.keys(pillEffects).find(k=>n.includes(k))&&pillEffects[Object.keys(pillEffects).find(k=>n.includes(k))]||'使用效果：服用后获得对应丹药增益。'}
 function addBagItem(it){g.bag=g.bag||[];let qty=it.qty||1,stack=it.type!=='equipment',max=it.max||99;if(stack){for(let s of g.bag){if(s.name===it.name&&s.type===it.type&&s.qty<max){let add=Math.min(max-s.qty,qty);s.qty+=add;qty-=add;if(qty<=0)return true}}while(qty>0){if(bagFree()<=0){log(`背包已满，${it.name}未能全部拾取`,'danger');return false}let add=Math.min(max,qty);g.bag.push({...it,qty:add,max});qty-=add}return true}else{while(qty-- >0){if(bagFree()<=0){log(`背包已满，${it.name}掉落遗失`,'danger');return false}g.bag.push({...it,qty:1})}return true}}
 syncForgeMaterialsBag();
@@ -1078,7 +1078,7 @@ useBagItem=()=>{
   }
   return useBagItemWithColdJade();
 };
-function sellBagItem(){let idx=g.bagSelected,it=g.bag[idx];if(!it)return;if(it.type==='forgeMaterial')return toast('锻造材料不可出售');let want=Math.floor(+($('#sellQtyInput')?.value||1));let qty=it.type==='equipment'?1:Math.max(1,Math.min(want||1,it.qty||1)),value=itemSell(it)*qty;g.stones+=value;if(it.key&&g[it.key])g[it.key]=Math.max(0,g[it.key]-qty);toast(`售卖${it.name}×${qty}，灵石+${fmt(value)}`);log(`售卖道具：${it.name}×${qty}，获得${fmt(value)}灵石`,'good');removeBagQty(idx,qty);if(!g.bag[g.bagSelected])g.bagSelected=-1;render();renderBag();save()}
+function sellBagItem(){let idx=g.bagSelected,it=g.bag[idx];if(!it)return;if(it.type==='forgeMaterial'||it.type==='quest')return toast('任务道具与锻造材料不可出售');let want=Math.floor(+($('#sellQtyInput')?.value||1));let qty=it.type==='equipment'?1:Math.max(1,Math.min(want||1,it.qty||1)),value=itemSell(it)*qty;g.stones+=value;if(it.key&&g[it.key])g[it.key]=Math.max(0,g[it.key]-qty);toast(`售卖${it.name}×${qty}，灵石+${fmt(value)}`);log(`售卖道具：${it.name}×${qty}，获得${fmt(value)}灵石`,'good');removeBagQty(idx,qty);if(!g.bag[g.bagSelected])g.bagSelected=-1;render();renderBag();save()}
 function sellEquipmentByQuality(){let q=+($('#sellQualitySelect')?.value||1),sold=0,value=0;g.bag=(g.bag||[]).filter(it=>{if(it.type==='equipment'&&(it.quality||equipQuality[it.name]||1)===q){sold++;value+=itemSell(it);return false}return true});if(!sold)return toast(`背包里没有${qualityText[q]}装`);g.stones+=value;g.bagSelected=-1;syncBagPage();toast(`售卖${qualityText[q]}装×${sold}，灵石+${fmt(value)}`);log(`批量售卖${qualityText[q]}色装备×${sold}，获得${fmt(value)}灵石`,'good');render();renderBag();save()}
 function expandBag(){let cap=g.bagCap||20,cost=cap<30?1000:cap<40?2000:cap<50?5000:cap<64?20000:0,next=cap<30?30:cap<40?40:cap<50?50:cap<64?64:cap;if(!cost)return toast('背包已满级');if(g.stones<cost)return toast('灵石不足');g.stones-=cost;g.bagCap=next;syncBagPage();toast(`背包扩充至${next}格`);render();renderBag();save()}
 
@@ -1545,8 +1545,8 @@ localNpcs=(i,spot)=>{
 const localNpcsWithXiaoYan=localNpcs;
 localNpcs=(i,spot)=>{
   let npcs=localNpcsWithXiaoYan(i,spot);
-  let atDiHuo=i===2&&spot===14&&!g.xiaoYanHunt?.resolved,tracking=g.xiaoYanHunt?.active&&g.xiaoYanHunt?.phase==='pursuitDialog'&&i!==10;
-  if(i===2&&spot===14&&g.xiaoYanHunt?.resolved==='defeated')npcs=[...npcs,['萧焱的尸体','萧焱重伤逃回地火炉后，终究没能活下来']];
+  let permanentlyDefeated=g.xiaoYanHunt?.resolved==='defeated',atDiHuo=i===2&&spot===14&&!permanentlyDefeated,tracking=g.xiaoYanHunt?.active&&g.xiaoYanHunt?.phase==='pursuitDialog'&&i!==10;
+  if(i===2&&spot===14&&permanentlyDefeated)npcs=[...npcs,['萧焱的尸体','萧焱重伤逃回地火炉后，终究没能活下来']];
   else if((atDiHuo||tracking)&&!npcs.some(npc=>(npc.name||npc[0])==='萧焱'))npcs=[...npcs,['萧焱',tracking?'循着你的气息追至此处':'守在地火炉前，目光不善']];
   return npcs;
 };
@@ -1696,13 +1696,20 @@ function mineXuanTie(silent=false){
   if(!silent)toast(`采矿成功：锻造材料 +${amount}`);
   return {type:'采矿',name:site.name,amount};
 }
+function ensureMiningAnimationStyles(){
+  if($('#miningAnimationStyles'))return;
+  let style=document.createElement('style');style.id='miningAnimationStyles';
+  style.textContent=`#miningModal .mining-action{display:flex;align-items:center;justify-content:center;gap:10px;margin:8px 0 13px;color:#796038;font-size:14px}#miningModal .mining-pickaxe{display:inline-grid;place-items:center;width:42px;height:42px;border:1px solid #b8924d;border-radius:50%;background:radial-gradient(circle,#fff8de,#dfc383);font-size:24px;transform-origin:72% 82%;box-shadow:0 5px 12px #553b1c33}#miningModal.show .mining-pickaxe{animation:miningPickaxeSwing .72s ease-in-out infinite}@keyframes miningPickaxeSwing{0%,100%{transform:rotate(-20deg) translateY(-1px)}50%{transform:rotate(28deg) translateY(4px)}}`;
+  document.head.appendChild(style);
+}
 function ensureMiningModal(){
+  ensureMiningAnimationStyles();
   let modal=$('#miningModal');
   if(modal)return modal;
   modal=document.createElement('div');
   modal.id='miningModal';
   modal.className='event-modal mining-modal';
-  modal.innerHTML='<div><h2>玄铁矿脉 · 自动采矿</h2><div class="event-result">矿锤落下时，玄铁矿脉正在回息。</div><div class="progress"><i id="miningProgressFill"></i></div><div class="progress-text"><span id="miningProgressText">准备采矿</span><b id="miningYieldText">本次累计：0</b></div><div class="actions"><button class="btn ghost" id="stopMiningBtn">退出采矿</button></div></div>';
+  modal.innerHTML='<div><h2>玄铁矿脉 · 自动采矿</h2><div class="mining-action"><span class="mining-pickaxe">⛏️</span><span>正在凿开矿壁</span></div><div class="event-result">矿锤落下时，玄铁矿脉正在回息。</div><div class="progress"><i id="miningProgressFill"></i></div><div class="progress-text"><span id="miningProgressText">准备采矿</span><b id="miningYieldText">本次累计：0</b></div><div class="actions"><button class="btn ghost" id="stopMiningBtn">退出采矿</button></div></div>';
   document.body.appendChild(modal);
   $('#stopMiningBtn').onclick=()=>stopAutoMining();
   return modal;
@@ -2581,7 +2588,7 @@ async function battleSkillEffect(sk,idx=0){
   else if(/雷/.test(name)){dmg=Math.floor(dmg*(Math.random()<.45?1.9:1.15));note='雷光炸裂'}
   else if(/回春/.test(name)){let heal=Math.floor(b.player.maxHp*.22+st.mana*.04);b.player.hp=Math.min(b.player.maxHp,b.player.hp+heal);dmg=Math.floor(dmg*.45);note=`回春+${heal}`}
   else if(/御风/.test(name)){b.player.wind=1;dmg=Math.floor(dmg*.75);note='身法提升'}
-  if(Math.random()*100<st.crit){dmg=Math.floor(dmg*1.55);note+=(note?'，':'')+'暴击'}
+  if(Math.random()*100<st.crit){dmg=Math.floor(dmg*1.55*ruyiCritDamageMultiplier());note+=(note?'，':'')+'暴击'}
   if(/火球术/.test(name))await playFireballAnimation();
   if(rageActive)b.player.rageTurns=Math.max(0,(b.player.rageTurns||0)-1);
   b.enemy.hp=Math.max(0,b.enemy.hp-dmg);battleFx('enemy','-'+dmg);battleLog(`你施展${name}，造成 ${dmg} 点伤害${note?'（'+note+'）':''}${rageActive?`，暴怒剩余${b.player.rageTurns}回合`:''}。`);return true
@@ -4223,13 +4230,32 @@ let xiaoYanPursuitTimer=null;
 function xiaoYanHuntActive(){return !!g.xiaoYanHunt?.active}
 function xiaoYanBlocksMovement(){return xiaoYanHuntActive()&&g.xiaoYanHunt?.phase==='pursuitDialog'}
 function xiaoYanTarget(){return{name:'萧焱',type:'战斗',xiaoYan:true,customStats:{...xiaoYanStats}}}
+function xiaoYanDefeatLootPenalty(){
+  syncForgeMaterialsBag();
+  let bag=g.bag||[],indices=bag.map((item,index)=>item?index:-1).filter(index=>index>=0),lost=[];
+  for(let i=indices.length-1;i>0;i--){let j=Math.floor(Math.random()*(i+1));[indices[i],indices[j]]=[indices[j],indices[i]];}
+  indices.slice(0,2).sort((a,b)=>b-a).forEach(index=>{
+    let item=bag[index];
+    if(!item)return;
+    let qty=Math.max(1,Math.floor(item.qty||1)),name=item.name||'未知道具';
+    if(item.type==='forgeMaterial'||name==='锻造材料')g.materials=Math.max(0,(g.materials||0)-qty);
+    if(item.type==='herb'||name==='药材')g.herbs=Math.max(0,(g.herbs||0)-qty);
+    bag.splice(index,1);
+    lost.push(`${name}×${fmt(qty)}`);
+  });
+  g.bag=bag;
+  syncForgeMaterialsBag();
+  g.bagSelected=Math.min(g.bagSelected??-1,g.bag.length-1);
+  syncBagPage();
+  return lost;
+}
 function openXiaoYanConfrontation(pursuit=false){
   if(!xiaoYanHuntActive()||battleState)return;
   let text=pursuit?'萧焱循着你残留的火息逼近，声音从身后压来。\n\n“还想逃？把你身上的灵石、法器和丹药都留下，我或许让你死得痛快些。”\n\n他抬手封住去路，杀意再无遮掩。':'萧焱从地火炉前缓步走来，目光越过你的肩头，贪婪地落在储物袋上。\n\n“一个外来修士，竟带着这么多好东西。交出灵石、法器和丹药，我还能留你一具全尸；不交，地火炉里多一具尸骨也无人会问。”';
   openNpcDialog('萧焱',text,[{text:'拔剑自证',alt:true,onClick(){forceXiaoYanBattle()}}]);
 }
 function triggerXiaoYanHuntAtDiHuo(){
-  if((g.selectedScene??g.map)!==2||activeSpot()!==14||g.xiaoYanHunt?.resolved||xiaoYanHuntActive())return false;
+  if((g.selectedScene??g.map)!==2||activeSpot()!==14||g.xiaoYanHunt?.resolved==='defeated'||xiaoYanHuntActive())return false;
   g.xiaoYanHunt={active:true,resolved:false,phase:'initialDialog',startedAt:Date.now()};
   pushLocalLog('【萧焱追杀】你刚踏入地火炉，萧焱便觊觎你的财物，拦路行凶。');
   openXiaoYanConfrontation(false);
@@ -4259,7 +4285,7 @@ function resumeXiaoYanHunt(delay=2000){
   },Math.max(2000,delay));
 }
 function talkXiaoYan(){
-  if(g.xiaoYanHunt?.resolved)return;
+  if(g.xiaoYanHunt?.resolved==='defeated')return;
   if(!xiaoYanHuntActive())g.xiaoYanHunt={active:true,resolved:false,phase:'initialDialog',startedAt:Date.now()};
   openXiaoYanConfrontation(g.xiaoYanHunt?.phase==='pursuitDialog');
 }
@@ -4288,17 +4314,18 @@ const handleBattleDeathWithXiaoYan=handleBattleDeath;
 handleBattleDeath=function(enemyName){
   if(!battleState?.target?.xiaoYan)return handleBattleDeathWithXiaoYan(enemyName);
   clearTimeout(xiaoYanPursuitTimer);xiaoYanPursuitTimer=null;
-  g.xiaoYanHunt={active:false,resolved:'playerDefeated',finishedAt:Date.now()};
+  g.xiaoYanHunt={active:false,resolved:false,returnedToDiHuo:true,finishedAt:Date.now()};
   let need=realmNeed(),lost=Math.max(1,Math.floor(need*.01)),actualLost=Math.min(g.cult,lost),st=statTotal();
   g.cult=Math.max(0,g.cult-lost);g.deaths++;
+  let dropped=xiaoYanDefeatLootPenalty(),dropText=dropped.length?dropped.join('、'):'背包中没有可掉落的物品';
   if(battleState){battleState.player.hp=st.hp;battleState.player.mp=st.mana}
   closeBattle(false);
-  g.selectedScene=2;g.map=2;g.localSpot=14;g.hp=st.hp;g.mana=st.mana;g.deathGuideSeen=true;
-  pushLocalLog(`【萧焱追杀】你被萧焱击败一次，损失修为${fmt(actualLost)}，在地火炉外醒来。`);
+  g.selectedScene=10;g.map=10;g.localSpot=31;g.hp=st.hp;g.mana=st.mana;g.deathGuideSeen=true;
+  pushLocalLog(`【萧焱追杀】你被萧焱击败一次，损失修为${fmt(actualLost)}，随机遗失背包格：${dropText}；已被送回太玄宗·宗门广场；萧焱退回赤炎秘境·地火炉。`);
   log(`小地图战斗：败于萧焱，损失当前境界1%修为（${fmt(actualLost)}）`,'danger');
-  renderSceneMap();render();save();
-  openNpcDialog('地火炉 · 劫后余生',`地火的余温将你从昏厥中唤醒。萧焱见你已无力再战，冷笑着离去，追杀至此暂告一段落。\n\n本次损失修为：${fmt(actualLost)}\n你已回到赤炎秘境 · 地火炉。`,[{text:'收束心神'}]);
-  toast(`战败：损失修为 ${fmt(actualLost)}，已返回地火炉`);
+  renderSceneMap();render();renderBag();save();
+  openNpcDialog('小师妹 纳兰清月',`师兄，你终于醒了。巡山弟子在山外发现了你，已将你送回宗门广场。\n\n本次损失修为：${fmt(actualLost)}\n随机遗失背包格：${dropText}\n萧焱已退回赤炎秘境·地火炉，往后再遇仍需当心。`,[{text:'我记住了'}]);
+  toast(`战败：修为 -${fmt(actualLost)}；遗失 ${dropped.length} 格物品`);
 };
 const useSceneTransferWithXiaoYan=useSceneTransfer;
 useSceneTransfer=function(i,spot){
@@ -4395,8 +4422,8 @@ const useBagItemWithDeepSea=useBagItem;
 useBagItem=function(){let it=g.bag?.[g.bagSelected];if(it?.type!=='spiritFlower')return useBagItemWithDeepSea();let gain=500;g.cult+=gain;removeBagQty(g.bagSelected,1);processRealmProgress();toast(`吸收灵气花，修为 +${gain}`);render();renderBag();renderSceneMap();save()};
 function canUseAllBagItem(it){return !!it&&(it.type==='spiritFlower'||(it.type==='pill'&&!it.name.includes('渡劫')&&it.name!=='小还丹'&&it.name!=='大还丹'))}
 function useAllBagItem(){let idx=g.bagSelected,it=g.bag?.[idx],qty=Math.max(1,it?.qty||1);if(!it)return toast('请先选中要使用的道具');if(!canUseAllBagItem(it))return toast('该道具不支持全部使用');if(it.type==='spiritFlower'){let gain=qty*500;g.cult+=gain;removeBagQty(idx,qty);processRealmProgress();toast(`吸收灵气花×${qty}，修为 +${fmt(gain)}`)}else if(it.name.includes('回春')){let heal=(20+(rootKind()==='木'?4:0))*qty,before=g.hp;g.hp=Math.min(totalHp(),g.hp+heal);if(it.key&&g[it.key])g[it.key]=Math.max(0,g[it.key]-qty);removeBagQty(idx,qty);toast(`使用回春丹×${qty}，生命 +${fmt(g.hp-before)}`)}else if(it.name.includes('修为')){let gain=(it.cultGain||realmNeed()*.18)*qty;g.cult+=gain;if(it.key&&g[it.key])g[it.key]=Math.max(0,g[it.key]-qty);removeBagQty(idx,qty);processRealmProgress();toast(`使用${it.name}×${qty}，修为 +${fmt(gain)}`)}else{g.activeBoostUntil=Math.max(Date.now(),g.activeBoostUntil)+qty*600000;if(it.key&&g[it.key])g[it.key]=Math.max(0,g[it.key]-qty);removeBagQty(idx,qty);toast(`使用${it.name}×${qty}，增益时间已累计`)}pushLocalLog(`批量使用：${it.name}×${qty}。`);render();renderBag();renderSceneMap();save()}
-function sellAllBagItem(){let idx=g.bagSelected,it=g.bag?.[idx],qty=Math.max(1,it?.qty||1);if(!it)return toast('请先选中要售卖的道具');if(it.type==='forgeMaterial')return toast('锻造材料不可出售');let value=itemSell(it)*qty;g.stones+=value;if(it.key&&g[it.key])g[it.key]=Math.max(0,g[it.key]-qty);removeBagQty(idx,qty);g.bagSelected=-1;toast(`售卖${it.name}×${qty}，灵石 +${fmt(value)}`);log(`批量售卖道具：${it.name}×${qty}，获得${fmt(value)}灵石`,'good');render();renderBag();save()}
-function ensureBagBatchButtons(){let actions=$('#bagModal .bag-actions');if(!actions)return;if(!$('#useAllBagItemBtn')){let button=document.createElement('button');button.id='useAllBagItemBtn';button.className='btn alt';button.textContent='全部使用';actions.insertBefore(button,$('#sellBagItemBtn'))}if(!$('#sellAllBagItemBtn')){let button=document.createElement('button');button.id='sellAllBagItemBtn';button.className='btn ghost';button.textContent='全部售卖';actions.insertBefore(button,$('#closeBagBtn'))}$('#useAllBagItemBtn').onclick=useAllBagItem;$('#sellAllBagItemBtn').onclick=sellAllBagItem;let it=g.bag?.[g.bagSelected];$('#useAllBagItemBtn').disabled=!canUseAllBagItem(it);$('#sellAllBagItemBtn').disabled=!it||it.type==='forgeMaterial'}
+function sellAllBagItem(){let idx=g.bagSelected,it=g.bag?.[idx],qty=Math.max(1,it?.qty||1);if(!it)return toast('请先选中要售卖的道具');if(it.type==='forgeMaterial'||it.type==='quest')return toast('任务道具与锻造材料不可出售');let value=itemSell(it)*qty;g.stones+=value;if(it.key&&g[it.key])g[it.key]=Math.max(0,g[it.key]-qty);removeBagQty(idx,qty);g.bagSelected=-1;toast(`售卖${it.name}×${qty}，灵石 +${fmt(value)}`);log(`批量售卖道具：${it.name}×${qty}，获得${fmt(value)}灵石`,'good');render();renderBag();save()}
+function ensureBagBatchButtons(){let actions=$('#bagModal .bag-actions');if(!actions)return;if(!$('#useAllBagItemBtn')){let button=document.createElement('button');button.id='useAllBagItemBtn';button.className='btn alt';button.textContent='全部使用';actions.insertBefore(button,$('#sellBagItemBtn'))}if(!$('#sellAllBagItemBtn')){let button=document.createElement('button');button.id='sellAllBagItemBtn';button.className='btn ghost';button.textContent='全部售卖';actions.insertBefore(button,$('#closeBagBtn'))}$('#useAllBagItemBtn').onclick=useAllBagItem;$('#sellAllBagItemBtn').onclick=sellAllBagItem;let it=g.bag?.[g.bagSelected];$('#useAllBagItemBtn').disabled=!canUseAllBagItem(it);$('#sellAllBagItemBtn').disabled=!it||it.type==='forgeMaterial'||it.type==='quest'}
 const renderBagWithBatchActions=renderBag;
 renderBag=()=>{renderBagWithBatchActions();ensureBagBatchButtons()};
 const finishBattleWinWithDeepSea=finishBattleWin;
@@ -5511,10 +5538,9 @@ openNpcDialog=function(title,text,buttons=[{text:'知道了'}]){
     document.head.appendChild(style);
   }
   document.querySelectorAll('#npcDialogActions [data-npc-dialog-btn]').forEach(button=>{
-    let choice=buttons[+button.dataset.npcDialogBtn],label=button.textContent||'';
+    let choiceIndex=+button.dataset.npcDialogBtn,choice=buttons[choiceIndex],label=button.textContent||'';
     if(choice?.ghost||/(?:接下|收下)因果|返回|暂不|离开|不切磋|知道了|告辞|稍后再来|容我准备/.test(label))button.classList.add('npc-dialog-danger');
-    if(title==='外务执事 白景川'&&label!=='告辞')button.classList.remove('npc-dialog-danger');
-    if(title==='大师姐 柳如烟'&&label!=='暂不领取')button.classList.remove('npc-dialog-danger');
+    if(title==='外务执事 白景川'||title==='大师姐 柳如烟')button.classList.toggle('npc-dialog-danger',choiceIndex===buttons.length-1);
   });
 };
 
@@ -5877,6 +5903,517 @@ closeBattle=function(keep=false){
   authorFrameToken++;
   return closeBattleWithMysteriousAuthor(keep);
 };
+
+// ===== 幽月森林 · 幽潭：小木屋骰局 =====
+// 三个路点保持在同一屏内，手机端无需拖动地图即可点到。
+const cabinWorldCoords=[[39,60],[50,43],[61,60]];
+const CABIN_BET_LIMIT=100000,CABIN_BANKROLL_LIMIT=500000,CABIN_DEBT_COLLECTION_LIMIT=500000,CABIN_DEBT_ROUTE_STEPS=100;
+let cabinBetBusy=false;
+function cabinWorldState(){
+  let state=g.cabinWorld;
+  if(!state||typeof state!=='object')state=g.cabinWorld={active:false,spot:0,returnSpot:32};
+  if(!Number.isFinite(state.spot))state.spot=0;
+  return state;
+}
+function cabinDebtState(){
+  let state=g.cabinDebt;
+  if(!state||typeof state!=='object')state=g.cabinDebt={notes:[],collectionRemaining:0,routeSteps:0};
+  if(!Array.isArray(state.notes))state.notes=[];
+  if(!Number.isFinite(state.collectionRemaining))state.collectionRemaining=0;
+  if(!Number.isFinite(state.routeSteps))state.routeSteps=0;
+  if(!state.notes.length)state.forcedLiquidationDone=false;
+  if(state.collectionRemaining>0&&!state.forcedLiquidationDone)state.collectionRemaining=0;
+  return state;
+}
+function cabinBankrollState(){
+  let state=g.cabinBankroll;
+  if(!state||typeof state!=='object')state=g.cabinBankroll={stones:CABIN_BANKROLL_LIMIT,cult:CABIN_BANKROLL_LIMIT,closed:false};
+  ['stones','cult'].forEach(key=>{if(!Number.isFinite(state[key]))state[key]=CABIN_BANKROLL_LIMIT;state[key]=Math.max(0,Math.min(CABIN_BANKROLL_LIMIT,Math.floor(state[key])))});
+  state.closed=!!state.closed;
+  return state;
+}
+function resetCabinBankroll(){g.cabinBankroll={stones:CABIN_BANKROLL_LIMIT,cult:CABIN_BANKROLL_LIMIT,closed:false}}
+function cabinBankrollText(){let bank=cabinBankrollState();return `灵石 ${fmt(bank.stones)} / ${fmt(CABIN_BANKROLL_LIMIT)}，修为 ${fmt(bank.cult)} / ${fmt(CABIN_BANKROLL_LIMIT)}`}
+function cabinWorldActive(){return !!g.cabinWorld?.active&&(g.selectedScene??g.map)===1}
+function cabinDebtTotals(){
+  return cabinDebtState().notes.reduce((totals,note)=>{
+    totals[note.currency==='cult'?'cult':'stones']+=Math.max(0,Math.floor(note.amount||0));
+    return totals;
+  },{stones:0,cult:0});
+}
+function cabinDebtText(){
+  let totals=cabinDebtTotals(),parts=[];
+  if(totals.stones)parts.push(`灵石 ${fmt(totals.stones)}`);
+  if(totals.cult)parts.push(`修为 ${fmt(totals.cult)}`);
+  return parts.length?parts.join('，'):'无欠款';
+}
+function cabinDebtValue(){let totals=cabinDebtTotals();return totals.stones+totals.cult}
+function syncCabinDebtNotes(){
+  let debt=cabinDebtState(),count=debt.notes.length;
+  g.bag=g.bag||[];
+  g.bag=g.bag.filter(item=>!((item?.type==='debt'||item?.type==='quest')&&item?.name==='欠条'));
+  if(count){
+    let item={type:'quest',key:'cabinDebtNote',name:'欠条',qty:count,max:99,sell:0,icon:'🧾',desc:`任务道具：小木屋欠款 ${cabinDebtText()}。欠款总额超过${fmt(CABIN_DEBT_COLLECTION_LIMIT)}后，每更换${CABIN_DEBT_ROUTE_STEPS}次路点将被打手直接索债。`};
+    if(!addBagItem(item))g.bag.unshift(item);
+  }
+}
+function cabinForcedLiquidation(amount){
+  let due=Math.max(0,Math.floor(amount||0)),paid=0,refund=0,sold=[];
+  let candidates=()=>g.bag.map((item,index)=>({item,index,value:itemSell(item)})).filter(entry=>entry.item&&entry.item.type!=='quest'&&entry.item.type!=='forgeMaterial'&&entry.value>0).sort((a,b)=>a.value-b.value||a.index-b.index);
+  while(paid<due){
+    let pick=candidates()[0];if(!pick)break;
+    let item=pick.item,unit=pick.value,available=Math.max(1,Math.floor(item.qty||1)),need=Math.min(available,Math.max(1,Math.ceil((due-paid)/unit))),gross=unit*need,used=Math.min(gross,due-paid);
+    if(item.type==='herb'||item.name==='药材')g.herbs=Math.max(0,(g.herbs||0)-need);
+    removeBagQty(pick.index,need);
+    sold.push(`${item.name}×${need}`);paid+=used;refund+=gross-used;
+  }
+  if(refund>0)g.stones=(g.stones||0)+refund;
+  g.bagSelected=Math.min(g.bagSelected??-1,(g.bag||[]).length-1);syncBagPage();
+  return{paid,refund,sold,shortfall:Math.max(0,due-paid)};
+}
+function cabinCanRepayAll(){
+  let totals=cabinDebtTotals();
+  return (g.stones||0)>=totals.stones&&(g.cult||0)>=totals.cult;
+}
+function repayCabinDebts(){
+  if(!cabinCanRepayAll())return toast('灵石或修为不足，无法一次结清欠条');
+  let totals=cabinDebtTotals(),debt=cabinDebtState(),paidText=cabinDebtText();
+  g.stones=Math.max(0,(g.stones||0)-totals.stones);
+  g.cult=Math.max(0,(g.cult||0)-totals.cult);
+  debt.notes=[];debt.collectionRemaining=0;debt.routeSteps=0;debt.forcedLiquidationDone=false;
+  resetCabinBankroll();
+  syncCabinDebtNotes();
+  pushLocalLog(`小木屋：结清欠条，支付${paidText}。`);
+  processRealmProgress();renderSceneMap();render();renderBag();save();
+  showNpcResult('小木屋打手',`账簿上的墨迹逐条熄灭。打手收起短棍，让开了去路。\n\n小木屋资金已补足：${cabinBankrollText()}。`,'good');
+}
+function cabinCollectionActive(){return cabinDebtState().collectionRemaining>0}
+function cabinEnforcerTarget(){
+  return {name:'小木屋打手',type:'战斗',cabinEnforcer:true,noRun:true,customStats:{hp:25000,mp:1200,attack:1800,defense:1000,realm:'化神后期',icon:'🗡️'}};
+}
+function cabinEnforcerLootPenalty(){
+  let candidates=(g.bag||[]).map((item,index)=>({item,index})).filter(x=>x.item&&x.item.type!=='debt');
+  let picks=[];
+  while(candidates.length&&picks.length<2){
+    let at=Math.floor(Math.random()*candidates.length);
+    picks.push(candidates.splice(at,1)[0]);
+  }
+  let names=[];
+  picks.sort((a,b)=>b.index-a.index).forEach(({item,index})=>{
+    let qty=item.qty||1;
+    if(item.type==='herb'||item.name==='药材'||item.type==='material'||item.type==='forgeMaterial'||item.name==='锻造材料'){
+      names.push(`${item.name} ×${fmt(qty)}`);
+      if(item.type==='herb'||item.name==='药材')g.herbs=Math.max(0,(g.herbs||0)-qty);
+      if(item.type==='material'||item.type==='forgeMaterial'||item.name==='锻造材料')g.materials=Math.max(0,(g.materials||0)-qty);
+    }else names.push(item.name||'未知道具');
+    g.bag.splice(index,1);
+  });
+  return names;
+}
+function ensureCabinWorldStyles(){
+  if($('#cabinWorldStyle'))return;
+  let style=document.createElement('style');style.id='cabinWorldStyle';
+  style.textContent=`
+    #localMapCanvas.cabin-world{background:radial-gradient(circle at 50% 36%,rgba(125,91,48,.5),transparent 24%),linear-gradient(145deg,#17130e,#382616 50%,#100c08)!important;border-color:#9d7a43}
+    #localMapCanvas.cabin-world .path-line{background:linear-gradient(90deg,#764e28,#e5be67,#764e28);box-shadow:0 0 10px rgba(234,188,89,.35)}
+    #localMapCanvas.cabin-world .local-spot{filter:drop-shadow(0 0 10px rgba(232,187,100,.35))}
+    #localMapCanvas.cabin-world .local-spot i{background:#2b1b10;border-color:#d6a64e;color:#ffe3a4}
+    #localMapCanvas.cabin-world .local-spot i{display:none}
+    #cabinBetModal .modal-card{max-width:620px;background:linear-gradient(145deg,#1c241f,#0d1512);border:1px solid #b48a42;color:#f5ead0;box-shadow:0 24px 80px rgba(0,0,0,.65)}
+    .cabin-bet-head{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}.cabin-bet-head h2{margin:0;color:#f3d27c}.cabin-debt-chip{color:#f0c16b;font-size:13px;text-align:right}
+    .cabin-dice-stage{display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:18px;padding:22px;margin:18px 0;border:1px solid rgba(225,185,96,.4);border-radius:8px;background:rgba(0,0,0,.18);text-align:center}.cabin-die{width:74px;height:74px;display:grid;place-items:center;margin:8px auto;border-radius:12px;background:linear-gradient(145deg,#fbefd4,#b28a4e);border:2px solid #e9d098;color:#2a1b0e;font-size:42px;font-weight:800;box-shadow:0 7px 18px rgba(0,0,0,.4)}.cabin-die.rolling{animation:cabinDiceRoll .74s linear infinite}.cabin-dice-stage strong{color:#efcf79}@keyframes cabinDiceRoll{0%{transform:rotate(0) scale(1)}50%{transform:rotate(180deg) scale(.8)}100%{transform:rotate(360deg) scale(1)}}
+    .cabin-bet-form{display:grid;grid-template-columns:1fr 1fr;gap:12px}.cabin-bet-form label{display:grid;gap:7px;color:#d9caa9;font-size:14px}.cabin-bet-form select,.cabin-bet-form input{width:100%;box-sizing:border-box;padding:10px;border-radius:6px;border:1px solid #8a744e;background:#0c120f;color:#fff0cd;font:inherit}.cabin-bet-result{min-height:24px;margin:14px 0;color:#dce8d4;text-align:center}.cabin-bet-actions{display:flex;gap:10px;justify-content:flex-end}
+    @media(max-width:620px){.cabin-dice-stage{gap:8px;padding:14px}.cabin-die{width:58px;height:58px;font-size:32px}.cabin-bet-form{grid-template-columns:1fr}.cabin-bet-head{display:block}.cabin-debt-chip{text-align:left;margin-top:8px}}
+  `;document.head.appendChild(style);
+}
+function ensureCabinBetModal(){
+  let modal=$('#cabinBetModal');if(modal)return modal;
+  modal=document.createElement('div');modal.id='cabinBetModal';modal.className='event-modal cabin-bet-modal';
+  modal.innerHTML=`<div class="modal-card"><div class="cabin-bet-head"><h2>小木屋 · 骰局</h2><div class="cabin-debt-chip" id="cabinDebtChip"></div></div><p>老板轻摇骰盅：“灵石、修为，落子无悔。比我大，便拿走同额筹码。”</p><div class="cabin-dice-stage"><div><small>你</small><div class="cabin-die" id="cabinPlayerDie">?</div></div><strong>比大小</strong><div><small>老板</small><div class="cabin-die" id="cabinBossDie">?</div></div></div><div class="cabin-bet-form"><label>押注<select id="cabinBetType"><option value="stones">灵石</option><option value="cult">修为</option></select></label><label>数目<input id="cabinBetAmount" type="number" min="1" max="100000" step="1" value="100"></label></div><div id="cabinBetResult" class="cabin-bet-result">单局上限 100000；老板每类资金上限 500000。</div><div class="cabin-bet-actions"><button class="btn alt" id="cabinRollButton">掷骰</button><button class="btn ghost" id="cabinLeaveTable">离桌</button></div></div>`;
+  document.body.appendChild(modal);
+  $('#cabinRollButton').onclick=rollCabinDice;
+  $('#cabinLeaveTable').onclick=()=>{modal.classList.remove('show');renderSceneMap();};
+  return modal;
+}
+function openCabinBetModal(){
+  if(cabinCollectionActive()||cabinDebtState().notes.length>5)return talkCabinEnforcer();
+  if(cabinBankrollState().closed)return showNpcResult('小木屋老板','小店资金链断裂，暂不营业。待欠条结清、资金重新补足后，再来开盅。','danger');
+  ensureCabinWorldStyles();let modal=ensureCabinBetModal();
+  $('#cabinDebtChip').textContent=`资金：${cabinBankrollText()}\n欠条 ${cabinDebtState().notes.length} 张 · ${cabinDebtText()}`;
+  $('#cabinBetResult').textContent='单局上限 100000；老板每类资金上限 500000。';$('#cabinPlayerDie').textContent='?';$('#cabinBossDie').textContent='?';
+  modal.classList.add('show');
+}
+function talkCabinOwner(){
+  let bank=cabinBankrollState();
+  if(bank.closed)return showNpcResult('小木屋老板','老板扣住骰盅，苦笑道：“小店资金链断裂，暂不营业。待旧账结清、资金补足后再来。”','danger');
+  openNpcDialog('小木屋老板',`老板抬眼看了看你，慢条斯理地把骰盅推来。\n\n“灵石、修为皆可下注。单局上限 ${fmt(CABIN_BET_LIMIT)}；我这小店的两类资金各有 ${fmt(CABIN_BANKROLL_LIMIT)}。”\n\n当前资金：${cabinBankrollText()}`,[
+    {text:'参与骰局',alt:true,onClick:openCabinBetModal},
+    {text:'暂不下注',ghost:true}
+  ]);
+}
+async function rollCabinDice(){
+  if(cabinBetBusy)return;
+  let amount=Math.floor(+$('#cabinBetAmount')?.value||0),currency=$('#cabinBetType')?.value==='cult'?'cult':'stones';
+  if(amount<1)return toast('请输入大于0的押注数目');
+  if(amount>CABIN_BET_LIMIT)return toast(`单局押注上限为 ${fmt(CABIN_BET_LIMIT)}`);
+  let bank=cabinBankrollState();
+  if(bank.closed||amount>bank[currency]){
+    bank.closed=true;save();
+    return showNpcResult('小木屋老板','小店资金链断裂，暂不营业。当前资金已无法承接这笔赌局。','danger');
+  }
+  cabinBetBusy=true;
+  let player=$('#cabinPlayerDie'),boss=$('#cabinBossDie'),result=$('#cabinBetResult'),button=$('#cabinRollButton');
+  button.disabled=true;player.classList.add('rolling');boss.classList.add('rolling');result.textContent='骰子在碗中翻滚……';
+  await waitBattle(780);
+  // 老板暗中控局：仍展示正常骰面，但其胜率固定为 66.6%。
+  let bossWins=Math.random()<.666,mine=1+Math.floor(Math.random()*6),theirs=1+Math.floor(Math.random()*6);
+  while(mine===theirs||(bossWins?theirs<mine:mine<theirs)){
+    mine=1+Math.floor(Math.random()*6);theirs=1+Math.floor(Math.random()*6);
+  }
+  player.classList.remove('rolling');boss.classList.remove('rolling');player.textContent=mine;boss.textContent=theirs;
+  if(mine>theirs){
+    if(currency==='stones')g.stones=(g.stones||0)+amount;else{g.cult=(g.cult||0)+amount;processRealmProgress();}
+    bank[currency]=Math.max(0,bank[currency]-amount);
+    if(bank[currency]===0)bank.closed=true;
+    result.textContent=`你掷出 ${mine}，老板掷出 ${theirs}。你赢了，获得${currency==='stones'?'灵石':'修为'} ${fmt(amount)}！`;
+    pushLocalLog(`小木屋骰局获胜：${currency==='stones'?'灵石':'修为'}+${fmt(amount)}。`);
+  }else{
+    let held=Math.max(0,Math.floor(currency==='stones'?(g.stones||0):(g.cult||0))),paid=Math.min(held,amount),short=Math.max(0,amount-paid);
+    if(currency==='stones')g.stones=held-paid;else g.cult=held-paid;
+    bank[currency]=Math.min(CABIN_BANKROLL_LIMIT,bank[currency]+paid);
+    if(short){cabinDebtState().notes.push({currency,amount:short,createdAt:Date.now()});syncCabinDebtNotes();}
+    result.textContent=`你掷出 ${mine}，老板掷出 ${theirs}。你输了，${currency==='stones'?'灵石':'修为'} -${fmt(amount)}${short?`；不足的 ${fmt(short)} 已记入欠条。`:''}`;
+    pushLocalLog(`小木屋骰局失利：${currency==='stones'?'灵石':'修为'}-${fmt(amount)}${short?'，留下欠条。':''}`);
+  }
+  processRealmProgress();render();renderBag();save();
+  $('#cabinDebtChip').textContent=`资金：${cabinBankrollText()}\n欠条 ${cabinDebtState().notes.length} 张 · ${cabinDebtText()}`;
+  button.disabled=false;cabinBetBusy=false;
+  if(cabinDebtState().notes.length>5){
+    setTimeout(()=>{$('#cabinBetModal')?.classList.remove('show');talkCabinEnforcer();},650);
+  }
+}
+function talkCabinEnforcer(){
+  let debt=cabinDebtState(),count=debt.notes.length;
+  if(!count)return openNpcDialog('小木屋打手','打手靠在路旁，合上账簿：“没欠账，便各走各的。”',[{text:'告辞',ghost:true}]);
+  if(cabinCollectionActive())return startCabinCollection();
+  let text=`打手拦住你的去路，账簿上密密麻麻写着你的名字。\n\n欠条：${count} 张\n欠款：${cabinDebtText()}\n\n“超过五张，老板便让我亲自来收。”`;
+  let choices=[];
+  if(cabinCanRepayAll())choices.push({text:'结清全部欠条',alt:true,onClick:repayCabinDebts});
+  else choices.push({text:'无力偿还，接受追债',onClick:startCabinCollection});
+  choices.push({text:'容我准备',ghost:true});
+  openNpcDialog('小木屋打手',text,choices);
+}
+function startCabinCollection(){
+  let debt=cabinDebtState();
+  if(!debt.collectionRemaining){
+    let owed=cabinDebtValue(),settlement=cabinForcedLiquidation(owed);
+    if(settlement.shortfall<=0){
+      debt.notes=[];debt.collectionRemaining=0;debt.routeSteps=0;debt.forcedLiquidationDone=false;resetCabinBankroll();syncCabinDebtNotes();
+      pushLocalLog(`小木屋打手强制变卖背包物品抵债：${settlement.sold.join('、')||'无需变卖'}。`);
+      showNpcResult('小木屋打手',`账簿已结清。\n\n强制变卖：${settlement.sold.join('、')||'无'}\n抵债：${fmt(settlement.paid)}\n返还：灵石 ${fmt(settlement.refund)}\n\n小木屋资金已重新补足。`,'good');
+      renderSceneMap();render();renderBag();save();return;
+    }
+    debt.collectionRemaining=debt.notes.length;
+    debt.forcedLiquidationDone=true;
+    pushLocalLog(`小木屋打手变卖背包抵债 ${fmt(settlement.paid)}，仍欠 ${fmt(settlement.shortfall)}，开始追杀。`);
+    toast(`背包物品已被强制变卖，仍欠 ${fmt(settlement.shortfall)}，打手追至此处`,4200);
+  }
+  if(!debt.collectionRemaining||!debt.notes.length){debt.collectionRemaining=0;syncCabinDebtNotes();return talkCabinEnforcer();}
+  debt.notes.shift();debt.collectionRemaining=Math.max(0,debt.collectionRemaining-1);syncCabinDebtNotes();
+  pushLocalLog(`小木屋打手强制索债，剩余追杀 ${debt.collectionRemaining} 次。`);
+  renderSceneMap();render();renderBag();save();
+  setTimeout(()=>{if(!battleState)openBattle(cabinEnforcerTarget(),1)},260);
+}
+function enterCabinWorld(){
+  let state=cabinWorldState();state.active=true;state.spot=0;state.returnSpot=32;
+  g.map=1;g.selectedScene=1;closeNpcDialog();$('#sceneMapModal')?.classList.add('show');
+  pushLocalLog('推开幽潭小木屋的门，踏入一座只余三条路的小世界。');
+  renderSceneMap();render();save();
+  if(cabinCollectionActive()||cabinDebtState().notes.length>5)setTimeout(talkCabinEnforcer,360);
+}
+function exitCabinWorld(){
+  if(cabinCollectionActive())return toast('打手已开始追债，无法从大门离开');
+  let state=cabinWorldState();state.active=false;g.map=1;g.selectedScene=1;g.localSpot=state.returnSpot??32;
+  closeNpcDialog();pushLocalLog('穿过小世界大门，回到幽潭的小木屋外。');renderSceneMap();render();save();
+}
+function trackCabinDebtRouteChange(){
+  let debt=cabinDebtState();
+  if(cabinCollectionActive()||cabinDebtValue()<=CABIN_DEBT_COLLECTION_LIMIT)return;
+  debt.routeSteps++;
+  if(debt.routeSteps<CABIN_DEBT_ROUTE_STEPS){save();return;}
+  debt.routeSteps=0;
+  pushLocalLog(`【小木屋索债】欠款超过${fmt(CABIN_DEBT_COLLECTION_LIMIT)}，打手循着气息追至此处。`);
+  toast('小木屋打手循着欠条找上门');save();
+  setTimeout(()=>{if(!battleState&&cabinDebtState().notes.length)startCabinCollection()},160);
+}
+function triggerCabinDebtPursuit(i){
+  if(i===10||!cabinCollectionActive()||battleState)return;
+  setTimeout(()=>{if(!battleState&&cabinCollectionActive()&&(g.selectedScene??g.map)!==10)startCabinCollection()},180);
+}
+const routeCoordsWithCabinWorld=routeCoords;
+routeCoords=function(i){return cabinWorldActive()&&i===1?cabinWorldCoords:routeCoordsWithCabinWorld(i)};
+const activeSpotWithCabinWorld=activeSpot;
+activeSpot=function(){return cabinWorldActive()?Math.max(0,Math.min(2,cabinWorldState().spot)):activeSpotWithCabinWorld()};
+const keySpotMapWithCabinWorld=keySpotMap;
+keySpotMap=function(i){return cabinWorldActive()&&i===1?{0:['','01'],1:['','02'],2:['','03']}:keySpotMapWithCabinWorld(i)};
+const spotLabelWithCabinWorld=spotLabel;
+spotLabel=function(i,spot){return cabinWorldActive()&&i===1?['01','02','03'][spot]||'未知路点':spotLabelWithCabinWorld(i,spot)};
+const spotIconWithCabinWorld=spotIcon;
+spotIcon=function(i,spot){return cabinWorldActive()&&i===1?'':spotIconWithCabinWorld(i,spot)};
+const localMapRingLinksWithCabinWorld=localMapRingLinks;
+localMapRingLinks=function(i){return cabinWorldActive()&&i===1?[]:localMapRingLinksWithCabinWorld(i)};
+const sceneTransferAtWithCabinWorld=sceneTransferAt;
+sceneTransferAt=function(i,spot){return cabinWorldActive()&&i===1?null:sceneTransferAtWithCabinWorld(i,spot)};
+const localNpcsWithCabinWorld=localNpcs;
+localNpcs=function(i,spot){
+  if(cabinWorldActive()&&i===1){
+    let npcs=spot===0?[['小木屋老板','骰盅未停，筹码可押灵石或修为']]:spot===1?[['小木屋打手','守着账簿，替老板收回欠款']]:[['小世界大门','穿过此门可回到幽潭小木屋']];
+    if((cabinCollectionActive()||cabinDebtState().notes.length>5)&&spot!==1)npcs.push(['小木屋打手','循着欠条的气息追了过来']);
+    return npcs;
+  }
+  let npcs=localNpcsWithCabinWorld(i,spot);
+  if(i===1&&spot===32&&!npcs.some(npc=>(npc.name||npc[0])==='小木屋'))npcs=[...npcs,['小木屋','幽潭尽头亮着一盏灯，门内传来骰声']];
+  if(cabinCollectionActive()&&i!==10&&!npcs.some(npc=>(npc.name||npc[0])==='小木屋打手')){
+    npcs=[...npcs,['小木屋打手','循着欠条气息追来，正在强制索债']];
+  }
+  return npcs;
+};
+const localMeetWithCabinWorld=localMeet;
+localMeet=function(idx=0){
+  let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];
+  if(name==='小木屋')return openNpcDialog('幽潭 · 小木屋','幽潭尽头的小木屋只开半扇门。屋内传来骰子与铜钱碰撞的轻响。\n\n“进来坐坐。灵石可赌，修为也可赌。”',[{text:'推门进入小世界',alt:true,onClick:enterCabinWorld},{text:'暂不进入',ghost:true}]);
+  if(name==='小木屋老板')return talkCabinOwner();
+  if(name==='小木屋打手')return talkCabinEnforcer();
+  if(name==='小世界大门')return openNpcDialog('小世界大门','门外是幽潭的水声。穿过此门，便能回到小木屋。',[{text:'离开小世界',alt:true,onClick:exitCabinWorld},{text:'暂不离开',ghost:true}]);
+  return localMeetWithCabinWorld(idx);
+};
+const npcQuestIconWithCabinWorld=npcQuestIcon;
+npcQuestIcon=function(name,mapIndex,spot){
+  if(name==='小木屋')return '💬';
+  if(name==='小木屋老板'||name==='小世界大门')return '💬';
+  if(name==='小木屋打手')return cabinCollectionActive()||cabinDebtState().notes.length>5?'❗️':'💬';
+  return npcQuestIconWithCabinWorld(name,mapIndex,spot);
+};
+const moveLocalSpotWithCabinWorld=moveLocalSpot;
+moveLocalSpot=function(i,nextSpot){
+  if(cabinWorldActive()&&i===1){
+    let current=activeSpot();
+    if(nextSpot===current)return;
+    if(Math.abs(nextSpot-current)!==1)return toast('小世界的道路只通往相邻路点');
+    cabinWorldState().spot=nextSpot;
+    pushLocalLog(`小世界：抵达${spotLabel(i,nextSpot)}。`);
+    trackCabinDebtRouteChange();
+    triggerCabinDebtPursuit(i);
+    renderSceneMap();save();return;
+  }
+  let before=activeSpot(),result=moveLocalSpotWithCabinWorld(i,nextSpot);
+  if(before!==nextSpot)setTimeout(()=>{if((g.selectedScene??g.map)===i&&activeSpot()===nextSpot){trackCabinDebtRouteChange();triggerCabinDebtPursuit(i)}},0);
+  return result;
+};
+const localExploreHereWithCabinWorld=localExploreHere;
+localExploreHere=function(){if(cabinWorldActive())return toast('小世界内只能手动移动与对话');return localExploreHereWithCabinWorld()};
+const goSceneWithCabinWorld=goScene;
+goScene=function(){
+  if(cabinWorldActive()){
+    // 收起地图后再次选择幽月森林，应回到保留进度的小世界，而非阻止进入。
+    g.map=1;$('#sceneMapModal')?.classList.add('show');renderSceneMap();render();save();
+    return;
+  }
+  return goSceneWithCabinWorld();
+};
+const renderSceneMapWithCabinWorld=renderSceneMap;
+renderSceneMap=function(){
+  renderSceneMapWithCabinWorld();
+  if(!cabinWorldActive())return;
+  ensureCabinWorldStyles();
+  let canvas=$('#localMapCanvas'),world=$('#localMapWorld'),spot=activeSpot();
+  canvas?.classList.add('cabin-world');canvas.style.backgroundImage='';
+  world?.querySelectorAll('.map-deco').forEach(node=>node.remove());
+  $('#localMapName').textContent='幽潭 · 小木屋小世界';
+  $('#localMapDesc').textContent='骰局、欠条与追债只在这三条路间循环。';
+  let info=$('#localMapInfo');if(info)info.innerHTML=rows({'位置信息':`小木屋小世界 · ${spotLabel(1,spot)}`,'欠条':`${cabinDebtState().notes.length} 张 · ${cabinDebtText()}`,'追债状态':cabinCollectionActive()?`剩余 ${cabinDebtState().collectionRemaining} 次`:'暂未追债'});
+  renderLocalMapOverview(1,spot);
+};
+const renderLocalMapOverviewWithCabinWorld=renderLocalMapOverview;
+renderLocalMapOverview=function(i,spot){
+  if(!cabinWorldActive()||i!==1)return renderLocalMapOverviewWithCabinWorld(i,spot);
+  let box=$('#localMapInfo');if(!box)return;
+  let heading=box.closest('.compact-region-info')?.querySelector('h3');if(heading)heading.textContent='小世界全览';
+  let labels=['01','02','03'],points=cabinWorldCoords.map(p=>`${p[0]},${p[1]}`).join(' '),nodes=cabinWorldCoords.map((p,index)=>`<circle class="mini-node named" data-mini-spot="${index}" cx="${p[0]}" cy="${p[1]}" r="2.3"></circle>`).join(''),here=cabinWorldCoords[spot],debt=cabinDebtState();
+  box.innerHTML=`<div class="mini-map-overview"><svg viewBox="0 0 100 100" role="img" aria-label="小木屋小世界全览"><polyline class="mini-route" points="${points}"></polyline>${nodes}<circle class="mini-player-ring" cx="${here[0]}" cy="${here[1]}" r="3.25"></circle><circle class="mini-player-core" cx="${here[0]}" cy="${here[1]}" r="1.15"></circle></svg><div class="mini-map-caption"><span><b>当前位置</b>${labels[spot]}</span><span class="mini-map-target"><b>欠条 ${debt.notes.length} 张</b>${cabinCollectionActive()?`追债剩余 ${debt.collectionRemaining} 次`:cabinDebtText()}</span></div></div>`;
+  box.querySelectorAll('[data-mini-spot]').forEach(node=>node.onclick=()=>moveLocalSpot(1,+node.dataset.miniSpot));
+};
+const renderBattleWithCabinWorld=renderBattle;
+renderBattle=function(){
+  renderBattleWithCabinWorld();
+  let run=$('#battleRunBtn');
+  if(run&&battleState?.target?.cabinEnforcer){run.disabled=true;run.title='欠债未清，无法逃跑';}
+};
+const finishBattleWinWithCabinWorld=finishBattleWin;
+finishBattleWin=function(){
+  if(!battleState?.target?.cabinEnforcer)return finishBattleWinWithCabinWorld();
+  closeBattle(true);
+  let debt=cabinDebtState();
+  pushLocalLog(`击退小木屋打手，剩余追债 ${debt.collectionRemaining} 次。`);
+  if(debt.collectionRemaining>0){
+    toast(`小木屋打手不肯罢休，剩余追杀 ${debt.collectionRemaining} 次`,3200);
+    setTimeout(()=>{if(!battleState&&(g.selectedScene??g.map)!==10&&cabinCollectionActive())startCabinCollection()},520);
+  }else{
+    if(!debt.notes.length){debt.routeSteps=0;debt.forcedLiquidationDone=false;resetCabinBankroll();}
+    openNpcDialog('小木屋打手',`最后一页账簿化作灰烬。打手沉默片刻，转身回到路点02。\n\n小木屋资金已补足：${cabinBankrollText()}。`,[{text:'知道了',ghost:true}]);
+  }
+  renderSceneMap();render();renderBag();save();
+};
+const handleBattleDeathWithCabinWorld=handleBattleDeath;
+handleBattleDeath=function(enemyName){
+  let target=battleState?.target;
+  if(!target?.cabinEnforcer)return handleBattleDeathWithCabinWorld(enemyName);
+  let remaining=cabinDebtState().notes.length;
+  handleBattleDeathWithCabinWorld(enemyName);
+  setTimeout(()=>{
+    let toastEl=$('.toast');if(toastEl)toastEl.style.zIndex='60';
+    toast(`小木屋索债：已销除 1 张欠条，剩余 ${remaining} 张`,4200);
+  },80);
+};
+const renderBagWithCabinDebtNote=renderBag;
+renderBag=function(){
+  renderBagWithCabinDebtNote();
+  let item=g.bag?.[g.bagSelected];
+  if(item?.key!=='cabinDebtNote')return;
+  $('#useBagItemBtn').disabled=true;
+  $('#sellBagItemBtn').disabled=true;
+  $('#sellAllBagItemBtn')&&( $('#sellAllBagItemBtn').disabled=true );
+  $('#bagDetail').innerHTML=`<b>🧾 欠条</b><br>类型：任务道具 · 数量：${fmt(item.qty||1)}<br>${item.desc||'小木屋的未结欠款。'}<br>此物不可使用、不可售卖。`;
+};
+
+// 海眼绑定装备：不占装备位，存放背包即可按玩家选择生效。
+function ruyiJinguBangItem(){
+  return {type:'boundArtifact',key:'ruyiJinguBang',name:'如意金箍棒',qty:1,max:1,sell:0,icon:'🪄',active:true,
+    desc:'绑定装备：无需装备，置于背包即可生效。开启后攻击穿透+10%（无视敌方防御10%），暴击伤害+10%。'};
+}
+function ruyiJinguBangBagItem(){return (g.bag||[]).find(item=>item?.key==='ruyiJinguBang')||null}
+function ruyiArtifactCount(){let a=artifactState();return ['fuxiQin','donghuangBell','kunlunMirror','xuanyuanSword'].filter(key=>!!a[key]).length}
+function hasRuyiJinguBang(){return !!ruyiJinguBangBagItem()?.active}
+function ruyiCritDamageMultiplier(){return hasRuyiJinguBang()?1.1:1}
+function talkRuyiJinguBang(){
+  let item=ruyiJinguBangBagItem(),count=ruyiArtifactCount();
+  if(item){
+    return showNpcResult('如意金箍棒',`海眼深处，乌金长棒轻轻震鸣。\n\n当前状态：${item.active?'已开启':'已关闭'}\n攻击穿透：${item.active?'10%':'0%'}\n暴击伤害：${item.active?'+10%':'0%'}\n\n可在背包中点击“${item.active?'关闭':'使用'}”切换效果。`,'good');
+  }
+  if(count<2){
+    return showNpcResult('如意金箍棒',`海眼水压翻涌，金箍棒却纹丝不动。\n\n“神器未齐，何谈执掌。”\n\n需持有至少两件四大神器方可获得。\n当前已持有：${count}/2 件。`,'danger');
+  }
+  if(!addBagItem(ruyiJinguBangItem()))return toast('背包已满，无法承接如意金箍棒');
+  pushLocalLog('海眼如意金箍棒认主，获得绑定装备：如意金箍棒。');
+  showNpcResult('如意金箍棒认主',`四神器气机交汇，海眼中的如意金箍棒化作一道乌金流光，落入你的背包。\n\n获得：如意金箍棒（绑定装备）\n攻击穿透 +10%\n暴击伤害 +10%\n\n无需装备，置于背包并开启即可生效。`,'good');
+  render();renderBag();renderSceneMap();save();
+}
+const localNpcsWithRuyiJinguBang=localNpcs;
+localNpcs=function(i,spot){
+  let npcs=localNpcsWithRuyiJinguBang(i,spot);
+  if(i===3&&spot===32&&!npcs.some(npc=>(npc.name||npc[0])==='如意金箍棒'))npcs=[...npcs,['如意金箍棒','海眼深处沉浮着一根乌金长棒']];
+  return npcs;
+};
+const localMeetWithRuyiJinguBang=localMeet;
+localMeet=function(idx=0){
+  let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];
+  if(name==='如意金箍棒')return talkRuyiJinguBang();
+  return localMeetWithRuyiJinguBang(idx);
+};
+const npcQuestIconWithRuyiJinguBang=npcQuestIcon;
+npcQuestIcon=function(name,mapIndex,spot){
+  if(name==='如意金箍棒')return ruyiJinguBangBagItem()?'💬':ruyiArtifactCount()>=2?'❗️':'💬';
+  return npcQuestIconWithRuyiJinguBang(name,mapIndex,spot);
+};
+const itemSellWithRuyiJinguBang=itemSell;
+itemSell=function(it){return it?.key==='ruyiJinguBang'||it?.type==='boundArtifact'?0:itemSellWithRuyiJinguBang(it)};
+const sellBagItemWithRuyiJinguBang=sellBagItem;
+sellBagItem=function(){let item=g.bag?.[g.bagSelected];if(item?.key==='ruyiJinguBang'||item?.type==='boundArtifact')return toast('绑定装备不可售卖');return sellBagItemWithRuyiJinguBang()};
+const sellAllBagItemWithRuyiJinguBang=sellAllBagItem;
+sellAllBagItem=function(){let item=g.bag?.[g.bagSelected];if(item?.key==='ruyiJinguBang'||item?.type==='boundArtifact')return toast('绑定装备不可售卖');return sellAllBagItemWithRuyiJinguBang()};
+const useBagItemWithRuyiJinguBang=useBagItem;
+useBagItem=function(){
+  let item=g.bag?.[g.bagSelected];
+  if(item?.key==='ruyiJinguBang'){
+    item.active=!item.active;
+    toast(`如意金箍棒已${item.active?'开启':'关闭'}${item.active?'：攻击穿透+10%，暴击伤害+10%':''}`);
+    render();renderBag();save();return;
+  }
+  return useBagItemWithRuyiJinguBang();
+};
+const renderBagWithRuyiJinguBang=renderBag;
+renderBag=function(){
+  renderBagWithRuyiJinguBang();
+  let item=g.bag?.[g.bagSelected];
+  if(item?.key!=='ruyiJinguBang'){let use=$('#useBagItemBtn');if(use)use.textContent='使用';return;}
+  let enabled=!!item.active,slot=document.querySelector(`[data-bag="${g.bagSelected}"]`),label=slot?.querySelector('small');
+  if(label)label.textContent='绑定装备';
+  $('#bagDetail').innerHTML=`<b>🪄 如意金箍棒</b><br>类型：绑定装备 · 不占装备位 · 不可售卖<br>状态：<b style="color:${enabled?'#d69b35':'#74827b'}">${enabled?'已开启':'已关闭'}</b><br>攻击穿透：${enabled?'10%':'0%'}（无视敌方防御）<br>暴击伤害：${enabled?'+10%':'0%'}<br><small>背包中放置即可生效；点击下方按钮可切换开启与关闭。</small>`;
+  $('#useBagItemBtn').disabled=false;$('#useBagItemBtn').textContent=enabled?'关闭':'使用';
+  $('#sellBagItemBtn').disabled=true;$('#sellAllBagItemBtn')&&($('#sellAllBagItemBtn').disabled=true);
+};
+const battleSkillEffectWithRuyiJinguBang=battleSkillEffect;
+battleSkillEffect=async function(sk,idx=0){
+  let b=battleState,defense=b?.enemy?.defense;
+  if(b&&hasRuyiJinguBang())b.enemy.defense=Math.max(0,Number(defense||0)*.9);
+  try{return await battleSkillEffectWithRuyiJinguBang(sk,idx)}
+  finally{if(b&&battleState===b)b.enemy.defense=defense}
+};
+
+// 万妖古域 · 血藤林：叛教修士事件。
+function renegadeCultivatorTarget(){
+  return {name:'叛教修士',type:'战斗',renegadeCultivator:true,loot:{materials:[],equipment:{rolls:0,chance:0},skillBookChance:0},customStats:{hp:12000,mp:1200,attack:3200,defense:4500,realm:'化神大圆满',icon:'🧙'}};
+}
+function talkRenegadeCultivator(){
+  if(g.renegadeCultivatorDefeated){
+    return showNpcResult('叛教修士','血藤林间只余被火焚过的残符。叛教修士已伏诛，林中的血藤也渐渐安静下来。','good');
+  }
+  openNpcDialog('叛教修士','叛教修士立在血藤阴影里，掌心悬着一团炽白火焰。\n\n“太玄宗的规矩束缚不了我。既然撞见了，便把你身上的机缘一并留下。”\n\n此人已将火球术修至第五重，法力未尽前会持续施展火球术。',[
+    {text:'出手诛灭叛徒',alt:true,onClick(){closeNpcDialog();openBattle(renegadeCultivatorTarget(),0)}},
+    {text:'暂且退去',ghost:true}
+  ]);
+}
+const localNpcsWithRenegadeCultivator=localNpcs;
+localNpcs=function(i,spot){
+  let npcs=localNpcsWithRenegadeCultivator(i,spot);
+  if(i===4&&spot===14&&!npcs.some(npc=>(npc.name||npc[0])==='叛教修士'))npcs=[...npcs,['叛教修士',g.renegadeCultivatorDefeated?'血藤林中的火光早已熄灭':'叛出太玄宗，正以邪火淬炼血藤']];
+  return npcs;
+};
+const localMeetWithRenegadeCultivator=localMeet;
+localMeet=function(idx=0){
+  let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];
+  if(name==='叛教修士')return talkRenegadeCultivator();
+  return localMeetWithRenegadeCultivator(idx);
+};
+const npcQuestIconWithRenegadeCultivator=npcQuestIcon;
+npcQuestIcon=function(name,mapIndex,spot){
+  if(name==='叛教修士')return g.renegadeCultivatorDefeated?'💬':'❗️';
+  return npcQuestIconWithRenegadeCultivator(name,mapIndex,spot);
+};
+const resolveLocalTargetWithRenegadeCultivator=resolveLocalTarget;
+resolveLocalTarget=function(target,batch=false){
+  if(!target?.renegadeCultivator)return resolveLocalTargetWithRenegadeCultivator(target,batch);
+  if(target.dead||g.renegadeCultivatorDefeated)return false;
+  const reward=1000000;
+  target.dead=true;g.renegadeCultivatorDefeated=true;g.cult=(g.cult||0)+reward;g.kills=(g.kills||0)+1;
+  processRealmProgress();
+  pushLocalLog(`血藤林：诛灭叛教修士，修为+${fmt(reward)}。`);
+  log(`血藤林事件：战胜叛教修士，获得修为${fmt(reward)}。`,'good');
+  return {type:'战斗',name:'叛教修士',materials:[]};
+};
+const battleEnemyTurnWithRenegadeCultivator=battleEnemyTurn;
+battleEnemyTurn=async function(){
+  let b=battleState;
+  if(!b?.target?.renegadeCultivator||b.enemy.mp<200||(b.enemy.skipTurns||0)>0)return battleEnemyTurnWithRenegadeCultivator();
+  let originalAttack=b.enemy.attack;
+  b.enemy.mp=Math.max(0,b.enemy.mp-200);
+  b.enemy.attack=Math.max(1,Math.floor(originalAttack*bigFireballConfig(5).multiplier));
+  battleLog(`叛教修士施展「5级火球术」，消耗200点法力。`);
+  try{return await battleEnemyTurnWithRenegadeCultivator()}
+  finally{if(battleState===b)b.enemy.attack=originalAttack}
+};
+// 兼容旧存档中的 debt 类型欠条：加载脚本时立即归入任务道具。
+syncCabinDebtNotes();
 
 function bindUi(){
 $('#nav').onclick=e=>{
