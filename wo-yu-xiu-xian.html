@@ -6504,8 +6504,8 @@ function talkLightningEmpress(){
   let state=lightningEmpressState();
   if(state.outcome==='surrender')return showNpcResult('闪电娘娘','闪电娘娘端坐天劫眼上方，雷云在她身后缓缓退散。\n\n“既已臣服，便去走你的路。”','good');
   if(state.outcome==='defy')return showNpcResult('闪电娘娘','闪电娘娘远望劫云，唇角带着一丝笑意。\n\n“你的不服，我记下了。”','good');
-  openNpcDialog('闪电娘娘',`天劫眼上空，闪电娘娘踏雷而立，万千电芒在裙角生灭。\n\n“修士，见我雷威，是臣服，还是不服？”\n\n臣服可获修为80亿，但需献上灵石30万；灵石不足时，我会自行取走你背包中的可售之物。\n不服则可获修为30亿。`,[
-    {text:'臣服，献上灵石30万',alt:true,onClick(){surrenderToLightningEmpress()}},
+  openNpcDialog('闪电娘娘',`天劫眼上空，闪电娘娘踏雷而立，万千电芒在裙角生灭。\n\n“修士，见我雷威，是臣服，还是不服？”`,[
+    {text:'臣服',alt:true,onClick(){surrenderToLightningEmpress()}},
     {text:'不服',onClick(){defyLightningEmpress()}},
     {text:'暂且离开',ghost:true}
   ]);
