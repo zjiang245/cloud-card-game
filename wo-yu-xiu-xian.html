@@ -4496,7 +4496,7 @@ function talkHerbBuybackMerchant(){let batches=herbBuybackBatches();openNpcDialo
 function demonicRiftChallengeState(){return g.demonicRiftChallenge||(g.demonicRiftChallenge={status:null})}
 function makeDemonicRiftBoots(){let quality=4,slot='boots',equipName=equipBaseName(quality,slot),powerLevel=Math.max(1,realmNameIndex('炼虚初期')+quality),item=normalizeEquip({name:equipName,quality,slot,powerLevel,sell:quality*220});item.desc=`煞气挑战的幸存者所得，成长等级${powerLevel}，加成系数参照铁甲尸·炼虚初期掉落。`+equipEffect(item);return item}
 function acceptDemonicRiftChallenge(){let state=demonicRiftChallengeState();if(state.status)return toast(state.status==='success'?'煞气挑战已经完成':'煞气挑战已经失败');if(bagFree()<=0)return toast('请至少预留1个背包空位，再接受煞气挑战');let damage=26666,before=Math.max(0,g.hp||0);g.hp=Math.max(0,before-damage);if(g.hp<=0){state.status='failed';pushLocalLog('煞气挑战失败：入魔修士的煞气造成26666点伤害，你未能撑住。');handleBattleDeath('入魔修士的煞气');return}let boots=makeDemonicRiftBoots();if(!addBagItem(boots))return toast('背包空间不足，奖励暂无法发放');state.status='success';pushLocalLog(`煞气挑战成功：承受26666点伤害后存活，获得紫色鞋子「${boots.name}」。`);showNpcResult('煞气挑战成功',`煞气穿体而过，你仍站在裂谷边。\n\n受到伤害：26666\n剩余生命：${fmt(g.hp)} / ${fmt(totalHp())}\n\n获得：紫色品质${equipSlotNames.boots}「${boots.name}」\n成长等级：${boots.powerLevel}\n加成系数参照铁甲尸·炼虚初期掉落。`,'good');renderBag();renderSceneMap();render();save()}
-function talkDemonicRiftCultivator(){let state=demonicRiftChallengeState();if(state.status==='success')return showNpcResult('入魔修士','入魔修士望着你离去的背影，裂谷中的煞气也再无法令你驻足。','good');if(state.status==='failed')return showNpcResult('入魔修士','你曾在煞气中倒下。入魔修士收起掌中黑雾：“道心不稳者，不配再入此试。”','danger');openNpcDialog('入魔修士','煞气裂谷中，一名修士双目赤红，掌心翻涌着凝如实质的黑雾。\n\n“想取裂谷机缘，先受我一缕煞气。此试会直接承受26666点伤害，活下来便算通过；若身死，挑战即告失败。”',[{text:'接受煞气挑战',alt:true,onClick(){acceptDemonicRiftChallenge()}},{text:'暂不接受',ghost:true}])}
+function talkDemonicRiftCultivator(){let state=demonicRiftChallengeState();if(state.status==='success')return showNpcResult('入魔修士','入魔修士望着你离去的背影，裂谷中的煞气也再无法令你驻足。','good');if(state.status==='failed')return showNpcResult('入魔修士','你曾在煞气中倒下。入魔修士收起掌中黑雾：“道心不稳者，不配再入此试。”','danger');openNpcDialog('入魔修士','煞气裂谷中，一名修士双目赤红，掌心翻涌着凝如实质的黑雾。\n\n“想取裂谷机缘，先受我一缕煞气。能撑过便算通过；若身死，挑战即告失败。”',[{text:'接受煞气挑战',alt:true,onClick(){acceptDemonicRiftChallenge()}},{text:'暂不接受',ghost:true}])}
 function talkAncientBattleSoul(){let artifacts=artifactState(),blue=equipmentQualityCount(3),purple=equipmentQualityCount(4),herbs=Math.max(g.herbs||0,bagItemCountByName('药材')),materials=g.materials||0;if(artifacts.donghuangBell)return showNpcResult('远古战魂','钟声曾在天渊战场上镇压万军。东皇钟已认你为主，战魂不再索取祭品。','good');openNpcDialog('远古战魂',`战魂台上，一缕披甲残魂从断戟间苏醒：\n\n“以蓝色法器十件、紫色法器两件、药材五百份、锻造材料二百份祭台，吾便将东皇钟的残响交予你。”\n\n蓝色装备：${blue} / 10\n紫色装备：${purple} / 2\n药材：${herbs} / 500\n锻造材料：${materials} / 200`,[
   {text:'献祭材料，唤醒东皇钟',alt:true,onClick(){if(equipmentQualityCount(3)<10)return toast('蓝色品质装备不足10件');if(equipmentQualityCount(4)<2)return toast('紫色品质装备不足2件');if(Math.max(g.herbs||0,bagItemCountByName('药材'))<500)return toast('药材不足500份');if((g.materials||0)<200)return toast('锻造材料不足200份');if(!takeEquipmentByQuality(3,10)||!takeEquipmentByQuality(4,2)||!takeHerbResource(500)||!takeForgeMaterials(200))return toast('祭品扣除失败，请重新检查背包');artifacts.donghuangBell={...donghuangBellArtifact(),obtainedAt:Date.now()};pushLocalLog('远古战魂收下祭品，东皇钟在战魂台上苏醒。');showNpcResult('东皇钟','残魂散入钟纹，苍茫钟声在天渊战场上回荡。\n\n获得特殊神器：东皇钟\n效果：技能法力消耗减少30%，生命上限 +3000。\n\n可在“装备”功能的四大神器栏查看。','good');renderSceneMap();render();save()}},
   {text:'暂不献祭',ghost:true}
@@ -5964,6 +5964,7 @@ function cabinForcedLiquidation(amount){
     let pick=candidates()[0];if(!pick)break;
     let item=pick.item,unit=pick.value,available=Math.max(1,Math.floor(item.qty||1)),need=Math.min(available,Math.max(1,Math.ceil((due-paid)/unit))),gross=unit*need,used=Math.min(gross,due-paid);
     if(item.type==='herb'||item.name==='药材')g.herbs=Math.max(0,(g.herbs||0)-need);
+    if(item.key&&g[item.key])g[item.key]=Math.max(0,(g[item.key]||0)-need);
     removeBagQty(pick.index,need);
     sold.push(`${item.name}×${need}`);paid+=used;refund+=gross-used;
   }
@@ -6411,6 +6412,120 @@ battleEnemyTurn=async function(){
   battleLog(`叛教修士施展「5级火球术」，消耗200点法力。`);
   try{return await battleEnemyTurnWithRenegadeCultivator()}
   finally{if(battleState===b)b.enemy.attack=originalAttack}
+};
+
+// 仙魔战场 · 仙魔裂谷：堕魔仙君与孤高金气。
+function gugaoJinqiSkill(){return{name:'孤高金气',icon:'⚜️',kind:'passive',gugaoJinqi:true,desc:'被动：生命上限与法力上限各+1%；每场战斗开始时，获得等同于自身攻击力30%的护盾。'}}
+function hasGugaoJinqi(){return(g.passiveSkills||[]).some(skill=>skill?.gugaoJinqi||skill?.name==='孤高金气')||(g.skillReserve||[]).some(skill=>skill?.gugaoJinqi||skill?.name==='孤高金气')}
+function hasGugaoJinqiEquipped(){return(g.passiveSkills||[]).some(skill=>skill?.gugaoJinqi||skill?.name==='孤高金气')}
+function passiveBookName(item){return item?.skill?.name||String(item?.name||'').replace(/技能书$/,'')}
+function uniquePassiveBookEntries(){
+  let picks=new Map();
+  (g.bag||[]).forEach((item,index)=>{
+    if(item?.type!=='skillbook'||skillKind(item.skill)!=='passive')return;
+    let name=passiveBookName(item);if(name&&!picks.has(name))picks.set(name,{index,item,name});
+  });
+  return [...picks.values()];
+}
+function submitGugaoJinqiBooks(){
+  if(hasGugaoJinqi())return toast('你已领悟孤高金气');
+  let books=uniquePassiveBookEntries();
+  if(books.length<10)return toast(`不同的被动技能书不足：${books.length}/10`);
+  books.slice(0,10).sort((a,b)=>b.index-a.index).forEach(({index})=>removeBagQty(index,1));
+  ensureSkillLayout();let skill=gugaoJinqiSkill();
+  if(g.passiveSkills.length<5)g.passiveSkills.push(skill);else g.skillReserve.push(skill);
+  pushLocalLog('向堕魔仙君交付十本不同的被动技能书，领悟「孤高金气」。');
+  showNpcResult('孤高金气',`十卷被动秘典在煞风中化作金色符纹，融入你的经脉。\n\n学会被动技：孤高金气\n生命上限 +1%\n法力上限 +1%\n每场战斗开始时，获得自身攻击力 30% 的护盾。\n\n技能已放入被动栏或备用栏，装备后生效。`,'good');
+  renderSkillHud();renderSceneMap();render();renderSkillManage();renderBag();save();
+}
+function talkFallenImmortalLord(){
+  if(hasGugaoJinqi())return showNpcResult('堕魔仙君','堕魔仙君坐在裂谷尽头的残碑上，周身金煞已尽数敛入虚无。\n\n“孤高金气既已入你经脉，便莫让它蒙尘。”','good');
+  let books=uniquePassiveBookEntries(),names=books.slice(0,10).map(book=>`《${book.name}》`).join('、');
+  openNpcDialog('堕魔仙君',`仙魔裂谷深处，一尊仙君残影披着破碎金甲，眸中却燃着幽暗魔火。\n\n“拿十卷不同的被动秘典来。旧法尽归我炉，我便以孤高金气换你一线不灭之机。”\n\n当前不同被动技能书：${books.length} / 10${names?`\n可交付：${names}`:''}`,[
+    {text:'交付10本不同被动技能书',alt:true,onClick(){submitGugaoJinqiBooks()}},
+    {text:'暂不交付',ghost:true}
+  ]);
+}
+const localNpcsWithFallenImmortalLord=localNpcs;
+localNpcs=function(i,spot){
+  let npcs=localNpcsWithFallenImmortalLord(i,spot);
+  if(i===7&&spot===23&&!npcs.some(npc=>(npc.name||npc[0])==='堕魔仙君'))npcs=[...npcs,['堕魔仙君','以十卷被动秘典换取一缕孤高金气']];
+  return npcs;
+};
+const localMeetWithFallenImmortalLord=localMeet;
+localMeet=function(idx=0){
+  let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];
+  if(name==='堕魔仙君')return talkFallenImmortalLord();
+  return localMeetWithFallenImmortalLord(idx);
+};
+const npcQuestIconWithFallenImmortalLord=npcQuestIcon;
+npcQuestIcon=function(name,mapIndex,spot){
+  if(name==='堕魔仙君')return hasGugaoJinqi()?'💬':'📕';
+  return npcQuestIconWithFallenImmortalLord(name,mapIndex,spot);
+};
+const statTotalWithGugaoJinqi=statTotal;
+statTotal=function(){
+  let st=statTotalWithGugaoJinqi();
+  if(!hasGugaoJinqiEquipped())return st;
+  let hp=Math.round(st.hp*1.01),mana=Math.round(st.mana*1.01);
+  return {...st,hp,mana,artifactBonus:{...(st.artifactBonus||{}),gugaoJinqi:{hp:hp-st.hp,mana:mana-st.mana}}};
+};
+const openBattleWithGugaoJinqi=openBattle;
+openBattle=function(target,idx){
+  let result=openBattleWithGugaoJinqi(target,idx),battle=battleState;
+  if(battle?.target===target&&hasGugaoJinqiEquipped()){
+    let shield=Math.max(1,Math.floor(statTotal().attack*.3));
+    addBattleShield(battle,shield);battleFx('player',`盾+${fmt(shield)}`,true);battleLog(`孤高金气护体，战斗初始获得${fmt(shield)}点护盾。`);renderBattle();
+  }
+  return result;
+};
+
+// 九天雷域 · 天劫眼：闪电娘娘的威压。
+const LIGHTNING_EMPRESS_TRIBUTE=300000;
+function lightningEmpressState(){return g.lightningEmpress||(g.lightningEmpress={outcome:null})}
+function surrenderToLightningEmpress(){
+  let state=lightningEmpressState();if(state.outcome)return toast('闪电娘娘的裁决已经落定');
+  let before=Math.max(0,Math.floor(g.stones||0)),shortfall=Math.max(0,LIGHTNING_EMPRESS_TRIBUTE-before),sale=shortfall?cabinForcedLiquidation(shortfall):{paid:0,refund:0,sold:[],shortfall:0};
+  g.stones=Math.max(0,before-LIGHTNING_EMPRESS_TRIBUTE+(sale.paid||0)+(sale.refund||0));
+  g.cult=(g.cult||0)+8000000000;processRealmProgress();state.outcome='surrender';
+  let saleText=sale.sold?.length?`\n强制售卖：${sale.sold.join('、')}\n抵扣灵石：${fmt(sale.paid)}${sale.refund?`\n找回灵石：${fmt(sale.refund)}`:''}`:'',unpaid=Math.max(0,LIGHTNING_EMPRESS_TRIBUTE-before-(sale.paid||0));
+  pushLocalLog(`向闪电娘娘臣服，修为+80亿，灵石-${fmt(LIGHTNING_EMPRESS_TRIBUTE)}${sale.sold?.length?'并被强制变卖背包物品':''}。`);
+  showNpcResult('雷罚已受',`闪电娘娘收拢雷云，淡淡道：“识时务者，方能活得更久。”\n\n获得：修为 +80亿\n消耗：灵石 -30万${saleText}${unpaid?`\n其余欠额已由娘娘收走你所有可售之物抵扣。`:''}`,'good');
+  renderSceneMap();render();renderBag();save();
+}
+function defyLightningEmpress(){
+  let state=lightningEmpressState();if(state.outcome)return toast('闪电娘娘的裁决已经落定');
+  g.cult=(g.cult||0)+3000000000;processRealmProgress();state.outcome='defy';
+  pushLocalLog('面对闪电娘娘的威压仍不低头，获得修为+30亿。');
+  showNpcResult('雷心可嘉',`闪电娘娘眸中的雷光微微一顿，随即展颜。\n\n“敢在天劫眼前说不服，你倒有几分骨气。”\n\n获得：修为 +30亿`,'good');
+  renderSceneMap();render();save();
+}
+function talkLightningEmpress(){
+  let state=lightningEmpressState();
+  if(state.outcome==='surrender')return showNpcResult('闪电娘娘','闪电娘娘端坐天劫眼上方，雷云在她身后缓缓退散。\n\n“既已臣服，便去走你的路。”','good');
+  if(state.outcome==='defy')return showNpcResult('闪电娘娘','闪电娘娘远望劫云，唇角带着一丝笑意。\n\n“你的不服，我记下了。”','good');
+  openNpcDialog('闪电娘娘',`天劫眼上空，闪电娘娘踏雷而立，万千电芒在裙角生灭。\n\n“修士，见我雷威，是臣服，还是不服？”\n\n臣服可获修为80亿，但需献上灵石30万；灵石不足时，我会自行取走你背包中的可售之物。\n不服则可获修为30亿。`,[
+    {text:'臣服，献上灵石30万',alt:true,onClick(){surrenderToLightningEmpress()}},
+    {text:'不服',onClick(){defyLightningEmpress()}},
+    {text:'暂且离开',ghost:true}
+  ]);
+}
+const localNpcsWithLightningEmpress=localNpcs;
+localNpcs=function(i,spot){
+  let npcs=localNpcsWithLightningEmpress(i,spot);
+  if(i===8&&spot===32&&!npcs.some(npc=>(npc.name||npc[0])==='闪电娘娘'))npcs=[...npcs,['闪电娘娘','立于天劫眼上空，以雷威考校来者']];
+  return npcs;
+};
+const localMeetWithLightningEmpress=localMeet;
+localMeet=function(idx=0){
+  let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];
+  if(name==='闪电娘娘')return talkLightningEmpress();
+  return localMeetWithLightningEmpress(idx);
+};
+const npcQuestIconWithLightningEmpress=npcQuestIcon;
+npcQuestIcon=function(name,mapIndex,spot){
+  if(name==='闪电娘娘')return lightningEmpressState().outcome?'💬':'❗️';
+  return npcQuestIconWithLightningEmpress(name,mapIndex,spot);
 };
 // 兼容旧存档中的 debt 类型欠条：加载脚本时立即归入任务道具。
 syncCabinDebtNotes();
