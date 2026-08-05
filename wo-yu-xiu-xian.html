@@ -884,7 +884,7 @@ function masterSkillConfig(path,level){
   level=Math.max(1,Math.min(realms.length,Math.floor(level||1)));
   let needRealm=level-1;
   if(path==='heqiang'){let drain=50*Math.pow(2,level-1);return{path,level,needRealm,cost:0,drain,shield:drain*3.5,name:`${level}级吸蓝大法`}}
-  if(path==='ziyun'){let cost=50*level,shield=200*Math.pow(2,level-1);return{path,level,needRealm,cost,shield,name:`${level}级紫霞大法`}}
+  if(path==='ziyun'){let cost=75*Math.pow(2,level-1),shield=200*Math.pow(2,level-1);return{path,level,needRealm,cost,shield,name:`${level}级紫霞大法`}}
   let cost=50*level,multiplier=.6+level*.1,skipChance=.50+(level-1)*.02,secondSkipChance=.10+(level-1)*.02;
   return{path:'dingguang',level,needRealm,cost,multiplier,skipChance,secondSkipChance,name:`${level}级耳光`};
 }
