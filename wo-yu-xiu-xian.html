@@ -3243,6 +3243,13 @@ if(name==='外务执事 白景川'){
 let realmLeft=Math.max(0,Math.ceil((g.sectRealmAt+1800000-Date.now())/60000)),warLeft=Math.max(0,Math.ceil((g.sectWarAt+600000-Date.now())/60000));
 openNpcDialog('外务执事 白景川',`外务执事 白景川拱手：${rank}，东执事厅掌宗门杂务案牍。\n你可在此咨询晋升、捐献灵石、宗门秘境与宗门团战。`,[
 {text:'宗门晋升',onClick(){
+if(g.sectRank===0&&g.sectReputation>=next[1]){
+  openNpcDialog('外务执事 白景川',`白景川翻开宗门名册：\n\n“你的声望已经达到内门弟子的标准。外门升入内门由东执事厅直接核验，无需再去掌教峰请示。”`,[
+    {text:'办理内门晋升',alt:true,onClick(){promoteSect();renderSceneMap();render();save();}},
+    {text:'稍后办理',ghost:true}
+  ]);
+  return;
+}
 let msg=g.sectRank>=5?`你已是${rank}，太玄宗中枢诸务皆可总摄。`:`当前身份：${rank}\n下一职位：${next[0]}\n所需声望：${fmt(next[1])}\n当前声望：${fmt(g.sectReputation)}\n${g.sectReputation>=next[1]?'声望已足，请前往宗主峰外殿向掌教请旨。':'可通过山门差事、讲经、执事领差、宗门团战积累声望。'}`;
 showNpcResult('晋升咨询',msg,'good');
 }},
