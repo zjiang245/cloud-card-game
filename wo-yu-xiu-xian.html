@@ -743,7 +743,7 @@
 <script>
 const KEY='woYuXiuXianSaveV1',MAX=9e15,realms=['练气','筑基','金丹','元婴','化神','炼虚','合体','大乘','渡劫','天仙'],stages=['初期','中期','后期','大圆满'],maps=[['青云山麓',0,1],['幽月森林',4,2.1],['赤炎秘境',8,4.6],['东海龙宫',12,9],['万妖古域',16,18],['天渊战场',20,38],['虚空遗迹',24,80],['仙魔战场',28,170],['九天雷域',32,360],['仙界天门',36,800],['太玄宗',0,.25]],roots=[['金灵根',1.08],['木灵根',1.1],['水灵根',1.12],['火灵根',1.15],['土灵根',1.06],['变异天灵根',1.55]],skillNames=['引气诀','青元剑诀','五行真解','太虚仙经','混沌道典'];
 const $=s=>document.querySelector(s),on=(s,fn)=>{let el=$(s);if(el)el.onclick=fn},fmt=n=>n>=1e12?(n/1e12).toFixed(2)+'万亿':n>=1e8?(n/1e8).toFixed(2)+'亿':n>=1e4?(n/1e4).toFixed(2)+'万':Math.floor(n).toLocaleString(),clamp=n=>Math.max(0,Math.min(MAX,Number.isFinite(n)?n:0));
-const sectRanks=[['外门弟子',0],['内门弟子',2000],['宗门执事',8000],['宗门长老',25000],['副宗主',60000],['宗主',120000]],sectGoods=[['🌿 药材×30',60,'herbs',30,1],['⛏️ 锻造材料×50',100,'materials',50,2],['💊 渡劫丹',260,'tribPills',1,3],['🧠 悟道天书·根骨+2',2200,'insightBook',1,4,'insightBook',1],['📕 经商秘术',4000,'commerceSecret',1,5,'commerceSecret',1],['📜 功法残卷×3',4500,'scrolls',3,6],['💎 灵玉（售价8万灵石）',10000,'jades',1,7],['💊 根骨丹',3500,'rootBonePill',1,8],['💊 洗髓丹',10000,'marrowPill',1,9]];
+const sectRanks=[['外门弟子',0],['内门弟子',2000],['宗门执事',8000],['宗门长老',25000],['副宗主',60000],['宗主',120000]],sectGoods=[['🌿 药材×30',60,'herbs',30,1],['⛏️ 锻造材料×50',100,'materials',50,2],['💊 渡劫丹',260,'tribPills',1,3],['🧠 悟道天书·根骨+2',2200,'insightBook',1,4,'insightBook',1],['📕 经商秘术',4000,'commerceSecret',1,5,'commerceSecret',1],['📜 功法残卷×3',4500,'scrolls',3,6],['💎 灵玉（售价8万灵石）',10000,'jades',1,7,'jades',10],['💊 根骨丹',3500,'rootBonePill',1,8],['💊 洗髓丹',10000,'marrowPill',1,9]];
 const sectIcons=['🌿','⛏️','📜','💊','💎','🥚','📕'],shopIcons=['💊','🥚','💎','📜','🌿'];
 // 精简后保留的丹药定义：药材、回春丹、分级修为丹、渡劫丹。
 const pillCatalog={
@@ -807,8 +807,8 @@ function stopMeditation(show=true){if(!meditationSession)return 0;let elapsed=Da
 function startMeditation(){if(meditationSession)return toast('你已经在打坐');meditationSession={started:Date.now(),awarded:0};g.meditating=true;pushLocalLog('在打坐台开始吐纳：每满5秒固定增加8点修为。');toast('开始打坐：每5秒修为+8');save()}
 function meditationTick(){if(!meditationSession)return;let total=Math.floor((Date.now()-meditationSession.started)/MEDITATION_INTERVAL_MS)*MEDITATION_CULT_PER_TICK;if(total>meditationSession.awarded){let gain=total-meditationSession.awarded;meditationSession.awarded=total;g.cult+=gain;pushLocalLog(`打坐吐纳：固定修为 +${gain}（累计${total}）`);render();save()}}
 function ensureLiquidMeditationModal(){let modal=$('#liquidMeditationModal');if(modal)return modal;modal=document.createElement('div');modal.id='liquidMeditationModal';modal.className='event-modal liquid-meditation-modal';modal.innerHTML='<div><h2>灵液池 · 自动打坐</h2><div class="event-result">灵液自经脉流转，下一次吐纳正在凝聚。</div><div class="progress"><i id="liquidMeditationProgressFill"></i></div><div class="progress-text"><span id="liquidMeditationProgressText">准备吐纳</span><b id="liquidMeditationYieldText">本次累计：修为×0</b></div><div class="actions"><button class="btn ghost" id="stopLiquidMeditationBtn">退出打坐</button></div></div>';document.body.appendChild(modal);$('#stopLiquidMeditationBtn').onclick=()=>stopLiquidMeditation();return modal}
-function renderLiquidMeditationProgress(){if(!liquidMeditationSession)return;let now=Date.now();while(now>=liquidMeditationSession.nextAt){g.cult+=1000;liquidMeditationSession.yield+=1000;liquidMeditationSession.nextAt+=2000;pushLocalLog(`灵液池打坐：修为 +1000（累计${fmt(liquidMeditationSession.yield)}）`);processRealmProgress();renderSceneMap();render();save()}let left=Math.max(0,liquidMeditationSession.nextAt-now),fill=$('#liquidMeditationProgressFill'),text=$('#liquidMeditationProgressText'),yieldText=$('#liquidMeditationYieldText');if(fill)fill.style.width=Math.max(0,Math.min(100,(1-left/2000)*100))+'%';if(text)text.textContent=`下一次吐纳：${(left/1000).toFixed(1)} 秒`;if(yieldText)yieldText.textContent=`本次累计：修为×${fmt(liquidMeditationSession.yield)}`}
-function startLiquidMeditation(){if(g.sectRank<2)return toast('灵液池仅对执事及以上职位开放');if(liquidMeditationSession)return true;if(meditationSession)stopMeditation(false);liquidMeditationSession={yield:0,nextAt:Date.now()+2000,timer:null};let modal=ensureLiquidMeditationModal();modal.classList.add('show');liquidMeditationSession.timer=setInterval(renderLiquidMeditationProgress,100);renderLiquidMeditationProgress();pushLocalLog('在灵液池开始自动打坐：每2秒固定获得1000点修为。');save();return true}
+function renderLiquidMeditationProgress(){if(!liquidMeditationSession)return;let now=Date.now();while(now>=liquidMeditationSession.nextAt){let gain=Math.max(1,Math.floor(realmNeed()*.005));g.cult+=gain;liquidMeditationSession.yield+=gain;liquidMeditationSession.nextAt+=2000;pushLocalLog(`灵液池打坐：修为 +${fmt(gain)}（当前所需修为的0.5%，累计${fmt(liquidMeditationSession.yield)}）`);processRealmProgress();renderSceneMap();render();save()}let left=Math.max(0,liquidMeditationSession.nextAt-now),fill=$('#liquidMeditationProgressFill'),text=$('#liquidMeditationProgressText'),yieldText=$('#liquidMeditationYieldText');if(fill)fill.style.width=Math.max(0,Math.min(100,(1-left/2000)*100))+'%';if(text)text.textContent=`下一次吐纳：${(left/1000).toFixed(1)} 秒`;if(yieldText)yieldText.textContent=`本次累计：修为×${fmt(liquidMeditationSession.yield)}`}
+function startLiquidMeditation(){if(g.sectRank<2)return toast('灵液池仅对执事及以上职位开放');if(liquidMeditationSession)return true;if(meditationSession)stopMeditation(false);liquidMeditationSession={yield:0,nextAt:Date.now()+2000,timer:null};let modal=ensureLiquidMeditationModal();modal.classList.add('show');liquidMeditationSession.timer=setInterval(renderLiquidMeditationProgress,100);renderLiquidMeditationProgress();pushLocalLog('在灵液池开始自动打坐：每2秒获得当下所需修为的0.5%。');save();return true}
 function stopLiquidMeditation(){if(!liquidMeditationSession)return;clearInterval(liquidMeditationSession.timer);let total=liquidMeditationSession.yield;liquidMeditationSession=null;$('#liquidMeditationModal')?.classList.remove('show');pushLocalLog(`离开灵液池，本次自动打坐获得修为 +${fmt(total)}。`);renderSceneMap();render();save()}
 function tick(){tickCount++;meditationTick();processRealmProgress();sanitize();if(tickCount%2===0)render();if(tickCount%5===0)save()}
 function rows(obj){return Object.entries(obj).map(([k,v])=>`<div class="row"><span>${k}</span><b>${v}</b></div>`).join('')}
@@ -883,16 +883,16 @@ function masterPathInfo(path){return masterPaths[path]||null}
 function masterSkillConfig(path,level){
   level=Math.max(1,Math.min(realms.length,Math.floor(level||1)));
   let needRealm=level-1;
-  if(path==='heqiang'){let drain=50*Math.pow(2,level-1);return{path,level,needRealm,cost:0,drain,shield:drain,name:`${level}级吸蓝大法`}}
-  if(path==='ziyun'){let cost=50*level,shield=100*level;return{path,level,needRealm,cost,shield,name:`${level}级紫霞大法`}}
-  let cost=50*level,multiplier=.6+level*.1,skipChance=.50+(level-1)*.02;
-  return{path:'dingguang',level,needRealm,cost,multiplier,skipChance,name:`${level}级耳光`};
+  if(path==='heqiang'){let drain=50*Math.pow(2,level-1);return{path,level,needRealm,cost:0,drain,shield:drain*3.5,name:`${level}级吸蓝大法`}}
+  if(path==='ziyun'){let cost=50*level,shield=200*Math.pow(2,level-1);return{path,level,needRealm,cost,shield,name:`${level}级紫霞大法`}}
+  let cost=50*level,multiplier=.6+level*.1,skipChance=.50+(level-1)*.02,secondSkipChance=.10+(level-1)*.02;
+  return{path:'dingguang',level,needRealm,cost,multiplier,skipChance,secondSkipChance,name:`${level}级耳光`};
 }
 function makeMasterSkill(path,level){
   let c=masterSkillConfig(path,level),info=masterPathInfo(path),desc='';
-  if(path==='heqiang')desc=`主动技：吸取敌人${c.drain}MP（不足按实际），自身回复吸取量并获得2.5倍护盾`;
+  if(path==='heqiang')desc=`主动技：吸取敌人${c.drain}MP（不足按实际），自身回复吸取量并获得3.5倍护盾；施放后冷却1回合`;
   else if(path==='ziyun')desc=`主动技：消耗${c.cost}MP，获得${c.shield}点护盾`;
-  else desc=`主动技：消耗${c.cost}MP，无视防御造成攻击×${c.multiplier.toFixed(1)}伤害，${Math.round(c.skipChance*100)}%使敌人下回合无法行动`;
+  else desc=`主动技：消耗${c.cost}MP，无视防御造成攻击×${c.multiplier.toFixed(1)}伤害，${Math.round(c.skipChance*100)}%使敌人下回合无法行动；若判定失败，再以${Math.round(c.secondSkipChance*100)}%使敌人下2回合无法行动`;
   return{name:c.name,icon:info.icon,kind:'active',masterPath:path,masterSkillLevel:c.level,mpCost:c.cost,desc};
 }
 function syncMasterSkill(path,level){
@@ -1062,8 +1062,8 @@ renderBag=()=>{
   renderBagWithForgeMaterials();
   let cap=g.bagCap||20,button=$('#expandBagBtn');
   if(button){
-    button.textContent=cap<30?'花1000灵石扩至30格':cap<40?'花2000灵石扩至40格':cap<50?'花5000灵石扩至50格':cap<64?'花20000灵石扩至64格':'背包已满级';
-    button.disabled=cap>=64;
+    button.textContent=cap<30?'花1000灵石扩至30格':cap<40?'花2000灵石扩至40格':cap<50?'花5000灵石扩至50格':cap<64?'花20000灵石扩至64格':cap<80?'花30000灵石扩至80格':'背包已满级';
+    button.disabled=cap>=80;
   }
 };
 function changeBagPage(delta){g.bagPage=Math.max(0,Math.min((g.bagPage||0)+delta,bagPages()-1));g.bagSelected=-1;renderBag()}
@@ -1089,7 +1089,7 @@ useBagItem=()=>{
 };
 function sellBagItem(){let idx=g.bagSelected,it=g.bag[idx];if(!it)return;if(it.type==='forgeMaterial'||it.type==='scrollResource'||it.type==='quest')return toast('任务道具、锻造材料与功法残卷不可出售');let want=Math.floor(+($('#sellQtyInput')?.value||1));let qty=it.type==='equipment'?1:Math.max(1,Math.min(want||1,it.qty||1)),value=itemSell(it)*qty;g.stones+=value;if(it.key&&g[it.key])g[it.key]=Math.max(0,g[it.key]-qty);toast(`售卖${it.name}×${qty}，灵石+${fmt(value)}`);log(`售卖道具：${it.name}×${qty}，获得${fmt(value)}灵石`,'good');removeBagQty(idx,qty);if(!g.bag[g.bagSelected])g.bagSelected=-1;render();renderBag();save()}
 function sellEquipmentByQuality(){let q=+($('#sellQualitySelect')?.value||1),sold=0,value=0;g.bag=(g.bag||[]).filter(it=>{if(it.type==='equipment'&&(it.quality||equipQuality[it.name]||1)===q){sold++;value+=itemSell(it);return false}return true});if(!sold)return toast(`背包里没有${qualityText[q]}装`);g.stones+=value;g.bagSelected=-1;syncBagPage();toast(`售卖${qualityText[q]}装×${sold}，灵石+${fmt(value)}`);log(`批量售卖${qualityText[q]}色装备×${sold}，获得${fmt(value)}灵石`,'good');render();renderBag();save()}
-function expandBag(){let cap=g.bagCap||20,cost=cap<30?1000:cap<40?2000:cap<50?5000:cap<64?20000:0,next=cap<30?30:cap<40?40:cap<50?50:cap<64?64:cap;if(!cost)return toast('背包已满级');if(g.stones<cost)return toast('灵石不足');g.stones-=cost;g.bagCap=next;syncBagPage();toast(`背包扩充至${next}格`);render();renderBag();save()}
+function expandBag(){let cap=g.bagCap||20,cost=cap<30?1000:cap<40?2000:cap<50?5000:cap<64?20000:cap<80?30000:0,next=cap<30?30:cap<40?40:cap<50?50:cap<64?64:cap<80?80:cap;if(!cost)return toast('背包已满级');if(g.stones<cost)return toast('灵石不足');g.stones-=cost;g.bagCap=next;syncBagPage();toast(`背包扩充至${next}格`);render();renderBag();save()}
 
 function updateRecommendation(){let info=tribulationInfo(),text;if(info.ready)text=`${realmText()}已经圆满，渡劫基础成功率${info.base}%，服用${info.toCertain}颗渡劫丹可达100%。`;else if(g.hp<statTotal().hp*.35)text='气血偏低，建议在小地图找小师妹 纳兰清月或驿站掌柜疗伤。';else if(g.sectSisterQuest||g.nalanQuest)text='你有进行中的小地图任务，可点击“任务”查看进度或提交。';else text=`当前地图：${maps[g.map][0]}。建议进入小地图手动战斗、采集或处理宗门事务。`;let assistant=$('#assistantText');if(assistant)assistant.textContent=text;$('#aiMessage').textContent='智能体：'+text}
 const devNumbers=[['cult','当前修为'],['stones','灵石'],['hp','当前生命'],['maxHp','生命上限'],['mana','法力值'],['attack','攻击力'],['defense','防御力'],['agility','身法'],['crit','暴击率'],['aptitude','根骨'],['rootMul','灵根倍率'],['materials','锻造材料'],['herbs','药材'],['fragments','装备碎片'],['scrolls','功法残卷'],['jades','灵玉'],['healPills','回春丹'],['tribPills','渡劫丹'],['cultPills','修为丹'],['sectContribution','宗门贡献'],['sectReputation','宗门声望']];
@@ -1508,7 +1508,7 @@ renderSceneMap=()=>{
       world.insertBefore(line,world.firstChild);
     }
   }
-  if(i===10&&spot===2){let info=$('#localMapInfo');if(info)info.innerHTML=rows({'位置信息':'太玄宗 · 灵液池','开放职位':'宗门执事及以上','打坐收益':'每2秒固定修为 +1000'});}
+  if(i===10&&spot===2){let info=$('#localMapInfo');if(info)info.innerHTML=rows({'位置信息':'太玄宗 · 灵液池','开放职位':'宗门执事及以上','打坐收益':'每2秒获得当下所需修为的0.5%'});}
   document.querySelectorAll('#localMobList [data-local-mob]').forEach((button,idx)=>{
     if(mobs[idx]?.mining){let icon=button.querySelector('b');if(icon)icon.textContent='🪨';}
   });
@@ -2564,7 +2564,7 @@ async function battleSkillEffect(sk,idx=0){
     await playHeroFrames('manaDrain',[150,220,260,300]);
     let c=masterSkillConfig(masterPath,sk.masterSkillLevel||1),drained=Math.min(c.drain,Math.max(0,b.enemy.mp)),beforeMp=b.player.mp;
     b.enemy.mp=Math.max(0,b.enemy.mp-drained);b.player.mp=Math.min(b.player.maxMp,b.player.mp+drained);let restored=b.player.mp-beforeMp;
-    addBattleShield(b,c.shield);battleFx('player',`盾+${c.shield}`,true);battleLog(`你施展${c.name}，吸取${drained}点敌方法力，自身恢复${restored}点法力并获得${c.shield}点护盾。`);return true
+    addBattleShield(b,c.shield);b.player.cooldowns[masterPath]=2;battleFx('player',`盾+${c.shield}`,true);battleLog(`你施展${c.name}，吸取${drained}点敌方法力，自身恢复${restored}点法力并获得${c.shield}点护盾；下回合进入冷却。`);return true
   }
   if(masterPath==='ziyun'){
     await playHeroFrames('purpleCloud',[150,220,280,280]);
@@ -2572,8 +2572,8 @@ async function battleSkillEffect(sk,idx=0){
   }
   if(masterPath==='dingguang'){
     await playHeroFrames('palmStrike',[130,150,220,230],{lunge:true});
-    let c=masterSkillConfig(masterPath,sk.masterSkillLevel||1),dmg=Math.max(1,Math.floor(st.attack*c.multiplier)),stopped=Math.random()<c.skipChance;
-    b.enemy.hp=Math.max(0,b.enemy.hp-dmg);b.player.cooldowns[masterPath]=2;if(stopped)b.enemy.skipTurns=Math.max(1,b.enemy.skipTurns||0);battleFx('enemy','-'+dmg);battleLog(`你施展${c.name}，无视防御造成${dmg}点伤害${stopped?'，敌人下回合无法行动。':'。'}下回合进入冷却。`);return true
+    let c=masterSkillConfig(masterPath,sk.masterSkillLevel||1),dmg=Math.max(1,Math.floor(st.attack*c.multiplier)),stopped=Math.random()<c.skipChance,stoppedTwice=!stopped&&Math.random()<c.secondSkipChance;
+    b.enemy.hp=Math.max(0,b.enemy.hp-dmg);b.player.cooldowns[masterPath]=2;if(stopped)b.enemy.skipTurns=Math.max(1,b.enemy.skipTurns||0);else if(stoppedTwice)b.enemy.skipTurns=Math.max(2,b.enemy.skipTurns||0);let controlText=stopped?'，敌人下回合无法行动。':stoppedTwice?'，敌人下2回合无法行动。':'。';battleFx('enemy','-'+dmg);battleLog(`你施展${c.name}，无视防御造成${dmg}点伤害${controlText}下回合进入冷却。`);return true
   }
   let isFlowerSeeking=!!(sk&&(sk.flowerSeeking||name==='浪里寻花'));
   if(isFlowerSeeking){
@@ -2996,7 +2996,7 @@ if(name==='太玄宗矿脉监管'){
 
 if(name==='看守长老'){
   if(g.sectRank<2){showNpcResult('看守长老','看守长老抬手拦住去路：“灵液池只供执事及以上职位洗练经脉。待你晋升后再来。”','danger');return;}
-  openNpcDialog('灵液池 · 看守长老','看守长老守在氤氲池畔：\n“池中灵液由宗门地脉温养，切莫贪功。入池后可自动打坐，每2秒获得1000点修为，随时可退出。”',[
+  openNpcDialog('灵液池 · 看守长老','看守长老守在氤氲池畔：\n“池中灵液由宗门地脉温养，切莫贪功。入池后可自动打坐，每2秒获得当下所需修为的0.5%，随时可退出。”',[
     {text:'进入灵液池自动打坐',alt:true,onClick(){startLiquidMeditation()}},
     {text:'暂不入池',ghost:true}
   ]);
@@ -4490,14 +4490,16 @@ function fuxiQinArtifact(){return{name:'伏羲琴',icon:'琴',effect:'每次战�
 function hasDonghuangBell(){return !!artifactState().donghuangBell}
 function donghuangBellArtifact(){return{name:'东皇钟',icon:'钟',effect:'技能法力消耗减少30%，生命上限+3000。'}}
 function equipmentQualityCount(quality){return(g.bag||[]).reduce((count,item)=>{let equip=normalizeEquip(item);return count+(equip?.quality===quality?1:0)},0)}
+function equipmentQualityCountStored(quality){let bagCount=equipmentQualityCount(quality),warehouseCount=warehouseItems().reduce((count,item)=>{let equip=normalizeEquip(item);return count+(equip?.quality===quality?1:0)},0);return bagCount+warehouseCount}
 function takeEquipmentByQuality(quality,amount){let left=amount;for(let i=(g.bag||[]).length-1;i>=0&&left>0;i--){let equip=normalizeEquip(g.bag[i]);if(equip?.quality!==quality)continue;g.bag.splice(i,1);left--}g.bagSelected=Math.min(g.bagSelected??-1,g.bag.length-1);syncBagPage();return left===0}
 function makeArmoryUpgradeEquip(sourceQuality){let quality=sourceQuality+1,slot=equipSlots[Math.floor(Math.random()*equipSlots.length)],equipName=equipBaseName(quality,slot),powerLevel=Math.max(1,realmNameIndex('炼虚初期')+quality),item=normalizeEquip({name:equipName,quality,slot,powerLevel,sell:quality*220});item.desc=`军械冢重铸所得，成长等级${powerLevel}，加成系数参照铁甲尸·炼虚初期掉落。`+equipEffect(item);return item}
-function exchangeArmoryGear(sourceQuality){if(sourceQuality<1||sourceQuality>=5)return toast('橙色装备已是终阶，无法继续重铸');if(equipmentQualityCount(sourceQuality)<10)return toast(`${qualityText[sourceQuality]}色品质装备不足10件`);let item=makeArmoryUpgradeEquip(sourceQuality);if(!takeEquipmentByQuality(sourceQuality,10))return toast('装备扣除失败，请重新尝试');if(!addBagItem(item))return toast('背包空间不足，重铸失败');pushLocalLog(`军械冢重铸：${qualityText[sourceQuality]}装×10，获得${qualityText[item.quality]}色${equipSlotNames[item.slot]}「${item.name}」。`);showNpcResult('军械重铸',`消耗：${qualityText[sourceQuality]}色品质装备 ×10\n\n获得：${qualityText[item.quality]}色${equipSlotNames[item.slot]}「${item.name}」\n成长等级：${item.powerLevel}\n\n装备加成系数参照铁甲尸·炼虚初期掉落。`,'good');renderBag();renderSceneMap();render();save()}
-function talkArmoryKeeper(){let counts=[1,2,3,4].map(q=>`${qualityText[q]}装 ${equipmentQualityCount(q)} / 10`).join(' · ');openNpcDialog('军械看管',`军械冢深处，甲胄残片堆叠如山。看管人掸去肩头尘土：\n\n“旧甲尚有余力，十件同阶低阶装备可入炉重铸，换一件更高一阶的随机装备。所得装备的加成系数，参照铁甲尸·炼虚初期掉落。”\n\n当前持有：${counts}`,[
-  {text:`白装×10 换绿装（${equipmentQualityCount(1)}/10）`,alt:true,onClick(){exchangeArmoryGear(1)}},
-  {text:`绿装×10 换蓝装（${equipmentQualityCount(2)}/10）`,alt:true,onClick(){exchangeArmoryGear(2)}},
-  {text:`蓝装×10 换紫装（${equipmentQualityCount(3)}/10）`,alt:true,onClick(){exchangeArmoryGear(3)}},
-  {text:`紫装×10 换橙装（${equipmentQualityCount(4)}/10）`,alt:true,onClick(){exchangeArmoryGear(4)}},
+function takeStoredEquipmentByQuality(quality,amount){let left=Math.max(0,Math.floor(amount||0));for(let i=(g.bag||[]).length-1;i>=0&&left>0;i--){let equip=normalizeEquip(g.bag[i]);if(equip?.quality!==quality)continue;g.bag.splice(i,1);left--}for(let i=warehouseItems().length-1;i>=0&&left>0;i--){let equip=normalizeEquip(warehouseItems()[i]);if(equip?.quality!==quality)continue;warehouseItems().splice(i,1);left--}g.bagSelected=Math.min(g.bagSelected??-1,g.bag.length-1);g.warehouseSelected=Math.min(g.warehouseSelected??-1,warehouseItems().length-1);syncBagPage();return left===0}
+function exchangeArmoryGear(sourceQuality){if(sourceQuality<1||sourceQuality>=5)return toast('橙色装备已是终阶，无法继续重铸');if(equipmentQualityCountStored(sourceQuality)<10)return toast(`${qualityText[sourceQuality]}色品质装备不足10件`);if(bagFree()<=0)return toast('背包已满，请先预留1个空位收取重铸装备');let item=makeArmoryUpgradeEquip(sourceQuality);if(!takeStoredEquipmentByQuality(sourceQuality,10))return toast('装备扣除失败，请重新尝试');if(!addBagItem(item))return toast('背包空间不足，重铸装备未能放入背包');pushLocalLog(`军械冢重铸：${qualityText[sourceQuality]}装×10（背包与仓库合计），获得${qualityText[item.quality]}色${equipSlotNames[item.slot]}「${item.name}」。`);showNpcResult('军械重铸',`消耗：${qualityText[sourceQuality]}色装备 ×10（背包与仓库合计）\n\n获得：${qualityText[item.quality]}色${equipSlotNames[item.slot]}「${item.name}」\n成长等级：${item.powerLevel}\n\n装备加成系数参照铁甲尸·炼虚初期掉落，装备已放入背包。`,'good');renderBag();renderWarehouseModal();renderSceneMap();render();save()}
+function talkArmoryKeeper(){let counts=[1,2,3,4].map(q=>`${qualityText[q]}装 ${equipmentQualityCountStored(q)} / 10`).join(' · ');openNpcDialog('军械看管',`军械冢深处，甲胄残片堆叠如山。看管人掸去肩头尘土：\n\n“旧甲尚有余力，十件同阶低阶装备可入炉重铸，换一件更高一阶的随机装备。所得装备的加成系数，参照铁甲尸·炼虚初期掉落。”\n\n当前持有（背包＋仓库）：${counts}`,[
+  {text:`白装×10 换绿装（${equipmentQualityCountStored(1)}/10）`,alt:true,onClick(){exchangeArmoryGear(1)}},
+  {text:`绿装×10 换蓝装（${equipmentQualityCountStored(2)}/10）`,alt:true,onClick(){exchangeArmoryGear(2)}},
+  {text:`蓝装×10 换紫装（${equipmentQualityCountStored(3)}/10）`,alt:true,onClick(){exchangeArmoryGear(3)}},
+  {text:`紫装×10 换橙装（${equipmentQualityCountStored(4)}/10）`,alt:true,onClick(){exchangeArmoryGear(4)}},
   {text:'暂不重铸',ghost:true}
 ])}
 function herbBuybackBatches(){return Math.max(0,Math.floor((g.herbs||0)/99))}
@@ -4922,20 +4924,20 @@ function takeBeastMaterials(amount){
 function learnShatterStarRealm(){
   let quest=juemingziQuest(),have=beastMaterialCount();
   if(quest.learned||hasShatterStarRealm())return toast('你已经领悟破碎星寰');
-  if(have<1000)return toast(`妖兽材料不足：${fmt(have)}/1,000`);
-  if(!takeBeastMaterials(1000))return toast('妖兽材料扣除失败，请整理背包后重试');
+  if(have<500)return toast(`妖兽材料不足：${fmt(have)}/500`);
+  if(!takeBeastMaterials(500))return toast('妖兽材料扣除失败，请整理背包后重试');
   ensureSkillLayout();
   let skill=makeShatterStarRealmSkill();
   if((g.activeSkills||[]).length<5)g.activeSkills.push(skill);else g.skillReserve.push(skill);
   quest.learned=true;
-  pushLocalLog('向决明子交付妖兽材料×1000，领悟雷系主动技「破碎星寰」。');
-  showNpcResult('破碎星寰','决明子以千种妖兽遗材引下天命雷纹，星光在掌间崩散成环。\n\n交付：不限种类的妖兽材料 ×1000\n学会雷系主动技：破碎星寰\n\n消耗法力：50000\n效果：普通攻击伤害×3，并令敌人陷入5回合雷系创伤；创伤期间受到的雷系伤害×2。\n\n技能已加入主动栏或备用栏。','good');
+  pushLocalLog('向决明子交付妖兽材料×500，领悟雷系主动技「破碎星寰」。');
+  showNpcResult('破碎星寰','决明子以妖兽遗材引下天命雷纹，星光在掌间崩散成环。\n\n交付：不限种类的妖兽材料 ×500\n学会雷系主动技：破碎星寰\n\n消耗法力：50000\n效果：普通攻击伤害×3，并令敌人陷入5回合雷系创伤；创伤期间受到的雷系伤害×2。\n\n技能已加入主动栏或备用栏。','good');
   renderSkillHud();renderSceneMap();render();save();
 }
 function talkJuemingzi(){
   let quest=juemingziQuest(),have=beastMaterialCount();
   if(quest.learned||hasShatterStarRealm())return showNpcResult('决明子','决明子收拢掌间雷纹，淡淡道：“破碎星寰已入你识海。雷伤未散之前，后续雷法自会循着裂痕而落。”','good');
-  openNpcDialog('决明子',`天命台上，决明子以妖兽遗材推演雷霆星轨。\n\n“我要的不是某一种皮骨，而是千份妖兽材料中残存的万灵气机。凑足一千份，便传你雷系秘术破碎星寰。”\n\n当前可交付妖兽材料：${fmt(have)} / 1,000\n\n破碎星寰：消耗50000点法力，造成普通攻击伤害×3；命中后留下5回合雷系创伤，使敌人受到的雷系伤害翻倍。`,[{text:'交付妖兽材料×1000，领悟破碎星寰',alt:true,onClick(){learnShatterStarRealm()}},{text:'暂不交付',ghost:true}]);
+  openNpcDialog('决明子',`天命台上，决明子以妖兽遗材推演雷霆星轨。\n\n“我要的不是某一种皮骨，而是妖兽材料中残存的万灵气机。凑足五百份，便传你雷系秘术破碎星寰。”\n\n当前可交付妖兽材料：${fmt(have)} / 500\n\n破碎星寰：消耗50000点法力，造成普通攻击伤害×3；命中后留下5回合雷系创伤，使敌人受到的雷系伤害翻倍。`,[{text:'交付妖兽材料×500，领悟破碎星寰',alt:true,onClick(){learnShatterStarRealm()}},{text:'暂不交付',ghost:true}]);
 }
 const localNpcsWithJuemingzi=localNpcs;
 localNpcs=function(i,spot){let npcs=localNpcsWithJuemingzi(i,spot);if(i===7&&spot===32&&!npcs.some(npc=>(npc.name||npc[0])==='决明子'))npcs=[...npcs,['决明子','推演天命雷纹，正在收集妖兽遗材']];return npcs};
@@ -5067,11 +5069,11 @@ renderBattleStatusEffects=function(){
 
 // ===== 九天雷域 · 淬体石与引雷台 =====
 let bodyTemperingSession=null;
-function ensureBodyTemperingModal(){let modal=$('#bodyTemperingModal');if(modal)return modal;modal=document.createElement('div');modal.id='bodyTemperingModal';modal.className='event-modal liquid-meditation-modal';modal.innerHTML='<div><h2>淬体石 · 锤炼体魄</h2><div class="event-result">雷域罡风掠过石面，筋骨在一次次震荡中逐渐坚韧。</div><div class="progress"><i id="bodyTemperingProgressFill"></i></div><div class="progress-text"><span id="bodyTemperingProgressText">准备淬体</span><b id="bodyTemperingYieldText">本次累计：防御+0.0</b></div><div class="actions"><button class="btn ghost" id="stopBodyTemperingBtn">退出淬体</button></div></div>';document.body.appendChild(modal);$('#stopBodyTemperingBtn').onclick=()=>stopBodyTempering();return modal}
-function renderBodyTemperingProgress(){if(!bodyTemperingSession)return;let now=Date.now();while(now>=bodyTemperingSession.nextAt){g.defense=(Number(g.defense)||0)+.5;bodyTemperingSession.yield+=.5;bodyTemperingSession.nextAt+=3000;pushLocalLog(`淬体石锤炼：防御 +0.5（累计+${bodyTemperingSession.yield.toFixed(1)}）`);renderSceneMap();render();save()}let left=Math.max(0,bodyTemperingSession.nextAt-now),fill=$('#bodyTemperingProgressFill'),text=$('#bodyTemperingProgressText'),yieldText=$('#bodyTemperingYieldText');if(fill)fill.style.width=Math.max(0,Math.min(100,(1-left/3000)*100))+'%';if(text)text.textContent=`下一次淬体：${(left/1000).toFixed(1)} 秒`;if(yieldText)yieldText.textContent=`本次累计：防御+${bodyTemperingSession.yield.toFixed(1)}`}
-function startBodyTempering(){let i=g.selectedScene??g.map;if(i!==8||activeSpot()!==6)return toast('请前往九天雷域 · 淬体石锤炼体魄');if(bodyTemperingSession)return true;if(localExploreSession)stopLocalExplore('进入淬体石');if(meditationSession)stopMeditation(false);if(miningSession)stopAutoMining();if(liquidMeditationSession)stopLiquidMeditation();if(swordArraySession)stopSwordArrayMeditation();if(residualMonumentSession)stopResidualMonumentMeditation();bodyTemperingSession={yield:0,nextAt:Date.now()+3000,timer:null};let modal=ensureBodyTemperingModal();modal.classList.add('show');bodyTemperingSession.timer=setInterval(renderBodyTemperingProgress,100);renderBodyTemperingProgress();pushLocalLog('进入淬体石锤炼：每3秒永久获得0.5点防御。');save();return true}
-function stopBodyTempering(){if(!bodyTemperingSession)return;clearInterval(bodyTemperingSession.timer);let total=bodyTemperingSession.yield;bodyTemperingSession=null;$('#bodyTemperingModal')?.classList.remove('show');pushLocalLog(`离开淬体石，本次永久获得防御 +${total.toFixed(1)}。`);renderSceneMap();render();save()}
-function talkBodyTemperingStone(){if(bodyTemperingSession)return openNpcDialog('淬体石',`淬体石仍在震荡你的筋骨。\n\n本次累计：防御 +${bodyTemperingSession.yield.toFixed(1)}\n每3秒永久获得0.5点防御。`,[{text:'结束淬体',alt:true,onClick(){stopBodyTempering()}},{text:'继续淬体',ghost:true}]);openNpcDialog('淬体石','一块遍布雷纹的黑石立在雷池边缘，靠近时便有罡风锤炼周身。\n\n可在此自动淬体，每3秒永久获得0.5点防御，随时可退出。',[{text:'开始淬体',alt:true,onClick(){startBodyTempering()}},{text:'暂不淬体',ghost:true}])}
+function ensureBodyTemperingModal(){let modal=$('#bodyTemperingModal');if(modal)return modal;modal=document.createElement('div');modal.id='bodyTemperingModal';modal.className='event-modal liquid-meditation-modal';modal.innerHTML='<div><h2>淬体石 · 锤炼体魄</h2><div class="event-result">雷域罡风掠过石面，筋骨在一次次震荡中逐渐坚韧。</div><div class="progress"><i id="bodyTemperingProgressFill"></i></div><div class="progress-text"><span id="bodyTemperingProgressText">准备淬体</span><b id="bodyTemperingYieldText">本次累计：防御+0</b></div><div class="actions"><button class="btn ghost" id="stopBodyTemperingBtn">退出淬体</button></div></div>';document.body.appendChild(modal);$('#stopBodyTemperingBtn').onclick=()=>stopBodyTempering();return modal}
+function renderBodyTemperingProgress(){if(!bodyTemperingSession)return;let now=Date.now();while(now>=bodyTemperingSession.nextAt){g.defense=(Number(g.defense)||0)+1;bodyTemperingSession.yield+=1;bodyTemperingSession.nextAt+=2000;pushLocalLog(`淬体石锤炼：防御 +1（累计+${bodyTemperingSession.yield}）`);renderSceneMap();render();save()}let left=Math.max(0,bodyTemperingSession.nextAt-now),fill=$('#bodyTemperingProgressFill'),text=$('#bodyTemperingProgressText'),yieldText=$('#bodyTemperingYieldText');if(fill)fill.style.width=Math.max(0,Math.min(100,(1-left/2000)*100))+'%';if(text)text.textContent=`下一次淬体：${(left/1000).toFixed(1)} 秒`;if(yieldText)yieldText.textContent=`本次累计：防御+${bodyTemperingSession.yield}`}
+function startBodyTempering(){let i=g.selectedScene??g.map;if(i!==8||activeSpot()!==6)return toast('请前往九天雷域 · 淬体石锤炼体魄');if(bodyTemperingSession)return true;if(localExploreSession)stopLocalExplore('进入淬体石');if(meditationSession)stopMeditation(false);if(miningSession)stopAutoMining();if(liquidMeditationSession)stopLiquidMeditation();if(swordArraySession)stopSwordArrayMeditation();if(residualMonumentSession)stopResidualMonumentMeditation();bodyTemperingSession={yield:0,nextAt:Date.now()+2000,timer:null};let modal=ensureBodyTemperingModal();modal.classList.add('show');bodyTemperingSession.timer=setInterval(renderBodyTemperingProgress,100);renderBodyTemperingProgress();pushLocalLog('进入淬体石锤炼：每2秒永久获得1点防御。');save();return true}
+function stopBodyTempering(){if(!bodyTemperingSession)return;clearInterval(bodyTemperingSession.timer);let total=bodyTemperingSession.yield;bodyTemperingSession=null;$('#bodyTemperingModal')?.classList.remove('show');pushLocalLog(`离开淬体石，本次永久获得防御 +${total}。`);renderSceneMap();render();save()}
+function talkBodyTemperingStone(){if(bodyTemperingSession)return openNpcDialog('淬体石',`淬体石仍在震荡你的筋骨。\n\n本次累计：防御 +${bodyTemperingSession.yield}\n每2秒永久获得1点防御。`,[{text:'结束淬体',alt:true,onClick(){stopBodyTempering()}},{text:'继续淬体',ghost:true}]);openNpcDialog('淬体石','一块遍布雷纹的黑石立在雷池边缘，靠近时便有罡风锤炼周身。\n\n可在此自动淬体，每2秒永久获得1点防御，随时可退出。',[{text:'开始淬体',alt:true,onClick(){startBodyTempering()}},{text:'暂不淬体',ghost:true}])}
 function thunderPlatformQuest(){return g.thunderPlatformQuest||(g.thunderPlatformQuest={lightningLearned:false,fireLearned:false})}
 function hasLightningFlashSkill(){return(g.activeSkills||[]).some(sk=>sk?.lightningFlash||sk?.name==='电闪雷鸣')||(g.skillReserve||[]).some(sk=>sk?.lightningFlash||sk?.name==='电闪雷鸣')}
 function hasWildfireSkill(){return(g.activeSkills||[]).some(sk=>sk?.wildfire||sk?.name==='烈火燎原')||(g.skillReserve||[]).some(sk=>sk?.wildfire||sk?.name==='烈火燎原')}
@@ -5332,7 +5334,7 @@ equipBagItemByIndex=function(index){let item=normalizeEquip(g.bag?.[index]);if(i
 const forgeSelectedEquipWithXianwangSword=forgeSelectedEquip;
 forgeSelectedEquip=function(){if(isXianwangSword(g.gear?.[g.selectedEquipSlot||'weapon']))return toast('仙王剑不可常规强化，请在炼器峰吸收其他法器成长');return forgeSelectedEquipWithXianwangSword()};
 const talkTieWufengWithXianwangSword=talkTieWufeng;
-talkTieWufeng=function(){let weapon=normalizeEquip(g.gear?.weapon),bracer=normalizeEquip(g.gear?.bracer),boots=normalizeEquip(g.gear?.boots),helmet=normalizeEquip(g.gear?.helmet),armor=normalizeEquip(g.gear?.armor),options=[];if(isXianwangSword(weapon))options.push({text:'淬炼仙王剑',alt:true,onClick(){openXianwangSwordAbsorbMenu()}});if(isTianjingBracer(bracer))options.push({text:'淬炼天晶腕甲',alt:true,onClick(){openTianjingAbsorbMenu()}});if(isQuetianBoots(boots))options.push({text:'淬炼阙天靴',alt:true,onClick(){openQuetianAbsorbMenu()}});if(isHuangtianHelmet(helmet))options.push({text:'淬炼荒天盔',alt:true,onClick(){openHuangtianAbsorbMenu()}});if(isXianfengArmor(armor))options.push({text:'淬炼仙风袍',alt:true,onClick(){openXianfengAbsorbMenu()}});if(!options.length)return talkTieWufengWithXianwangSword();options.push({text:'照常炼器',onClick(){talkTieWufengWithTianjingBracer()}},{text:'暂不处理',ghost:true});openNpcDialog('炼器长老 铁无锋','铁无锋望向你身上的赤色器纹：“这些红色装备皆非寻常矿火可强行锻炼，唯有吞纳同部位器纹，才能继续成长。”',options)};
+talkTieWufeng=function(){let weapon=normalizeEquip(g.gear?.weapon),stone=normalizeEquip(g.gear?.treasure),bracer=normalizeEquip(g.gear?.bracer),boots=normalizeEquip(g.gear?.boots),helmet=normalizeEquip(g.gear?.helmet),armor=normalizeEquip(g.gear?.armor),options=[];if(isPatchStone(stone))options.push({text:'淬炼补天石',alt:true,onClick(){openPatchStoneAbsorbMenu()}});if(isXianwangSword(weapon))options.push({text:'淬炼仙王剑',alt:true,onClick(){openXianwangSwordAbsorbMenu()}});if(isTianjingBracer(bracer))options.push({text:'淬炼天晶腕甲',alt:true,onClick(){openTianjingAbsorbMenu()}});if(isQuetianBoots(boots))options.push({text:'淬炼阙天靴',alt:true,onClick(){openQuetianAbsorbMenu()}});if(isHuangtianHelmet(helmet))options.push({text:'淬炼荒天盔',alt:true,onClick(){openHuangtianAbsorbMenu()}});if(isXianfengArmor(armor))options.push({text:'淬炼仙风袍',alt:true,onClick(){openXianfengAbsorbMenu()}});if(!options.length)return talkTieWufengWithXianwangSword();options.push({text:'照常炼器',onClick(){talkTieWufengWithTianjingBracer()}},{text:'暂不处理',ghost:true});openNpcDialog('炼器长老 铁无锋','铁无锋望向你身上的赤色器纹：“这些红色装备皆非寻常矿火可强行锻炼，唯有吞纳同部位器纹，才能继续成长。”',options)};
 
 // ===== 仙界天门 · 仙门石阶：西方极乐佛与轩辕剑 =====
 function xuanyuanSwordQuest(){return g.xuanyuanSwordQuest||(g.xuanyuanSwordQuest={accepted:false,defeated:false,claimed:false})}
