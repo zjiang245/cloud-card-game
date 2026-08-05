@@ -1564,16 +1564,16 @@ localNpcs=(i,spot)=>{
 function monsterStatsTable(){
   // 战斗修为固定奖励表：直接修改 normal / boss 即可；每张地图的 Boss 当前为普通怪两倍。
   const cultivationRewards={
-    '青云山麓':{normal:20,boss:40},
-    '幽月森林':{normal:50,boss:100},
-    '赤炎秘境':{normal:120,boss:240},
-    '东海龙宫':{normal:300,boss:600},
-    '万妖古域':{normal:800,boss:1600},
-    '天渊战场':{normal:2000,boss:4000},
-    '虚空遗迹':{normal:5000,boss:10000},
-    '仙魔战场':{normal:12000,boss:24000},
-    '九天雷域':{normal:30000,boss:60000},
-    '仙界天门':{normal:80000,boss:160000}
+    '青云山麓':{normal:20,boss:100},
+    '幽月森林':{normal:50,boss:250},
+    '赤炎秘境':{normal:120,boss:600},
+    '东海龙宫':{normal:300,boss:1500},
+    '万妖古域':{normal:900,boss:4500},
+    '天渊战场':{normal:2700,boss:10000},
+    '虚空遗迹':{normal:8000,boss:40000},
+    '仙魔战场':{normal:24000,boss:90000},
+    '九天雷域':{normal:84000,boss:460000},
+    '仙界天门':{normal:250000,boss:1200000}
   };
   const normal=(stats,portrait,material)=>({...stats,portrait:`assets/monster-portraits/${portrait}.png`,loot:{materials:[{name:material,count:1}],equipment:{rolls:1,chance:.20},skillBookChance:.025}});
   const boss=(stats,portrait,material)=>({...stats,portrait,loot:{materials:[{name:material,count:3}],equipment:{rolls:4,chance:.80},skillBookChance:.35}});
@@ -1628,7 +1628,7 @@ function monsterStatsTable(){
     '仙鹤':normal({hp:13150000,mp:155000,attack:265000,defense:84000,realm:'天仙中期'},'xianhe','仙羽'),
     '金甲力士':normal({hp:14300000,mp:110000,attack:248000,defense:125000,realm:'天仙后期'},'jinjia-lishi','金甲碎片'),
     '天兵残影':normal({hp:13850000,mp:180000,attack:292000,defense:97000,realm:'天仙大圆满'},'tianbing-canying','仙尘'),
-    'BOSS 守门仙将':boss({hp:100000000,mp:420000,attack:1000000,defense:300000,realm:'天仙大圆满'},'assets/boss-portraits/shoumen-xianjiang.png','仙将令牌')
+    'BOSS 守门仙将':boss({hp:100000000,mp:420000,attack:1000000,defense:800000,realm:'天仙大圆满'},'assets/boss-portraits/shoumen-xianjiang.png','仙将令牌')
   };
 }
 const MONSTER_STATS=monsterStatsTable();
