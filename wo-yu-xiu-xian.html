@@ -760,6 +760,20 @@ const pillCatalog={
 const mapScenes=[['⛰️','青云山麓','宗门山脚灵气温和，适合初入仙途者打坐、采药、清理山魈。','修为、药材、低阶材料',50,14],['🌲','幽月森林','林深处妖影游走，常有灵草与散修遗物，是前期最稳定的历练地。','灵石、药材、装备碎片',30,33],['🔥','赤炎秘境','地火翻涌，怪物凶猛，适合筑基之后磨炼法器。','锻造材料、残卷、灵石',66,32],['🐉','东海龙宫','海眼灵潮汇聚，水府遗迹偶有灵玉现世。','灵玉、高额灵石、装备',77,52],['👹','万妖古域','妖族古域危机四伏，胜者可携大量材料满载而归。','大量材料、稀有残卷',49,63],['⚔️','天渊战场','古修战场煞气未散，适合高阶修士刷装备与战功。','装备碎片、功法残卷',18,60],['🌀','虚空遗迹','空间裂隙中漂浮着旧时代洞府，机缘与风险并存。','灵玉、修为、装备',20,78],['☯️','仙魔战场','仙魔余波不息，强敌密布，但掉落极为丰厚。','高阶材料、稀有道具',50,88],['⚡','九天雷域','雷霆洗练肉身与元神，是渡劫前最好的磨刀石。','渡劫丹、修为、灵玉',75,77],['🚪','仙界天门','飞升前最后的门槛，只有真正的大修士才能在此长久驻足。','仙缘、海量修为',54,45],['🏯','太玄宗','宗门总坛，弟子在此晋升职位、领取差事、调阅秘典，所有宗门事务仅可手动处理。','宗门贡献、声望、秘典',20,17]];
 const subMapClasses=['mountain','forest','fire','sea','demon','battle','void','dark','thunder','heaven','mountain'],localMapBackgrounds=['assets/map-backgrounds/qingyun-shanlu.png','assets/map-backgrounds/youyue-senlin.png','assets/map-backgrounds/chiyan-mijing.png','assets/map-backgrounds/donghai-longgong.png','assets/map-backgrounds/wanyao-guyu.png','assets/map-backgrounds/tianyuan-zhanchang.png','assets/map-backgrounds/xukong-yiji.png','assets/map-backgrounds/xianmo-zhanchang.png','assets/map-backgrounds/jiutian-leiyu.png','assets/map-backgrounds/xianjie-tianmen.png'],subMapSpots=[['山门驿站','灵草坡','溪边小道','山魈洞','青云石阶'],['森林入口','月下草径','古树洞府','妖狐巢穴','幽潭'],['熔岩栈道','赤砂坡','地火炉','炎魔洞','玄铁矿脉'],['海滨渡口','珊瑚水道','龟丞相府','龙宫偏殿','海眼'],['荒骨原','妖王旗台','血藤林','古兽坟','万妖洞'],['营地','残剑丘','军械冢','煞气裂谷','战魂台'],['浮空渡桥','星砂台','破碎洞府','虚空裂隙','遗迹核心'],['仙盟前哨','魔气荒原','残碑阵','仙魔裂谷','天命台'],['雷池边缘','淬体石','引雷台','云霄栈道','天劫眼'],['接引亭','仙门石阶','问心桥','南天影壁','飞升台'],['山门广场','外门讲经台','西执事厅','藏经宝阁','打坐台']];function fresh(){let root=roots[Math.floor(Math.random()*roots.length)];return{v:1,last:Date.now(),created:Date.now(),realm:0,stage:0,cult:0,stones:100,materials:0,herbs:0,fragments:0,scrolls:0,petEggs:0,jades:0,tribPills:0,cultPills:0,boostPills:0,root:root[0],rootMul:root[1],aptitude:40+Math.floor(Math.random()*61),hp:100,maxHp:100,mana:80,baseMana:80,attack:12,defense:7,agility:5,crit:5,map:0,gear:{weapon:null,armor:null,treasure:null,helmet:null,boots:null,bracer:null},enhance:0,temper:0,jadeSlots:0,skillLevel:1,skillTier:0,insight:0,pet:null,sect:'太玄宗',sectContribution:0,autoAlchemy:true,tribBonus:0,tribFails:0,kills:0,deaths:0,encounters:0,logs:[],offline:null,newbieGuideDone:false,prologueDone:false,mainQuest:'血月之仇'}};
 localMapBackgrounds.push('assets/map-backgrounds/taixuan-zong.png');
+// 天魔宗在击败仙界天门守门仙将后才会显现在大地图右上角。
+maps.push(['天魔宗',0,2000]);
+mapScenes.push(['🕷️','天魔宗','击败守门仙将后显现的隐秘魔宗。只能从太玄宗22号天魔传送阵进入。','宗门声望、宗门贡献、魔道试炼',88,10]);
+subMapClasses.push('dark');
+subMapSpots.push(['天魔宗宗门广场']);
+function tianmoUnlocked(){return !!(g?.bossKills?.[9]>0)}
+const sceneUnlockedBeforeTianmo=sceneUnlocked;
+sceneUnlocked=function(i){return i===11?tianmoUnlocked():sceneUnlockedBeforeTianmo(i)};
+const sceneReqTextBeforeTianmo=sceneReqText;
+sceneReqText=function(i){if(i===11)return tianmoUnlocked()?'已开启 · 请从太玄宗22号天魔传送阵进入':'需先击败仙界天门Boss守门仙将；开启后从太玄宗22号天魔传送阵进入';return sceneReqTextBeforeTianmo(i)};
+const renderHomeMapBeforeTianmo=renderHomeMap;
+renderHomeMap=function(){if(!tianmoUnlocked()&&g?.selectedScene===11)g.selectedScene=10;renderHomeMapBeforeTianmo();if(!tianmoUnlocked())document.querySelector('#homeMap [data-scene="11"]')?.remove()};
+const goSceneBeforeTianmo=goScene;
+goScene=function(){if((g.selectedScene??0)===11)return toast('天魔宗只能通过太玄宗22号天魔传送阵进入');return goSceneBeforeTianmo()};
 let g;try{g=Object.assign(fresh(),JSON.parse(localStorage.getItem(KEY)||'null')||{})}catch(e){g=fresh()}let pendingOffline=0,tickCount=0,battleState=null,meditationSession=null,miningSession=null,liquidMeditationSession=null,simpleMode=localStorage.getItem('xiuSimpleMode')!=='0';const openingPrologueTitle=$('#prologueModal .prologue-title').textContent,openingPrologueScroll=$('#prologueModal .prologue-scroll').innerHTML;g.selectedScene=g.selectedScene??g.map??0;
 g.sect='太玄宗';
 // 路点 02 现为灵液池；不具执事职位的旧存档回到宗门广场。
@@ -1164,7 +1178,7 @@ if($('#bagStatus'))$('#bagStatus').textContent=`背包：${bagUsed()}/${g.bagCap
 function labelDir(idx){return{0:'label-right',5:'label-left',6:'label-top',8:'label-right',10:'label-left',14:'label-left',23:'label-left',32:'label-right',45:'label-left'}[idx]||''}
 function clampPoint(v,min,max){return Math.max(min,Math.min(max,v))}
 function resamplePath(points,total=37){let seg=[],sum=0;for(let i=1;i<points.length;i++){let a=points[i-1],b=points[i],d=Math.hypot(b[0]-a[0],b[1]-a[1]);seg.push(d);sum+=d}let out=[];for(let n=0;n<total;n++){let t=sum*n/(total-1),acc=0;for(let i=1;i<points.length;i++){let d=seg[i-1];if(t<=acc+d||i===points.length-1){let r=d?((t-acc)/d):0,a=points[i-1],b=points[i];out.push([+(a[0]+(b[0]-a[0])*r).toFixed(1),+(a[1]+(b[1]-a[1])*r).toFixed(1)]);break}acc+=d}}return out}
-function routePattern(i){let k=i===0?9:i%10,pts=[
+function routePattern(i){if(i===11)return resamplePath([[10,82],[18,68],[30,76],[42,64],[54,78],[68,68],[84,80],[76,62],[88,48],[72,40],[84,24],[66,16],[54,28],[42,18],[28,30],[16,20],[10,38],[24,50],[38,42],[52,50],[64,40],[74,52],[62,62],[48,54],[34,60],[22,70],[12,58]],35);let k=i===0?9:i%10,pts=[
 [[8,86],[18,68],[12,48],[25,30],[42,18],[58,28],[72,14],[88,26],[80,46],[66,62],[76,82],[55,90],[38,78],[22,88]],
 [[9,84],[20,72],[34,76],[48,86],[66,80],[84,66],[78,48],[90,30],[70,18],[54,30],[36,18],[18,30],[28,50],[14,64],[30,82]],
 [[12,88],[18,70],[34,62],[48,74],[62,62],[54,46],[70,34],[86,22],[66,16],[48,28],[30,18],[16,34],[30,48],[18,62],[38,84],[62,88],[82,72]],
@@ -1184,6 +1198,8 @@ function sceneTransferAt(i,spot){
   // 太玄宗三处固定界门：30号往青云山麓，36号往幽月森林。
   if(i===10&&spot===30)return{to:0,toSpot:18,label:'青云山麓入口',icon:'⛰️'};
   if(i===10&&spot===36)return{to:1,toSpot:25,label:'幽月森林入口',icon:'🌲'};
+  if(i===10&&spot===22)return{to:11,toSpot:0,label:'天魔宗传送阵',icon:'🕷️'};
+  if(i===11&&spot===0)return{to:10,toSpot:22,label:'返回太玄宗传送阵',icon:'↩️'};
   // 青云山麓18号与太玄宗30号互通；原东南界门继续通往幽月森林。
   if(i===0&&spot===18)return{to:10,toSpot:30,label:'太玄宗入口',icon:'🏯'};
   if(i===0&&spot===36)return{to:1,toSpot:0,label:'幽月森林入口',icon:'🌲'};
@@ -1194,12 +1210,12 @@ function sceneTransferAt(i,spot){
   if(i===9&&spot===0)return{to:8,toSpot:36,label:'返回九天雷域',icon:'↩️'};
   return null;
 }
-function keySpotMap(i){let spots=subMapSpots[i]||subMapSpots[0],base;if(i===10)base={0:['⛩️',spots[0]],2:['💧','灵液池'],5:['🧿','天机峰'],31:['🏛️','宗门广场'],6:['📜',spots[1]],8:['🧪','丹阁'],10:['⚒️','炼器峰'],12:['📋','西执事厅'],14:['🥋','练功房'],16:['🌄','定光峰'],19:['🏯','东执事厅'],23:['🗃️',spots[3]],27:['☁️','紫云峰'],32:['🧘','打坐台'],33:['🏔️','宗主峰外殿'],34:['🏛️','掌教内殿'],37:['🏮','凉亭']};else base={0:['🏠',spots[0]],6:['🌿',spots[1]],14:['🕳️',spots[2]],23:['👹',spots[3]],32:['💎',spots[4]]};if(i===3)base[45]=['🏛️','沉月水府'];for(let p=0;p<routeCoords(i).length;p++){let t=sceneTransferAt(i,p);if(t)base[p]=[t.icon,t.label]}return base}
+function keySpotMap(i){let spots=subMapSpots[i]||subMapSpots[0],base;if(i===10)base={0:['⛩️',spots[0]],2:['💧','灵液池'],5:['🧿','天机峰'],22:['🕷️','天魔传送阵'],31:['🏛️','宗门广场'],6:['📜',spots[1]],8:['🧪','丹阁'],10:['⚒️','炼器峰'],12:['📋','西执事厅'],14:['🥋','练功房'],16:['🌄','定光峰'],19:['🏯','东执事厅'],23:['🗃️',spots[3]],27:['☁️','紫云峰'],32:['🧘','打坐台'],33:['🏔️','宗主峰外殿'],34:['🏛️','掌教内殿'],37:['🏮','凉亭']};else if(i===11)base={0:['🕷️',spots[0]]};else base={0:['🏠',spots[0]],6:['🌿',spots[1]],14:['🕳️',spots[2]],23:['👹',spots[3]],32:['💎',spots[4]]};if(i===3)base[45]=['🏛️','沉月水府'];for(let p=0;p<routeCoords(i).length;p++){let t=sceneTransferAt(i,p);if(t)base[p]=[t.icon,t.label]}return base}
 function spotLabel(i,idx){let m=keySpotMap(i);return m[idx]?.[1]||String(idx).padStart(2,'0')}
 function spotIcon(i,idx){let m=keySpotMap(i);return m[idx]?.[0]||String(idx).padStart(2,'0')}
 function spotIsNamed(i,idx){return !!keySpotMap(i)[idx]}
 function activeSpot(){let coords=routeCoords(g.selectedScene??g.map);return Math.max(0,Math.min(coords.length-1,g.localSpot??0))}
-function localMapRingLinks(i){return i===0?[[2,22]]:i===2?[[7,35]]:i===3?[[1,20]]:i===6?[[15,35]]:i===10?[[1,35],[21,24],[24,37]]:(i>=1&&i<=9?[[1,35]]:[])}
+function localMapRingLinks(i){return i===0?[[2,22]]:i===2?[[7,35]]:i===3?[[1,20]]:i===6?[[15,35]]:i===10?[[1,35],[21,24],[24,37]]:i===11?[[1,34]]:(i>=1&&i<=9?[[1,35]]:[])}
 function mapOverviewTarget(i){
   if(g.patrolGuideActive&&!g.patrolGuideSeen&&i===10)return{map:10,spot:33,label:'新手指引 · 宗主峰外殿',ring:true};
   if((g.transmissionGuideActive||g.transmissionElderGuidePending||((g.mainQuestStage||0)===0&&!g.transmissionElderGuideCompleted))&&i===10)return{map:10,spot:14,label:'新手指引 · 练功房',ring:true};
@@ -6904,6 +6920,36 @@ function submitSectDonation(){
 }
 const localMeetWithQingheInput=localMeet;
 localMeet=function(idx=0){let mapIndex=g.selectedScene??g.map,spot=activeSpot(),npc=localNpcs(mapIndex,spot)[idx],name=npc?.name||npc?.[0];if(name==='丹童 青禾')return openQingheExchangeModal();return localMeetWithQingheInput(idx)};
+// ===== 隐藏地图：天魔宗 =====
+const tianmoRanks=[
+  {from:0,to:7,title:'外门弟子',realm:0,hp:480,mp:120,attack:70,defense:24,reputation:12,contribution:24},
+  {from:8,to:14,title:'内门弟子',realm:1,hp:2200,mp:360,attack:260,defense:110,reputation:30,contribution:60},
+  {from:15,to:21,title:'核心弟子',realm:2,hp:11000,mp:900,attack:920,defense:420,reputation:68,contribution:140},
+  {from:22,to:25,title:'魔教圣女',realm:3,hp:42000,mp:2200,attack:2600,defense:1200,reputation:130,contribution:280},
+  {from:26,to:28,title:'执事',realm:4,hp:125000,mp:5200,attack:7600,defense:3600,reputation:220,contribution:500},
+  {from:29,to:31,title:'长老',realm:5,hp:480000,mp:12000,attack:26000,defense:12000,reputation:360,contribution:900},
+  {from:32,to:33,title:'副宗主',realm:6,hp:1800000,mp:26000,attack:72000,defense:34000,reputation:560,contribution:1500},
+  {from:34,to:34,title:'天魔宗主',realm:7,hp:6800000,mp:60000,attack:190000,defense:90000,reputation:900,contribution:2600}
+];
+function tianmoCultivatorInfo(spot){let index=Math.max(0,Math.min(34,Math.floor(spot||0))),rank=tianmoRanks.find(x=>index>=x.from&&index<=x.to)||tianmoRanks[0],step=index-rank.from,scale=1+step*.2;return{...rank,spot:index,stage:step%4,realmText:`${realms[rank.realm]}${stages[step%4]}`,displayName:`魔教中人 · ${rank.title} ${String(index+1).padStart(2,'0')}`,hp:Math.round(rank.hp*scale),mp:Math.round(rank.mp*scale),attack:Math.round(rank.attack*scale),defense:Math.round(rank.defense*scale),reputation:Math.round(rank.reputation*scale),contribution:Math.round(rank.contribution*scale)}}
+function tianmoNpcEntry(spot){let info=tianmoCultivatorInfo(spot);return{name:info.displayName,desc:`${info.title}，镇守天魔宗第${String(info.spot+1).padStart(2,'0')}号路点`,tianmoInfo:info}}
+function tianmoBattleTarget(info){return{name:info.displayName,type:'战斗',tianmoCultivator:true,tianmoInfo:info,customStats:{hp:info.hp,mp:info.mp,attack:info.attack,defense:info.defense,realm:info.realmText,icon:'🕷️',portrait:'',stage:info.stage,multiplier:1},loot:{materials:[],equipment:{rolls:0,chance:0},skillBookChance:0}}}
+function talkTianmoCultivator(info){openNpcDialog(info.displayName,`你在${spotLabel(11,info.spot)}遇见${info.displayName}。\n\n${info.title}身披黑纹法袍，魔气随呼吸起伏。天魔宗各阶弟子皆奉宗门为命，外来修士若想继续深入，便只能以战证明来意。\n\n境界：${info.realmText}\n\n击败后可获得：宗门声望 +${fmt(info.reputation)}、宗门贡献 +${fmt(info.contribution)}`,[{text:'出手击杀',alt:true,onClick(){openBattle(tianmoBattleTarget(info),0)}},{text:'暂且离开',ghost:true}])}
+const localNpcsBeforeTianmo=localNpcs;
+localNpcs=function(i,spot){if(i!==11)return localNpcsBeforeTianmo(i,spot);let list=[tianmoNpcEntry(spot)];if(spot===0)list.unshift(['天魔传送门','返回太玄宗22号天魔传送阵']);return list};
+const localMobsBeforeTianmo=localMobs;
+localMobs=function(i,spot){return i===11?[]:localMobsBeforeTianmo(i,spot)};
+const syncLocalExploreButtonBeforeTianmo=syncLocalExploreButton;
+syncLocalExploreButton=function(){if((g.selectedScene??g.map)===11){let btn=$('#localExploreBtn');if(btn){btn.disabled=true;btn.textContent='魔宗手动';btn.title='天魔宗只开放魔教中人对话与战斗'}return}return syncLocalExploreButtonBeforeTianmo()};
+const useSceneTransferBeforeTianmo=useSceneTransfer;
+useSceneTransfer=function(i,spot){let transfer=sceneTransferAt(i,spot),used=useSceneTransferBeforeTianmo(i,spot);if(used&&transfer?.to===11){g.tianmoGuidePending=false;pushLocalLog('【天魔宗】你通过太玄宗22号天魔传送阵抵达宗门广场。各处魔教中人已现身，谨慎选择对话。');save()}return used};
+const localMeetBeforeTianmo=localMeet;
+localMeet=function(idx=0){let i=g.selectedScene??g.map,spot=activeSpot(),npc=localNpcs(i,spot)[idx],name=npc?.name||npc?.[0];if(i===11&&name==='天魔传送门')return useSceneTransfer(11,0);if(i===11&&npc?.tianmoInfo)return talkTianmoCultivator(npc.tianmoInfo);return localMeetBeforeTianmo(idx)};
+const npcQuestIconBeforeTianmo=npcQuestIcon;
+npcQuestIcon=function(name,mapIndex,spot){if(mapIndex===11)return '⚔️';return npcQuestIconBeforeTianmo(name,mapIndex,spot)};
+function finishTianmoCultivatorVictory(target){let info=target.tianmoInfo||tianmoCultivatorInfo(activeSpot());closeBattle(true);g.sectReputation=(g.sectReputation||0)+info.reputation;g.sectContribution=(g.sectContribution||0)+info.contribution;g.kills=(g.kills||0)+1;pushLocalLog(`天魔宗战斗：${info.displayName}败退，宗门声望+${info.reputation}，宗门贡献+${info.contribution}。`);showNpcResult('天魔宗战果',`宗门声望 +${fmt(info.reputation)}\n宗门贡献 +${fmt(info.contribution)}\n\n魔教中人已败退，天魔宗的魔门仍在等待下一场问道。`,'good');renderSceneMap();render();save()}
+const finishBattleBeforeTianmo=finishBattleWin;
+finishBattleWin=function(){let target=battleState?.target;if(target?.tianmoCultivator)return finishTianmoCultivatorVictory(target);let result=finishBattleBeforeTianmo();if(target?.boss&&target.name==='BOSS 守门仙将'&&tianmoUnlocked()&&!g.tianmoGuideSeen){g.tianmoGuideSeen=true;g.tianmoGuidePending=true;pushLocalLog('【天魔宗解锁】守门仙将败退，天门之外浮现一座被魔雾遮蔽的宗门。请返回大地图查看右上角入口，并从太玄宗22号天魔传送阵进入。');renderHomeMap();toast('天魔宗已开启：请从太玄宗22号天魔传送阵进入',5200)}return result};
 normalizeBookItems();syncScrollsBag();ensureBookTreasuryUi();
 // 兼容旧存档中的 debt 类型欠条：加载脚本时立即归入任务道具。
 syncCabinDebtNotes();
