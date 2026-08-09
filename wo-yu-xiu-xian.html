@@ -602,6 +602,7 @@
 @media(max-width:650px){.fighter-figure .boss-portrait img{height:175px;max-width:165px}}
 .npc-dialog-portrait.tianmo-facing-left,.fighter-figure .boss-portrait.tianmo-facing-left img{transform:scaleX(-1)}
 .npc-list button.tianmo-elder-npc span{color:#b22b33;font-weight:800}
+.fighter-name em.realm-badge.tianmo-elder-realm{color:#fff!important;background:#111!important;border-color:#111!important;box-shadow:0 2px 9px #000b}
 @keyframes fireballFly{0%{left:27%;top:58%;opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(-12deg)}14%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}72%{opacity:1}100%{left:74%;top:54%;opacity:0;transform:translate(-50%,-50%) scale(1.35) rotate(18deg)}}
 @keyframes fireballBurst{0%{opacity:0;transform:translate(-50%,-50%) scale(.18)}22%{opacity:1;transform:translate(-50%,-50%) scale(1.18)}65%{opacity:.9;transform:translate(-50%,-50%) scale(.84)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.45)}}
 @keyframes fireCasterLunge{0%,100%{transform:translateX(0)}38%{transform:translateX(18px) scale(1.03)}60%{transform:translateX(8px)}}
@@ -666,6 +667,7 @@
 .path-line.sect-ring-line{border-top-style:dotted;border-top-color:#f4edd2;opacity:.9}.mini-route.sect-ring-line{stroke:#73856f;stroke-width:1.7;opacity:.9}
 /* ===== 沉月水府易物与战斗侧栏操作 ===== */
 .xiao-longnu-exchange{display:grid;gap:12px}.xiao-longnu-exchange .exchange-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px}.xiao-longnu-exchange .exchange-summary span{padding:10px;border:1px solid #c8b27a;border-radius:7px;background:#fffaf0;color:#365044}.xiao-longnu-exchange label{display:grid;grid-template-columns:auto minmax(110px,1fr) auto;align-items:center;gap:9px;padding:12px;border:1px dashed #c3ad78;background:#fffdf6;color:#365044}.xiao-longnu-exchange input{width:100%;padding:9px;border:1px solid #b9a06d;border-radius:6px;background:#fff;color:#294235;font:700 16px Georgia,serif}.xiao-longnu-exchange small{color:#67776d;line-height:1.6}.explore-settings{display:grid;gap:9px}.explore-settings label{display:grid;grid-template-columns:22px 1fr;gap:9px;align-items:start;padding:11px;border:1px solid #66877c55;border-radius:8px;background:#f9f5e8;color:#294235;cursor:pointer}.explore-settings input{width:18px;height:18px;accent-color:#2f715b}.explore-settings b{display:block;font-size:15px}.explore-settings small{display:block;margin-top:4px;color:#6a786d;line-height:1.55}.battle-title-sr{display:none}.battle-head:after{display:none}.battle-head>.battle-actions.battle-actions-head{position:relative;z-index:2;display:flex;justify-content:flex-start;gap:6px;padding:0;border:0;background:transparent}.battle-head>.battle-actions.battle-actions-head .btn{min-width:68px;padding:7px 10px;font-size:14px;line-height:1}.battle-head>.battle-actions.battle-actions-head #battleNormalBtn{border-color:#57c8ea;background:linear-gradient(180deg,#2a5868,#183842)}.battle-head>.battle-actions.battle-actions-head #battleAutoBtn{border-color:#efbd4d;background:linear-gradient(180deg,#8e6524,#5b3e19)}.battle-head>.battle-actions.battle-actions-head #battleRunBtn{border-color:#e7756e;background:linear-gradient(180deg,#66383c,#3d2428)}.side .nav,.main>.top{display:none}@media(max-width:650px){.xiao-longnu-exchange label{grid-template-columns:1fr;gap:5px}.explore-settings label{padding:9px}.explore-settings b{font-size:14px}.battle-head>.battle-actions.battle-actions-head{gap:4px}.battle-head>.battle-actions.battle-actions-head .btn{min-width:45px;padding:6px 5px;font-size:12px}}
+.equip-temper-tools{margin-top:12px;padding:12px;border:1px solid #9a754744;border-radius:8px;background:linear-gradient(145deg,#f8f3e6,#e9f0e7);color:#294235}.equip-temper-tools h3{margin:0 0 5px;font-size:16px}.equip-temper-tools>small{display:block;margin-bottom:9px;color:#67776d;line-height:1.5}.equip-temper-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:7px}.equip-temper-list label{display:flex;gap:7px;align-items:center;padding:8px;border:1px solid #a99a7855;border-radius:6px;background:#fffdf7;cursor:pointer}.equip-temper-list input{accent-color:#9d3a36}.equip-temper-list small{display:block;color:#718077;font-size:11px}.equip-temper-tools .actions{margin-top:10px}@media(max-width:650px){.equip-temper-list{grid-template-columns:1fr}}
 /* Developer monster controls */
 #devModal>div{width:min(760px,94vw);max-height:92vh;overflow:auto}#devModal .dev-grid{max-height:34vh}.dev-monster-tools{margin-top:14px;padding:12px;border:1px solid #b6c1b4;border-radius:8px;background:#f4f7f1}.dev-monster-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:9px}.dev-monster-head b{color:#315844;font-size:15px}.dev-monster-head small{color:#6f7e73;font-size:11px}.dev-monster-editor{display:grid;grid-template-columns:1.25fr repeat(4,minmax(72px,1fr)) 1fr;gap:7px;align-items:end}.dev-monster-editor label{display:grid;gap:4px;color:#64756c;font-size:11px}.dev-monster-editor input,.dev-monster-editor select{width:100%;padding:8px;border:1px solid #aeb7ad;border-radius:6px;background:#fff;color:#26392e}.dev-monster-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.dev-monster-actions .btn{padding:7px 10px;font-size:12px}@media(max-width:650px){#devModal{padding:8px}#devModal .dev-grid{grid-template-columns:repeat(2,1fr);max-height:28vh}.dev-monster-head{align-items:flex-start;flex-direction:column}.dev-monster-editor{grid-template-columns:repeat(2,minmax(0,1fr))}.dev-monster-editor label:first-child{grid-column:1/-1}.dev-monster-actions .btn{flex:1}}
 #npcDialogActions .npc-dialog-choice{border-color:#4d8462!important;background:linear-gradient(180deg,#4f8b66,#2f6446)!important;color:#fff9e5!important;box-shadow:inset 0 1px #ffffff45,0 2px 5px #183b2780}#npcDialogActions .npc-dialog-choice:hover{border-color:#7fb18b!important;background:linear-gradient(180deg,#609d75,#397451)!important;filter:brightness(1.06)}#npcDialogActions .npc-dialog-choice:disabled{border-color:#94a99a!important;background:#708276!important;color:#dce5dc!important;box-shadow:none}.danchi-quantity-picker{display:grid;grid-template-columns:auto minmax(90px,1fr) auto;align-items:center;gap:8px;margin-top:12px;padding:10px 12px;border:1px solid #b8c8b9;border-radius:6px;background:#f5faef;color:#31533e;font-weight:700}.danchi-quantity-picker input{width:100%;min-width:0;padding:7px 8px;border:1px solid #7fa185;border-radius:4px;background:#fff;color:#244634;font:700 16px Georgia,serif}.danchi-quantity-picker small{color:#667b69;font-weight:600}@media(max-width:600px){.danchi-quantity-picker{grid-template-columns:1fr 82px;gap:6px}.danchi-quantity-picker small{grid-column:1/-1}}
@@ -1213,7 +1215,7 @@ function sceneTransferAt(i,spot){
   if(i===9&&spot===0)return{to:8,toSpot:36,label:'返回九天雷域',icon:'↩️'};
   return null;
 }
-function keySpotMap(i){let spots=subMapSpots[i]||subMapSpots[0],base;if(i===10)base={0:['⛩️',spots[0]],2:['💧','灵液池'],5:['🧿','天机峰'],31:['🏛️','宗门广场'],6:['📜',spots[1]],8:['🧪','丹阁'],10:['⚒️','炼器峰'],12:['📋','西执事厅'],14:['🥋','练功房'],16:['🌄','定光峰'],19:['🏯','东执事厅'],23:['🗃️',spots[3]],27:['☁️','紫云峰'],32:['🧘','打坐台'],33:['🏔️','宗主峰外殿'],34:['🏛️','掌教内殿'],37:['🏮','凉亭']};else if(i===11)base={0:['🕷️',spots[0]]};else base={0:['🏠',spots[0]],6:['🌿',spots[1]],14:['🕳️',spots[2]],23:['👹',spots[3]],32:['💎',spots[4]]};if(i===3)base[45]=['🏛️','沉月水府'];for(let p=0;p<routeCoords(i).length;p++){let t=sceneTransferAt(i,p);if(t)base[p]=[t.icon,t.label]}return base}
+function keySpotMap(i){let spots=subMapSpots[i]||subMapSpots[0],base;if(i===10)base={0:['⛩️',spots[0]],2:['💧','灵液池'],5:['🧿','天机峰'],25:['♻️','宗门回收处'],31:['🏛️','宗门广场'],6:['📜',spots[1]],8:['🧪','丹阁'],10:['⚒️','炼器峰'],12:['📋','西执事厅'],14:['🥋','练功房'],16:['🌄','定光峰'],19:['🏯','东执事厅'],23:['🗃️',spots[3]],27:['☁️','紫云峰'],32:['🧘','打坐台'],33:['🏔️','宗主峰外殿'],34:['🏛️','掌教内殿'],37:['🏮','凉亭']};else if(i===11)base={0:['🕷️',spots[0]]};else base={0:['🏠',spots[0]],6:['🌿',spots[1]],14:['🕳️',spots[2]],23:['👹',spots[3]],32:['💎',spots[4]]};if(i===3)base[45]=['🏛️','沉月水府'];for(let p=0;p<routeCoords(i).length;p++){let t=sceneTransferAt(i,p);if(t)base[p]=[t.icon,t.label]}return base}
 function spotLabel(i,idx){let m=keySpotMap(i);return m[idx]?.[1]||String(idx).padStart(2,'0')}
 function spotIcon(i,idx){let m=keySpotMap(i);return m[idx]?.[0]||String(idx).padStart(2,'0')}
 function spotIsNamed(i,idx){return !!keySpotMap(i)[idx]}
@@ -2538,7 +2540,7 @@ function setBattleRealmBadge(selector,label,index){
   let badge=$(selector);
   if(!badge)return;
   badge.textContent=label;
-  badge.className='realm-badge realm-tier-'+Math.max(0,Math.min(realms.length-1,index));
+  badge.className='realm-badge realm-tier-'+Math.max(0,Math.min(realms.length-1,index))+(selector==='#battleEnemyLevel'&&battleState?.target?.tianmoElder?' tianmo-elder-realm':'');
 }
 function battleSkillBlockReason(skill,index,b=battleState){
   if(!skill||!b)return skill?'战斗已结束':'技能未激活';
@@ -3644,7 +3646,7 @@ function resolveLocalTarget(target,batch=false){let i=g.selectedScene??g.map,spo
 function localHunt(idx=0){let target=localMobs(g.selectedScene??g.map,activeSpot())[idx];if(!target)return toast('此处暂无可探索目标');if(target.dead)return toast(target.permanentCorpse?'萧焱已伏诛，不会复活':`${target.originalName||target.name}尚未复活`);if(target.type==='战斗')return openBattle(target,idx);let ok=resolveLocalTarget(target,false);if(!ok)return toast('此目标暂不可探索');renderSceneMap();render();save()}
 let localExploreSession=null;
 function areaExploreUnlocked(i){return i>=0&&i<10&&(g.bossKills?.[i]||0)>0}
-function localExploreSettings(){return{sellOverflow:false,autoEquip:false,sellMaterials:false,...(g.autoExploreSettings||{})}}
+function localExploreSettings(){return{sellOverflow:false,autoEquip:false,sellMaterials:false,sellPassiveBooks:false,sellWeakerEquip:false,...(g.autoExploreSettings||{})}}
 function ensureLocalExploreSettingsModal(){
   let modal=$('#localExploreSettingsModal');if(modal)return modal;
   document.body.insertAdjacentHTML('beforeend',`<div class="event-modal bag-modal" id="localExploreSettingsModal"><div><h2>原地探索设置</h2><div class="explore-settings" id="localExploreSettingsBody"></div><div class="bag-actions"><button class="btn alt" id="confirmLocalExploreBtn">开始探索</button><button class="btn ghost" id="cancelLocalExploreBtn">暂不探索</button></div></div></div>`);
@@ -3652,8 +3654,8 @@ function ensureLocalExploreSettingsModal(){
 }
 function openLocalExploreSettings(){
   let modal=ensureLocalExploreSettingsModal(),settings=localExploreSettings();
-  $('#localExploreSettingsBody').innerHTML=`<label><input type="checkbox" id="exploreSellOverflow" ${settings.sellOverflow?'checked':''}><span><b>背包溢出自动售卖</b><small>优先出售妖兽材料和评分较低的背包装备，为新掉落腾出空位。</small></span></label><label><input type="checkbox" id="exploreAutoEquip" ${settings.autoEquip?'checked':''}><span><b>实时更换最强装备</b><small>发现本部位评分更高的装备时自动穿戴，旧装备放回背包。</small></span></label><label><input type="checkbox" id="exploreSellMaterials" ${settings.sellMaterials?'checked':''}><span><b>自动出售妖兽材料</b><small>新获得的妖兽材料直接换成灵石，不进入背包。</small></span></label>`;
-  $('#confirmLocalExploreBtn').onclick=()=>{let next={sellOverflow:!!$('#exploreSellOverflow').checked,autoEquip:!!$('#exploreAutoEquip').checked,sellMaterials:!!$('#exploreSellMaterials').checked};g.autoExploreSettings=next;modal.classList.remove('show');beginLocalExplore(next)};
+  $('#localExploreSettingsBody').innerHTML=`<label><input type="checkbox" id="exploreSellOverflow" ${settings.sellOverflow?'checked':''}><span><b>背包溢出自动售卖</b><small>优先出售妖兽材料和评分较低的背包装备，为新掉落腾出空位。</small></span></label><label><input type="checkbox" id="exploreAutoEquip" ${settings.autoEquip?'checked':''}><span><b>实时更换最强装备</b><small>发现本部位评分更高的装备时自动穿戴，旧装备放回背包。</small></span></label><label><input type="checkbox" id="exploreSellMaterials" ${settings.sellMaterials?'checked':''}><span><b>自动出售妖兽材料</b><small>新获得的妖兽材料直接换成灵石，不进入背包。</small></span></label><label><input type="checkbox" id="exploreSellPassiveBooks" ${settings.sellPassiveBooks?'checked':''}><span><b>自动售出被动技能书</b><small>探索中获得的被动技能书直接换成灵石，不占用背包。</small></span></label><label><input type="checkbox" id="exploreSellWeakerEquip" ${settings.sellWeakerEquip?'checked':''}><span><b>自动售出低级装备</b><small>仅出售同部位且装备评分低于当前佩戴装备的掉落。</small></span></label>`;
+  $('#confirmLocalExploreBtn').onclick=()=>{let next={sellOverflow:!!$('#exploreSellOverflow').checked,autoEquip:!!$('#exploreAutoEquip').checked,sellMaterials:!!$('#exploreSellMaterials').checked,sellPassiveBooks:!!$('#exploreSellPassiveBooks').checked,sellWeakerEquip:!!$('#exploreSellWeakerEquip').checked};g.autoExploreSettings=next;modal.classList.remove('show');beginLocalExplore(next)};
   $('#cancelLocalExploreBtn').onclick=()=>modal.classList.remove('show');
   modal.classList.add('show');
 }
@@ -4412,7 +4414,7 @@ function deepSeaResourcesSealed(st=deepSeaState()){return (!!st.detected&&!st.de
 function deepSeaResourceSealText(st,action){return st.puppetLockedBy?`秘境傀儡已锁定你的气息，击碎它前无法${action}`:`秘境之主的气息已锁定此处，击败它前无法${action}`}
 function deepSeaNeighbors(spot){let row=Math.floor(spot/7),col=spot%7,near=[];if(row>0)near.push(spot-7);if(row<6)near.push(spot+7);if(col>0)near.push(spot-1);if(col<6)near.push(spot+1);return near}
 function deepSeaStepToward(from,to){let near=deepSeaNeighbors(from),best=Math.min(...near.map(next=>deepSeaDistance(next,to))),choices=near.filter(next=>deepSeaDistance(next,to)===best);return choices[Math.floor(Math.random()*choices.length)]}
-function deepSeaBossTarget(){return{name:'秘境之主',type:'战斗',boss:true,deepSeaBoss:true,customStats:{hp:190000,mp:12000,attack:12345,defense:10500,realm:'真仙初期',icon:'👑',portrait:'assets/boss-portraits/long-taizi.png'}}}
+function deepSeaBossTarget(){return{name:'秘境之主',type:'战斗',boss:true,deepSeaBoss:true,customStats:{hp:1900000000,mp:12000,attack:1234500,defense:1050000,realm:'天仙初期',icon:'👑',portrait:'assets/boss-portraits/long-taizi.png'}}}
 function deepSeaPuppetTarget(puppet){return{name:'秘境傀儡',type:'战斗',deepSeaPuppet:true,puppetId:puppet.id,customStats:{hp:3000,mp:1200,attack:350,defense:150,realm:'元婴初期',icon:'⚙️',portrait:'assets/monster-portraits/tiejia-shi.png'}}}
 function deepSeaLordStep(){let st=deepSeaState();if(st.defeated)return;let near=deepSeaNeighbors(st.lordSpot);st.lordSpot=st.detected?deepSeaStepToward(st.lordSpot,st.spot):near[Math.floor(Math.random()*near.length)]}
 function deepSeaPuppetStep(){let st=deepSeaState(),caught=null;(st.puppets||[]).filter(p=>!p.defeated).forEach(puppet=>{let steps=1+Math.floor(Math.random()*2);for(let step=0;step<steps&&puppet.spot!==st.spot;step++)puppet.spot=deepSeaStepToward(puppet.spot,st.spot);if(puppet.spot===st.spot&&!caught)caught=puppet});return caught}
@@ -4483,17 +4485,17 @@ function installDeepSeaBattleRun(){let button=$('#battleRunBtn');if(!button||but
 
 // ===== 万妖古域 · 古兽坟：邪恶散修的炼魂抉择 =====
 function evilCultivatorState(){return g.evilCultivator||(g.evilCultivator={defeated:false,outcome:null})}
-function makeSoulBannerSkill(){return{name:'炼魂幡法',icon:'🏴',kind:'passive',soulVictoryCult:300,soulHpFlat:.02,desc:'被动：每次战斗胜利额外获得300修为，生命上限固定提高0.02'}}
-function makeSoulDevourSkill(){return{name:'炼魂大法',icon:'🕯️',kind:'passive',soulVictoryCult:200,soulHpFlat:.01,desc:'被动：每次战斗胜利额外获得200修为，生命上限固定提高0.01'}}
+function makeSoulBannerSkill(){return{name:'炼魂幡法',icon:'🏴',kind:'passive',soulVictoryCult:300,soulHpFlat:1,desc:'被动：每次战斗胜利额外获得300修为，生命上限固定提高1'}}
+function makeSoulDevourSkill(){return{name:'炼魂大法',icon:'🕯️',kind:'passive',soulVictoryCult:200,soulHpFlat:.5,desc:'被动：每次战斗胜利额外获得200修为，生命上限固定提高0.5'}}
 function soulArtProgress(){return g.soulArtProgress||(g.soulArtProgress={bannerHp:0,devourHp:0})}
-function normalizeSoulArts(){let update=sk=>{if(!sk)return;let isBanner=sk.name==='炼魂幡法',isDevour=sk.name==='炼魂大法';if(!isBanner&&!isDevour)return;sk.soulVictoryCult=isBanner?300:200;sk.soulHpFlat=isBanner ? .02 : .01;sk.desc=isBanner?'被动：每次战斗胜利额外获得300修为，生命上限固定提高0.02':'被动：每次战斗胜利额外获得200修为，生命上限固定提高0.01'};[g.passiveSkills,g.activeSkills,g.skillReserve].forEach(list=>(list||[]).forEach(update));(g.bag||[]).forEach(item=>{update(item?.skill);if(item?.name==='炼魂幡法')item.desc='邪恶散修遗下的炼魂幡法。使用后学会被动技：每次战斗胜利修为+300，生命上限+0.02。'})}
+function normalizeSoulArts(){let update=sk=>{if(!sk)return;let isBanner=sk.name==='炼魂幡法',isDevour=sk.name==='炼魂大法';if(!isBanner&&!isDevour)return;sk.soulVictoryCult=isBanner?300:200;sk.soulHpFlat=isBanner?1:.5;sk.desc=isBanner?'被动：每次战斗胜利额外获得300修为，生命上限固定提高1':'被动：每次战斗胜利额外获得200修为，生命上限固定提高0.5'};[g.passiveSkills,g.activeSkills,g.skillReserve].forEach(list=>(list||[]).forEach(update));(g.bag||[]).forEach(item=>{update(item?.skill);if(item?.name==='炼魂幡法')item.desc='邪恶散修遗下的炼魂幡法。使用后学会被动技：每次战斗胜利修为+300，生命上限+1。';if(item?.name==='炼魂大法')item.desc='邪恶散修传下的炼魂大法。使用后学会被动技：每次战斗胜利修为+200，生命上限+0.5。'})}
 normalizeSoulArts();
 function hasSoulArt(name){return(g.passiveSkills||[]).some(sk=>sk?.name===name)||(g.skillReserve||[]).some(sk=>sk?.name===name)||(g.bag||[]).some(it=>it?.type==='skillbook'&&it?.skill?.name===name)}
 function evilCultivatorTarget(){return{name:'邪恶散修',type:'战斗',evilCultivator:true,customStats:{hp:70000,mp:1500,attack:1600,defense:340,realm:'化神大圆满',icon:'🕯️',portrait:'assets/monster-portraits/moxiu-canhun.png'}}}
-function teachSoulDevour(){let st=evilCultivatorState(),skill=makeSoulDevourSkill();if(hasSoulArt(skill.name)){st.outcome='evil';return showNpcResult('炼魂大法','邪恶散修阴恻恻地笑道：“此法你早已知晓。”','good')}if(!learnSkillBook({skill})){return}st.outcome='evil';pushLocalLog('你选择助纣为虐，习得被动技「炼魂大法」。');showNpcResult('炼魂大法','你随邪恶散修踏入血雾，亲手斩断凡人的生机。\n\n学会被动技：炼魂大法\n每次战斗胜利额外获得修为 +200\n每次战斗胜利生命上限 +0.01','danger');renderSkillHud();renderSceneMap();render();save()}
+function teachSoulDevour(){let st=evilCultivatorState(),skill=makeSoulDevourSkill();if(hasSoulArt(skill.name)){st.outcome='evil';return showNpcResult('炼魂大法','邪恶散修阴恻恻地笑道：“此法你早已知晓。”','good')}if(!learnSkillBook({skill})){return}st.outcome='evil';pushLocalLog('你选择助纣为虐，习得被动技「炼魂大法」。');showNpcResult('炼魂大法','你随邪恶散修踏入血雾，亲手斩断凡人的生机。\n\n学会被动技：炼魂大法\n每次战斗胜利额外获得修为 +200\n每次战斗胜利生命上限 +0.5','danger');renderSkillHud();renderSceneMap();render();save()}
 function handEvilCultivatorToSect(){let st=evilCultivatorState(),skill={name:'圣光罩',icon:'✧',kind:'active',holyLightShield:true,mpCost:0,desc:'主动技：零耗蓝。本次战斗中，受到的每次伤害减少15%'};st.outcome='sect';g.cult+=(600000);g.stones=(g.stones||0)+50000;ensureSkillLayout();if(!(g.activeSkills||[]).some(sk=>sk?.holyLightShield||sk?.name==='圣光罩')&&!(g.skillReserve||[]).some(sk=>sk?.holyLightShield||sk?.name==='圣光罩')){if(g.activeSkills.length<5)g.activeSkills.push(skill);else g.skillReserve.push(skill)}processRealmProgress();pushLocalLog('你将邪恶散修交由掌教处置，获得修为与灵石嘉奖，并领悟圣光罩。');showNpcResult('掌教处置','掌教以宗门法度封禁邪恶散修，焚毁炼魂法器。\n\n获得：修为 +60万\n获得：灵石 +5万\n学会主动技：圣光罩\n效果：零耗蓝；本次战斗中，每次受到伤害减少15%。','good');renderSkillHud();renderSceneMap();render();save()}
 function resolveEvilCultivatorVictory(){let st=evilCultivatorState();openNpcDialog('邪恶散修','邪恶散修倒在古兽骸骨之间，炼魂幡仍在阴风中猎猎作响。\n\n“你若收下它，千魂之力尽可为你所用；你若自诩正道，便把我交给太玄宗。”',[
-  {text:'收下炼魂幡法',alt:true,onClick(){let skill=makeSoulBannerSkill();if(hasSoulArt(skill.name)){evilCultivatorState().outcome='banner';return showNpcResult('炼魂幡法','炼魂幡法已在你的功法与背包中，无需重复收取。','good')}let book={type:'skillbook',name:'炼魂幡法',qty:1,max:1,icon:'🏴',sell:0,skill,desc:'邪恶散修遗下的炼魂幡法。使用后学会被动技：每次战斗胜利修为+300，生命上限+0.02。'};if(!addBagItem(book))return toast('背包已满，无法收取炼魂幡法');evilCultivatorState().outcome='banner';pushLocalLog('你收下了邪恶散修遗留的炼魂幡法。');showNpcResult('炼魂幡法','获得《炼魂幡法》\n\n可在“道具”背包中使用，学会被动技：\n每次战斗胜利额外修为 +300\n每次战斗胜利生命上限 +0.02。','good');renderBag();renderSceneMap();render();save()}},
+  {text:'收下炼魂幡法',alt:true,onClick(){let skill=makeSoulBannerSkill();if(hasSoulArt(skill.name)){evilCultivatorState().outcome='banner';return showNpcResult('炼魂幡法','炼魂幡法已在你的功法与背包中，无需重复收取。','good')}let book={type:'skillbook',name:'炼魂幡法',qty:1,max:1,icon:'🏴',sell:0,skill,desc:'邪恶散修遗下的炼魂幡法。使用后学会被动技：每次战斗胜利修为+300，生命上限+1。'};if(!addBagItem(book))return toast('背包已满，无法收取炼魂幡法');evilCultivatorState().outcome='banner';pushLocalLog('你收下了邪恶散修遗留的炼魂幡法。');showNpcResult('炼魂幡法','获得《炼魂幡法》\n\n可在“道具”背包中使用，学会被动技：\n每次战斗胜利额外修为 +300\n每次战斗胜利生命上限 +1。','good');renderBag();renderSceneMap();render();save()}},
   {text:'交给掌教处理',onClick(){handEvilCultivatorToSect()}},
   {text:'暂不处置',ghost:true}
 ])}
@@ -4599,11 +4601,11 @@ battleSkillEffect=async function(sk,idx=0){if(!(sk?.starSandPalm||sk?.name==='�
 // ===== 虚空遗迹 · 虚空裂隙：补天石 =====
 function patchHeavenState(){return g.patchHeaven||(g.patchHeaven={repaired:false,stoneReceived:false})}
 function isPatchStone(item){let equip=normalizeEquip(item);return !!(equip?.patchStone||equip?.name==='补天石')}
-function patchStoneRealmReady(){return realmIndex()>=realmNameIndex('合体中期')}
-function patchStoneRealmText(){return '合体中期'}
+function patchStoneRealmReady(){return realmIndex()>=realmNameIndex('合体初期')}
+function patchStoneRealmText(){return '合体初期'}
 function makePatchStone(){return normalizeEquip({name:'补天石',quality:6,slot:'treasure',powerLevel:realmNameIndex('合体中期')+6,sell:0,special:true,patchStone:true,absorbedCount:0,requiredRealm:patchStoneRealmText(),bonus:{mana:200000,agility:4000},desc:'红色品质法宝。仅合体中期及以上可佩戴；基础效果：法力+200000、身法+4000。可在炼器峰吸收其他法宝，每次获得被吸收法宝全部属性的3%。'})}
-function repairVoidRift(){let state=patchHeavenState();if(state.repaired)return toast('虚空裂隙已经修补完成');if((g.materials||0)<999)return toast(`锻造材料不足：${fmt(g.materials||0)}/999`);if(bagFree()<=0)return toast('背包已满，无法收取补天废料');if(!takeForgeMaterials(999))return toast('锻造材料扣除失败');let scrap={type:'quest',name:'补天废料',qty:1,max:1,icon:'🧱',sell:0,desc:'任务道具：蕴有虚空余韵的补天废料，交给太玄宗炼器峰长老铁无锋可炼制红色品质法宝「补天石」。'};if(!addBagItem(scrap))return toast('背包已满，补天废料暂无法收取');state.repaired=true;pushLocalLog('你以锻造材料×999修补虚空裂隙，获得补天废料。');showNpcResult('虚空裂隙已修补','交付：锻造材料 ×999\n获得任务道具：补天废料 ×1\n\n请将补天废料交给太玄宗炼器峰的铁无锋。','good');renderBag();renderSceneMap();render();save()}
-function talkPatchHeavenGuardian(){let state=patchHeavenState();if(state.stoneReceived)return showNpcResult('补天守护者','裂隙已被补天石的余辉抚平。守护者拱手道：“此界因果已定，愿你善用天外之石。”','good');if(state.repaired)return showNpcResult('补天守护者','守护者立于弥合的裂隙前：“补天废料已交到你手中。去太玄宗炼器峰寻铁无锋，他会知道该如何炼出补天石。”','good');openNpcDialog('补天守护者',`虚空裂隙旁，一位披着星光残甲的守护者镇住逸散的空间乱流。\n\n“裂缝每一次呼吸，都在吞噬此界根基。需以999份锻造材料填补其脉络。修复之后，我会将凝结的补天废料交予你。”\n\n当前锻造材料：${fmt(g.materials||0)} / 999`,[{text:'交付锻造材料×999，修补裂隙',alt:true,onClick(){repairVoidRift()}},{text:'暂不修补',ghost:true}])}
+function repairVoidRift(){let state=patchHeavenState();if(state.repaired)return toast('虚空裂隙已经修补完成');if((g.materials||0)<1999)return toast(`锻造材料不足：${fmt(g.materials||0)}/1999`);if(bagFree()<=0)return toast('背包已满，无法收取补天废料');if(!takeForgeMaterials(1999))return toast('锻造材料扣除失败');let scrap={type:'quest',name:'补天废料',qty:1,max:1,icon:'🧱',sell:0,desc:'任务道具：蕴有虚空余韵的补天废料，交给太玄宗炼器峰长老铁无锋可炼制红色品质法宝「补天石」。'};if(!addBagItem(scrap))return toast('背包已满，补天废料暂无法收取');state.repaired=true;pushLocalLog('你以锻造材料×1999修补虚空裂隙，获得补天废料。');showNpcResult('虚空裂隙已修补','交付：锻造材料 ×1999\n获得任务道具：补天废料 ×1\n\n请将补天废料交给太玄宗炼器峰的铁无锋。','good');renderBag();renderSceneMap();render();save()}
+function talkPatchHeavenGuardian(){let state=patchHeavenState();if(state.stoneReceived)return showNpcResult('补天守护者','裂隙已被补天石的余辉抚平。守护者拱手道：“此界因果已定，愿你善用天外之石。”','good');if(state.repaired)return showNpcResult('补天守护者','守护者立于弥合的裂隙前：“补天废料已交到你手中。去太玄宗炼器峰寻铁无锋，他会知道该如何炼出补天石。”','good');openNpcDialog('补天守护者',`虚空裂隙旁，一位披着星光残甲的守护者镇住逸散的空间乱流。\n\n“裂缝每一次呼吸，都在吞噬此界根基。需以1999份锻造材料填补其脉络。修复之后，我会将凝结的补天废料交予你。”\n\n当前锻造材料：${fmt(g.materials||0)} / 1999`,[{text:'交付锻造材料×1999，修补裂隙',alt:true,onClick(){repairVoidRift()}},{text:'暂不修补',ghost:true}])}
 function receivePatchStone(){let state=patchHeavenState();if(state.stoneReceived)return toast('补天石已炼成');if(!takeBagItemsByName('补天废料',1))return toast('补天废料不在背包中');let stone=makePatchStone();if(!addBagItem(stone))return toast('背包已满，补天石暂无法收取');state.stoneReceived=true;pushLocalLog('铁无锋以补天废料炼成红色品质法宝「补天石」。');showNpcResult('补天石','补天废料在炉中化作赤红灵光，凝成一枚镇压裂隙的古石。\n\n获得红色品质法宝：补天石\n基础属性：法力 +200000、身法 +4000\n佩戴门槛：合体中期\n成长：可在炼器峰吸收其他法宝，每次继承被吸收法宝全部属性的3%。','good');renderBag();renderSceneMap();render();save()}
 function patchStoneAbsorbCandidates(){return(g.bag||[]).map((item,index)=>({item:normalizeEquip(item),index})).filter(x=>x.item?.slot==='treasure'&&!isPatchStone(x.item)).sort((a,b)=>gearScore(b.item)-gearScore(a.item))}
 function openPatchStoneAbsorbMenu(){
@@ -4643,7 +4645,7 @@ talkTieWufeng=function(){let hasScrap=bagItemCountByName('补天废料')>0,stone
 // ===== 虚空遗迹 · 遗迹核心：天晶腕甲 =====
 function xuantianBracerState(){return g.xuantianBracer||(g.xuantianBracer={medicineBrewed:false,bracerReceived:false})}
 function isTianjingBracer(item){let equip=normalizeEquip(item);return !!(equip?.tianjingBracer||equip?.name==='天晶腕甲')}
-function tianjingBracerRealmReady(){return realmIndex()>=realmNameIndex('合体中期')}
+function tianjingBracerRealmReady(){return realmIndex()>=realmNameIndex('合体初期')}
 function makeTianjingBracer(){return normalizeEquip({name:'天晶腕甲',quality:6,slot:'bracer',powerLevel:realmNameIndex('合体中期')+6,sell:0,special:true,tianjingBracer:true,absorbedCount:0,requiredRealm:'合体中期',bonus:{attack:2000,crit:2,defense:1000},desc:'红色品质腕部装备。仅合体中期及以上可佩戴；基础效果：攻击+2000、暴击+2%、防御+1000。可在炼器峰长老铁无锋处吸收其他腕部装备，每次继承被吸收装备全部属性的3%。'})}
 function brewXuantianMedicine(){
   let state=xuantianBracerState(),have=Math.max(g.herbs||0,bagItemCountByName('药材'));
@@ -4728,7 +4730,7 @@ function smallWorldReward(){return g.smallWorldReward||(g.smallWorldReward={clai
 function smallWorldState(){return g.smallWorld||(g.smallWorld={active:false,spot:0,godSpot:48,turns:0,phase:'roaming',returnSpot:14})}
 function smallWorldActive(){return !!g.smallWorld?.active&&(g.selectedScene??g.map)===6}
 function isQuetianBoots(item){let equip=normalizeEquip(item);return !!(equip?.quetianBoots||equip?.name==='阙天靴')}
-function quetianBootsRealmReady(){return realmIndex()>=realmNameIndex('合体中期')}
+function quetianBootsRealmReady(){return realmIndex()>=realmNameIndex('合体初期')}
 function makeQuetianBoots(){return normalizeEquip({name:'阙天靴',quality:6,slot:'boots',powerLevel:realmNameIndex('合体中期')+6,sell:0,special:true,quetianBoots:true,absorbedCount:0,requiredRealm:'合体中期',bonus:{defense:400,agility:2000},desc:'红色品质足部装备。仅合体中期及以上可佩戴；基础效果：防御+400、身法+2000。可在炼器峰长老铁无锋处吸收其他鞋子装备，每次继承被吸收装备全部属性的3%。'})}
 function smallWorldNeighbors(spot){let row=Math.floor(spot/7),col=spot%7,near=[];if(row>0)near.push(spot-7);if(row<6)near.push(spot+7);if(col>0)near.push(spot-1);if(col<6)near.push(spot+1);return near}
 function smallWorldDistance(a,b){let ar=Math.floor(a/7),ac=a%7,br=Math.floor(b/7),bc=b%7;return Math.abs(ar-br)+Math.abs(ac-bc)}
@@ -4902,7 +4904,7 @@ function dihuangQuest(){let q=g.dihuangQuest||(g.dihuangQuest={stage:0,kills:{'�
 function dihuangKillReady(q=dihuangQuest()){return ['魔焰鬼','魔修残魂','残碑灵'].every(name=>(q.kills[name]||0)>=10)}
 function makeHuangtianHelmet(){return normalizeEquip({name:'荒天盔',quality:6,slot:'helmet',powerLevel:realmNameIndex('合体中期')+6,sell:0,special:true,huangtianHelmet:true,absorbedCount:0,requiredRealm:'合体中期',bonus:{hp:10000,defense:1600,mana:9000},desc:'红色品质头部装备。仅合体中期及以上可佩戴；基础效果：生命+10000、防御+1600、法力+9000。可在炼器峰长老铁无锋处吸收其他头部装备，每次继承被吸收装备全部属性的3%。'})}
 function isHuangtianHelmet(item){let equip=normalizeEquip(item);return !!(equip?.huangtianHelmet||equip?.name==='荒天盔')}
-function huangtianHelmetRealmReady(){return realmIndex()>=realmNameIndex('合体中期')}
+function huangtianHelmetRealmReady(){return realmIndex()>=realmNameIndex('合体初期')}
 function acceptDihuangQuest(){let q=dihuangQuest();q.stage=1;pushLocalLog('帝荒委托开启：击败魔焰鬼、魔修残魂、残碑灵各10个。');showNpcResult('帝荒的委托','第一段目标：\n魔焰鬼 0/10\n魔修残魂 0/10\n残碑灵 0/10\n\n完成后返回魔气荒原领取2亿修为，并开启第二段委托。','good');renderSceneMap();render();save()}
 function claimDihuangFirstReward(){let q=dihuangQuest();if(q.stage!==2)return toast('三类魔物尚未全部清剿');q.stage=3;g.cult+=200000000;processRealmProgress();pushLocalLog('帝荒认可你的战果，奖励修为 +2亿，并交付第二段委托。');showNpcResult('帝荒 · 第一段完成','你踏过熄灭的魔焰与残魂余烬。\n\n获得：修为 +2亿\n\n第二段委托：提交药材×2000，帝荒将交付红色头部装备「荒天盔」。','good');renderSceneMap();render();save()}
 function submitDihuangHerbs(){let q=dihuangQuest(),have=Math.max(g.herbs||0,bagItemCountByName('药材'));if(q.stage!==3)return toast('请先完成帝荒的第一段委托');if(have<2000)return toast(`药材不足：${fmt(have)}/2,000`);if(bagFree()<=0)return toast('背包已满，无法收取荒天盔');if(!takeHerbResource(2000))return toast('药材扣除失败，请整理背包后再试');if(!addBagItem(makeHuangtianHelmet()))return toast('背包已满，荒天盔暂无法收取');q.stage=4;pushLocalLog('向帝荒提交药材×2000，获得红色品质头部装备「荒天盔」。');showNpcResult('帝荒 · 第二段完成','交付：药材 ×2000\n\n获得红色品质头部装备：荒天盔\n基础属性：生命 +10000、防御 +1600、法力 +9000\n佩戴门槛：合体中期\n成长：可在炼器峰长老铁无锋处吸收其他头部装备，每次继承被吸收装备全部属性的3%。','good');renderBag();renderSceneMap();render();save()}
@@ -5269,9 +5271,9 @@ renderBattleStatusEffects=function(){renderBattleStatusEffectsWithKunlunMirror()
 
 // ===== 仙界天门 · 仙门石阶：登天梯与仙风袍 =====
 function celestialLadderState(){return g.celestialLadder||(g.celestialLadder={active:false,level:0,completed:false,rewardPending:false,rewardClaimed:false})}
-function celestialLadderNeed(level){return Math.max(0,Math.floor(level||0)*2)}
+function celestialLadderNeed(level){return Math.max(0,Math.floor(level||0))}
 function isXianfengArmor(item){let equip=normalizeEquip(item);return !!(equip?.xianfengArmor||equip?.name==='仙风袍')}
-function xianfengArmorRealmReady(){return realmIndex()>=realmNameIndex('合体中期')}
+function xianfengArmorRealmReady(){return realmIndex()>=realmNameIndex('合体初期')}
 function makeXianfengArmor(){return normalizeEquip({name:'仙风袍',quality:6,slot:'armor',powerLevel:realmNameIndex('合体中期')+6,sell:0,special:true,xianfengArmor:true,absorbedCount:0,requiredRealm:'合体中期',bonus:{hp:1500000,defense:100000},desc:'红色品质防具。仅合体中期及以上可佩戴；基础效果：生命+1500000、防御+100000。可在炼器峰长老铁无锋处吸收其他防具，每次继承被吸收装备全部属性的3%。'})}
 function ensureCelestialLadderStyles(){if($('#celestialLadderStyles'))return;let style=document.createElement('style');style.id='celestialLadderStyles';style.textContent=`.celestial-ladder-modal>div{width:min(560px,94vw);max-height:min(780px,92vh);display:grid;grid-template-rows:auto auto minmax(0,1fr) auto;gap:10px;padding:18px 20px;background:linear-gradient(180deg,#f8f4e8,#e9f0e7);border:2px solid #b99a55;color:#284437;box-shadow:0 22px 55px #13221899}.celestial-ladder-modal h2{margin:0;color:#785a21;font:700 29px "STKaiti","KaiTi",serif}.celestial-ladder-summary{display:flex;justify-content:space-between;gap:9px;padding:10px 12px;border:1px solid #bfaf80;background:#fffaf0;font-size:13px}.celestial-ladder-summary b{color:#845e1f}.celestial-ladder-track{position:relative;display:grid;gap:4px;min-height:0;padding:8px 18px;overflow:auto;background:linear-gradient(90deg,#edf3e8,#fffdf5 48%,#edf3e8);border:1px solid #b4c0af}.celestial-ladder-track:before{content:"";position:absolute;left:50%;top:0;bottom:0;width:2px;background:#c4a45c;transform:translateX(-50%)}.ladder-node{position:relative;z-index:1;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;gap:9px;min-height:31px;color:#7c867d;font-size:12px}.ladder-node i{display:grid;place-items:center;width:28px;height:28px;border:2px solid #aeb7a6;border-radius:50%;background:#f5f3ea;color:#647368;font-style:normal;font-weight:800}.ladder-node span{text-align:right}.ladder-node small{color:#87948a}.ladder-node.current i{border-color:#bd8933;background:#3d7154;color:#fff7d7;box-shadow:0 0 0 4px #d8b76455}.ladder-node.current span{color:#385d46;font-weight:800}.ladder-node.cleared i{border-color:#7ca47f;background:#e4f0dd;color:#346242}.ladder-node.next i{border-color:#bd8933;color:#8a6320}.ladder-node.next span{color:#79591f;font-weight:800}.celestial-ladder-actions{display:flex;justify-content:center;gap:9px}.celestial-ladder-actions .btn{min-width:138px}@media(max-width:650px){.celestial-ladder-modal>div{padding:14px}.celestial-ladder-modal h2{font-size:25px}.celestial-ladder-summary{font-size:12px}.ladder-node{font-size:11px}}`;document.head.appendChild(style)}
 function ensureCelestialLadderModal(){let modal=$('#celestialLadderModal');if(modal)return modal;ensureCelestialLadderStyles();modal=document.createElement('div');modal.id='celestialLadderModal';modal.className='event-modal celestial-ladder-modal';modal.innerHTML='<div><h2>登天梯</h2><div class="celestial-ladder-summary"><span id="celestialLadderStageText"></span><span id="celestialLadderAptitudeText"></span></div><div class="celestial-ladder-track" id="celestialLadderTrack"></div><div class="celestial-ladder-actions"><button class="btn alt" id="climbCelestialLadderBtn">登上一阶</button><button class="btn ghost" id="leaveCelestialLadderBtn">离开天梯</button></div></div>';document.body.appendChild(modal);$('#climbCelestialLadderBtn').onclick=()=>climbCelestialLadder();$('#leaveCelestialLadderBtn').onclick=()=>leaveCelestialLadder();return modal}
@@ -5328,7 +5330,7 @@ useAllBagItem=function(){let idx=g.bagSelected,item=g.bag?.[idx];if(item?.rootBo
 // ===== 仙界天门 · 南天影壁：北极帝君与仙王剑 =====
 function northEmperorState(){return g.northEmperor||(g.northEmperor={swordClaimed:false})}
 function isXianwangSword(item){let equip=normalizeEquip(item);return !!(equip?.xianwangSword||equip?.name==='仙王剑')}
-function xianwangSwordRealmReady(){return realmIndex()>=realmNameIndex('合体中期')}
+function xianwangSwordRealmReady(){return realmIndex()>=realmNameIndex('合体初期')}
 function makeXianwangSword(){return normalizeEquip({name:'仙王剑',quality:6,slot:'weapon',powerLevel:realmNameIndex('合体中期')+6,sell:0,special:true,xianwangSword:true,absorbedCount:0,requiredRealm:'合体中期',bonus:{attack:500000,crit:1},desc:'红色品质法器。仅合体中期及以上可佩戴；基础效果：攻击+500000、暴击+1%。可在炼器峰长老铁无锋处吸收其他法器装备，每次继承被吸收装备全部属性的3%。'})}
 function exchangeXianwangSword(){
   let state=northEmperorState(),orange=equipmentQualityCount(5),herbs=Math.max(g.herbs||0,bagItemCountByName('药材')),materials=g.materials||0;
@@ -6422,18 +6424,19 @@ function talkRenegadeCultivator(){
 const localNpcsWithRenegadeCultivator=localNpcs;
 localNpcs=function(i,spot){
   let npcs=localNpcsWithRenegadeCultivator(i,spot);
-  if(i===4&&spot===14&&!npcs.some(npc=>(npc.name||npc[0])==='叛教修士'))npcs=[...npcs,['叛教修士',g.renegadeCultivatorDefeated?'血藤林中的火光早已熄灭':'叛出太玄宗，正以邪火淬炼血藤']];
+  if(i===4&&spot===14&&!npcs.some(npc=>(npc.name||npc[0])==='叛教修士'||(npc.name||npc[0])==='叛教修士的尸体'))npcs=[...npcs,[g.renegadeCultivatorDefeated?'叛教修士的尸体':'叛教修士',g.renegadeCultivatorDefeated?'叛教修士已伏诛，尸身留在血藤林':'叛出太玄宗，正以邪火淬炼血藤']];
   return npcs;
 };
 const localMeetWithRenegadeCultivator=localMeet;
 localMeet=function(idx=0){
   let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];
-  if(name==='叛教修士')return talkRenegadeCultivator();
+  if(name==='叛教修士'||name==='叛教修士的尸体')return talkRenegadeCultivator();
   return localMeetWithRenegadeCultivator(idx);
 };
 const npcQuestIconWithRenegadeCultivator=npcQuestIcon;
 npcQuestIcon=function(name,mapIndex,spot){
-  if(name==='叛教修士')return g.renegadeCultivatorDefeated?'💬':'❗️';
+  if(name==='叛教修士')return g.renegadeCultivatorDefeated?'☠️':'❗️';
+  if(name==='叛教修士的尸体')return '☠️';
   return npcQuestIconWithRenegadeCultivator(name,mapIndex,spot);
 };
 const resolveLocalTargetWithRenegadeCultivator=resolveLocalTarget;
@@ -6709,7 +6712,7 @@ function courierTargetCandidates(){
   });
   return candidates;
 }
-function courierRewardCult(){return Math.max(1,Math.floor(realmNeed()*.05))}
+function courierRewardCult(){return Math.max(1,Math.floor(realmNeed()*.03))}
 function acceptCourierMission(){
   let state=courierState();
   if(state.mission)return toast('已有一封信在路上，请先完成或送达后回报');
@@ -6738,7 +6741,7 @@ function settleCourierMission(){
   let cult=courierRewardCult();
   g.cult=(g.cult||0)+cult;g.sectContribution=(g.sectContribution||0)+800;g.sectReputation=(g.sectReputation||0)+300;state.mission=null;processRealmProgress();
   pushLocalLog(`信使委托结算：修为 +${fmt(cult)}，宗门贡献 +800，宗门声望 +300。`);
-  showNpcResult('信使 · 回报结算',`书信往来无误，信使将功勋记入宗门玉册。\n\n获得：\n修为 +${fmt(cult)}（当前境界升级所需的5%）\n宗门贡献 +800\n宗门声望 +300\n\n本时辰剩余委托：${COURIER_HOURLY_LIMIT-state.count} 次`,'good');
+  showNpcResult('信使 · 回报结算',`书信往来无误，信使将功勋记入宗门玉册。\n\n获得：\n修为 +${fmt(cult)}（当前境界升级所需的3%）\n宗门贡献 +800\n宗门声望 +300\n\n本时辰剩余委托：${COURIER_HOURLY_LIMIT-state.count} 次`,'good');
   renderTaskPanel();renderSceneMap();render();save();
 }
 function talkSectCourier(){
@@ -6746,7 +6749,7 @@ function talkSectCourier(){
   if(mission?.stage==='return')return settleCourierMission();
   if(mission?.stage==='deliver')return showNpcResult('信使',`你手中的书信尚未送达。\n\n目的地：${mission.place}\n收信人：${mission.name}\n\n将信亲手交出后，再回来领取报酬。`,'good');
   if(state.count>=COURIER_HOURLY_LIMIT)return showNpcResult('信使',`今日这一时辰的信件已经悉数发出。\n\n已完成委托：${state.count} / ${COURIER_HOURLY_LIMIT}\n下一时辰可再来领取。`,'good');
-  openNpcDialog('信使',`信使抱着一叠玉封书信，向你拱手道：\n“宗门传讯需人亲送。你若愿跑这一趟，送达并回报后自有功勋。”\n\n本时辰可接：${COURIER_HOURLY_LIMIT-state.count} / ${COURIER_HOURLY_LIMIT} 次\n奖励：当前境界升级所需修为的5% · 宗门贡献800 · 宗门声望300`,[
+  openNpcDialog('信使',`信使抱着一叠玉封书信，向你拱手道：\n“宗门传讯需人亲送。你若愿跑这一趟，送达并回报后自有功勋。”\n\n本时辰可接：${COURIER_HOURLY_LIMIT-state.count} / ${COURIER_HOURLY_LIMIT} 次\n奖励：当前境界升级所需修为的3% · 宗门贡献800 · 宗门声望300`,[
     {text:'接取一封书信',onClick(){acceptCourierMission()}},
     {text:'暂不接取',ghost:true}
   ]);
@@ -6805,7 +6808,7 @@ renderTaskPanel=function(){
   renderTaskPanelWithCourier();
   let mission=courierState().mission,list=$('#taskList');if(!list||!mission)return;
   let body=mission.stage==='deliver'?`将书信送往${mission.place}，交给${mission.name}。`:`书信已送达，返回太玄宗·山门广场向信使复命。`;
-  list.insertAdjacentHTML('beforeend',taskCard('信使：宗门传书',`${body}\n奖励：当前境界升级所需修为的5%、宗门贡献 +800、宗门声望 +300。`,''));
+  list.insertAdjacentHTML('beforeend',taskCard('信使：宗门传书',`${body}\n奖励：当前境界升级所需修为的3%、宗门贡献 +800、宗门声望 +300。`,''));
 };
 const npcCanTeachSkillWithYuqe=npcCanTeachSkill;
 npcCanTeachSkill=function(name,mapIndex,spot){
@@ -6932,10 +6935,10 @@ const tianmoRanks=[
   {from:22,to:25,title:'魔教圣女',realm:3,hp:42000,mp:2200,attack:2600,defense:1200,reputation:130,contribution:280,names:['绛雪','玄音','姬月','白灵','颜辞','顾青萝','姬无双','楚天歌','叶流萤','殷红妆','赵灵均','洛青辞'],stories:['她掌管祭坛的香火，却悄悄把祭文改成了亡者的名字。','她从小被当作宗门的脸面，真正想要的却只是一次不被安排的选择。','她擅长以歌声安抚心魔，也擅长让敌人在歌声里忘记为何拔剑。','她说魔门并非只有吞噬，也有人在黑暗里替无名之人守灯。']},
   {from:26,to:28,title:'执事',realm:4,hp:125000,mp:5200,attack:7600,defense:3600,reputation:220,contribution:500,names:['罗刹','鬼手','赤魁','黑鸦','铁判','断魂','聂风','何九','秦无咎'],stories:['他掌着进出令牌，知道每一条密道通向哪里，也知道每个失踪者最后去了哪里。','他负责收取各处供奉，从不多拿一枚灵石，却会把欠账记到死者名下。','他刚从边境回来，甲胄上还沾着风沙，似乎不愿再为宗门多杀一个人。']},
   {from:29,to:31,title:'镇宗使',realm:5,hp:480000,mp:12000,attack:26000,defense:12000,reputation:360,contribution:900,names:['血河','玄骨','幽冥','骨青','冥渡','封烬','赤霄','刑天','古冥'],stories:['他曾是上一代宗主的护道人，后来亲手封住了那位宗主的闭关石门。','他守着一座没有名字的坟，坟中没有尸骨，只有一卷不敢打开的遗诏。','他在魔门最深处听见过天外的低语，因此不再相信这座宗门就是终点。']},
-  {from:32,to:34,title:'宗门长老',realm:6,realmLabel:'合体期',hp:4200000,mp:52000,attack:125000,defense:62000,reputation:700,contribution:1900,names:['玄老','刑渊','慕容烬'],stories:['他守着天魔宗的戒律石，见过太多弟子从誓言开始，最后在血泊里结束。','他曾替宗门封印过一条失控的地脉，如今每逢夜深，仍能听见封印下的低吼。','他不急着拔剑，只问你是否知道自己一路杀来的代价。']},
-  {from:35,to:36,title:'护法',realm:7,realmLabel:'大乘期',hp:15000000,mp:150000,attack:420000,defense:210000,reputation:1000,contribution:3000,names:['赤冥','封岳'],stories:['他负责替宗主巡视禁地，身上的黑甲没有一处不是从旧战场上拾来的。','他曾在天门裂隙前独守七日，后来再也不相信所谓的援军。']},
-  {from:37,to:37,title:'副宗主',realm:8,realmLabel:'渡劫期',hp:52000000,mp:360000,attack:980000,defense:480000,reputation:1600,contribution:5000,names:['天孤'],stories:['他替宗主统领诸殿，所有人都称他为副宗主，却没有人见过他真正低头。']},
-  {from:38,to:38,title:'宗主',realm:9,realmLabel:'天仙期',hp:500000000,mp:900000,attack:2800000,defense:1400000,reputation:2600,contribution:8500,names:['无极天尊'],stories:['他在天魔宗最高处俯视这场闯入，像是在等一个终于能让自己拔剑的人。']}
+  {from:32,to:34,title:'宗门长老',realm:6,realmLabel:'合体初期',hp:4200000,mp:52000,attack:125000,defense:62000,reputation:700,contribution:1900,names:['玄老','刑渊','慕容烬'],stories:['他守着天魔宗的戒律石，见过太多弟子从誓言开始，最后在血泊里结束。','他曾替宗门封印过一条失控的地脉，如今每逢夜深，仍能听见封印下的低吼。','他不急着拔剑，只问你是否知道自己一路杀来的代价。']},
+  {from:35,to:36,title:'护法',realm:7,realmLabel:'大乘初期',hp:15000000,mp:150000,attack:420000,defense:210000,reputation:1000,contribution:3000,names:['赤冥','封岳'],stories:['他负责替宗主巡视禁地，身上的黑甲没有一处不是从旧战场上拾来的。','他曾在天门裂隙前独守七日，后来再也不相信所谓的援军。']},
+  {from:37,to:37,title:'副宗主',realm:8,realmLabel:'渡劫初期',hp:52000000,mp:360000,attack:980000,defense:480000,reputation:1600,contribution:5000,names:['天孤'],stories:['他替宗主统领诸殿，所有人都称他为副宗主，却没有人见过他真正低头。']},
+  {from:38,to:38,title:'宗主',realm:9,realmLabel:'天仙初期',hp:500000000,mp:900000,attack:2800000,defense:1400000,reputation:2600,contribution:8500,names:['无极天尊'],stories:['他在天魔宗最高处俯视这场闯入，像是在等一个终于能让自己拔剑的人。']}
 ];
 const tianmoGuardNames=['墨关','韩戍','玄门'];
 function tianmoNpcCount(spot){g.tianmoNpcCounts??={};let index=Math.max(0,Math.min(38,Math.floor(spot||0))),rank=tianmoRanks.find(x=>index>=x.from&&index<=x.to)||tianmoRanks[0],count;if(rank.realm===0)count=3;else if(rank.realm===1)count=2;else if(rank.realm===2)count=1+Math.floor(stableRand(`tianmo:npcs:${index}`)*2);else count=1;if(g.tianmoNpcCounts[index]!==count)g.tianmoNpcCounts[index]=count;return count}
@@ -6944,11 +6947,11 @@ function tianmoGuardInfo(variant){let info=tianmoCultivatorInfo(0,variant);retur
 function tianmoNpcEntry(info){return{name:info.displayName,desc:`${info.title}，${info.story}`,tianmoInfo:info}}
 function tianmoCorpseEntry(info){return{name:`${info.displayName}的尸体`,desc:`${info.title}已败亡，尸身留在${spotLabel(11,info.spot)}。`,tianmoInfo:info,tianmoCorpse:true}}
 function tianmoDefeatState(){g.tianmoDefeated??={};return g.tianmoDefeated}
-const tianmoElderInfo={displayName:'太上长老',title:'太上长老',realmText:'真仙初期',hp:1000000000,mp:1800000,attack:6000000,defense:3000000,reputation:0,contribution:0,spot:1,stage:0,tianmoKey:'elder:entrance',story:'他奉宗主之命镇守宗门深处，平日从不离开天魔宗01号路点半步。'};
+const tianmoElderInfo={displayName:'太上长老',title:'太上长老',realmText:'真仙初期',hp:2000000000,mp:1800000,attack:6000000,defense:3000000,reputation:0,contribution:0,spot:1,stage:0,tianmoKey:'elder:entrance',story:'他奉宗主之命镇守宗门深处，平日从不离开天魔宗01号路点半步。'};
 function tianmoAllVisibleDefeated(){let state=tianmoDefeatState();for(let spot=0;spot<routeCoords(11).length;spot++){let count=tianmoNpcCount(spot);for(let variant=0;variant<count;variant++){let info=spot===0?tianmoGuardInfo(variant):tianmoCultivatorInfo(spot,variant);if(!state[info.tianmoKey])return false}}return true}
 function tianmoElderEntry(){return g.tianmoElderDefeated?{name:'太上长老的尸体',desc:'太上长老已败亡，尸身留在天魔宗01号路点。',tianmoInfo:tianmoElderInfo,tianmoCorpse:true}:{name:tianmoElderInfo.displayName,desc:`真仙初期，${tianmoElderInfo.story}`,tianmoInfo:tianmoElderInfo,tianmoElder:true}}
 function tianmoPortraitFor(info){let title=String(info?.title||'');if(title==='魔教圣女')return'assets/npc-portraits/tianmo-shengnv.png';if(title==='宗主'||title==='太上长老'||title==='副宗主')return'assets/npc-portraits/tianmo-master.png';if(title)return'assets/npc-portraits/tianmo-elder.png';return''}
-function tianmoElderTarget(){return{name:tianmoElderInfo.displayName,type:'战斗',tianmoElder:true,tianmoInfo:tianmoElderInfo,customStats:{hp:tianmoElderInfo.hp,mp:tianmoElderInfo.mp,attack:tianmoElderInfo.attack,defense:tianmoElderInfo.defense,realm:tianmoElderInfo.realmText,icon:'🕷️',portrait:tianmoPortraitFor(tianmoElderInfo),stage:0,multiplier:1},loot:{materials:[],equipment:{rolls:0,chance:0},skillBookChance:0}}}
+function tianmoElderTarget(){return{name:tianmoElderInfo.displayName,type:'战斗',boss:true,tianmoElder:true,tianmoInfo:tianmoElderInfo,customStats:{hp:tianmoElderInfo.hp,mp:tianmoElderInfo.mp,attack:tianmoElderInfo.attack,defense:tianmoElderInfo.defense,realm:tianmoElderInfo.realmText,icon:'🕷️',portrait:tianmoPortraitFor(tianmoElderInfo),stage:0,multiplier:1},loot:{materials:[],equipment:{rolls:0,chance:0},skillBookChance:0}}}
 function tianmoSpotNpcList(spot){let state=tianmoDefeatState(),count=tianmoNpcCount(spot),infos=Array.from({length:count},(_,variant)=>spot===0?tianmoGuardInfo(variant):tianmoCultivatorInfo(spot,variant));return infos.map(info=>state[info.tianmoKey]?tianmoCorpseEntry(info):tianmoNpcEntry(info))}
 function tianmoSpotHasEnemies(spot){if(spot===1&&tianmoAllVisibleDefeated()&&!g.tianmoElderDefeated)return true;return tianmoSpotNpcList(spot).some(npc=>npc.tianmoInfo&&!npc.tianmoCorpse)}
 function tianmoBattleTarget(info){return{name:info.displayName,type:'战斗',tianmoCultivator:true,tianmoKey:info.tianmoKey,tianmoInfo:info,customStats:{hp:info.hp,mp:info.mp,attack:info.attack,defense:info.defense,realm:info.realmText,icon:'🕷️',portrait:tianmoPortraitFor(info),stage:info.stage,multiplier:1},loot:{materials:[],equipment:{rolls:0,chance:0},skillBookChance:0}}}
@@ -7002,6 +7005,321 @@ const localNpcsBeforeBrokenTianmoGate=localNpcs;
 localNpcs=function(i,spot){let npcs=localNpcsBeforeBrokenTianmoGate(i,spot);if(i===10&&spot===22&&!npcs.some(npc=>(npc.name||npc[0])==='破碎的传送阵'))npcs=[['破碎的传送阵','残缺界门，达到大乘初期后可对话传送至天魔宗入口'],...npcs];return npcs};
 const localMeetBeforeBrokenTianmoGate=localMeet;
 localMeet=function(idx=0){let i=g.selectedScene??g.map,spot=activeSpot(),npc=localNpcs(i,spot)[idx],name=npc?.name||npc?.[0];if(i===10&&spot===22&&name==='破碎的传送阵')return talkBrokenTianmoGate();return localMeetBeforeBrokenTianmoGate(idx)};
+// 红色品质装备统一在合体初期解锁；同时修正旧存档中仍保留的合体中期门槛。
+const normalizeEquipWithRedRealmGate=normalizeEquip;
+normalizeEquip=function(item){let result=normalizeEquipWithRedRealmGate(item);if(result?.quality===6){result.requiredRealm='合体初期';if(result.desc)result.desc=result.desc.replaceAll('合体中期','合体初期')}return result};
+g.gear=Object.fromEntries(equipSlots.map(slot=>[slot,normalizeEquip(g.gear?.[slot])]));
+g.bag=(g.bag||[]).map(item=>item?.type==='equipment'?normalizeEquip(item):item);
+const useBagItemWithRedRealmGate=useBagItem;
+useBagItem=function(){let item=normalizeEquip(g.bag?.[g.bagSelected]);if(item?.quality===6&&realmIndex()<realmNameIndex('合体初期'))return toast('红色品质装备需达到合体初期后才能佩戴');return useBagItemWithRedRealmGate()};
+const equipBagItemByIndexWithRedRealmGate=equipBagItemByIndex;
+equipBagItemByIndex=function(index){let item=normalizeEquip(g.bag?.[index]);if(item?.quality===6&&realmIndex()<realmNameIndex('合体初期'))return toast('红色品质装备需达到合体初期后才能佩戴');return equipBagItemByIndexWithRedRealmGate(index)};
+const talkWoundedFoxWithPoisonSacs=talkWoundedFox;
+talkWoundedFox=function(){let artifacts=artifactState(),havePowder=bagItemCountByName('妖花粉'),haveSacs=bagItemCountByName('毒囊');if(artifacts.fuxiQin)return showNpcResult('受伤的妖狐','妖狐伏在旗台阴影里，伤口已然愈合。它轻拨伏羲琴弦，向你低低一揖。\n\n伏羲琴已收录于“装备”中的四大神器栏。','good');openNpcDialog('受伤的妖狐',`妖王旗台下，一只白狐被妖藤刺穿了前爪。它望着你背包中的妖花粉与毒囊，轻声请求：\n\n“十五份妖花粉，再加十五枚毒囊，便可解我体内的妖毒。若你愿意相赠，我以祖传的伏羲琴相报。”\n\n当前持有：妖花粉 ${havePowder} / 15 · 毒囊 ${haveSacs} / 15`,[{text:'交付妖花粉×15、毒囊×15',alt:true,onClick(){if(bagItemCountByName('妖花粉')<15)return toast('妖花粉不足15份');if(bagItemCountByName('毒囊')<15)return toast('毒囊不足15枚');if(!takeBagItemsByName('妖花粉',15)||!takeBagItemsByName('毒囊',15))return toast('任务材料扣除失败');artifacts.fuxiQin={...fuxiQinArtifact(),obtainedAt:Date.now()};pushLocalLog('你以妖花粉与毒囊救下受伤的妖狐，获得特殊神器「伏羲琴」。');showNpcResult('伏羲琴','白狐衔来一张古琴，琴弦微颤，心神随之澄明。\n\n获得特殊神器：伏羲琴\n效果：每次战斗胜利后，回复自身生命与法力上限的20%。\n\n可在“装备”功能的四大神器栏查看。','good');renderSceneMap();render();save()}},{text:'暂不相助',ghost:true}])};
+const openNpcDialogWithRedRealmText=openNpcDialog;
+openNpcDialog=function(title,text,buttons,portraitOverride){if(typeof text==='string'&&/红色品质|佩戴门槛/.test(text))text=text.replaceAll('合体中期','合体初期');return openNpcDialogWithRedRealmText(title,text,buttons,portraitOverride)};
+// ===== 原地探索自动处置与红色装备一键淬炼 =====
+function isExplorePassiveSkillBook(item){return item?.type==='skillbook'&&(item.skill?.kind||'passive')!=='active'}
+function exploreAutoSellValue(item){return Math.max(0,Math.floor(itemSell(item)*(item?.qty||1)))}
+const addBagItemWithExploreAutoSell=addBagItem;
+addBagItem=function(item){
+  let settings=localExploreSession?.settings;
+  if(settings?.sellPassiveBooks&&isExplorePassiveSkillBook(item)){
+    let value=exploreAutoSellValue(item);
+    if(value>0){g.stones+=value;pushLocalLog(`探索自动售卖被动技能书：${item.name}，灵石+${fmt(value)}。`);return true}
+  }
+  let equip=normalizeEquip(item),worn=equip&&normalizeEquip(g.gear?.[equip.slot]);
+  if(settings?.sellWeakerEquip&&equip&&worn&&gearScore(equip)<gearScore(worn)){
+    let value=exploreAutoSellValue(equip);
+    if(value>0){g.stones+=value;pushLocalLog(`探索自动售卖低级装备：${equip.name}（低于当前${equipSlotNames[equip.slot]}），灵石+${fmt(value)}。`);return true}
+  }
+  return addBagItemWithExploreAutoSell(item);
+};
+const RED_EQUIP_TEMPER_RATE=.06;
+function redTemperTarget(slot){let item=normalizeEquip(g.gear?.[slot]);return item?.quality===6?item:null}
+function redTemperCandidates(slot){let target=redTemperTarget(slot);if(!target)return[];return(g.bag||[]).map((item,index)=>({item:normalizeEquip(item),index})).filter(entry=>entry.item?.slot===slot&&entry.item.name!==target.name).sort((a,b)=>gearScore(b.item)-gearScore(a.item))}
+function redTemperPreview(item){return Object.entries(equipAttrs(item)).filter(([,value])=>value).map(([key,value])=>`${({hp:'生命',mana:'法力',attack:'攻击',defense:'防御',agility:'身法',crit:'暴击'}[key])}+${Math.floor(value*RED_EQUIP_TEMPER_RATE)}${key==='crit'?'%':''}`).join('，')}
+function temperRedEquipment(slot,indices){let target=redTemperTarget(slot);if(!target)return{count:0};let valid=new Set(redTemperCandidates(slot).map(entry=>entry.index)),picked=(indices||[]).filter(index=>valid.has(index)).sort((a,b)=>b-a);if(!picked.length)return{count:0};let before={...equipAttrs(target)},bonus={...(target.bonus||{})},names=[];picked.forEach(index=>{let source=normalizeEquip(g.bag?.[index]);if(!source)return;Object.entries(equipAttrs(source)).forEach(([key,value])=>bonus[key]=(bonus[key]||0)+value*RED_EQUIP_TEMPER_RATE);names.push(source.name);removeBagQty(index,1)});target.bonus=bonus;target.absorbedCount=(target.absorbedCount||0)+names.length;g.gear[slot]=target;return{count:names.length,names,before,after:equipAttrs(target),target}}
+function finishSingleRedTemper(slot,index){let result=temperRedEquipment(slot,[index]);if(!result.count)return toast('请选择背包中同部位的装备');let label=equipSlotNames[slot];pushLocalLog(`${result.target.name}淬炼完成：吸收${result.names[0]}，继承其属性的6%。`);showNpcResult(`${result.target.name}淬炼完成`,`${result.target.name}吸收了${result.names[0]}。\n\n本次继承（6%）：${formatForgeAttributeDelta(result.before,result.after)}\n累计吸收：${result.target.absorbedCount}件${label}装备。`,'good');renderEquipModal();renderBag();renderSceneMap();render();save()}
+function openRedTemperMenu(slot){let target=redTemperTarget(slot),choices=redTemperCandidates(slot);if(!target)return toast('请先佩戴红色品质装备');if(!choices.length)return showNpcResult('炼器长老 铁无锋',`${target.name}尚无同部位装备可供淬炼。将多余${equipSlotNames[slot]}装备放入背包后再来。`,'good');let options=choices.map(({item,index})=>({text:`吸收${qualityText[item.quality]}色${item.name}${redTemperPreview(item)?`（${redTemperPreview(item)}）`:''}`,alt:true,onClick(){finishSingleRedTemper(slot,index)}}));options.push({text:'暂不淬炼',ghost:true});openNpcDialog('炼器长老 铁无锋',`铁无锋将${target.name}悬于炉心：“赤色器纹可吞纳同部位灵性，每次继承被吸收装备全部属性的6%。”\n\n${target.name}已吸收：${target.absorbedCount||0}件`,options)}
+openPatchStoneAbsorbMenu=function(){openRedTemperMenu('treasure')};
+absorbTreasureIntoPatchStone=function(index){finishSingleRedTemper('treasure',index)};
+openTianjingAbsorbMenu=function(){openRedTemperMenu('bracer')};
+absorbBracerIntoTianjing=function(index){finishSingleRedTemper('bracer',index)};
+openQuetianAbsorbMenu=function(){openRedTemperMenu('boots')};
+absorbBootsIntoQuetian=function(index){finishSingleRedTemper('boots',index)};
+openHuangtianAbsorbMenu=function(){openRedTemperMenu('helmet')};
+absorbHelmetIntoHuangtian=function(index){finishSingleRedTemper('helmet',index)};
+openXianfengAbsorbMenu=function(){openRedTemperMenu('armor')};
+absorbArmorIntoXianfeng=function(index){finishSingleRedTemper('armor',index)};
+openXianwangSwordAbsorbMenu=function(){openRedTemperMenu('weapon')};
+absorbWeaponIntoXianwangSword=function(index){finishSingleRedTemper('weapon',index)};
+function redTemperSettings(){return g.redTemperSettings||(g.redTemperSettings={})}
+function redTemperSlots(){return equipSlots.filter(slot=>!!redTemperTarget(slot))}
+function renderRedTemperTools(){let slots=redTemperSlots(),settings=redTemperSettings();if(!slots.length)return'<section class="equip-temper-tools"><h3>红装淬炼</h3><small>当前未佩戴红色品质装备。</small></section>';return`<section class="equip-temper-tools"><h3>红装淬炼</h3><small>勾选需要处理的红色装备后，一键吸收背包内全部同部位装备。每件继承 6% 属性。</small><div class="equip-temper-list">${slots.map(slot=>{let item=redTemperTarget(slot),count=redTemperCandidates(slot).length;return`<label><input type="checkbox" data-red-temper-slot="${slot}" ${settings[slot]?'checked':''}><span><b>${equipSlotNames[slot]} · ${item.name}</b><small>可淬炼 ${count} 件</small></span></label>`}).join('')}</div><div class="actions"><button class="btn alt" id="runRedTemperBtn">一键淬炼</button></div></section>`}
+function runConfiguredRedTemper(){let settings=redTemperSettings(),slots=redTemperSlots().filter(slot=>settings[slot]);if(!slots.length)return toast('请先勾选要一键淬炼的红色装备');let total=0,names=[];slots.forEach(slot=>{let result=temperRedEquipment(slot,redTemperCandidates(slot).map(entry=>entry.index));if(result.count){total+=result.count;names.push(`${result.target.name}×${result.count}`)}});if(!total)return toast('所选红色装备暂无可吸收的同部位装备');pushLocalLog(`一键淬炼完成：${names.join('、')}，共吸收${total}件装备，继承比例6%。`);toast(`一键淬炼完成：吸收${total}件装备`);render();renderBag();renderEquipModal();renderSceneMap();save()}
+const renderEquipModalWithRedTemperTools=renderEquipModal;
+renderEquipModal=function(){renderEquipModalWithRedTemperTools();let content=$('#equipModalContent');if(!content)return;content.querySelector('.equip-temper-tools')?.remove();content.insertAdjacentHTML('beforeend',renderRedTemperTools());document.querySelectorAll('[data-red-temper-slot]').forEach(input=>input.onchange=()=>{redTemperSettings()[input.dataset.redTemperSlot]=input.checked;save()});$('#runRedTemperBtn')?.addEventListener('click',runConfiguredRedTemper,{once:true})};
+const normalizeEquipWithRedTemperText=normalizeEquip;
+normalizeEquip=function(item){let result=normalizeEquipWithRedTemperText(item);if(result?.quality===6&&result.desc)result.desc=result.desc.replaceAll('属性的3%','属性的6%');return result};
+const openNpcDialogWithRedTemperText=openNpcDialog;
+openNpcDialog=function(title,text,buttons,portraitOverride){if(typeof text==='string')text=text.replaceAll('属性的3%','属性的6%').replaceAll('本次继承（3%）','本次继承（6%）');return openNpcDialogWithRedTemperText(title,text,buttons,portraitOverride)};
+// ===== 宗门回收员与宝库高阶修为丹 =====
+// 妖兽材料按掉落来源分堆，回收时才能正确计算境界与 Boss 加成。
+function materialOriginFromName(name){
+  for(let [monster,stats] of Object.entries(MONSTER_STATS||{})){
+    if(!stats?.loot?.materials?.some(material=>material.name===name))continue;
+    let realm=stats.realm||'练气初期';
+    return {realm,tier:Math.max(1,realmNameIndex(realm)+1),boss:/^BOSS\s/.test(monster)};
+  }
+  return {realm:'练气初期',tier:1,boss:false};
+}
+function materialSaleOrigin(item){
+  let inferred=materialOriginFromName(item?.name||'');
+  return {
+    realm:item?.sourceRealm||inferred.realm,
+    tier:Math.max(1,Math.floor(Number(item?.sourceRealmTier)||inferred.tier||1)),
+    boss:item?.sourceBoss===undefined?!!inferred.boss:!!item.sourceBoss
+  };
+}
+function recoveryMaterialUnitPrice(item){
+  let source=materialSaleOrigin(item),base=Math.max(0,itemSell(item));
+  return base+Math.max(0,source.tier-1)*30+(source.boss?source.tier*300:0);
+}
+let monsterMaterialOriginContext=null;
+const addTrophyWithRecoveryOrigin=addTrophy;
+addTrophy=function(name,count=1,origin=null){
+  if(!origin)return addTrophyWithRecoveryOrigin(name,count);
+  g.trophies=g.trophies||{};g.bag=g.bag||[];
+  let left=Math.max(1,Math.floor(count||1)),wanted=left,max=99,tier=Math.max(1,Math.floor(origin.tier||1)),boss=!!origin.boss;
+  for(let item of g.bag){
+    if(item?.type!=='material'||item.name!==name||(item.qty||1)>=max||Number(item.sourceRealmTier)!==tier||!!item.sourceBoss!==boss)continue;
+    let add=Math.min(max-(item.qty||1),left);item.qty=(item.qty||1)+add;left-=add;if(!left)break;
+  }
+  while(left>0&&bagFree()>0){
+    let add=Math.min(max,left);
+    g.bag.push({type:'material',name,qty:add,max,sell:35,sourceRealm:origin.realm,sourceRealmTier:tier,sourceBoss:boss,sourceMonster:origin.monster||'',desc:`妖兽材料：${origin.realm}${boss?' Boss':''}掉落。可在太玄宗·宗门回收处享受境界加价。`});
+    left-=add;
+  }
+  let gained=wanted-left;if(gained)g.trophies[name]=(g.trophies[name]||0)+gained;
+  if(left)log(`背包已满，${name}未能拾取×${left}`,'danger');
+  return gained;
+};
+const grantMonsterMaterialsWithRecoveryOrigin=grantMonsterMaterials;
+grantMonsterMaterials=function(materials=[]){
+  let origin=monsterMaterialOriginContext;
+  if(!origin)return grantMonsterMaterialsWithRecoveryOrigin(materials);
+  let rewards=[];
+  materials.forEach(material=>{let gained=addTrophy(material.name,Math.max(1,material.count||1),origin);if(gained)rewards.push({name:material.name,count:gained})});
+  return rewards;
+};
+const resolveLocalTargetWithRecoveryOrigin=resolveLocalTarget;
+resolveLocalTarget=function(target,batch=false){
+  let previous=monsterMaterialOriginContext;
+  if(target?.type==='战斗'){
+    let area=g.selectedScene??g.map,realm=target._battleRealm||target.customStats?.realm||getMonsterStats(target.originalName||target.name)?.realm||localMonsterRealm(area,activeSpot(),target,0);
+    monsterMaterialOriginContext={realm,tier:Math.max(1,realmNameIndex(realm)+1),boss:!!target.boss,monster:target.originalName||target.name};
+  }
+  try{return resolveLocalTargetWithRecoveryOrigin(target,batch)}finally{monsterMaterialOriginContext=previous}
+};
+function redEquipmentBuybacks(){return g.redEquipmentBuybacks||(g.redEquipmentBuybacks=[])}
+function recordRedEquipmentSale(item,price=itemSell(item)){
+  let equip=normalizeEquip(item);if(!equip||equip.quality!==6)return;
+  redEquipmentBuybacks().unshift({item:{...item,bonus:item?.bonus?{...item.bonus}:null},price:Math.max(0,Math.floor(price)),soldAt:Date.now()});
+  g.redEquipmentBuybacks=g.redEquipmentBuybacks.slice(0,30);
+}
+function sellAllMonsterMaterialsToSect(){
+  let sold=0,total=0,bonus=0;
+  for(let index=(g.bag||[]).length-1;index>=0;index--){
+    let item=g.bag[index];if(item?.type!=='material')continue;
+    let qty=Math.max(1,item.qty||1),base=itemSell(item)*qty,value=recoveryMaterialUnitPrice(item)*qty;
+    sold+=qty;total+=value;bonus+=Math.max(0,value-base);g.bag.splice(index,1);
+  }
+  if(!sold)return toast('背包中暂无可回收的妖兽材料');
+  g.stones+=total;g.bagSelected=-1;syncBagPage();
+  pushLocalLog(`宗门回收员回收妖兽材料×${sold}，灵石+${fmt(total)}（境界与 Boss 加价+${fmt(bonus)}）。`);
+  showNpcResult('宗门回收员 · 结算',`回收妖兽材料：${fmt(sold)} 份\n境界与 Boss 加价：+${fmt(bonus)} 灵石\n\n获得灵石：+${fmt(total)}`,'good');
+  render();renderBag();renderSceneMap();save();
+}
+function reclaimRedEquipment(index){
+  let record=redEquipmentBuybacks()[index];if(!record)return toast('该回收记录已失效');
+  if(g.stones<record.price)return toast('灵石不足，暂无法原价回收');
+  if(bagFree()<=0)return toast('背包已满，无法取回装备');
+  if(!addBagItem({...record.item,qty:1}))return toast('背包已满，无法取回装备');
+  g.stones-=record.price;redEquipmentBuybacks().splice(index,1);
+  pushLocalLog(`宗门回收员返还红色装备「${record.item.name}」，消耗灵石${fmt(record.price)}。`);
+  showNpcResult('红装回收完成',`原价回收：${record.item.name}\n消耗灵石：${fmt(record.price)}\n\n装备已放入背包。`,'good');
+  render();renderBag();renderSceneMap();save();
+}
+function openRedEquipmentBuybacks(){
+  let records=redEquipmentBuybacks();
+  if(!records.length)return showNpcResult('宗门回收员','回收架上暂无你曾售出的红色品质装备。','good');
+  let options=records.map((record,index)=>({text:`原价回收 ${record.item.name}（${fmt(record.price)}灵石）`,alt:true,onClick(){reclaimRedEquipment(index)}}));
+  options.push({text:'暂不回收',ghost:true});
+  openNpcDialog('宗门回收员',`回收员取出封存玉匣：\n“红色品质装备一旦入库，宗门会完整保管。只要按当初售价原价回收，它便仍归你所有。”\n\n可回收红装：${records.length} 件`,options);
+}
+function talkSectRecovery(){
+  let materials=(g.bag||[]).filter(item=>item?.type==='material'),estimated=materials.reduce((sum,item)=>sum+recoveryMaterialUnitPrice(item)*(item.qty||1),0),records=redEquipmentBuybacks();
+  openNpcDialog('宗门回收员',`“妖兽遗材的灵性会随境界与首领血脉涨落，我按宗门公价回收。”\n\n回收单价 = 原售卖价 +（境界序位 - 1）×30 + Boss境界序位×300\n\n当前可回收材料：${fmt(materials.reduce((sum,item)=>sum+(item.qty||1),0))} 份\n预计灵石：${fmt(estimated)}\n待回收红装：${records.length} 件`,[
+    {text:'出售全部妖兽材料',alt:true,onClick(){sellAllMonsterMaterialsToSect()}},
+    {text:`原价回收红色装备（${records.length}）`,alt:true,onClick(){openRedEquipmentBuybacks()}},
+    {text:'暂不处理',ghost:true}
+  ]);
+}
+const localNpcsWithSectRecovery=localNpcs;
+localNpcs=function(i,spot){let npcs=localNpcsWithSectRecovery(i,spot);if(i===10&&spot===25&&!npcs.some(npc=>(npc?.name||npc?.[0])==='宗门回收员'))return [...npcs,['宗门回收员','按妖兽境界与首领血脉回收材料，并可原价返还误售红装']];return npcs};
+const localMeetWithSectRecovery=localMeet;
+localMeet=function(idx=0){let i=g.selectedScene??g.map,spot=activeSpot(),npc=localNpcs(i,spot)[idx],name=npc?.name||npc?.[0];if(i===10&&spot===25&&name==='宗门回收员')return talkSectRecovery();return localMeetWithSectRecovery(idx)};
+const sellBagItemWithRedBuyback= sellBagItem;
+sellBagItem=function(){let item=g.bag?.[g.bagSelected],isRed=normalizeEquip(item)?.quality===6;sellBagItemWithRedBuyback();if(isRed&&!g.bag.includes(item)){recordRedEquipmentSale(item);save()}};
+const sellAllBagItemWithRedBuyback=sellAllBagItem;
+sellAllBagItem=function(){let item=g.bag?.[g.bagSelected],isRed=normalizeEquip(item)?.quality===6;sellAllBagItemWithRedBuyback();if(isRed&&!g.bag.includes(item)){recordRedEquipmentSale(item);save()}};
+const addBagItemWithRedBuyback=addBagItem;
+addBagItem=function(item){let equip=normalizeEquip(item),worn=equip&&normalizeEquip(g.gear?.[equip.slot]),settings=localExploreSession?.settings;if(settings?.sellWeakerEquip&&equip?.quality===6&&worn&&gearScore(equip)<gearScore(worn))recordRedEquipmentSale(item,itemSell(equip));return addBagItemWithRedBuyback(item)};
+const autoExploreSellOverflowWithRedBuyback=autoExploreSellOverflowItem;
+autoExploreSellOverflowItem=function(){let before=(g.bag||[]).filter(item=>normalizeEquip(item)?.quality===6).map(item=>({item,price:itemSell(item)})),result=autoExploreSellOverflowWithRedBuyback();before.forEach(record=>{if(!g.bag.includes(record.item))recordRedEquipmentSale(record.item,record.price)});return result};
+function treasuryCultPillItem(level,rate,maxRealm,maxStage){return{type:'pill',name:`${level}级修为丹`,qty:1,max:99,icon:'💊',sell:level*120,cultNeedRate:rate,maxCultRealm:maxRealm,maxCultStage:maxStage,desc:`服用后获得当前升级所需修为的${Math.round(rate*100)}%。仅限${realms[maxRealm]}${stages[maxStage]}及以下使用。`}}
+if(!sectGoods.some(item=>item[2]==='cultPill6'))sectGoods.push(['💊 6级修为丹·当前需求5%',200,'cultPill6',1,1]);
+if(!sectGoods.some(item=>item[2]==='cultPill7'))sectGoods.push(['💊 7级修为丹·当前需求18%',600,'cultPill7',1,1]);
+const buySectGoodWithCultPills=buySectGood;
+buySectGood=function(index){
+  let item=sectGoods[index];if(!item||!['cultPill6','cultPill7'].includes(item[2]))return buySectGoodWithCultPills(index);
+  if(!g.sect||g.sectLevel<item[4])return toast('宗门宝库等级不足');
+  if(g.sectContribution<item[1])return toast('宗门贡献不足');
+  let pill=item[2]==='cultPill6'?treasuryCultPillItem(6,.05,8,0):treasuryCultPillItem(7,.18,8,3);
+  let canStack=(g.bag||[]).some(entry=>entry?.type==='pill'&&entry.name===pill.name&&(entry.qty||1)<(entry.max||99));
+  if(!canStack&&bagFree()<=0)return toast('背包已满，无法兑换该物品');
+  if(!addBagItem(pill))return toast('背包已满，无法兑换该物品');
+  g.sectContribution-=item[1];pushLocalLog(`宗门宝库兑换：${pill.name}。`);toast(`获得${pill.name}`);render();renderBag();renderSectTreasury();save();
+};
+const useBagItemWithTreasuryCultPills=useBagItem;
+useBagItem=function(){
+  let index=g.bagSelected,item=g.bag?.[index];
+  if(item?.type==='pill'&&item.cultNeedRate){
+    let realm=item.maxCultRealm??8,stage=item.maxCultStage??3;
+    if(g.realm>realm||(g.realm===realm&&g.stage>stage))return toast(`${item.name}仅限${realms[realm]}${stages[stage]}及以下使用`);
+    let gain=Math.max(1,Math.floor(realmNeed()*item.cultNeedRate));g.cult+=gain;removeBagQty(index,1);processRealmProgress();
+    pushLocalLog(`服用${item.name}，修为+${fmt(gain)}。`);toast(`服用${item.name}，修为+${fmt(gain)}`);render();renderBag();renderSceneMap();save();return;
+  }
+  return useBagItemWithTreasuryCultPills();
+};
+const canUseAllBagItemWithTreasuryCultPills=canUseAllBagItem;
+canUseAllBagItem=function(item){return !!item?.cultNeedRate?false:canUseAllBagItemWithTreasuryCultPills(item)};
+const renderBagWithCultPillLimits=renderBag;
+renderBag=function(){
+  renderBagWithCultPillLimits();
+  let item=g.bag?.[g.bagSelected];
+  if(!item?.cultNeedRate)return;
+  let realm=item.maxCultRealm??8,stage=item.maxCultStage??3;
+  if(g.realm>realm||(g.realm===realm&&g.stage>stage)){
+    let use=$('#useBagItemBtn');
+    if(use){use.disabled=true;use.title=`仅限${realms[realm]}${stages[stage]}及以下使用`;}
+  }
+};
+// ===== 淬体大妖与残碑阵守护兽 =====
+function canReceiveNpcCultivationRewards(rootPills,scrolls){
+  let slots=0,bag=g.bag||[];
+  if(rootPills&&!bag.some(item=>item?.rootBonePill&&(item.qty||1)<(item.max||99)))slots++;
+  if(scrolls&&!bag.some(item=>item?.type==='scrollResource'&&item.name==='功法残卷'))slots++;
+  return bagFree()>=slots;
+}
+function giveNpcCultivationRewards({rootPills=0,scrolls=0,cult=0}){
+  if(rootPills)addBagItem(rootBonePillItem(rootPills));
+  if(scrolls)addScrolls(scrolls);
+  if(cult){g.cult+=cult;processRealmProgress();}
+}
+function bodyDemonQuest(){return g.bodyDemonQuest||(g.bodyDemonQuest={claimed:false})}
+function bossMaterialKinds(){
+  let counts={};
+  (g.bag||[]).forEach(item=>{
+    if(item?.type!=='material'||!materialSaleOrigin(item).boss)return;
+    counts[item.name]=(counts[item.name]||0)+(item.qty||1);
+  });
+  return Object.entries(counts).sort((a,b)=>a[0].localeCompare(b[0],'zh-CN'));
+}
+function takeBossMaterialByName(name,qty){
+  let left=qty;
+  for(let index=(g.bag||[]).length-1;index>=0&&left>0;index--){
+    let item=g.bag[index];
+    if(item?.type!=='material'||item.name!==name||!materialSaleOrigin(item).boss)continue;
+    let take=Math.min(item.qty||1,left);item.qty=(item.qty||1)-take;left-=take;
+    if(item.qty<=0)g.bag.splice(index,1);
+  }
+  if(left)return false;
+  if(g.trophies?.[name])g.trophies[name]=Math.max(0,g.trophies[name]-qty);
+  syncBagPage();return true;
+}
+function submitBodyDemonOffering(){
+  let state=bodyDemonQuest();if(state.claimed)return talkBodyTemperingDemon();
+  let kinds=bossMaterialKinds().filter(([,qty])=>qty>=3).slice(0,5);
+  if(kinds.length<5)return toast(`还需${5-kinds.length}种数量不少于3份的 Boss 妖兽材料`);
+  if(!canReceiveNpcCultivationRewards(3,10))return toast('背包至少需预留2格空间领取奖励');
+  let names=kinds.map(([name])=>name);
+  if(!names.every(name=>takeBossMaterialByName(name,3)))return toast('Boss 妖兽材料数量发生变化，请重新确认');
+  state.claimed=true;giveNpcCultivationRewards({rootPills:3,scrolls:10,cult:3500000000});
+  pushLocalLog(`向淬体大妖献上五种 Boss 妖兽材料各3份，获得根骨丹×3、功法残卷×10、修为+35亿。`);
+  showNpcResult('淬体大妖的回馈',`交付 Boss 妖兽材料：\n${names.map(name=>`${name} ×3`).join('、')}\n\n获得：\n根骨丹 ×3\n功法残卷 ×10\n修为 +35亿`,'good');
+  render();renderBag();renderSceneMap();save();
+}
+function talkBodyTemperingDemon(){
+  let state=bodyDemonQuest();
+  if(state.claimed)return showNpcResult('淬体大妖','大妖的雷纹骨甲已经褪去凶意。它沉声道：“五种首领血脉已炼入你的筋骨，此后当以自身道途为炉。”','good');
+  let kinds=bossMaterialKinds(),ready=kinds.filter(([,qty])=>qty>=3),lines=kinds.length?kinds.map(([name,qty])=>`${name} ${qty}/3`).join(' · '):'尚未持有 Boss 妖兽材料';
+  openNpcDialog('淬体大妖',`淬体石后，一头披着雷纹骨甲的大妖缓缓睁眼。\n\n“我不取寻常妖血。交出五种不同的 Boss 妖兽材料，各三份，我便以雷域本源替你洗炼根骨。”\n\n当前可用种类：${ready.length} / 5\n${lines}\n\n报酬：根骨丹×3、功法残卷×10、修为+35亿`,[
+    {text:'献上五种Boss材料各3份',alt:true,onClick(){submitBodyDemonOffering()}},
+    {text:'暂不献纳',ghost:true}
+  ]);
+}
+function residualGuardianQuest(){return g.residualGuardianQuest||(g.residualGuardianQuest={fed:0,claimed:false})}
+function allMonsterMaterialCount(){return(g.bag||[]).reduce((total,item)=>total+(item?.type==='material'?(item.qty||1):0),0)}
+function feedResidualGuardian(amount){
+  let state=residualGuardianQuest();if(state.claimed)return talkResidualGuardian();
+  let remaining=Math.max(0,1000-(state.fed||0)),offer=Math.max(0,Math.min(Math.floor(amount||0),remaining,allMonsterMaterialCount()));
+  if(!offer)return toast(remaining?'背包中没有可投喂的妖兽材料':'守护兽已吃饱');
+  if(offer===remaining&&!canReceiveNpcCultivationRewards(3,15))return toast('背包至少需预留2格空间领取奖励');
+  let left=offer;
+  for(let index=(g.bag||[]).length-1;index>=0&&left>0;index--){
+    let item=g.bag[index];if(item?.type!=='material')continue;
+    let take=Math.min(item.qty||1,left);item.qty=(item.qty||1)-take;left-=take;
+    if(g.trophies?.[item.name])g.trophies[item.name]=Math.max(0,g.trophies[item.name]-take);
+    if(item.qty<=0)g.bag.splice(index,1);
+  }
+  state.fed=(state.fed||0)+offer;syncBagPage();
+  if(state.fed>=1000){
+    state.fed=1000;state.claimed=true;giveNpcCultivationRewards({rootPills:3,scrolls:15,cult:450000000});
+    pushLocalLog('残碑阵守护兽吃饱妖兽材料，获得根骨丹×3、功法残卷×15、修为+4.5亿。');
+    showNpcResult('守护兽的赠礼',`累计投喂妖兽材料：1000份\n\n获得：\n根骨丹 ×3\n功法残卷 ×15\n修为 +4.5亿`,'good');
+  }else{
+    toast(`守护兽吞下妖兽材料×${offer}，累计${state.fed}/1000`);pushLocalLog(`向残碑阵守护兽投喂妖兽材料×${offer}，累计${state.fed}/1000。`);
+  }
+  render();renderBag();renderSceneMap();save();
+}
+function talkResidualGuardian(){
+  let state=residualGuardianQuest();
+  if(state.claimed)return showNpcResult('守护兽','守护兽伏在残碑旁，鼻息平稳。它已经将千份妖兽材料炼成护阵灵性，不再向你索取祭品。','good');
+  let remaining=Math.max(0,1000-(state.fed||0)),available=allMonsterMaterialCount();
+  openNpcDialog('守护兽',`残碑阵中央的石兽自裂纹间抬起头，低沉的咆哮震得碑文微颤。\n\n“以妖兽材料饲我。千份灵性足以补全此地守阵残魂。”\n\n累计投喂：${state.fed||0} / 1000\n背包妖兽材料：${available}\n\n完成报酬：根骨丹×3、功法残卷×15、修为+4.5亿`,[
+    {text:'投喂1份妖兽材料',alt:true,onClick(){feedResidualGuardian(1)}},
+    {text:'投喂10份妖兽材料',alt:true,onClick(){feedResidualGuardian(10)}},
+    {text:'投喂100份妖兽材料',alt:true,onClick(){feedResidualGuardian(100)}},
+    {text:`投喂至完成（还需${remaining}）`,alt:true,onClick(){feedResidualGuardian(remaining)}},
+    {text:'暂不投喂',ghost:true}
+  ]);
+}
+const localNpcsWithCultivationBeasts=localNpcs;
+localNpcs=function(i,spot){
+  let npcs=localNpcsWithCultivationBeasts(i,spot);
+  if(i===8&&spot===6&&!npcs.some(npc=>(npc?.name||npc?.[0])==='淬体大妖'))npcs=[...npcs,['淬体大妖','以 Boss 妖兽材料换取雷域洗炼之机']];
+  if(i===7&&spot===14&&!npcs.some(npc=>(npc?.name||npc?.[0])==='守护兽'))npcs=[...npcs,['守护兽','可持续投喂妖兽材料，补全残碑守阵灵性']];
+  return npcs;
+};
+const localMeetWithCultivationBeasts=localMeet;
+localMeet=function(idx=0){
+  let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];
+  if(name==='淬体大妖')return talkBodyTemperingDemon();
+  if(name==='守护兽')return talkResidualGuardian();
+  return localMeetWithCultivationBeasts(idx);
+};
 normalizeBookItems();syncScrollsBag();ensureBookTreasuryUi();
 // 兼容旧存档中的 debt 类型欠条：加载脚本时立即归入任务道具。
 syncCabinDebtNotes();
