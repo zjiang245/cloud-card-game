@@ -568,17 +568,17 @@
 #battlePlayerFigure.skill-frame{transform:translateY(var(--hero-frame-offset,0px)) scale(var(--hero-frame-scale,1.35));transform-origin:center bottom}
 .fighter-figure.player.normal-attack{animation:playerNormalAttack .58s cubic-bezier(.25,.8,.25,1)}
 .fighter-figure.enemy.normal-attack{animation:enemyNormalAttack .58s cubic-bezier(.25,.8,.25,1)}
-.fighter-figure.player.skill-lunge{animation:playerSkillLunge .82s cubic-bezier(.2,.8,.28,1)}
+.fighter-figure.player.skill-lunge{z-index:3;animation:playerSkillLunge .82s cubic-bezier(.2,.8,.28,1)}
 .fighter-figure.player.skill-hit-lunge{animation:playerSkillHitLunge .36s cubic-bezier(.2,.82,.28,1)}
 .fighter-figure.player.hit-shake,.fighter-figure.enemy.hit-shake{animation:battleHitShake .38s ease}
 .fighter-figure.player.run-away{animation:playerRunAway .85s ease-in forwards}
 @keyframes playerNormalAttack{0%,100%{transform:translateX(0)}35%{transform:translateX(64%) translateY(-7px) scale(1.06)}55%{transform:translateX(70%) translateY(-2px) scale(1.02)}75%{transform:translateX(16%)}}
 @keyframes enemyNormalAttack{0%,100%{transform:translateX(0)}35%{transform:translateX(-64%) translateY(-7px) scale(1.06)}55%{transform:translateX(-70%) translateY(-2px) scale(1.02)}75%{transform:translateX(-16%)}}
-@keyframes playerSkillLunge{0%,100%{transform:translateX(0)}26%{transform:translateX(18%) translateY(-4px) scale(1.03)}52%{transform:translateX(72%) translateY(-10px) scale(1.1)}65%{transform:translateX(66%) translateY(-3px) scale(1.07)}82%{transform:translateX(16%)}}
-@keyframes playerSkillHitLunge{0%,100%{transform:translateX(0)}48%{transform:translateX(58%) translateY(-7px) scale(1.07)}72%{transform:translateX(35%) translateY(-3px) scale(1.04)}}
+@keyframes playerSkillLunge{0%,100%{transform:translateX(0)}30%{transform:translateX(4%) translateY(-2px) scale(1.01)}58%{transform:translateX(12%) translateY(-5px) scale(1.035)}76%{transform:translateX(5%) translateY(-2px) scale(1.015)}}
+@keyframes playerSkillHitLunge{0%,100%{transform:translateX(0)}48%{transform:translateX(9%) translateY(-4px) scale(1.025)}72%{transform:translateX(4%) translateY(-1px) scale(1.01)}}
 @keyframes battleHitShake{0%,100%{transform:translateX(0);filter:brightness(1)}25%{transform:translateX(-10px);filter:brightness(1.8)}50%{transform:translateX(9px)}75%{transform:translateX(-5px)}}
 @keyframes playerRunAway{0%{transform:translateX(0);opacity:1}25%{transform:translateX(-12px) rotate(-4deg)}100%{transform:translateX(-145%) translateY(10px) rotate(-10deg);opacity:0;filter:blur(2px)}}
-@media(max-width:650px){@keyframes playerNormalAttack{0%,100%{transform:translateX(0)}42%{transform:translateX(48%) translateY(-5px) scale(1.04)}70%{transform:translateX(12%)}}@keyframes enemyNormalAttack{0%,100%{transform:translateX(0)}42%{transform:translateX(-48%) translateY(-5px) scale(1.04)}70%{transform:translateX(-12%)}}@keyframes playerSkillLunge{0%,100%{transform:translateX(0)}28%{transform:translateX(15%) translateY(-3px) scale(1.02)}54%{transform:translateX(52%) translateY(-6px) scale(1.06)}80%{transform:translateX(12%)}}@keyframes playerSkillHitLunge{0%,100%{transform:translateX(0)}48%{transform:translateX(42%) translateY(-5px) scale(1.04)}72%{transform:translateX(24%) translateY(-2px) scale(1.02)}}}
+@media(max-width:650px){@keyframes playerNormalAttack{0%,100%{transform:translateX(0)}42%{transform:translateX(48%) translateY(-5px) scale(1.04)}70%{transform:translateX(12%)}}@keyframes enemyNormalAttack{0%,100%{transform:translateX(0)}42%{transform:translateX(-48%) translateY(-5px) scale(1.04)}70%{transform:translateX(-12%)}}@keyframes playerSkillLunge{0%,100%{transform:translateX(0)}30%{transform:translateX(3%) translateY(-2px) scale(1.01)}58%{transform:translateX(8%) translateY(-4px) scale(1.025)}76%{transform:translateX(3%) translateY(-1px) scale(1.01)}}@keyframes playerSkillHitLunge{0%,100%{transform:translateX(0)}48%{transform:translateX(6%) translateY(-3px) scale(1.02)}72%{transform:translateX(3%) translateY(-1px) scale(1.01)}}}
 
 /* ===== 战斗按钮图标与火球术释放动画 ===== */
 .battle-actions .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px}
@@ -600,6 +600,7 @@
 .fighter-figure .boss-portrait{display:grid;height:100%;place-items:end center;width:100%}
 .fighter-figure .boss-portrait img{display:block;height:286px;max-width:290px;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 18px 14px #0009)}
 @media(max-width:650px){.fighter-figure .boss-portrait img{height:175px;max-width:165px}}
+.fighter-figure .boss-portrait.boss-facing-left img{transform:scaleX(-1)}
 .npc-dialog-portrait.tianmo-facing-left,.fighter-figure .boss-portrait.tianmo-facing-left img{transform:scaleX(-1)}
 .npc-list button.tianmo-elder-npc span{color:#b22b33;font-weight:800}
 .fighter-name em.realm-badge.tianmo-elder-realm{color:#fff!important;background:#111!important;border-color:#111!important;box-shadow:0 2px 9px #000b}
@@ -610,8 +611,32 @@
 @media(max-width:650px){.battle-actions .btn{gap:4px}.battle-action-icon{width:21px;height:21px;font-size:13px}.fireball-projectile{width:32px;height:32px}.fireball-impact{width:78px;height:78px}}
 
 
+/* The desktop game no longer reserves a third column for the removed adventure log. */
+.app{grid-template-columns:190px minmax(0,1fr)}
+
 /* World map artwork: keep the complete vertical scroll visible beneath interactive pins. */
 .ink-map{aspect-ratio:5/7;min-height:0;align-self:start;border:2px solid #6a765f;border-radius:8px;background:#e6e7dc url('assets/world-map/xianxia-continent-map.png') center center/100% 100% no-repeat;box-shadow:inset 0 0 36px #17382a33,0 12px 30px #263e2b1c}.ink-map:before{display:none}.map-node{gap:6px;color:#f8edc2;filter:drop-shadow(0 3px 5px #13241d99)}.map-node i{width:43px;height:43px;border:2px solid #d9bc71;background:#173f37e6;color:#fff7d0;box-shadow:0 0 0 3px #f4e3a522,0 5px 12px #10291d66;font-size:20px}.map-node span{padding:4px 9px;border:1px solid #d6c27d;background:#173f37ed;color:#fff5ca;font-weight:700;box-shadow:0 3px 8px #10291d88}.map-node.active i{background:#2b6b54;border-color:#ffe39a;box-shadow:0 0 0 6px #f7ce6644,0 9px 20px #112d20bb}.map-node.active span{background:#8a5d27;color:#fff8d5;border-color:#f6d985}.map-node.lock{opacity:.62;filter:grayscale(.7) drop-shadow(0 3px 5px #13241d99)}.map-enter-pop{border:1px solid #f1d484;border-radius:8px;background:#275b48;color:#fff4c3;box-shadow:0 6px 18px #10291d99;font-family:"KaiTi",serif;font-size:17px;letter-spacing:2px}.map-enter-pop:before{border-bottom-color:#275b48}
+.map-node i.scene-node-portrait{position:relative;overflow:hidden;background-image:var(--scene-art)!important;background-color:#173f37;background-position:var(--scene-art-position,center);background-size:var(--scene-art-size,cover);background-repeat:no-repeat;color:transparent;isolation:isolate}.map-node i.scene-node-portrait:after{content:"";position:absolute;inset:0;background:linear-gradient(145deg,#fff3b922,transparent 42%,#071b1473);pointer-events:none}.map-node.active i.scene-node-portrait{border-color:#ffe39a;box-shadow:0 0 0 6px #f7ce6655,0 9px 20px #112d20bb}.map-node:hover:not(.lock) i.scene-node-portrait{filter:saturate(1.12) contrast(1.04)}
+.map-node.lock i.scene-node-unknown{background:#102b23cc;border-color:#74867b;box-shadow:inset 0 0 0 5px #071a143d,0 4px 10px #081b1555}
+
+/* Enemy skill telegraphs: a single effect surface adapts to every enemy spell theme. */
+/* 敌方技能只驱动立绘本身：收势、前压、命中、回位。 */
+#battleEnemyFigure.skill-portrait-cast{transform-origin:center 84%;animation:enemyPortraitSkillCast .62s cubic-bezier(.2,.76,.22,1) both}
+#battleEnemyFigure.enemy-skill-lunge{transform-origin:center 84%;animation:enemyPortraitSkillLunge .7s cubic-bezier(.18,.74,.2,1) both}
+#battleEnemyFigure.enemy-portrait-normal-attack{transform-origin:center 84%;animation:enemyPortraitNormalAttack .46s cubic-bezier(.2,.72,.25,1) both}
+.boss-power-wave{--wave-main:#d7c189;--wave-hot:#fff1c5;position:absolute;left:78%;top:55%;width:168px;height:116px;z-index:4;pointer-events:none;opacity:0;transform:translate(-50%,-50%)}
+.boss-power-wave i{position:absolute;right:0;display:block;height:16px;width:136px;transform-origin:right center;clip-path:polygon(0 50%,18% 13%,100% 0,81% 50%,100% 100%,18% 87%);background:linear-gradient(90deg,transparent 0 7%,var(--wave-main) 28%,var(--wave-hot) 64%,transparent 100%);filter:drop-shadow(0 0 4px var(--wave-main)) drop-shadow(0 0 13px var(--wave-main));mix-blend-mode:screen}
+.boss-power-wave i:nth-child(1){top:21px;transform:rotate(-13deg) scaleX(.76);opacity:.72}
+.boss-power-wave i:nth-child(2){top:48px;width:164px;height:21px;transform:rotate(1deg);opacity:1}
+.boss-power-wave i:nth-child(3){top:76px;width:120px;transform:rotate(14deg) scaleX(.7);opacity:.62}
+.boss-power-wave:after{content:"";position:absolute;right:9px;top:37px;width:38px;height:38px;border-left:2px solid var(--wave-hot);border-top:2px solid var(--wave-hot);transform:rotate(-45deg) skewY(-18deg);filter:drop-shadow(0 0 8px var(--wave-main));opacity:.9}
+.boss-power-wave.cast{animation:bossPowerWave .88s cubic-bezier(.16,.72,.2,1) forwards}
+.fighter-figure.player.portrait-skill-hit{animation:enemyPortraitSkillHit .34s ease-out both}
+@keyframes enemyPortraitSkillCast{0%{transform:translateX(0) translateY(0) scale(1)}18%{transform:translateX(5%) translateY(3px) scale(.96,.98);filter:brightness(.94)}62%{transform:translateX(-17%) translateY(-5px) scale(1.08,1.04);filter:brightness(1.14)}100%{transform:translateX(0) translateY(0) scale(1);filter:brightness(1)}}
+@keyframes enemyPortraitSkillLunge{0%{transform:translateX(0) translateY(0) scale(1);filter:brightness(1)}22%{transform:translateX(6%) translateY(3px) scale(.96,.98);filter:brightness(.9)}63%{transform:translateX(-23%) translateY(-6px) scale(1.1,1.05);filter:brightness(1.2) saturate(1.08)}100%{transform:translateX(0) translateY(0) scale(1);filter:brightness(1)}}
+@keyframes enemyPortraitNormalAttack{0%,100%{transform:translateX(0) scale(1)}38%{transform:translateX(-12%) translateY(-2px) scale(1.045)}62%{transform:translateX(-6%) translateY(0) scale(1.02)}}
+@keyframes bossPowerWave{0%{left:77%;opacity:0;transform:translate(-50%,-50%) scaleX(.25)}13%{opacity:1;transform:translate(-50%,-50%) scaleX(.92)}68%{left:29%;opacity:.96;transform:translate(-50%,-50%) scaleX(1.2)}100%{left:21%;opacity:0;transform:translate(-50%,-50%) scaleX(1.4)}}
+@keyframes enemyPortraitSkillHit{0%{transform:translateX(0)}34%{transform:translateX(12px) rotate(1deg)}66%{transform:translateX(-7px) rotate(-.6deg)}100%{transform:translateX(0)}}
 @media(max-width:650px){.ink-map{min-height:560px;background-size:contain}.map-node i{width:46px;height:46px;font-size:22px}.map-node span{font-size:10px;padding:3px 6px}}
 
 /* Battle realm badges and unavailable skill states. */
@@ -668,6 +693,7 @@
 /* ===== 沉月水府易物与战斗侧栏操作 ===== */
 .xiao-longnu-exchange{display:grid;gap:12px}.xiao-longnu-exchange .exchange-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px}.xiao-longnu-exchange .exchange-summary span{padding:10px;border:1px solid #c8b27a;border-radius:7px;background:#fffaf0;color:#365044}.xiao-longnu-exchange label{display:grid;grid-template-columns:auto minmax(110px,1fr) auto;align-items:center;gap:9px;padding:12px;border:1px dashed #c3ad78;background:#fffdf6;color:#365044}.xiao-longnu-exchange input{width:100%;padding:9px;border:1px solid #b9a06d;border-radius:6px;background:#fff;color:#294235;font:700 16px Georgia,serif}.xiao-longnu-exchange small{color:#67776d;line-height:1.6}.explore-settings{display:grid;gap:9px}.explore-settings label{display:grid;grid-template-columns:22px 1fr;gap:9px;align-items:start;padding:11px;border:1px solid #66877c55;border-radius:8px;background:#f9f5e8;color:#294235;cursor:pointer}.explore-settings input{width:18px;height:18px;accent-color:#2f715b}.explore-settings b{display:block;font-size:15px}.explore-settings small{display:block;margin-top:4px;color:#6a786d;line-height:1.55}.battle-title-sr{display:none}.battle-head:after{display:none}.battle-head>.battle-actions.battle-actions-head{position:relative;z-index:2;display:flex;justify-content:flex-start;gap:6px;padding:0;border:0;background:transparent}.battle-head>.battle-actions.battle-actions-head .btn{min-width:68px;padding:7px 10px;font-size:14px;line-height:1}.battle-head>.battle-actions.battle-actions-head #battleNormalBtn{border-color:#57c8ea;background:linear-gradient(180deg,#2a5868,#183842)}.battle-head>.battle-actions.battle-actions-head #battleAutoBtn{border-color:#efbd4d;background:linear-gradient(180deg,#8e6524,#5b3e19)}.battle-head>.battle-actions.battle-actions-head #battleRunBtn{border-color:#e7756e;background:linear-gradient(180deg,#66383c,#3d2428)}.side .nav,.main>.top{display:none}@media(max-width:650px){.xiao-longnu-exchange label{grid-template-columns:1fr;gap:5px}.explore-settings label{padding:9px}.explore-settings b{font-size:14px}.battle-head>.battle-actions.battle-actions-head{gap:4px}.battle-head>.battle-actions.battle-actions-head .btn{min-width:45px;padding:6px 5px;font-size:12px}}
 .equip-temper-tools{margin-top:12px;padding:12px;border:1px solid #9a754744;border-radius:8px;background:linear-gradient(145deg,#f8f3e6,#e9f0e7);color:#294235}.equip-temper-tools h3{margin:0 0 5px;font-size:16px}.equip-temper-tools>small{display:block;margin-bottom:9px;color:#67776d;line-height:1.5}.equip-temper-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:7px}.equip-temper-list label{display:flex;gap:7px;align-items:center;padding:8px;border:1px solid #a99a7855;border-radius:6px;background:#fffdf7;cursor:pointer}.equip-temper-list input{accent-color:#9d3a36}.equip-temper-list small{display:block;color:#718077;font-size:11px}.equip-temper-tools .actions{margin-top:10px}@media(max-width:650px){.equip-temper-list{grid-template-columns:1fr}}
+.equipment-affix{display:inline-flex;align-items:baseline;gap:5px;flex-wrap:wrap;margin-top:5px;padding:3px 7px;border:1px solid currentColor;border-radius:4px;font-weight:800;line-height:1.45;background:#1d2826;color:#e8d28c;box-shadow:inset 0 1px #ffffff18}.equipment-affix b{font-size:11px;letter-spacing:1px;color:#fbf0bd}.equipment-affix strong{font-size:13px}.equipment-affix em{font-style:normal;font-size:12px;font-weight:700;opacity:.95}.equipment-affix-mark{display:inline-block;padding:1px 4px;border:1px solid currentColor;border-radius:3px;font-size:9px;font-weight:900;line-height:1.1;vertical-align:1px;background:#202a29}.equipment-affix.affix-fire,.equipment-affix-mark.affix-fire{color:#ff8a6b;background:#402421;border-color:#d85b47}.equipment-affix.affix-water,.equipment-affix-mark.affix-water{color:#76ccff;background:#182f42;border-color:#438cba}.equipment-affix.affix-lightning,.equipment-affix-mark.affix-lightning{color:#d4a5ff;background:#332047;border-color:#9261c6}.equipment-affix.affix-shield,.equipment-affix-mark.affix-shield{color:#c5d4d6;background:#263136;border-color:#81989b}.equipment-affix.affix-critMana,.equipment-affix-mark.affix-critMana{color:#7ee9dc;background:#173a3b;border-color:#3faeaa}.equipment-affix.affix-fire b,.equipment-affix.affix-water b,.equipment-affix.affix-lightning b,.equipment-affix.affix-shield b,.equipment-affix.affix-critMana b{color:#fff8d5}
 /* Developer monster controls */
 #devModal>div{width:min(760px,94vw);max-height:92vh;overflow:auto}#devModal .dev-grid{max-height:34vh}.dev-monster-tools{margin-top:14px;padding:12px;border:1px solid #b6c1b4;border-radius:8px;background:#f4f7f1}.dev-monster-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:9px}.dev-monster-head b{color:#315844;font-size:15px}.dev-monster-head small{color:#6f7e73;font-size:11px}.dev-monster-editor{display:grid;grid-template-columns:1.25fr repeat(4,minmax(72px,1fr)) 1fr;gap:7px;align-items:end}.dev-monster-editor label{display:grid;gap:4px;color:#64756c;font-size:11px}.dev-monster-editor input,.dev-monster-editor select{width:100%;padding:8px;border:1px solid #aeb7ad;border-radius:6px;background:#fff;color:#26392e}.dev-monster-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.dev-monster-actions .btn{padding:7px 10px;font-size:12px}@media(max-width:650px){#devModal{padding:8px}#devModal .dev-grid{grid-template-columns:repeat(2,1fr);max-height:28vh}.dev-monster-head{align-items:flex-start;flex-direction:column}.dev-monster-editor{grid-template-columns:repeat(2,minmax(0,1fr))}.dev-monster-editor label:first-child{grid-column:1/-1}.dev-monster-actions .btn{flex:1}}
 #npcDialogActions .npc-dialog-choice{border-color:#4d8462!important;background:linear-gradient(180deg,#4f8b66,#2f6446)!important;color:#fff9e5!important;box-shadow:inset 0 1px #ffffff45,0 2px 5px #183b2780}#npcDialogActions .npc-dialog-choice:hover{border-color:#7fb18b!important;background:linear-gradient(180deg,#609d75,#397451)!important;filter:brightness(1.06)}#npcDialogActions .npc-dialog-choice:disabled{border-color:#94a99a!important;background:#708276!important;color:#dce5dc!important;box-shadow:none}.danchi-quantity-picker{display:grid;grid-template-columns:auto minmax(90px,1fr) auto;align-items:center;gap:8px;margin-top:12px;padding:10px 12px;border:1px solid #b8c8b9;border-radius:6px;background:#f5faef;color:#31533e;font-weight:700}.danchi-quantity-picker input{width:100%;min-width:0;padding:7px 8px;border:1px solid #7fa185;border-radius:4px;background:#fff;color:#244634;font:700 16px Georgia,serif}.danchi-quantity-picker small{color:#667b69;font-weight:600}@media(max-width:600px){.danchi-quantity-picker{grid-template-columns:1fr 82px;gap:6px}.danchi-quantity-picker small{grid-column:1/-1}}
@@ -730,19 +756,44 @@
 @keyframes authorAuraPulse{0%{opacity:0;transform:scale(.35)}42%{opacity:.9;transform:scale(1.1)}100%{opacity:0;transform:scale(1.42)}}
 @media(max-width:650px){#battleEnemyFigure.author-skill-frame .author-figure{height:175px;max-width:165px}#battleModal.author-trial .fighter.enemy:after{margin-top:4px;font-size:8px}}
 
+/* 小地图设置：扩展地图时收起辅助信息，但保留 NPC 与妖兽操作栏。 */
+#mapSettingsModal{z-index:94}
+#mapSettingsModal>div{width:min(480px,92vw);padding:0;overflow:hidden;border:1px solid #b99b58;border-radius:7px;background:#f5f0e2;color:#294438;box-shadow:0 24px 72px #07130dcc}
+#mapSettingsModal h2{margin:0;padding:15px 18px;border-bottom:1px solid #b99b58;background:linear-gradient(105deg,#173e32,#285345);color:#fff1c2;font:700 25px "STKaiti","KaiTi",serif;letter-spacing:2px}
+.map-settings-list{display:grid;gap:10px;padding:15px 18px;background:linear-gradient(90deg,#ece6d4,#fbf9f0 13%,#fbf9f0 87%,#ece6d4)}
+.map-setting-row{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:12px 13px;border:1px solid #bdc8b8;border-radius:5px;background:#fffdf7;box-shadow:0 2px 6px #32412c12;cursor:pointer}
+.map-setting-row b{display:block;color:#294c3b;font-size:15px}.map-setting-row small{display:block;margin-top:4px;color:#718077;font-size:11px;line-height:1.5}
+.map-setting-switch{appearance:none;flex:0 0 auto;width:42px;height:23px;margin:0;border:1px solid #9b9983;border-radius:999px;background:#b9b8ab;box-shadow:inset 0 1px 2px #0003;cursor:pointer;transition:.18s}
+.map-setting-switch:before{content:"";display:block;width:17px;height:17px;margin:2px;border-radius:50%;background:#fffdf4;box-shadow:0 1px 3px #3338;transition:.18s}
+.map-setting-switch:checked{border-color:#477b5f;background:#3b7a5b}.map-setting-switch:checked:before{transform:translateX(18px)}
+#mapSettingsModal .bag-actions{margin:0;padding:0 18px 16px;background:#f3eee0}
+#sceneMapModal .scene-map-body.map-expanded{position:relative;display:block;min-height:630px}
+#sceneMapModal .scene-map-body.map-expanded .scene-left{display:block;min-width:0}
+#sceneMapModal .scene-map-body.map-expanded .local-map{width:100%;height:550px;max-width:none}
+#sceneMapModal .scene-map-body.map-expanded .scene-player-hud{position:relative;z-index:3;margin-top:10px}
+#sceneMapModal .scene-map-body.map-expanded .scene-side{position:absolute;z-index:4;right:14px;top:230px;width:232px;display:block}
+#sceneMapModal .scene-map-body.map-expanded .compact-region-info,#sceneMapModal .scene-map-body.map-expanded .scene-goal-card{display:none!important}
+#sceneMapModal .scene-map-body.map-expanded .people-card{display:flex;max-height:210px!important;padding:7px;border-color:#7f907d;background:#f8f5e9ed;box-shadow:0 5px 16px #28302073;backdrop-filter:blur(3px)}
+#sceneMapModal .scene-map-body.map-expanded .people-card h3{margin-bottom:4px;font-size:15px}
+#sceneMapModal .scene-map-body.map-expanded .people-card h4{margin:4px 0 2px;padding-bottom:2px;font-size:11px}
+#sceneMapModal .scene-map-body.map-expanded .people-card .npc-list{max-height:44px;margin-bottom:3px}
+#sceneMapModal .scene-map-body.map-expanded .people-card .mob-list{max-height:70px;min-height:0}
+#sceneMapModal .scene-map-body.map-expanded .mob-list button,#sceneMapModal .scene-map-body.map-expanded .npc-list button{min-height:24px;padding:3px;font-size:11px}
+#sceneMapModal .scene-map-body.map-expanded .scene-actions{margin-top:7px;gap:6px}
+@media(max-width:850px){#mapSettingsModal>div{width:calc(100vw - 20px)}#sceneMapModal .scene-map-body.map-expanded{position:relative;display:block;min-height:515px;padding:5px}#sceneMapModal .scene-map-body.map-expanded .scene-left{display:block}#sceneMapModal .scene-map-body.map-expanded .local-map{width:100%;height:430px}#sceneMapModal .scene-map-body.map-expanded .scene-player-hud{position:relative;z-index:3;margin-top:7px}#sceneMapModal .scene-map-body.map-expanded .scene-side{position:absolute;z-index:4;right:8px;top:152px;width:142px;display:block}#sceneMapModal .scene-map-body.map-expanded .people-card{display:flex;max-height:178px!important;padding:5px;border-color:#7f907d;background:#f8f5e9ed;box-shadow:0 4px 12px #28302073;backdrop-filter:blur(3px)}#sceneMapModal .scene-map-body.map-expanded .people-card h3{margin-bottom:3px;font-size:12px}#sceneMapModal .scene-map-body.map-expanded .people-card h4{margin:3px 0 1px;padding-bottom:1px;font-size:9px}#sceneMapModal .scene-map-body.map-expanded .people-card .npc-list{max-height:35px;margin-bottom:2px}#sceneMapModal .scene-map-body.map-expanded .people-card .mob-list{max-height:60px}#sceneMapModal .scene-map-body.map-expanded .mob-list button,#sceneMapModal .scene-map-body.map-expanded .npc-list button{min-height:20px;padding:2px;font-size:9px}#sceneMapModal .scene-map-body.map-expanded .scene-actions{margin-top:5px;gap:4px;grid-template-columns:1fr}#sceneMapModal .scene-map-body.map-expanded .scene-actions .btn{padding:5px 3px;font-size:10px}}
+
 </style>
 </head>
 <body><div class="app">
 <aside class="side"><a class="back" href="index.html">← 游戏大厅</a><div class="brand">我欲修仙</div><div class="sub">手动历练 · 问道长生</div><nav class="nav" id="nav"><button data-tab="home" class="active">首页</button></nav><div class="save-note">手动战斗与宗门事务存档</div></aside>
 <main class="main"><div class="top"><div><div class="realm" id="realmName">练气初期</div><div class="rate" id="rateText">挂机倍率 ×1.00</div></div><button class="btn ghost" id="saveBtn">立即存档</button></div>
-<section class="panel active" id="home"><div class="paper"><h2>修仙大地图</h2><div class="travel-shell"><div class="ink-map" id="homeMap"><div class="ink-river"></div><div class="ink-mountain"></div></div><div class="location-card"><div class="box"><div class="scene-title"><i id="sceneIcon">⛰️</i><div><h3 id="sceneName">青云山麓</h3><div class="route-note" id="sceneNeed">练气初期可进入</div></div></div><p class="scene-desc" id="sceneDesc"></p><div class="scene-tags" id="sceneDrops"></div><div class="actions"><button class="btn" id="goSceneBtn">进入地图</button></div></div><div class="box"><h3>测试与存档</h3><p class="route-note">主页只保留兑换码和开发者面板；属性、装备、道具、宗门与技能请进入小地图查看。</p><div class="actions"><button class="btn alt" id="redeemBtn">兑换码</button><button class="btn ghost" id="devHomeBtn">开发者面板</button></div></div></div></div></div></section>
+<section class="panel active" id="home"><div class="paper"><h2>修仙大地图</h2><div class="travel-shell"><div class="ink-map" id="homeMap"><div class="ink-river"></div><div class="ink-mountain"></div></div><div class="location-card"><div class="box"><h3>测试与存档</h3><p class="route-note">主页只保留兑换码和开发者面板；属性、装备、道具、宗门与技能请进入小地图查看。</p><div class="actions"><button class="btn alt" id="redeemBtn">兑换码</button><button class="btn ghost" id="devHomeBtn">开发者面板</button></div></div></div></div></div></section>
 </main>
-<aside class="logs"><h3>历练日志</h3><div class="assistant" id="aiMessage">智能体：挂机收益已关闭，请通过手动战斗、采集、任务和宗门事务获得资源。</div><div class="logbox" id="logbox"></div><div class="status"><span id="battleStatus">收益模式：手动</span><span id="saveStatus">存档：安全</span><span id="bagStatus">背包：手动整理</span><span id="hpStatus">气血：充盈</span></div></aside>
 </div>
 <div class="guide" id="guide"><div><h2>新手指引</h2><p>初入仙途不必慌张，先记住下面几件事：</p><div class="guide-steps"><div class="guide-step"><b>① 去哪里学习技能？</b><br>首页选择“太玄宗”并进入小地图，前往路点 <b>14 · 练功房</b>，与“传功长老 莫天河”对话，可学习主动技能与疗伤技能。已获得的技能可点击小地图顶部“技能”查看和装备。</div><div class="guide-step"><b>② 去哪里看属性、装备和背包？</b><br>进入任意小地图后，顶部有“属性、装备、道具、宗门、技能”按钮。属性面板可查看攻击、防御、生命、法力等完整数值。</div><div class="guide-step"><b>③ 怎么回血和回蓝？</b><br>可在“道具”中使用回春丹等恢复物品；战斗中装备“包扎”等恢复技能后也能回血。战败会损失当前境界约 1% 修为，并送回 <b>太玄宗路点31 · 宗门广场</b>，生命与法力恢复。</div><div class="guide-step"><b>④ 前期应该做什么？</b><br>先去青云山麓低级路点战斗、采药；再回太玄宗路点31找大师姐 柳如烟或小师妹 纳兰清月接取委托。随时点击“任务”查看进度。</div></div><div class="guide-actions"><button class="btn ghost" id="skipGuide">跳过指引</button><button class="btn" id="closeGuide">看完了，继续</button></div></div></div><div class="guide" id="prologueModal"><div><h2 class="prologue-title">序章 · 血夜余烬</h2><div class="prologue-viewport"><div class="prologue-scroll"><p>十二年前，临河镇一夜覆灭。<br>大火烧了三天三夜，镇中三百余口无一生还。</p><p>你从焦土中醒来时，怀里只剩父亲塞给你的半块青铜令牌。<br>令牌背面刻着一个被血浸透的“玄”字。</p><p>恍惚间，你记得一个披着黑袍的人站在火海尽头。<br>他的袖口绣着一轮血月，掌中剑光落下前，父亲只来得及对你说一句：</p><p>“活下去……去太玄宗。”</p><p>十二年后，你终于来到太玄宗山门。<br>你不是为了长生，也不是为了逍遥。</p><p>你来修仙，只为查明临河镇覆灭的真相，找到那个血月之人。</p><p>但黑袍人是谁？血月印记属于哪个势力？<br>父亲为何早已准备好那块令牌？</p><p>答案，都藏在漫长仙路的尽头。</p><div class="story-goal"><b>主线目标：血月之仇</b><br>加入太玄宗，提升修为，调查血月印记与青铜令牌的来历。终有一日，找到临河镇惨案的幕后之人。</div></div></div><div class="guide-actions prologue-actions"><button class="btn ghost" id="skipPrologue">跳过剧情</button><button class="btn alt" id="startJourney">踏入山门</button></div></div></div><div class="toast" id="toast"></div>
 <div class="event-modal" id="eventResultModal"><div><h2 id="eventResultTitle">奇遇结果</h2><div class="event-result" id="eventResultText"></div><div class="actions"><button class="btn" id="confirmEventResult">收下因果</button></div></div></div>
 <div class="npc-dialog-modal" id="npcDialogModal"><div class="npc-dialog-card" id="npcDialogCard"><img class="npc-dialog-portrait" id="npcDialogPortrait" alt=""><h2 id="npcDialogTitle">掌教法旨</h2><div class="event-result" id="npcDialogText"></div><div class="actions" id="npcDialogActions"></div></div></div>
-<div class="event-modal battle-modal" id="battleModal"><div><div class="battle-head"><div class="battle-actions battle-actions-head"><button class="btn ghost" id="battleNormalBtn" title="普通攻击">普攻</button><button class="btn alt" id="battleAutoBtn" title="自动战斗">自动</button><button class="btn ghost" id="battleRunBtn" title="逃跑">逃跑</button></div><b id="battleTitle" class="battle-title-sr">遭遇妖兽</b><span id="battleRoundText">第1回合</span></div><div class="battle-arena"><div class="fighter player"><div class="fighter-name"><span id="battlePlayerName">你</span><em id="battlePlayerLevel">修士</em></div><div class="battle-bar hp"><i id="battlePlayerHp"></i><b id="battlePlayerHpText">生命 0/0</b></div><div class="battle-bar mp"><i id="battlePlayerMp"></i><b id="battlePlayerMpText">法力 0/0</b></div><div class="battle-bar shield"><i id="battlePlayerShield"></i><b id="battlePlayerShieldText">护盾 0</b></div></div><div class="fighter enemy"><div class="fighter-name"><span id="battleEnemyName">妖兽</span><em id="battleEnemyLevel">练气初期</em></div><div class="battle-bar hp"><i id="battleEnemyHp"></i><b id="battleEnemyHpText">0/0</b></div><div class="battle-bar mp"><i id="battleEnemyMp"></i><b id="battleEnemyMpText">0/0</b></div></div><div class="fighter-figure player"><img id="battlePlayerFigure" src="assets/hero-animation/attack-1.png" alt="修士"></div><div class="fighter-figure enemy"><div class="monster" id="battleEnemyFigure">👹</div></div><div class="battle-fx player" id="battlePlayerFx"></div><div class="battle-fx enemy" id="battleEnemyFx"></div><div class="fireball-projectile" id="fireballProjectile"></div><div class="fireball-impact" id="fireballImpact"></div><div class="battle-skills" id="battleSkillBar"></div></div><div class="battle-log" id="battleLog"></div></div></div>
+<div class="event-modal battle-modal" id="battleModal"><div><div class="battle-head"><div class="battle-actions battle-actions-head"><button class="btn ghost" id="battleNormalBtn" title="普通攻击"><span class="battle-action-icon" aria-hidden="true">🗡️</span>普攻</button><button class="btn alt" id="battleAutoBtn" title="自动战斗">自动</button><button class="btn ghost" id="battleRunBtn" title="逃跑">逃跑</button></div><b id="battleTitle" class="battle-title-sr">遭遇妖兽</b><span id="battleRoundText">第1回合</span></div><div class="battle-arena"><div class="fighter player"><div class="fighter-name"><span id="battlePlayerName">你</span><em id="battlePlayerLevel">修士</em></div><div class="battle-bar hp"><i id="battlePlayerHp"></i><b id="battlePlayerHpText">生命 0/0</b></div><div class="battle-bar mp"><i id="battlePlayerMp"></i><b id="battlePlayerMpText">法力 0/0</b></div><div class="battle-bar shield"><i id="battlePlayerShield"></i><b id="battlePlayerShieldText">护盾 0</b></div></div><div class="fighter enemy"><div class="fighter-name"><span id="battleEnemyName">妖兽</span><em id="battleEnemyLevel">练气初期</em></div><div class="battle-bar hp"><i id="battleEnemyHp"></i><b id="battleEnemyHpText">0/0</b></div><div class="battle-bar mp"><i id="battleEnemyMp"></i><b id="battleEnemyMpText">0/0</b></div></div><div class="fighter-figure player"><img id="battlePlayerFigure" src="assets/hero-animation/attack-1.png" alt="修士"></div><div class="fighter-figure enemy"><div class="monster" id="battleEnemyFigure">👹</div></div><div class="battle-fx player" id="battlePlayerFx"></div><div class="battle-fx enemy" id="battleEnemyFx"></div><div class="fireball-projectile" id="fireballProjectile"></div><div class="fireball-impact" id="fireballImpact"></div><div class="battle-skills" id="battleSkillBar"></div></div><div class="battle-log" id="battleLog"></div></div></div>
 <div class="event-modal scene-map-modal" id="sceneMapModal"><div><div class="scene-map-head"><div class="scene-map-title"><b id="localMapName">幽月森林</b><small id="localMapDesc">当前区域小地图</small></div><div class="scene-tabs"><button class="scene-tab-btn" id="openTaskBtn">任务</button><button class="scene-tab-btn" id="openAttrBtn">属性</button><button class="scene-tab-btn" id="openEquipBtn">装备</button><button class="scene-tab-btn" id="openBagBtn">道具</button><button class="scene-tab-btn" id="openSectBtn">宗门</button><button class="scene-tab-btn" id="openSkillBtn">技能</button></div></div><div class="scene-map-body"><div class="scene-left"><div class="local-map forest" id="localMapCanvas"><div class="map-world" id="localMapWorld"><div class="local-hero" id="localHero"><img src="assets/figure1/figure1.png" alt="修士形象"></div></div></div><div class="scene-player-hud"><div class="vital-bars"><div class="vital hp"><span>生命</span><i id="localHpBar"></i><b id="localHpText">100/100</b></div><div class="vital mp"><span>法力</span><i id="localMpBar"></i><b id="localMpText">80/80</b></div></div><div class="cultivation-hud" title="当前境界修为进度"><span id="localRealmLabel">练气初期</span><div class="cultivation-track"><i id="localCultBar"></i></div><b id="localCultText">0 / 100</b></div><div class="skill-slots" id="skillSlots"></div></div></div><div class="scene-side"><div class="scene-card compact-region-info"><h3>区域信息</h3><div id="localMapInfo"></div></div><div class="scene-card people-card"><h3>区域人物与怪物</h3><h4>NPC / 事件</h4><div class="npc-list" id="localNpcList"></div><h4>妖兽 / 灵草 <small style="font-weight:400">整点随机刷新</small></h4><div class="mob-list" id="localMobList"></div></div><div class="scene-actions"><button class="btn" id="localExploreBtn">原地探索</button><button class="btn ghost" id="closeSceneMap">收起地图</button></div></div></div><div class="scene-chat" id="localMapLog"></div></div></div><div class="event-modal bag-modal" id="taskModal"><div><h2>任务</h2><div class="bag-detail">这里显示当前可接取任务、已接任务与完成进度。已接任务可手动放弃。</div><div class="shop-list" id="taskList"></div><div class="bag-actions"><button class="btn ghost" id="closeTaskBtn">关闭</button></div></div></div><div class="event-modal attr-modal" id="attrModal"><div><h2>自身属性</h2><div class="attr-grid" id="attrModalGrid"></div><div class="attr-note" id="attrModalNote"></div><div class="actions"><button class="btn ghost" id="closeAttrBtn">关闭</button></div></div></div><div class="event-modal equip-modal" id="equipModal"><div><h2>装备详情</h2><div id="equipModalContent"></div><div class="actions"><button class="btn ghost" id="closeEquipBtn">关闭</button></div></div></div><div class="event-modal bag-modal" id="skillManageModal"><div><h2>技能管理</h2><div class="bag-detail">可拆卸已装备技能并放入备用栏；备用技能可重新装备到被动栏或主动栏。</div><div id="skillManageContent" class="skill-manage"></div><div class="bag-actions"><button class="btn ghost" id="closeSkillBtn">关闭</button></div></div></div><div class="event-modal bag-modal market-modal" id="marketModal"><div><h2>黑市商人</h2><div class="bag-top"><div><b>黑市货品</b> · <span>下次刷新 <b id="marketModalCountdown">--:--</b></span></div><div class="bag-top-actions"><button class="btn alt" id="marketModalRefreshBtn">花500灵石手动刷新</button><span id="marketModalRefreshHint"></span></div></div><div class="shop-list" id="marketModalShop"></div><div class="bag-actions"><button class="btn ghost" id="closeMarketModalBtn">关闭</button></div></div></div><div class="event-modal bag-modal" id="bagModal"><div><h2>道具背包</h2><div class="bag-top"><div><b id="bagStoneText">灵石：0</b> · <span id="bagCapText">容量 0/20</span></div><div class="bag-top-actions"><button class="btn ghost" id="sortBagBtn">自动整理</button><button class="btn alt" id="expandBagBtn">扩充背包</button></div></div><div class="bag-pagebar"><button class="btn ghost" id="bagPrevBtn">上一页</button><b id="bagPageText">第1/1页</b><button class="btn ghost" id="bagNextBtn">下一页</button></div><div class="bag-grid" id="bagGrid"></div><div class="bag-detail" id="bagDetail">请选择一个道具。</div><div class="bag-sell-tools"><label>售卖数量 <input id="sellQtyInput" type="number" min="1" value="1"></label><label>装备品质 <select id="sellQualitySelect"><option value="1">白装</option><option value="2">绿装</option><option value="3">蓝装</option><option value="4">紫装</option><option value="5">橙装</option></select></label><button class="btn ghost" id="sellQualityBtn">按品质售卖装备</button></div><div class="bag-actions"><button class="btn" id="useBagItemBtn">使用</button><button class="btn ghost" id="sellBagItemBtn">售卖</button><button class="btn ghost" id="closeBagBtn">关闭</button></div></div></div><div class="event-modal bag-modal" id="sectTreasuryModal"><div><h2>太玄宗宝库</h2><div class="bag-top"><div><b id="treasuryContributionText">宗门贡献：0</b> · <span id="treasuryLevelText">宝库等级 1</span></div><div class="bag-top-actions"><button class="btn ghost" id="closeTreasuryBtnTop">关闭</button></div></div><div class="bag-detail" id="treasuryGuide">守阁长老 沈知白：宝库分丹药、材料、秘典三列。你可逐类翻阅，挑中哪件便兑换哪件。</div><div class="actions" id="treasuryTabs"><button class="btn ghost" data-treasury-tab="丹药">丹药</button><button class="btn ghost" data-treasury-tab="材料">材料</button><button class="btn ghost" data-treasury-tab="秘典">秘典</button></div><div class="shop-list" id="sectTreasuryList"></div><div class="bag-detail" id="sectTreasuryDetail">请先选择一件想兑换的物资。</div><div class="bag-actions"><button class="btn" id="buySectTreasuryBtn">兑换当前选中</button><button class="btn ghost" id="closeTreasuryBtn">关闭</button></div></div></div><div class="event-modal" id="redeemModal"><div><h2>兑换码</h2><p>输入兑换码后确认。兑换码不区分大小写。</p><input class="code-input" id="redeemInput" maxlength="24" placeholder="请输入兑换码"><div class="actions"><button class="btn" id="confirmRedeem">确认兑换</button><button class="btn ghost" id="closeRedeem">取消</button></div></div></div><div class="event-modal" id="devModal"><div><h2>开发者模式</h2><p class="dev-warning">修改数值会直接影响当前存档，请确认后再保存。</p><div class="dev-grid" id="devFields"></div><div class="actions"><button class="btn" id="saveDev">应用并保存</button><button class="btn alt" id="resetDev">一键重置开局</button><button class="btn ghost" id="closeDev">关闭</button></div></div></div>
 <script>
 const KEY='woYuXiuXianSaveV1',MAX=9e15,realms=['练气','筑基','金丹','元婴','化神','炼虚','合体','大乘','渡劫','天仙'],stages=['初期','中期','后期','大圆满'],maps=[['青云山麓',0,1],['幽月森林',4,2.1],['赤炎秘境',8,4.6],['东海龙宫',12,9],['万妖古域',16,18],['天渊战场',20,38],['虚空遗迹',24,80],['仙魔战场',28,170],['九天雷域',32,360],['仙界天门',36,800],['太玄宗',0,.25]],roots=[['金灵根',1.08],['木灵根',1.1],['水灵根',1.12],['火灵根',1.15],['土灵根',1.06],['变异天灵根',1.55]],skillNames=['引气诀','青元剑诀','五行真解','太虚仙经','混沌道典'];
@@ -762,7 +813,13 @@ const pillCatalog={
   ]
 };
 const mapScenes=[['⛰️','青云山麓','宗门山脚灵气温和，适合初入仙途者打坐、采药、清理山魈。','修为、药材、低阶材料',50,14],['🌲','幽月森林','林深处妖影游走，常有灵草与散修遗物，是前期最稳定的历练地。','灵石、药材、装备碎片',30,33],['🔥','赤炎秘境','地火翻涌，怪物凶猛，适合筑基之后磨炼法器。','锻造材料、残卷、灵石',66,32],['🐉','东海龙宫','海眼灵潮汇聚，水府遗迹偶有灵玉现世。','灵玉、高额灵石、装备',77,52],['👹','万妖古域','妖族古域危机四伏，胜者可携大量材料满载而归。','大量材料、稀有残卷',49,63],['⚔️','天渊战场','古修战场煞气未散，适合高阶修士刷装备与战功。','装备碎片、功法残卷',18,60],['🌀','虚空遗迹','空间裂隙中漂浮着旧时代洞府，机缘与风险并存。','灵玉、修为、装备',20,78],['☯️','仙魔战场','仙魔余波不息，强敌密布，但掉落极为丰厚。','高阶材料、稀有道具',50,88],['⚡','九天雷域','雷霆洗练肉身与元神，是渡劫前最好的磨刀石。','渡劫丹、修为、灵玉',75,77],['🚪','仙界天门','飞升前最后的门槛，只有真正的大修士才能在此长久驻足。','仙缘、海量修为',54,45],['🏯','太玄宗','宗门总坛，弟子在此晋升职位、领取差事、调阅秘典，所有宗门事务仅可手动处理。','宗门贡献、声望、秘典',20,17]];
-const subMapClasses=['mountain','forest','fire','sea','demon','battle','void','dark','thunder','heaven','mountain'],localMapBackgrounds=['assets/map-backgrounds/qingyun-shanlu.png','assets/map-backgrounds/youyue-senlin.png','assets/map-backgrounds/chiyan-mijing.png','assets/map-backgrounds/donghai-longgong.png','assets/map-backgrounds/wanyao-guyu.png','assets/map-backgrounds/tianyuan-zhanchang.png','assets/map-backgrounds/xukong-yiji.png','assets/map-backgrounds/xianmo-zhanchang.png','assets/map-backgrounds/jiutian-leiyu.png','assets/map-backgrounds/xianjie-tianmen.png'],subMapSpots=[['山门驿站','灵草坡','溪边小道','山魈洞','青云石阶'],['森林入口','月下草径','古树洞府','妖狐巢穴','幽潭'],['熔岩栈道','赤砂坡','地火炉','炎魔洞','玄铁矿脉'],['海滨渡口','珊瑚水道','龟丞相府','龙宫偏殿','海眼'],['荒骨原','妖王旗台','血藤林','古兽坟','万妖洞'],['营地','残剑丘','军械冢','煞气裂谷','战魂台'],['浮空渡桥','星砂台','破碎洞府','虚空裂隙','遗迹核心'],['仙盟前哨','魔气荒原','残碑阵','仙魔裂谷','天命台'],['雷池边缘','淬体石','引雷台','云霄栈道','天劫眼'],['接引亭','仙门石阶','问心桥','南天影壁','飞升台'],['山门广场','外门讲经台','西执事厅','藏经宝阁','打坐台']];function fresh(){let root=roots[Math.floor(Math.random()*roots.length)];return{v:1,last:Date.now(),created:Date.now(),realm:0,stage:0,cult:0,stones:100,materials:0,herbs:0,fragments:0,scrolls:0,petEggs:0,jades:0,tribPills:0,cultPills:0,boostPills:0,root:root[0],rootMul:root[1],aptitude:40+Math.floor(Math.random()*61),hp:100,maxHp:100,mana:80,baseMana:80,attack:12,defense:7,agility:5,crit:5,map:0,gear:{weapon:null,armor:null,treasure:null,helmet:null,boots:null,bracer:null},enhance:0,temper:0,jadeSlots:0,skillLevel:1,skillTier:0,insight:0,pet:null,sect:'太玄宗',sectContribution:0,autoAlchemy:true,tribBonus:0,tribFails:0,kills:0,deaths:0,encounters:0,logs:[],offline:null,newbieGuideDone:false,prologueDone:false,mainQuest:'血月之仇'}};
+const subMapClasses=['mountain','forest','fire','sea','demon','battle','void','dark','thunder','heaven','mountain'],localMapBackgrounds=['assets/map-backgrounds/qingyun-shanlu.png','assets/map-backgrounds/youyue-senlin.png','assets/map-backgrounds/chiyan-mijing.png','assets/map-backgrounds/donghai-longgong.png','assets/map-backgrounds/wanyao-guyu.png','assets/map-backgrounds/tianyuan-zhanchang.png','assets/map-backgrounds/xukong-yiji.png','assets/map-backgrounds/xianmo-zhanchang.png','assets/map-backgrounds/jiutian-leiyu.png','assets/map-backgrounds/xianjie-tianmen.png'],subMapSpots=[['山门驿站','灵草坡','溪边小道','山魈洞','青云石阶'],['森林入口','月下草径','古树洞府','妖狐巢穴','幽潭'],['熔岩栈道','赤砂坡','地火炉','炎魔洞','玄铁矿脉'],['海滨渡口','珊瑚水道','龟丞相府','龙宫偏殿','海眼'],['荒骨原','妖王旗台','血藤林','古兽坟','万妖洞'],['营地','残剑丘','军械冢','煞气裂谷','战魂台'],['浮空渡桥','星砂台','破碎洞府','虚空裂隙','遗迹核心'],['仙盟前哨','魔气荒原','残碑阵','仙魔裂谷','天命台'],['雷池边缘','淬体石','引雷台','云霄栈道','天劫眼'],['接引亭','仙门石阶','问心桥','南天影壁','飞升台'],['山门广场','外门讲经台','西执事厅','藏经宝阁','打坐台']];
+const mapScenePortraits=[
+  ['assets/world-map/map-node-portraits-v2.png','0% 0%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','33.333% 0%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','66.667% 0%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','100% 0%','400% 300%'],
+  ['assets/world-map/map-node-portraits-v2.png','0% 50%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','33.333% 50%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','66.667% 50%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','100% 50%','400% 300%'],
+  ['assets/world-map/map-node-portraits-v2.png','0% 100%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','33.333% 100%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','66.667% 100%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','100% 100%','400% 300%']
+];
+function fresh(){let root=roots[Math.floor(Math.random()*roots.length)];return{v:1,last:Date.now(),created:Date.now(),realm:0,stage:0,cult:0,stones:100,materials:0,herbs:0,fragments:0,scrolls:0,petEggs:0,jades:0,tribPills:0,cultPills:0,boostPills:0,root:root[0],rootMul:root[1],aptitude:40+Math.floor(Math.random()*61),hp:100,maxHp:100,mana:80,baseMana:80,attack:12,defense:7,agility:5,crit:5,map:0,gear:{weapon:null,armor:null,treasure:null,helmet:null,boots:null,bracer:null},enhance:0,temper:0,jadeSlots:0,skillLevel:1,skillTier:0,insight:0,pet:null,sect:'太玄宗',sectContribution:0,autoAlchemy:true,tribBonus:0,tribFails:0,kills:0,deaths:0,encounters:0,logs:[],offline:null,newbieGuideDone:false,prologueDone:false,mainQuest:'血月之仇'}};
 localMapBackgrounds.push('assets/map-backgrounds/taixuan-zong.png');
 localMapBackgrounds.push('assets/map-backgrounds/tianmo-zong.png');
 // 天魔宗在击败仙界天门守门仙将后才会显现在大地图右上角。
@@ -802,7 +859,7 @@ function settleSectConstruction(notify=false){g.sectLevel=Math.max(1,Math.floor(
 function addSectConstruction(amount){let gain=Math.max(0,Math.floor(Number(amount)||0));if(!gain)return 0;g.sectExp=(g.sectExp||0)+gain;settleSectConstruction(true);return gain}
 function log(text,type=''){let stamp=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'});g.logs.unshift({text,stamp,type});g.logs=g.logs.slice(0,120);renderLogs()}
 function sanitize(){['cult','stones','materials','herbs','fragments','petEggs','jades','sectContribution'].forEach(k=>g[k]=clamp(g[k]));g.scrolls=Math.max(0,Math.min(999,Math.floor(Number(g.scrolls)||0)));g.crit=Math.max(0,Math.min(40,Number(g.crit)||0));if(!realms[g.realm]){g.realm=0;g.stage=0}g.last=Date.now()}
-function save(manual=false){sanitize();settleSectConstruction();syncForgeMaterialsBag();syncScrollsBag();syncJadesBag();localStorage.setItem(KEY,JSON.stringify(g));$('#saveStatus').textContent='存档：'+(manual?'已手动保存':'安全');if(manual)toast('洞府存档已封存')}
+function save(manual=false){sanitize();settleSectConstruction();syncForgeMaterialsBag();syncScrollsBag();syncJadesBag();localStorage.setItem(KEY,JSON.stringify(g));let status=$('#saveStatus');if(status)status.textContent='存档：'+(manual?'已手动保存':'安全');if(manual)toast('洞府存档已封存')}
 function removeBagItemsByKeyOrName(key,name,amount){let left=amount;for(let i=(g.bag||[]).length-1;i>=0&&left>0;i--){let it=g.bag[i];if(it&&(it.key===key||it.name===name)){let take=Math.min(left,it.qty||1);if((it.qty||1)>take)it.qty-=take;else g.bag.splice(i,1);left-=take}}return left===0}
 function consumeTribPills(amount=100){if((g.tribPills||0)<amount)return false;g.tribPills-=amount;removeBagItemsByKeyOrName('tribPills','渡劫丹',amount);return true}
 function growBaseStats(mult){let beforeHp=Math.max(1,g.maxHp),beforeMana=Math.max(1,g.baseMana||80),hpRatio=Math.max(0,Math.min(1,(g.hp||0)/beforeHp)),manaRatio=Math.max(0,Math.min(1,(g.mana||0)/beforeMana));['maxHp','baseMana','attack','defense','agility'].forEach(k=>g[k]=Math.max(1,Math.round((g[k]||1)*mult*100)/100));g.hp=Math.max(1,g.maxHp*hpRatio);g.mana=Math.max(0,g.baseMana*manaRatio)}
@@ -1111,7 +1168,7 @@ function sellBagItem(){let idx=g.bagSelected,it=g.bag[idx];if(!it)return;if(it.t
 function sellEquipmentByQuality(){let q=+($('#sellQualitySelect')?.value||1),sold=0,value=0;g.bag=(g.bag||[]).filter(it=>{if(it.type==='equipment'&&(it.quality||equipQuality[it.name]||1)===q){sold++;value+=itemSell(it);return false}return true});if(!sold)return toast(`背包里没有${qualityText[q]}装`);g.stones+=value;g.bagSelected=-1;syncBagPage();toast(`售卖${qualityText[q]}装×${sold}，灵石+${fmt(value)}`);log(`批量售卖${qualityText[q]}色装备×${sold}，获得${fmt(value)}灵石`,'good');render();renderBag();save()}
 function expandBag(){let cap=g.bagCap||20,cost=cap<30?1000:cap<40?2000:cap<50?5000:cap<64?20000:cap<80?30000:0,next=cap<30?30:cap<40?40:cap<50?50:cap<64?64:cap<80?80:cap;if(!cost)return toast('背包已满级');if(g.stones<cost)return toast('灵石不足');g.stones-=cost;g.bagCap=next;syncBagPage();toast(`背包扩充至${next}格`);render();renderBag();save()}
 
-function updateRecommendation(){let info=tribulationInfo(),text;if(info.ready)text=`${realmText()}已经圆满，渡劫基础成功率${info.base}%，服用${info.toCertain}颗渡劫丹可达100%。`;else if(g.hp<statTotal().hp*.35)text='气血偏低，建议在小地图找小师妹 纳兰清月或驿站掌柜疗伤。';else if(g.sectSisterQuest||g.nalanQuest)text='你有进行中的小地图任务，可点击“任务”查看进度或提交。';else text=`当前地图：${maps[g.map][0]}。建议进入小地图手动战斗、采集或处理宗门事务。`;let assistant=$('#assistantText');if(assistant)assistant.textContent=text;$('#aiMessage').textContent='智能体：'+text}
+function updateRecommendation(){let info=tribulationInfo(),text;if(info.ready)text=`${realmText()}已经圆满，渡劫基础成功率${info.base}%，服用${info.toCertain}颗渡劫丹可达100%。`;else if(g.hp<statTotal().hp*.35)text='气血偏低，建议在小地图找小师妹 纳兰清月或驿站掌柜疗伤。';else if(g.sectSisterQuest||g.nalanQuest)text='你有进行中的小地图任务，可点击“任务”查看进度或提交。';else text=`当前地图：${maps[g.map][0]}。建议进入小地图手动战斗、采集或处理宗门事务。`;let assistant=$('#assistantText'),message=$('#aiMessage');if(assistant)assistant.textContent=text;if(message)message.textContent='智能体：'+text}
 const devNumbers=[['cult','当前修为'],['stones','灵石'],['hp','当前生命'],['maxHp','生命上限'],['mana','法力值'],['attack','攻击力'],['defense','防御力'],['agility','身法'],['crit','暴击率'],['aptitude','根骨'],['rootMul','灵根倍率'],['materials','锻造材料'],['herbs','药材'],['fragments','装备碎片'],['scrolls','功法残卷'],['jades','灵玉'],['healPills','回春丹'],['tribPills','渡劫丹'],['cultPills','修为丹'],['sectContribution','宗门贡献'],['sectReputation','宗门声望']];
 function devMonsterNames(){return Object.keys(MONSTER_STATS||{}).filter(name=>MONSTER_STATS[name]?.hp!==undefined)}
 function renderDevMonsterEditor(name){
@@ -2529,7 +2586,84 @@ function openBattle(target,idx){battleBusy=false;setBattleControlsDisabled(false
 function battlePct(v,m){return Math.max(0,Math.min(100,(m? v/m:0)*100))+'%'}
 function battleLog(t){if(!battleState)return;battleState.log.unshift(t);battleState.log=battleState.log.slice(0,30)}
 function battleFx(side,t,heal=false){let el=$(side==='player'?'#battlePlayerFx':'#battleEnemyFx');if(!el)return;el.textContent=t;el.classList.remove('pop','heal');if(heal)el.classList.add('heal');void el.offsetWidth;el.classList.add('pop')}
-const heroActionFrames={attack:['assets/hero-animation/attack-1.png','assets/hero-animation/attack-2.png','assets/hero-animation/attack-3.png','assets/hero-animation/attack-4.png'],fireball:['assets/hero-animation/fireball-1.png','assets/hero-animation/fireball-2.png','assets/hero-animation/fireball-3.png','assets/hero-animation/fireball-4.png'],bandage:['assets/hero-animation/bandage-1.png','assets/hero-animation/bandage-2.png','assets/hero-animation/bandage-3.png','assets/hero-animation/bandage-4.png'],run:['assets/hero-animation/run-1.png','assets/hero-animation/run-2.png','assets/hero-animation/run-3.png','assets/hero-animation/run-4.png'],flowerSeeking:['assets/hero-animation/flower-seeking-1.png','assets/hero-animation/flower-seeking-2.png','assets/hero-animation/flower-seeking-3.png','assets/hero-animation/flower-seeking-4.png'],manaDrain:['assets/hero-animation/mana-drain-1.png','assets/hero-animation/mana-drain-2.png','assets/hero-animation/mana-drain-3.png','assets/hero-animation/mana-drain-4.png'],palmStrike:['assets/hero-animation/palm-strike-1.png','assets/hero-animation/palm-strike-2.png','assets/hero-animation/palm-strike-3.png','assets/hero-animation/palm-strike-4.png'],rage:['assets/hero-animation/rage-1.png','assets/hero-animation/rage-2.png','assets/hero-animation/rage-3.png','assets/hero-animation/rage-4.png'],purpleCloud:['assets/hero-animation/purple-cloud-1.png','assets/hero-animation/purple-cloud-2.png','assets/hero-animation/purple-cloud-3.png','assets/hero-animation/purple-cloud-4.png'],witheringWood:['assets/hero-animation/withering-wood-1.png','assets/hero-animation/withering-wood-2.png','assets/hero-animation/withering-wood-3.png','assets/hero-animation/withering-wood-4.png']};const heroActionScales={flowerSeeking:[1.95,1.95,1.75,1.7],manaDrain:[1.35,1.3,1.35,1.27],palmStrike:[1.23,1.45,1.28,1.25],rage:[1.48,1.48,1.35,1.45],purpleCloud:[1.27,1.27,1.2,1.24]},heroActionOffsets={flowerSeeking:[76,84,68,60],manaDrain:[42,40,41,36],palmStrike:[32,60,37,34],rage:[35,35,27,32],purpleCloud:[38,38,27,30]};let heroFrameToken=0;function playSkillHitLunge(figure){if(!figure)return;figure.classList.remove('skill-hit-lunge');void figure.offsetWidth;figure.classList.add('skill-hit-lunge');setTimeout(()=>figure.classList.remove('skill-hit-lunge'),380)}function resetBattleHeroFrame(){heroFrameToken++;let hero=$('#battlePlayerFigure'),figure=document.querySelector('.fighter-figure.player');figure?.classList.remove('skill-lunge','skill-hit-lunge');if(hero){hero.classList.remove('skill-frame');hero.style.removeProperty('--hero-frame-scale');hero.style.removeProperty('--hero-frame-offset');hero.src=heroActionFrames.attack[0]}}async function playHeroFrames(action,durations=[100,140,180,180],options={}){let hero=$('#battlePlayerFigure'),frames=heroActionFrames[action],figure=document.querySelector('.fighter-figure.player'),scales=heroActionScales[action],offsets=heroActionOffsets[action];if(!hero||!frames)return;let token=++heroFrameToken;if(options.lunge&&figure){figure.classList.remove('skill-lunge');void figure.offsetWidth;figure.classList.add('skill-lunge')}if(scales)hero.classList.add('skill-frame');try{for(let i=0;i<frames.length;i++){if(token!==heroFrameToken)return;if(scales){let factor=(figure?.clientHeight||195)/195;hero.style.setProperty('--hero-frame-scale',scales[i]||scales[0]);hero.style.setProperty('--hero-frame-offset',`${Math.round((offsets?.[i]||0)*factor)}px`)}hero.src=frames[i];await options.onFrameStart?.(i);await waitBattle(durations[i]||140);if(token!==heroFrameToken)return;await options.onFrameEnd?.(i)}if(token===heroFrameToken){hero.src=heroActionFrames.attack[0];hero.classList.remove('skill-frame');hero.style.removeProperty('--hero-frame-scale');hero.style.removeProperty('--hero-frame-offset')}}finally{if(token===heroFrameToken&&options.lunge)figure?.classList.remove('skill-lunge')}}
+const bossPortraitFrames={
+  'BOSS 山魈王':['assets/boss-portraits/shanxiao-wang.png','assets/boss-portraits/shanxiao-wang-windup.png','assets/boss-portraits/shanxiao-wang-strike.png','assets/boss-portraits/shanxiao-wang.png'],
+  'BOSS 巨树妖':['assets/boss-portraits/jushu-yao.png','assets/boss-portraits/jushu-yao-windup.png','assets/boss-portraits/jushu-yao-strike.png','assets/boss-portraits/jushu-yao.png'],
+  'BOSS 熔岩领主':['assets/boss-portraits/rongyan-lingzhu.png','assets/boss-portraits/rongyan-lingzhu-windup.png','assets/boss-portraits/rongyan-lingzhu-strike.png','assets/boss-portraits/rongyan-lingzhu.png'],
+  'BOSS 龙太子':['assets/boss-portraits/long-taizi.png','assets/boss-portraits/long-taizi-windup.png','assets/boss-portraits/long-taizi-strike.png','assets/boss-portraits/long-taizi.png'],
+  'BOSS 巫妖王':['assets/boss-portraits/wuyao-wang.png','assets/boss-portraits/wuyao-wang-windup.png','assets/boss-portraits/wuyao-wang-strike.png','assets/boss-portraits/wuyao-wang.png'],
+  'BOSS 古战神残魂':['assets/boss-portraits/guzhanshen-canhun.png','assets/boss-portraits/guzhanshen-canhun-windup.png','assets/boss-portraits/guzhanshen-canhun-strike.png','assets/boss-portraits/guzhanshen-canhun.png'],
+  'BOSS 虚空吞灵':['assets/boss-portraits/xukong-tunling.png','assets/boss-portraits/xukong-tunling-windup.png','assets/boss-portraits/xukong-tunling-strike.png','assets/boss-portraits/xukong-tunling.png'],
+  'BOSS 堕仙魔君':['assets/boss-portraits/duoxian-mojun.png','assets/boss-portraits/duoxian-mojun-windup.png','assets/boss-portraits/duoxian-mojun-strike.png','assets/boss-portraits/duoxian-mojun.png'],
+  'BOSS 雷劫真君':['assets/boss-portraits/leijie-zhenjun.png','assets/boss-portraits/leijie-zhenjun-windup.png','assets/boss-portraits/leijie-zhenjun-strike.png','assets/boss-portraits/leijie-zhenjun.png'],
+  'BOSS 守门仙将':['assets/boss-portraits/shoumen-xianjiang.png','assets/boss-portraits/shoumen-xianjiang-windup.png','assets/boss-portraits/shoumen-xianjiang-strike.png','assets/boss-portraits/shoumen-xianjiang.png']
+};
+let bossPortraitFrameToken=0;
+function playBossPowerWave(){
+  let arena=$('#battleModal .battle-arena');
+  if(!arena)return;
+  arena.querySelector('.boss-power-wave')?.remove();
+  let themes=[['#c8b171','#fff2bf'],['#9ca7ee','#e9edff'],['#ef6745','#ffe0a0'],['#3ec8d5','#d8feff'],['#d34e60','#ffd3da'],['#b6a370','#fff1b7'],['#8d6de4','#e6d8ff'],['#b34d9a','#ffd3f3'],['#7c9cff','#eff2ff'],['#e1be6d','#fff5ca']],theme=themes[Math.max(0,Math.min(themes.length-1,battleState?.area||0))];
+  let wave=document.createElement('div');
+  wave.className='boss-power-wave';
+  wave.style.setProperty('--wave-main',theme[0]);
+  wave.style.setProperty('--wave-hot',theme[1]);
+  wave.innerHTML='<i></i><i></i><i></i>';
+  arena.appendChild(wave);
+  void wave.offsetWidth;
+  wave.classList.add('cast');
+  setTimeout(()=>wave.remove(),860);
+}
+async function playEnemyPortraitSkill(self=false,powerWave=false){
+  let portrait=$('#battleEnemyFigure'),target=battleFigure('player');
+  if(!portrait)return;
+  if(battleState?.enemy)battleState.enemy.portraitSkillAt=Date.now();
+  let frames=bossPortraitFrames[battleState?.target?.originalName||battleState?.target?.name],image=portrait.querySelector('img');
+  portrait.classList.remove('enemy-portrait-normal-attack','enemy-skill-lunge','skill-portrait-cast');
+  target?.classList.remove('portrait-skill-hit');
+  void portrait.offsetWidth;
+  if(frames&&image){
+    let token=++bossPortraitFrameToken;
+    portrait.classList.add('enemy-skill-lunge');
+    image.src=frames[0];
+    await waitBattle(90);
+    if(token!==bossPortraitFrameToken||battleState==null)return;
+    image.src=frames[1];
+    await waitBattle(270);
+    if(token!==bossPortraitFrameToken||battleState==null)return;
+    image.src=frames[2];
+    if(powerWave)playBossPowerWave();
+    if(!self)target?.classList.add('portrait-skill-hit');
+    await waitBattle(340);
+    if(token===bossPortraitFrameToken&&image.isConnected)image.src=frames[3];
+    portrait.classList.remove('enemy-skill-lunge');
+    target?.classList.remove('portrait-skill-hit');
+    return;
+  }
+  portrait.classList.add('skill-portrait-cast');
+  await waitBattle(390);
+  if(!self)target?.classList.add('portrait-skill-hit');
+  await waitBattle(190);
+  portrait.classList.remove('skill-portrait-cast');
+  target?.classList.remove('portrait-skill-hit');
+}
+async function playEnemyPortraitNormalAttack(){
+  let portrait=$('#battleEnemyFigure'),target=battleFigure('player');
+  if(!portrait)return;
+  bossPortraitFrameToken++;
+  let frames=bossPortraitFrames[battleState?.target?.originalName||battleState?.target?.name],image=portrait.querySelector('img');
+  if(frames&&image)image.src=frames[0];
+  portrait.classList.remove('enemy-skill-lunge','skill-portrait-cast','enemy-portrait-normal-attack');
+  target?.classList.remove('portrait-skill-hit');
+  void portrait.offsetWidth;
+  portrait.classList.add('enemy-portrait-normal-attack');
+  await waitBattle(235);
+  target?.classList.add('portrait-skill-hit');
+  await waitBattle(225);
+  portrait.classList.remove('enemy-portrait-normal-attack');
+  target?.classList.remove('portrait-skill-hit');
+}
+const heroActionFrames={attack:['assets/hero-animation/attack-1.png','assets/hero-animation/attack-2.png','assets/hero-animation/attack-3.png','assets/hero-animation/attack-1.png'],fireball:['assets/hero-animation/fireball-1.png','assets/hero-animation/fireball-2.png','assets/hero-animation/fireball-3.png','assets/hero-animation/attack-1.png'],bandage:['assets/hero-animation/bandage-1.png','assets/hero-animation/bandage-2.png','assets/hero-animation/bandage-3.png','assets/hero-animation/bandage-4.png'],run:['assets/hero-animation/run-1.png','assets/hero-animation/run-2.png','assets/hero-animation/run-3.png','assets/hero-animation/run-4.png'],flowerSeeking:['assets/hero-animation/flower-seeking-1.png','assets/hero-animation/flower-seeking-2.png','assets/hero-animation/flower-seeking-3.png','assets/hero-animation/flower-seeking-4.png'],manaDrain:['assets/hero-animation/mana-drain-1.png','assets/hero-animation/mana-drain-2.png','assets/hero-animation/mana-drain-3.png','assets/hero-animation/mana-drain-4.png'],palmStrike:['assets/hero-animation/palm-strike-1.png','assets/hero-animation/palm-strike-2.png','assets/hero-animation/palm-strike-3.png','assets/hero-animation/palm-strike-4.png'],rage:['assets/hero-animation/rage-1.png','assets/hero-animation/rage-2.png','assets/hero-animation/rage-3.png','assets/hero-animation/rage-4.png'],purpleCloud:['assets/hero-animation/purple-cloud-1.png','assets/hero-animation/purple-cloud-2.png','assets/hero-animation/purple-cloud-3.png','assets/hero-animation/purple-cloud-4.png'],witheringWood:['assets/hero-animation/withering-wood-1.png','assets/hero-animation/withering-wood-2.png','assets/hero-animation/withering-wood-3.png','assets/hero-animation/withering-wood-4.png']};const heroActionScales={flowerSeeking:[1.34,1.42,1.32,1.28],manaDrain:[1.08,1.12,1.08,1.05],palmStrike:[1.06,1.14,1.08,1.06],rage:[1.13,1.15,1.1,1.12],purpleCloud:[1.08,1.1,1.06,1.08]},heroActionOffsets={flowerSeeking:[0,0,0,0],manaDrain:[0,0,0,0],palmStrike:[0,0,0,0],rage:[0,0,0,0],purpleCloud:[0,0,0,0]};let heroFrameToken=0;function playSkillHitLunge(figure){if(!figure)return;figure.classList.remove('skill-hit-lunge');void figure.offsetWidth;figure.classList.add('skill-hit-lunge');setTimeout(()=>figure.classList.remove('skill-hit-lunge'),380)}function resetBattleHeroFrame(){heroFrameToken++;let hero=$('#battlePlayerFigure'),figure=document.querySelector('.fighter-figure.player');figure?.classList.remove('skill-lunge','skill-hit-lunge');if(hero){hero.classList.remove('skill-frame');hero.style.removeProperty('--hero-frame-scale');hero.style.removeProperty('--hero-frame-offset');hero.src=heroActionFrames.attack[0]}}async function playHeroFrames(action,durations=[100,140,180,180],options={}){let hero=$('#battlePlayerFigure'),frames=heroActionFrames[action],figure=document.querySelector('.fighter-figure.player'),scales=heroActionScales[action],offsets=heroActionOffsets[action];if(!hero||!frames)return;let token=++heroFrameToken;if(options.lunge&&figure){figure.classList.remove('skill-lunge');void figure.offsetWidth;figure.classList.add('skill-lunge')}if(scales)hero.classList.add('skill-frame');try{for(let i=0;i<frames.length;i++){if(token!==heroFrameToken)return;if(scales){hero.style.setProperty('--hero-frame-scale',scales[i]||scales[0]);hero.style.setProperty('--hero-frame-offset',`${offsets?.[i]||0}px`)}hero.src=frames[i];await options.onFrameStart?.(i);await waitBattle(durations[i]||140);if(token!==heroFrameToken)return;await options.onFrameEnd?.(i)}if(token===heroFrameToken){hero.src=heroActionFrames.attack[0];hero.classList.remove('skill-frame');hero.style.removeProperty('--hero-frame-scale');hero.style.removeProperty('--hero-frame-offset')}}finally{if(token===heroFrameToken&&options.lunge)figure?.classList.remove('skill-lunge')}}
 async function playFireballAnimation(){let ball=$('#fireballProjectile'),impact=$('#fireballImpact'),caster=document.querySelector('.fighter-figure.player'),target=document.querySelector('.fighter-figure.enemy');if(!ball||!impact)return;void playHeroFrames('fireball',[160,230,260,230]);ball.classList.remove('cast');impact.classList.remove('burst');caster?.classList.remove('fire-cast');target?.classList.remove('fire-hit');void ball.offsetWidth;caster?.classList.add('fire-cast');ball.classList.add('cast');await waitBattle(500);impact.classList.add('burst');target?.classList.add('fire-hit');setTimeout(()=>{ball.classList.remove('cast');impact.classList.remove('burst');caster?.classList.remove('fire-cast');target?.classList.remove('fire-hit')},360)}
 function battleRealmIndex(label){
   let text=String(label||'');
@@ -2559,7 +2693,7 @@ function tickBattleCooldowns(b){
   Object.keys(cooldowns).forEach(key=>{cooldowns[key]=Math.max(0,(cooldowns[key]||0)-1);if(!cooldowns[key])delete cooldowns[key]});
 }
 function renderBattle(){let b=battleState;if(!b)return;let t=b.target;$('#battleTitle').textContent=(t.boss?'Boss战：':'战斗：')+t.name;$('#battleRoundText').textContent='第'+b.round+'回合';$('#battlePlayerName').textContent='你';setBattleRealmBadge('#battlePlayerLevel',realmText(),g.realm);$('#battleEnemyName').textContent=t.name;setBattleRealmBadge('#battleEnemyLevel',b.enemy.realm,battleRealmIndex(b.enemy.realm));$('#battleEnemyFigure').textContent=b.enemy.icon;$('#battlePlayerHp').style.width=battlePct(b.player.hp,b.player.maxHp);$('#battlePlayerMp').style.width=battlePct(b.player.mp,b.player.maxMp);let shield=Math.max(0,b.player.shield||0),shieldPeak=Math.max(1,b.player.shieldPeak||b.player.maxHp||1);$('#battlePlayerShield').style.width=battlePct(shield,shieldPeak);$('#battlePlayerHpText').textContent=`生命 ${fmt(b.player.hp)}/${fmt(b.player.maxHp)}`;$('#battlePlayerMpText').textContent=`法力 ${fmt(b.player.mp)}/${fmt(b.player.maxMp)}`;$('#battlePlayerShieldText').textContent=`护盾 ${fmt(shield)}`;$('#battleEnemyHp').style.width=battlePct(b.enemy.hp,b.enemy.maxHp);$('#battleEnemyMp').style.width=battlePct(b.enemy.mp,b.enemy.maxMp);$('#battleEnemyHpText').textContent=`生命 ${fmt(b.enemy.hp)}/${fmt(b.enemy.maxHp)}`;$('#battleEnemyMpText').textContent=`法力 ${fmt(b.enemy.mp)}/${fmt(b.enemy.maxMp)}`;ensureSkillLayout();let skills=g.activeSkills||[];$('#battleSkillBar').innerHTML=Array.from({length:5},(_,i)=>{let sk=skills[i],cost=sk?battleSkillCost(sk,i):0,reason=sk?battleSkillBlockReason(sk,i,b):'技能未激活',disabled=!sk||!!reason;return`<button class="battle-skill" data-battle-skill="${i}" ${disabled?'disabled':''}><b>${sk?(sk.icon||'✨')+' '+sk.name:'空'}</b><small>${sk?`耗蓝${cost}${reason?' · '+reason:''} · ${sk.desc||'主动技'}`:'技能书激活'}</small></button>`}).join('');document.querySelectorAll('[data-battle-skill]').forEach(btn=>btn.onclick=()=>battlePlayerTurn(+btn.dataset.battleSkill));$('#battleLog').innerHTML=b.log.map(x=>`<div>${x}</div>`).join('')}
-function renderBattleEnemyPortrait(){let b=battleState,figure=$('#battleEnemyFigure'),portrait=b?.enemy?.portrait;if(!figure)return;if(!portrait){figure.className='monster';figure.classList.remove('tianmo-facing-left');return}figure.className='boss-portrait';figure.classList.toggle('tianmo-facing-left',portrait.includes('assets/npc-portraits/tianmo-'));figure.innerHTML=`<img src="${portrait}" alt="${b.target.name}">`}
+function renderBattleEnemyPortrait(){let b=battleState,figure=$('#battleEnemyFigure'),portrait=b?.enemy?.portrait,name=b?.target?.originalName||b?.target?.name||'';if(!figure)return;if(!portrait){figure.className='monster';figure.classList.remove('tianmo-facing-left','boss-facing-left');return}figure.className='boss-portrait';figure.classList.toggle('tianmo-facing-left',portrait.includes('assets/npc-portraits/tianmo-'));figure.classList.toggle('boss-facing-left',!!bossPortraitFrames[name]&&name!=='BOSS 山魈王');figure.innerHTML=`<img src="${portrait}" alt="${b.target.name}">`}
 const baseRenderBattle=renderBattle;
 renderBattle=function(){baseRenderBattle();renderBattleEnemyPortrait()};
 function battleSkillCost(sk,i){if(!sk)return 0;let masterPath=masterSkillPathFor(sk);if(masterPath)return masterSkillConfig(masterPath,sk.masterSkillLevel||parseInt(sk.name)||1).cost;if(sk.holyLightShield||sk.name==='圣光罩')return 0;if(sk.witheringWood||sk.name==='枯木逢春')return Math.max(1,Math.ceil((battleState?.player?.maxMp||statTotal().mana)*.3));if(sk.flowerSeeking||sk.name==='浪里寻花')return 0;if(sk.starterFireball||sk.name==='火球术')return 20;if(sk.rageSkill||sk.name==='暴怒')return 0;if(sk.bandageLevel||/包扎/.test(sk.name))return bandageConfig(sk.bandageLevel||parseInt(sk.name)||1).cost;if(sk.bigFireballLevel||/大火球术/.test(sk.name))return bigFireballConfig(sk.bigFireballLevel||parseInt(sk.name)||1).cost;if(/回春/.test(sk.name))return 24;if(/雷/.test(sk.name))return 30;if(/冰/.test(sk.name))return 22;if(/御风/.test(sk.name))return 18;return 20+i*3}
@@ -2619,7 +2753,7 @@ async function battleSkillEffect(sk,idx=0){
   else if(/雷/.test(name)){dmg=Math.floor(dmg*(Math.random()<.45?1.9:1.15));note='雷光炸裂'}
   else if(/回春/.test(name)){let heal=Math.floor(b.player.maxHp*.22+st.mana*.04);b.player.hp=Math.min(b.player.maxHp,b.player.hp+heal);dmg=Math.floor(dmg*.45);note=`回春+${heal}`}
   else if(/御风/.test(name)){b.player.wind=1;dmg=Math.floor(dmg*.75);note='身法提升'}
-  if(Math.random()*100<st.crit){dmg=Math.floor(dmg*1.55*ruyiCritDamageMultiplier());note+=(note?'，':'')+'暴击'}
+  if(Math.random()*100<st.crit){dmg=Math.floor(dmg*1.55*ruyiCritDamageMultiplier());note+=(note?'，':'')+'暴击';let manaRate=equipmentAffixStats().critManaRatio;if(manaRate>0){let beforeMp=b.player.mp,restored=Math.min(b.player.maxMp-beforeMp,Math.max(1,Math.floor(b.player.maxMp*manaRate)));b.player.mp+=restored;if(restored)note+=`，回蓝${restored}`}}
   if(/火球术/.test(name))await playFireballAnimation();
   if(rageActive)b.player.rageTurns=Math.max(0,(b.player.rageTurns||0)-1);
   b.enemy.hp=Math.max(0,b.enemy.hp-dmg);battleFx('enemy','-'+dmg);battleLog(`你施展${name}，造成 ${dmg} 点伤害${note?'（'+note+'）':''}${rageActive?`，暴怒剩余${b.player.rageTurns}回合`:''}。`);return true
@@ -2627,7 +2761,17 @@ async function battleSkillEffect(sk,idx=0){
 let battleBusy=false,battleAutoRunning=false;
 function waitBattle(ms){return new Promise(resolve=>setTimeout(resolve,ms))}
 function battleFigure(side){return document.querySelector(`.fighter-figure.${side}`)}
-async function playNormalAttackAnimation(side){let attacker=battleFigure(side),target=battleFigure(side==='player'?'enemy':'player');if(!attacker)return;let frames=side==='player'?playHeroFrames('attack',[100,140,190,170]):null;attacker.classList.remove('normal-attack');target?.classList.remove('hit-shake');void attacker.offsetWidth;attacker.classList.add('normal-attack');await waitBattle(300);target?.classList.add('hit-shake');await waitBattle(300);attacker.classList.remove('normal-attack');target?.classList.remove('hit-shake');if(frames)await frames}
+async function playNormalAttackAnimation(side){
+  let attacker=battleFigure(side),target=battleFigure(side==='player'?'enemy':'player'),bossTurn=side==='enemy'&&battleState?.target?.boss;
+  if(!attacker)return;
+  if(bossTurn){
+    let justCast=Date.now()-(battleState.enemy.portraitSkillAt||0)<1200;
+    if(!justCast)await playEnemyPortraitNormalAttack();
+    return;
+  }
+  let frames=side==='player'?playHeroFrames('attack',[100,140,190,170]):null;
+  attacker.classList.remove('normal-attack');target?.classList.remove('hit-shake');void attacker.offsetWidth;attacker.classList.add('normal-attack');await waitBattle(300);target?.classList.add('hit-shake');await waitBattle(300);attacker.classList.remove('normal-attack');target?.classList.remove('hit-shake');if(frames)await frames
+}
 async function playRunAnimation(){let player=battleFigure('player');if(!player)return;let frames=playHeroFrames('run',[130,160,220,310]);player.classList.remove('run-away');void player.offsetWidth;player.classList.add('run-away');await waitBattle(820);player.classList.remove('run-away');await frames}
 function setBattleControlsDisabled(disabled){
   document.querySelectorAll('#battleModal button').forEach(btn=>{
@@ -3753,7 +3897,41 @@ resolveLocalTarget=(target,batch=false)=>{
   if(target)delete target._cultivationMultiplier;
   return result;
 };
-function bossGateUnlocked(i){return i<=0||i>=10||(g.bossKills&&g.bossKills[i-1]>0)}function bossReqText(i){return i>0&&i<10&&!bossGateUnlocked(i)?`，且需击败${maps[i-1][0]}Boss至少1次`:''}function sceneUnlocked(i){return bossGateUnlocked(i)}function sceneReqText(i){return i>0&&i<10&&!bossGateUnlocked(i)?`需击败${maps[i-1][0]}Boss至少1次`:'所有境界均可进入'}function renderHomeMap(){let mapEl=$('#homeMap');if(!mapEl)return;g.selectedScene=Math.max(0,Math.min(mapScenes.length-1,g.selectedScene??g.map??0));mapEl.querySelectorAll('.map-node,.map-enter-pop').forEach(n=>n.remove());mapScenes.forEach((s,i)=>{let b=document.createElement('button');b.className='map-node '+(g.selectedScene===i?'active ':'')+(sceneUnlocked(i)?'':'lock');b.style.setProperty('--x',s[4]+'%');b.style.setProperty('--y',s[5]+'%');b.dataset.scene=i;b.innerHTML=`<i>${s[0]}</i><span>${s[1]}</span>`;mapEl.appendChild(b)});let s=mapScenes[g.selectedScene],locked=!sceneUnlocked(g.selectedScene);if(!locked){let enter=document.createElement('button');enter.className='map-enter-pop';enter.style.setProperty('--x',s[4]+'%');enter.style.setProperty('--y',s[5]+'%');enter.textContent='进入';enter.onclick=goScene;mapEl.appendChild(enter)}$('#sceneIcon').textContent=s[0];$('#sceneName').textContent=s[1];$('#sceneNeed').textContent=(locked?'尚未解锁 · ':'')+sceneReqText(g.selectedScene);$('#sceneDesc').textContent=s[2];$('#sceneDrops').innerHTML=s[3].split('、').map(x=>`<span>${x}</span>`).join('');$('#goSceneBtn').disabled=locked;$('#goSceneBtn').textContent=g.selectedScene===10?'进入宗门':'进入地图';document.querySelectorAll('[data-scene]').forEach(b=>b.onclick=()=>{let i=+b.dataset.scene;g.selectedScene=i;if(!sceneUnlocked(i))toast(sceneReqText(i)+'后解锁');renderHomeMap()})}function goScene(){let i=g.selectedScene??0;if(!sceneUnlocked(i))return toast(sceneReqText(i)+'后解锁');g.map=i;log('御风前往：'+maps[i][0]+'，展开区域小地图','good');toast('进入：'+maps[i][0]);openSceneMap()}
+function bossGateUnlocked(i){return i<=0||i>=10||(g.bossKills&&g.bossKills[i-1]>0)}function bossReqText(i){return i>0&&i<10&&!bossGateUnlocked(i)?`，且需击败${maps[i-1][0]}Boss至少1次`:''}function sceneUnlocked(i){return bossGateUnlocked(i)}function sceneReqText(i){return i>0&&i<10&&!bossGateUnlocked(i)?`需击败${maps[i-1][0]}Boss至少1次`:'所有境界均可进入'}
+function renderHomeMap(){
+  let mapEl=$('#homeMap');
+  if(!mapEl)return;
+  g.selectedScene=Math.max(0,Math.min(mapScenes.length-1,g.selectedScene??g.map??0));
+  mapEl.querySelectorAll('.map-node,.map-enter-pop').forEach(n=>n.remove());
+  mapScenes.forEach((s,i)=>{
+    let b=document.createElement('button'),portrait=mapScenePortraits[i],unlocked=sceneUnlocked(i);
+    b.className='map-node '+(g.selectedScene===i?'active ':'')+(unlocked?'':'lock');
+    b.style.setProperty('--x',s[4]+'%');
+    b.style.setProperty('--y',s[5]+'%');
+    b.dataset.scene=i;
+    b.innerHTML=unlocked&&portrait
+      ?`<i class="scene-node-portrait" style="--scene-art:url('${portrait[0]}');--scene-art-position:${portrait[1]};--scene-art-size:${portrait[2]||'cover'}"></i><span>${s[1]}</span>`
+      :`<i class="scene-node-unknown"></i><span>？？</span>`;
+    mapEl.appendChild(b);
+  });
+  let s=mapScenes[g.selectedScene];
+  if(sceneUnlocked(g.selectedScene)){
+    let enter=document.createElement('button');
+    enter.className='map-enter-pop';
+    enter.style.setProperty('--x',s[4]+'%');
+    enter.style.setProperty('--y',s[5]+'%');
+    enter.textContent='进入';
+    enter.onclick=goScene;
+    mapEl.appendChild(enter);
+  }
+  document.querySelectorAll('[data-scene]').forEach(b=>b.onclick=()=>{
+    let i=+b.dataset.scene;
+    g.selectedScene=i;
+    if(!sceneUnlocked(i))toast(sceneReqText(i)+'后解锁');
+    renderHomeMap();
+  });
+}
+function goScene(){let i=g.selectedScene??0;if(!sceneUnlocked(i))return toast(sceneReqText(i)+'后解锁');g.map=i;log('御风前往：'+maps[i][0]+'，展开区域小地图','good');toast('进入：'+maps[i][0]);openSceneMap()}
 function gearRows(){
 let st=statTotal(),b=st.bonus;
 return rows({
@@ -3852,7 +4030,7 @@ function ensureMarketStock(){let hour=Math.floor(Date.now()/3600000),old=!Array.
 function buyMarketGood(i){let x=g.marketStock[i];if(!x)return;if(g.stones<x[2])return toast('灵石不足');if(x[3]==='bagItem'&&!addBagItem(x[4]))return toast('背包已满，无法购买');g.stones-=x[2];if(x[3]==='bagItem'&&x[4].name==='回春丹')g.healPills=(g.healPills||0)+(x[4].qty||1);else if(x[3]==='resource')g[x[4]]+=x[5];else if(x[3]==='cultPill')addFixedCultPill(x[5].level,x[5].gain,1);else if(x[3]==='forge'){g.enhance+=x[5];g.attack+=x[5]*2;g.defense+=x[5]}else if(x[3]==='skillbook')addBagItem(x[5]);log(`黑市购得${x[1]}`,'good');g.marketStock.splice(i,1);renderShop();render();save()}
 function manualRefreshMarket(){let hour=Math.floor(Date.now()/3600000);if(g.marketManualHour===hour)return toast('本小时已经手动刷新过');if(g.stones<500)return toast('手动刷新需要500灵石');g.stones-=500;g.marketManualHour=hour;makeMarketStock();log('花费500灵石，手动刷新黑市货架');render();save()}
 function renderShop(){ensureMarketStock();let next=(Math.floor(Date.now()/3600000)+1)*3600000,left=Math.max(0,next-Date.now()),min=Math.floor(left/60000),sec=Math.floor(left%60000/1000),used=g.marketManualHour===Math.floor(Date.now()/3600000),time=`${String(min).padStart(2,'0')}:${String(sec).padStart(2,'0')}`,hint=used?'本小时手动刷新已使用':'本小时还可手动刷新1次',html=g.marketStock.map((x,i)=>`<div class="item"><div class="item-main"><span class="item-icon">${x[0]}</span><span>${x[1]}<small> · 售价 ${fmt(x[2])} 灵石</small></span></div><button class="btn" data-buy="${i}">购买</button></div>`).join('')||'<div class="item">本时辰货物已售罄，等待整点刷新。</div>',modalHtml=`<div class="item"><div class="item-main"><span class="item-icon">💰</span><span>当前灵石<small>${fmt(g.stones)}</small></span></div></div>`+html;if($('#marketCountdown'))$('#marketCountdown').textContent=time;if($('#manualRefreshHint'))$('#manualRefreshHint').textContent=hint;if($('#refreshMarketBtn'))$('#refreshMarketBtn').disabled=used;if($('#shop'))$('#shop').innerHTML=html;if($('#marketModalCountdown'))$('#marketModalCountdown').textContent=time;if($('#marketModalRefreshHint'))$('#marketModalRefreshHint').textContent=hint;if($('#marketModalRefreshBtn'))$('#marketModalRefreshBtn').disabled=used;if($('#marketModalShop'))$('#marketModalShop').innerHTML=modalHtml;document.querySelectorAll('[data-buy]').forEach(b=>b.onclick=()=>buyMarketGood(+b.dataset.buy))}
-function renderLogs(){$('#logbox').innerHTML=(g.logs||[]).map(x=>`<div class="log ${x.type||''}">[${x.stamp}] ${x.text}</div>`).join('')}
+function renderLogs(){let box=$('#logbox');if(box)box.innerHTML=(g.logs||[]).map(x=>`<div class="log ${x.type||''}">[${x.stamp}] ${x.text}</div>`).join('')}
 function toast(t,duration=1800){let el=$('#toast');el.textContent=t;el.classList.add('show');clearTimeout(el.t);el.t=setTimeout(()=>el.classList.remove('show'),duration)}
 function runSectRealm(){
 if(Date.now()<g.sectRealmAt+1800000)return toast('宗门秘境尚未开启');
@@ -3989,8 +4167,8 @@ renderSceneMap=()=>{renderSceneMapWithGoal();renderSceneGoalCard()};
 
 function bossMechanicProfile(target,area){
   let profiles=[
-    ['崩山践踏',1.55,'裂岩横扫',1.18],['月影噬魂',1.58,'幽月扑杀号',1.20],['熔核爆燃',1.60,'灼焰喷吐',1.22],['龙潮重压',1.62,'潮汐冲击',1.24],['血契裂爪',1.65,'妖血撕裂',1.26],
-    ['战旗断魂',1.68,'战魂突刺',1.28],['虚空坍缩',1.70,'裂隙弹射',1.30],['魔印降临',1.72,'魔印侵蚀',1.32],['九霄落雷',1.75,'雷光击',1.34],['镇门剑潮',1.78,'剑罡横斩',1.36]
+    ['崩山践踏',1.55,'裂岩横扫',1.08],['月影噬魂',1.58,'幽月扑杀号',1.089],['熔核爆燃',1.60,'灼焰喷吐',1.098],['龙潮重压',1.62,'潮汐冲击',1.107],['血契裂爪',1.65,'妖血撕裂',1.116],
+    ['战旗断魂',1.68,'战魂突刺',1.124],['虚空坍缩',1.70,'裂隙弹射',1.133],['魔印降临',1.72,'魔印侵蚀',1.142],['九霄落雷',1.75,'雷光击',1.151],['镇门剑潮',1.78,'剑罡横斩',1.16]
   ];
   let p=profiles[Math.max(0,Math.min(profiles.length-1,Number(area)||0))];
   return{name:p[0],multiplier:p[1],minorName:p[2],minorMultiplier:p[3]};
@@ -4071,6 +4249,7 @@ battleEnemyTurn=async function(){
     m.intent=`${m.name} · 爆发`;
     b.enemy.attack=Math.max(1,Math.round(originalAttack*m.multiplier));
     battleLog(`${b.target.name}施展「${m.name}」，消耗${m.mpCost}点法力，伤害 ${Math.round(m.multiplier*100)}%。`);
+    await playEnemyPortraitSkill(false,true);
     renderBattle();
     await baseBossEnemyTurn();
     if(battleState===b){
@@ -4089,11 +4268,12 @@ battleEnemyTurn=async function(){
     battleLog(`${b.target.name}正在准备「${m.name}」。`);
     renderBattle();
   }else m.intent=`${m.countdown}回合后施展`;
-  if(b.enemy.mp>=m.minorCost&&Math.random()<.42){
+  if(b.enemy.mp>=m.minorCost&&Math.random()<.32){
     let originalAttack=b.enemy.attack;
     b.enemy.mp-=m.minorCost;
     b.enemy.attack=Math.max(1,Math.round(originalAttack*m.minorMultiplier));
     battleLog(`${b.target.name}施展「${m.minorName}」，消耗${m.minorCost}点法力。`);
+    await playEnemyPortraitSkill();
     renderBattle();
     await baseBossEnemyTurn();
     if(battleState===b){b.enemy.attack=originalAttack;renderBattle();}
@@ -4147,7 +4327,7 @@ battleEnemyTurn=async function(){
   if((b.enemy.skipTurns||0)>0)return battleEnemyTurnWithDarkDragon();
   if(b.enemy.hp<5000&&b.enemy.mp>=200){
     b.enemy.mp-=200;
-    await playNormalAttackAnimation('enemy');
+    await playEnemyPortraitSkill(true);
     if(battleState!==b)return;
     let before=b.enemy.hp;
     b.enemy.hp=Math.min(b.enemy.maxHp,b.enemy.hp+5000);
@@ -4160,6 +4340,7 @@ battleEnemyTurn=async function(){
   b.enemy.darkDragonCycle=(turn+1)%3;
   if(turn===0&&b.enemy.mp>=250){
     b.enemy.mp-=250;
+    await playEnemyPortraitSkill();
     await playNormalAttackAnimation('enemy');
     if(battleState!==b)return;
     let damage=Math.max(1,Math.floor(b.enemy.hp*.1));
@@ -4168,6 +4349,7 @@ battleEnemyTurn=async function(){
   }
   if(turn===1&&b.enemy.mp>=300){
     b.enemy.mp-=300;
+    await playEnemyPortraitSkill();
     await playNormalAttackAnimation('enemy');
     if(battleState!==b)return;
     let stunned=Math.random()<.35;
@@ -6458,6 +6640,7 @@ battleEnemyTurn=async function(){
   b.enemy.mp=Math.max(0,b.enemy.mp-200);
   b.enemy.attack=Math.max(1,Math.floor(originalAttack*bigFireballConfig(5).multiplier));
   battleLog(`叛教修士施展「5级火球术」，消耗200点法力。`);
+  await playEnemyPortraitSkill();
   try{return await battleEnemyTurnWithRenegadeCultivator()}
   finally{if(battleState===b)b.enemy.attack=originalAttack}
 };
@@ -7074,11 +7257,13 @@ function materialOriginFromName(name){
   }
   return {realm:'练气初期',tier:1,boss:false};
 }
+function materialMajorRealmTier(realm='练气初期'){return Math.max(1,Math.floor(Math.max(0,realmNameIndex(realm))/4)+1)}
 function materialSaleOrigin(item){
   let inferred=materialOriginFromName(item?.name||'');
+  let realm=item?.sourceRealm||inferred.realm;
   return {
-    realm:item?.sourceRealm||inferred.realm,
-    tier:Math.max(1,Math.floor(Number(item?.sourceRealmTier)||inferred.tier||1)),
+    realm,
+    tier:materialMajorRealmTier(realm),
     boss:item?.sourceBoss===undefined?!!inferred.boss:!!item.sourceBoss
   };
 }
@@ -7091,14 +7276,14 @@ const addTrophyWithRecoveryOrigin=addTrophy;
 addTrophy=function(name,count=1,origin=null){
   if(!origin)return addTrophyWithRecoveryOrigin(name,count);
   g.trophies=g.trophies||{};g.bag=g.bag||[];
-  let left=Math.max(1,Math.floor(count||1)),wanted=left,max=99,tier=Math.max(1,Math.floor(origin.tier||1)),boss=!!origin.boss;
+  let left=Math.max(1,Math.floor(count||1)),wanted=left,max=999,tier=materialMajorRealmTier(origin.realm),boss=!!origin.boss;
   for(let item of g.bag){
     if(item?.type!=='material'||item.name!==name||(item.qty||1)>=max||Number(item.sourceRealmTier)!==tier||!!item.sourceBoss!==boss)continue;
     let add=Math.min(max-(item.qty||1),left);item.qty=(item.qty||1)+add;left-=add;if(!left)break;
   }
   while(left>0&&bagFree()>0){
     let add=Math.min(max,left);
-    g.bag.push({type:'material',name,qty:add,max,sell:35,sourceRealm:origin.realm,sourceRealmTier:tier,sourceBoss:boss,sourceMonster:origin.monster||'',desc:`妖兽材料：${origin.realm}${boss?' Boss':''}掉落。可在太玄宗·宗门回收处享受境界加价。`});
+    g.bag.push({type:'material',name,qty:add,max,sell:35,sourceRealm:origin.realm,sourceRealmTier:tier,sourceBoss:boss,sourceMonster:origin.monster||'',desc:`妖兽材料：${realms[tier-1]}境掉落${boss?' Boss':''}。可在太玄宗·宗门回收处享受境界加价。`});
     left-=add;
   }
   let gained=wanted-left;if(gained)g.trophies[name]=(g.trophies[name]||0)+gained;
@@ -7118,10 +7303,24 @@ resolveLocalTarget=function(target,batch=false){
   let previous=monsterMaterialOriginContext;
   if(target?.type==='战斗'){
     let area=g.selectedScene??g.map,realm=target._battleRealm||target.customStats?.realm||getMonsterStats(target.originalName||target.name)?.realm||localMonsterRealm(area,activeSpot(),target,0);
-    monsterMaterialOriginContext={realm,tier:Math.max(1,realmNameIndex(realm)+1),boss:!!target.boss,monster:target.originalName||target.name};
+    monsterMaterialOriginContext={realm,tier:materialMajorRealmTier(realm),boss:!!target.boss,monster:target.originalName||target.name};
   }
   try{return resolveLocalTargetWithRecoveryOrigin(target,batch)}finally{monsterMaterialOriginContext=previous}
 };
+function normalizeMonsterMaterialStacks(){
+  let merged=[],slots=new Map();
+  (g.bag||[]).forEach(item=>{
+    if(item?.type!=='material'){merged.push(item);return;}
+    let origin=materialSaleOrigin(item),tier=origin.tier,boss=origin.boss,key=`${item.name}|${tier}|${boss?1:0}`,left=Math.max(1,Math.floor(item.qty||1)),max=999,buckets=slots.get(key)||[];
+    while(left>0){
+      let bucket=buckets.find(entry=>(entry.qty||0)<max);
+      if(!bucket){bucket={...item,qty:0,max,sell:item.sell??35,sourceRealm:realms[tier-1]+'初期',sourceRealmTier:tier,sourceBoss:boss,sourceMonster:item.sourceMonster||'',desc:`妖兽材料：${realms[tier-1]}境掉落${boss?' Boss':''}。可在太玄宗·宗门回收处享受境界加价。`};merged.push(bucket);buckets.push(bucket);slots.set(key,buckets);}
+      let gain=Math.min(max-bucket.qty,left);bucket.qty+=gain;left-=gain;
+    }
+  });
+  g.bag=merged;g.bagSelected=Math.min(g.bagSelected??-1,g.bag.length-1);syncBagPage();
+}
+normalizeMonsterMaterialStacks();
 function redEquipmentBuybacks(){return g.redEquipmentBuybacks||(g.redEquipmentBuybacks=[])}
 function recordRedEquipmentSale(item,price=itemSell(item)){
   let equip=normalizeEquip(item);if(!equip||equip.quality!==6)return;
@@ -7320,11 +7519,289 @@ localMeet=function(idx=0){
   if(name==='守护兽')return talkResidualGuardian();
   return localMeetWithCultivationBeasts(idx);
 };
+// ===== 小地图随机事件 =====
+const mapRandomEventFlavor=[
+  '山雾里传来急促的脚步声', '月影被风吹得支离破碎', '地火余温让空气微微扭曲',
+  '潮声里混着陌生的低语', '古域残碑下有灵光一闪', '战场旧旗在煞风中猎猎作响',
+  '裂隙边缘浮起一层微光', '残碑间传来沉重的石响', '雷云短暂地照亮了前路', '接引仙雾忽然翻涌',
+  '宗门石阶旁忽有灵光一闪'
+];
+function mapRandomEventState(){return g.mapRandomEvents||(g.mapRandomEvents={})}
+function mapRandomEventReward(area,ratio=1){return Math.max(1,Math.floor(monsterCultivationReward(area,false)*(1.5+area*.35)*ratio))}
+function mapRandomEventCooldown(area){let state=mapRandomEventState(),entry=state[area]||(state[area]={cooldown:0,seen:0});return entry}
+function randomEventCanReceive(item){
+  if(!item)return true;
+  let stack=(g.bag||[]).some(entry=>entry?.type===item.type&&entry.name===item.name&&(entry.qty||1)<(entry.max||99));
+  return stack||bagFree()>0;
+}
+function finishRandomEvent(title,text){
+  pushLocalLog(`【随机事件】${title}：${text}`);
+  render();renderBag();renderSceneMap();save();
+}
+function randomWoundedCultivator(area){
+  let herbCost=8+area*4,pillCost=1+Math.floor(area/3),cult=mapRandomEventReward(area,1.4),stones=Math.max(20,Math.floor(monsterCultivationReward(area,false)*(1+area*.15)));
+  openNpcDialog('受伤修士',`${mapRandomEventFlavor[area]}。一名修士倚在断石旁，衣襟已被血浸透。\n\n“道友……我被伏击时伤了经脉，若能撑过这一关，定不忘相助。”\n\n可选择用回春丹或药材救治。`,[
+    {text:`赠予回春丹×${pillCost}`,alt:true,close:false,onClick(){if(pillCountByName('回春丹','healPills')<pillCost)return toast(`回春丹不足${pillCost}枚`);if(!takePillByName('回春丹','healPills',pillCost))return toast('回春丹扣除失败');closeNpcDialog();g.cult+=cult;g.stones+=stones;processRealmProgress();showNpcResult('救人一命',`交付：回春丹 ×${pillCost}\n\n获得：\n修为 +${fmt(cult)}\n灵石 +${fmt(stones)}`,'good');finishRandomEvent('救助受伤修士',`修为+${fmt(cult)}，灵石+${fmt(stones)}`)}},
+    {text:`以药材疗伤×${herbCost}`,alt:true,close:false,onClick(){if(Math.max(g.herbs||0,bagItemCountByName('药材'))<herbCost)return toast(`药材不足${herbCost}份`);if(!takeHerbResource(herbCost))return toast('药材扣除失败');closeNpcDialog();g.cult+=Math.floor(cult*.72);processRealmProgress();showNpcResult('救人一命',`交付：药材 ×${herbCost}\n\n获得：修为 +${fmt(Math.floor(cult*.72))}`,'good');finishRandomEvent('救助受伤修士',`修为+${fmt(Math.floor(cult*.72))}`)}},
+    {text:'继续赶路',ghost:true,onClick(){finishRandomEvent('擦肩而过','你没有停下脚步。')}}
+  ]);
+}
+function randomTrueFalseChest(area){
+  let success=Math.random()<.68,damage=Math.max(1,Math.floor(totalHp()*(.04+area*.006)));
+  openNpcDialog('真假宝箱',`${mapRandomEventFlavor[area]}。路旁摆着一只没有留下任何气息的宝箱，锁扣却刻着早已失传的纹路。\n\n它可能装着遗宝，也可能藏着一记反噬。`,[
+    {text:'开启宝箱',alt:true,close:false,onClick(){
+      if(!success){closeNpcDialog();g.hp=Math.max(1,(g.hp||totalHp())-damage);showNpcResult('宝箱反噬',`箱中没有遗宝，只有一道护主禁制。\n\n生命 -${fmt(damage)}`,'danger');finishRandomEvent('真假宝箱','触发禁制，生命受损。');return;}
+      let quality=Math.min(5,1+Math.floor(area/2)+(Math.random()<.22?1:0)),slot=equipSlots[Math.floor(Math.random()*equipSlots.length)],item=normalizeEquip({name:equipBaseName(quality,slot),quality,slot,powerLevel:Math.max(1,area+quality),sell:quality*220});
+      item.desc=`随机事件“真假宝箱”所得。${equipEffect(item)}`;
+      if(!randomEventCanReceive(item))return toast('背包已满，暂无法开启宝箱');
+      if(!addBagItem(item))return toast('背包已满，暂无法收取装备');
+      closeNpcDialog();showNpcResult('宝箱开启',`获得：${qualityText[quality]}色${equipSlotNames[slot]}「${item.name}」`,'good');finishRandomEvent('真假宝箱',`获得${qualityText[quality]}色${item.name}。`);
+    }},
+    {text:'不碰宝箱',ghost:true,onClick(){finishRandomEvent('真假宝箱','你绕开了来历不明的宝箱。')}}
+  ]);
+}
+function randomTravelingMerchant(area){
+  let herbQty=10+area*8,forgeQty=2+area*2,herbCost=120*(area+1)*(area+1),forgeCost=260*(area+1)*(area+1);
+  openNpcDialog('临时商队',`${mapRandomEventFlavor[area]}。一支轻装商队临时停在路边，领队见你靠近，掀开了装满补给的木箱。\n\n“此地不宜久留，货真价实，过了这村便没这店。”`,[
+    {text:`购入药材×${herbQty}（${fmt(herbCost)}灵石）`,alt:true,close:false,onClick(){if((g.stones||0)<herbCost)return toast('灵石不足');if(!randomEventCanReceive({type:'herb',name:'药材',max:99}))return toast('背包已满');g.stones-=herbCost;addHerbResource(herbQty);closeNpcDialog();showNpcResult('商队交易',`消耗：灵石 ×${fmt(herbCost)}\n获得：药材 ×${herbQty}`,'good');finishRandomEvent('临时商队',`购入药材×${herbQty}。`)}},
+    {text:`购入锻造材料×${forgeQty}（${fmt(forgeCost)}灵石）`,alt:true,close:false,onClick(){if((g.stones||0)<forgeCost)return toast('灵石不足');if(!randomEventCanReceive({type:'forgeMaterial',name:'锻造材料',max:999}))return toast('背包已满');g.stones-=forgeCost;addForgeMaterials(forgeQty);closeNpcDialog();showNpcResult('商队交易',`消耗：灵石 ×${fmt(forgeCost)}\n获得：锻造材料 ×${forgeQty}`,'good');finishRandomEvent('临时商队',`购入锻造材料×${forgeQty}。`)}},
+    {text:'下次再说',ghost:true,onClick(){finishRandomEvent('临时商队','商队收起木箱，沿着另一条路离开。')}}
+  ]);
+}
+let arrayFragmentSession=null;
+function ensureArrayFragmentModal(){
+  let modal=$('#arrayFragmentModal');if(modal)return modal;
+  modal=document.createElement('div');modal.id='arrayFragmentModal';modal.className='event-modal liquid-meditation-modal';
+  modal.innerHTML='<div><h2>阵法残页 · 参悟中</h2><div class="event-result">残缺阵纹在识海中一笔笔重组，静候十息，方能窥见完整的一角。</div><div class="progress"><i id="arrayFragmentProgressFill"></i></div><div class="progress-text"><span id="arrayFragmentProgressText">参悟准备中</span><b id="arrayFragmentRewardText">奖励待结算</b></div><div class="actions"><button class="btn ghost" id="stopArrayFragmentBtn">退出参悟</button></div></div>';
+  document.body.appendChild(modal);$('#stopArrayFragmentBtn').onclick=()=>stopArrayFragmentStudy();return modal;
+}
+function renderArrayFragmentProgress(){
+  let session=arrayFragmentSession;if(!session)return;
+  let now=Date.now(),left=Math.max(0,session.endAt-now),percent=Math.max(0,Math.min(100,(1-left/10000)*100)),fill=$('#arrayFragmentProgressFill'),text=$('#arrayFragmentProgressText'),reward=$('#arrayFragmentRewardText');
+  if(fill)fill.style.width=percent+'%';
+  if(text)text.textContent=left?`阵纹推演中：${(left/1000).toFixed(1)} 秒`:'阵纹已成';
+  if(reward)reward.textContent=`完成后：修为+${fmt(session.cult)}${session.scrolls?` · 功法残卷×${session.scrolls}`:' · 阵法感悟'}`;
+  if(now>=session.endAt)completeArrayFragmentStudy();
+}
+function stopArrayFragmentStudy(){
+  let session=arrayFragmentSession;if(!session)return;
+  clearInterval(session.timer);arrayFragmentSession=null;$('#arrayFragmentModal')?.classList.remove('show');
+  finishRandomEvent('阵法残页','你中断了参悟，残页重新沉入石缝。');
+}
+function completeArrayFragmentStudy(){
+  let session=arrayFragmentSession;if(!session)return;
+  clearInterval(session.timer);arrayFragmentSession=null;$('#arrayFragmentModal')?.classList.remove('show');
+  g.cult+=session.cult;if(session.scrolls)addScrolls(session.scrolls);processRealmProgress();
+  let rewardText=`修为 +${fmt(session.cult)}${session.scrolls?`\n功法残卷 ×${session.scrolls}`:''}`;
+  showNpcResult('阵法残页',`十息推演终了，残缺阵图在识海中补全了一角。\n\n获得：\n${rewardText}`,'good');
+  finishRandomEvent('阵法残页',`参悟10秒完成，修为+${fmt(session.cult)}${session.scrolls?`，功法残卷×${session.scrolls}`:''}。`);
+}
+function startArrayFragmentStudy(area,scrolls,cult){
+  if(arrayFragmentSession)return toast('你正在参悟另一页阵法残页');
+  if(scrolls&&!randomEventCanReceive({type:'scrollResource',name:'功法残卷',max:999}))return toast('背包已满，无法收取功法残卷');
+  let modal=ensureArrayFragmentModal();arrayFragmentSession={area,scrolls,cult,startedAt:Date.now(),endAt:Date.now()+10000,timer:null};
+  modal.classList.add('show');arrayFragmentSession.timer=setInterval(renderArrayFragmentProgress,100);renderArrayFragmentProgress();
+  pushLocalLog('开始参悟阵法残页：十息后结算修为与功法残卷。');save();
+}
+function randomArrayFragment(area){
+  let scrolls=area>=8?2:area>=5?1:0,cult=mapRandomEventReward(area,1.1),rewardHint=scrolls?`本次有机会领悟功法残卷 ×${scrolls}。`:'此地阵纹尚浅，只能化作修为感悟。';
+  openNpcDialog('阵法残页',`${mapRandomEventFlavor[area]}。石缝中露出半页残破阵图，阵纹仍有微弱灵光流转。\n\n若能耐心参悟十息，或许能从断裂的笔画中补出一丝旧法。\n\n${rewardHint}`,[
+    {text:'静心参悟十息',alt:true,close:false,onClick(){closeNpcDialog();startArrayFragmentStudy(area,scrolls,cult)}},
+    {text:'暂不参悟',ghost:true,onClick(){finishRandomEvent('阵法残页','你将阵图原样留在石缝中。')}}
+  ]);
+}
+function triggerMapRandomEvent(area){
+  if(mapUiSettings().randomEvents===false||area<0||area>=10||g.deepSea?.active||g.smallWorld?.active||g.cabinWorld?.active)return false;
+  let entry=mapRandomEventCooldown(area);
+  if(entry.cooldown>0){entry.cooldown--;return false;}
+  if(Math.random()>=.08)return false;
+  entry.cooldown=5+Math.floor(Math.random()*3);entry.seen=(entry.seen||0)+1;
+  let events=[randomWoundedCultivator,randomTrueFalseChest,randomTravelingMerchant,randomArrayFragment];
+  events[Math.floor(Math.random()*events.length)](area);return true;
+}
+function mapUiSettings(){return g.mapUiSettings||(g.mapUiSettings={randomEvents:true,expanded:false})}
+function ensureMapSettingsUi(){
+  let tabs=$('#sceneMapModal .scene-tabs');if(!tabs)return;
+  let open=$('#openMapSettingsBtn');
+  if(!open){open=document.createElement('button');open.id='openMapSettingsBtn';open.className='scene-tab-btn';open.textContent='设置';tabs.appendChild(open)}
+  let modal=$('#mapSettingsModal');
+  if(!modal){
+    modal=document.createElement('div');modal.id='mapSettingsModal';modal.className='event-modal';
+    modal.innerHTML='<div><h2>地图设置</h2><div class="map-settings-list"><label class="map-setting-row"><span><b>随机事件</b><small>移动路点时触发受伤修士、真假宝箱、临时商队与阵法残页。</small></span><input class="map-setting-switch" id="toggleRandomEvents" type="checkbox"></label><label class="map-setting-row"><span><b>扩大地图区域</b><small>隐藏区域全览和当前目标，扩大当前小地图的显示范围。</small></span><input class="map-setting-switch" id="toggleExpandedMap" type="checkbox"></label></div><div class="bag-actions"><button class="btn ghost" id="closeMapSettingsBtn">关闭</button></div></div>';
+    document.body.appendChild(modal);
+    $('#toggleRandomEvents').onchange=e=>updateMapUiSetting('randomEvents',e.target.checked);
+    $('#toggleExpandedMap').onchange=e=>updateMapUiSetting('expanded',e.target.checked);
+    $('#closeMapSettingsBtn').onclick=()=>modal.classList.remove('show');
+  }
+  open.onclick=openMapSettings;
+}
+function applyMapUiSettings(){
+  let body=$('#sceneMapModal .scene-map-body');if(!body)return;
+  let expanded=!!mapUiSettings().expanded;
+  body.classList.toggle('map-expanded',expanded);
+  let overview=body.querySelector('.compact-region-info'),goal=body.querySelector('#sceneGoalCard');
+  if(overview)overview.hidden=expanded;
+  if(goal)goal.hidden=expanded;
+  let left=body.querySelector('.scene-left'),canvas=$('#localMapCanvas'),hud=body.querySelector('.scene-player-hud'),side=body.querySelector('.scene-side');
+  let desktop=window.matchMedia?.('(min-width:651px)').matches;
+  if(expanded&&desktop){
+    // Inline layout makes the expanded map resilient to the many legacy map style blocks.
+    body.style.display='block';body.style.position='relative';body.style.minHeight='630px';
+    left.style.display='block';canvas.style.width='100%';canvas.style.height='550px';canvas.style.maxWidth='none';
+    hud.style.position='relative';hud.style.zIndex='3';hud.style.marginTop='10px';
+    side.style.position='absolute';side.style.zIndex='4';side.style.right='14px';side.style.top='230px';side.style.width='232px';side.style.display='block';
+  }else{
+    body.style.display='';body.style.position='';body.style.minHeight='';
+    left.style.display='';canvas.style.width='';canvas.style.height='';canvas.style.maxWidth='';
+    hud.style.position='';hud.style.zIndex='';hud.style.marginTop='';
+    side.style.position='';side.style.zIndex='';side.style.right='';side.style.top='';side.style.width='';side.style.display='';
+  }
+}
+function openMapSettings(){
+  ensureMapSettingsUi();let state=mapUiSettings();
+  $('#toggleRandomEvents').checked=state.randomEvents!==false;
+  $('#toggleExpandedMap').checked=!!state.expanded;
+  $('#mapSettingsModal').classList.add('show');
+}
+function updateMapUiSetting(key,value){mapUiSettings()[key]=value;applyMapUiSettings();save()}
+const renderSceneMapWithMapSettings=renderSceneMap;
+renderSceneMap=function(){let out=renderSceneMapWithMapSettings.apply(this,arguments);applyMapUiSettings();return out};
+const finishLocalMoveWithRandomEvents=finishLocalMove;
+finishLocalMove=function(i,nextSpot){
+  let from=activeSpot(),result=finishLocalMoveWithRandomEvents(i,nextSpot);
+  if(activeSpot()!==from)triggerMapRandomEvent(i);
+  return result;
+};
+// ===== 高品质装备随机词缀 =====
+const equipmentAffixDefs={
+  fire:{name:'焚脉·燎原',describe:q=>`火属性主动技伤害 +${Math.round((.04+(q-4)*.02)*100)}%`,stats:q=>({fireDamageBonus:.04+(q-4)*.02,score:40+(q-4)*18})},
+  water:{name:'沧澜·叠浪',describe:q=>`水属性主动技伤害 +${Math.round((.04+(q-4)*.02)*100)}%`,stats:q=>({waterDamageBonus:.04+(q-4)*.02,score:40+(q-4)*18})},
+  shield:{name:'玄甲·凝盾',describe:q=>`获得护盾效果 +${Math.round((.15+(q-4)*.07)*100)}%`,stats:q=>({shieldBonus:.15+(q-4)*.07,score:95+(q-4)*40})},
+  lightning:{name:'雷印·续电',describe:q=>`雷属性主动技伤害 +${Math.round((.035+(q-4)*.0175)*100)}%，雷系创伤持续时间 +${q>=6?2:1}回合`,stats:q=>({lightningDamageBonus:.035+(q-4)*.0175,lightningWoundTurns:q>=6?2:1,score:70+(q-4)*28})},
+  critMana:{name:'灵泉·回响',describe:q=>`暴击后恢复法力上限的${Math.round((.04+(q-4)*.02)*100)}%`,stats:q=>({critManaRatio:.04+(q-4)*.02,score:70+(q-4)*35})}
+};
+function normalizeEquipmentAffix(raw,quality){
+  let id=typeof raw==='string'?raw:raw?.id,def=equipmentAffixDefs[id];
+  if(!def||quality<4)return null;
+  return{id,name:def.name,text:def.describe(quality),...def.stats(quality)};
+}
+function rollEquipmentAffix(quality){
+  if(quality<4)return null;
+  let ids=Object.keys(equipmentAffixDefs),id=ids[Math.floor(Math.random()*ids.length)];
+  return normalizeEquipmentAffix({id},quality);
+}
+function equipmentAffixText(item){let equip=normalizeEquip(item),affix=equip?.affix;return affix?`${affix.name}：${affix.text}`:''}
+function equipmentAffixHtml(item){let equip=normalizeEquip(item),affix=equip?.affix;if(!affix)return'';return`<span class="equipment-affix affix-${affix.id}"><b>词缀</b><strong>${affix.name}</strong><em>${affix.text}</em></span>`}
+function equipmentAffixStats(){
+  let total={fireDamageBonus:0,waterDamageBonus:0,lightningDamageBonus:0,shieldBonus:0,lightningWoundTurns:0,critManaRatio:0};
+  equipSlots.forEach(slot=>{let affix=normalizeEquip(g.gear?.[slot])?.affix;if(!affix)return;Object.keys(total).forEach(key=>total[key]+=Number(affix[key])||0)});
+  total.fireDamageBonus=Math.min(.3,total.fireDamageBonus);
+  total.waterDamageBonus=Math.min(.3,total.waterDamageBonus);
+  total.lightningDamageBonus=Math.min(.3,total.lightningDamageBonus);
+  total.shieldBonus=Math.min(.8,total.shieldBonus);
+  total.lightningWoundTurns=Math.min(3,Math.floor(total.lightningWoundTurns));
+  total.critManaRatio=Math.min(.3,total.critManaRatio);
+  return total;
+}
+function hasHighQualityEquip(item){return normalizeEquip(item)?.quality>=4}
+function seedHighQualityEquipmentAffixes(){
+  if(g.highQualityAffixMigrationV2)return false;
+  let changed=false,seed=item=>{if(!hasHighQualityEquip(item)||item?.affix)return item;changed=true;return{...item,affix:rollEquipmentAffix(normalizeEquip(item).quality)}};
+  g.bag=(g.bag||[]).map(seed);
+  g.gear=g.gear||emptyGear();equipSlots.forEach(slot=>{if(g.gear[slot])g.gear[slot]=seed(g.gear[slot])});
+  g.highQualityAffixMigrationV2=true;
+  return changed;
+}
+const normalizeEquipWithRandomAffix=normalizeEquip;
+normalizeEquip=function(item){
+  let equip=normalizeEquipWithRandomAffix(item);
+  if(equip)equip.affix=normalizeEquipmentAffix(item?.affix,equip.quality);
+  return equip;
+};
+const addBagItemWithRandomAffix=addBagItem;
+addBagItem=function(item){
+  let equip=normalizeEquip(item);
+  if(equip?.quality>=4&&!equip.affix)item={...item,affix:rollEquipmentAffix(equip.quality)};
+  return addBagItemWithRandomAffix(item);
+};
+const equipEffectWithRandomAffix=equipEffect;
+equipEffect=function(item){let base=equipEffectWithRandomAffix(item),affix=equipmentAffixHtml(item);return affix?`${base}<br>${affix}`:base};
+const gearScoreWithRandomAffix=gearScore;
+gearScore=function(item){return gearScoreWithRandomAffix(item)+(normalizeEquip(item)?.affix?.score||0)};
+const renderBagWithEquipmentAffixMarks=renderBag;
+renderBag=function(){
+  renderBagWithEquipmentAffixMarks();
+  document.querySelectorAll('[data-bag]').forEach(button=>{
+    let affix=normalizeEquip(g.bag?.[+button.dataset.bag])?.affix,label=button.querySelector('small');
+    if(affix&&label&&!label.querySelector('.equipment-affix-mark'))label.insertAdjacentHTML('beforeend',` <span class="equipment-affix-mark affix-${affix.id}">词缀</span>`);
+  });
+};
+const renderEquipModalWithEquipmentAffixMarks=renderEquipModal;
+renderEquipModal=function(){
+  renderEquipModalWithEquipmentAffixMarks();
+  document.querySelectorAll('#equipModalContent .equip-slot').forEach(button=>{
+    let affix=normalizeEquip(g.gear?.[button.dataset.modalEquipSlot])?.affix,label=button.querySelector('small');
+    if(affix&&label&&!label.querySelector('.equipment-affix-mark'))label.insertAdjacentHTML('beforeend',` <span class="equipment-affix-mark affix-${affix.id}">词缀</span>`);
+  });
+};
+const addBattleShieldWithRandomAffix=addBattleShield;
+addBattleShield=function(b,value){
+  let bonus=equipmentAffixStats().shieldBonus,boosted=bonus>0?Math.max(1,Math.floor(value*(1+bonus))):value;
+  return addBattleShieldWithRandomAffix(b,boosted);
+};
+function isEquipmentFireSkill(skill){return !!skill&&(skill?.element==='fire'||skillThemeClass(skill)==='theme-fire')}
+function isEquipmentWaterSkill(skill){return !!skill&&(skill?.element==='water'||skillThemeClass(skill)==='theme-water')}
+function isEquipmentLightningSkill(skill){return !!skill&&(skill?.element==='lightning'||skillThemeClass(skill)==='theme-lightning')}
+function isEquipmentThunderWoundSkill(skill){return !!skill&&(skill?.shatterStarRealm||skill?.name==='破碎星寰')}
+const battleSkillEffectWithRandomAffix=battleSkillEffect;
+battleSkillEffect=async function(sk,idx=0){
+  let battle=battleState,beforeHp=battle?.enemy?.hp||0,beforeShield=battle?.player?.shield||0,result=await battleSkillEffectWithRandomAffix(sk,idx);
+  if(result===false||!battle||battleState!==battle)return result;
+  let affixes=equipmentAffixStats(),shieldGain=Math.max(0,(battle.player.shield||0)-beforeShield);
+  if(shieldGain&&affixes.shieldBonus>0)battleLog(`玄甲·凝盾加持，本次护盾已受装备词缀强化。`);
+  let elementAffix=isEquipmentFireSkill(sk)?{name:'焚脉·燎原',label:'火系',bonus:affixes.fireDamageBonus}:isEquipmentWaterSkill(sk)?{name:'沧澜·叠浪',label:'水系',bonus:affixes.waterDamageBonus}:isEquipmentLightningSkill(sk)?{name:'雷印·续电',label:'雷系',bonus:affixes.lightningDamageBonus}:null;
+  if(elementAffix?.bonus>0){
+    let dealt=Math.max(0,beforeHp-battle.enemy.hp),extra=Math.min(Math.max(0,battle.enemy.hp),Math.floor(dealt*elementAffix.bonus));
+    if(extra>0){battle.enemy.hp=Math.max(0,battle.enemy.hp-extra);battleFx('enemy','-'+fmt(extra));battleLog(`${elementAffix.name}加持，${elementAffix.label}术法额外造成${fmt(extra)}点伤害。`)}
+  }
+  if(isEquipmentThunderWoundSkill(sk)&&affixes.lightningWoundTurns>0&&battle.enemy.thunderWound?.turns>0){
+    battle.enemy.thunderWound.turns+=affixes.lightningWoundTurns;
+    battleLog(`雷印·续电加持，雷系创伤延长${affixes.lightningWoundTurns}回合。`);
+  }
+  return result;
+};
+if(seedHighQualityEquipmentAffixes())save();
 normalizeBookItems();syncScrollsBag();ensureBookTreasuryUi();
 // 兼容旧存档中的 debt 类型欠条：加载脚本时立即归入任务道具。
 syncCabinDebtNotes();
+// ===== 太玄宗 · 定光峰弟子：专属背包扩容 =====
+const DINGGUANG_BAG_SLOT_COST=66666,DINGGUANG_BAG_SLOT_LIMIT=16;
+function dingguangBagSlotsBought(){return Math.max(0,Math.min(DINGGUANG_BAG_SLOT_LIMIT,Math.floor(g.dingguangBagSlots||0)))}
+function buyDingguangBagSlot(){
+  let bought=dingguangBagSlotsBought();
+  if(bought>=DINGGUANG_BAG_SLOT_LIMIT)return toast('定光峰的纳物符已经扩至极限');
+  if((g.stones||0)<DINGGUANG_BAG_SLOT_COST)return toast(`灵石不足：需要${fmt(DINGGUANG_BAG_SLOT_COST)}灵石`);
+  g.stones-=DINGGUANG_BAG_SLOT_COST;g.dingguangBagSlots=bought+1;g.bagCap=(g.bagCap||20)+1;syncBagPage();
+  pushLocalLog(`定光弟子以纳物符扩展背包：容量+1（定光峰扩容 ${g.dingguangBagSlots}/${DINGGUANG_BAG_SLOT_LIMIT}）。`);
+  showNpcResult('纳物符生效',`消耗：灵石 ×${fmt(DINGGUANG_BAG_SLOT_COST)}\n\n背包容量 +1\n当前容量：${g.bagCap} 格\n定光峰额外扩容：${g.dingguangBagSlots} / ${DINGGUANG_BAG_SLOT_LIMIT} 格`,'good');
+  render();renderBag();renderSceneMap();save();
+}
+function talkDingguangDisciple(){
+  let bought=dingguangBagSlotsBought(),full=bought>=DINGGUANG_BAG_SLOT_LIMIT;
+  openNpcDialog('定光弟子',full?'定光弟子收起最后一枚纳物符：\n\n“师兄的储物空间已由我峰符箓拓至极限，往后再多一格，便会伤及灵台。”':`定光弟子抱着一叠朱砂符纸，向你一礼：\n\n“定光峰的纳物符能为储物袋再开一寸虚空。每枚需以灵石 ${fmt(DINGGUANG_BAG_SLOT_COST)} 枚温养，可增加背包 1 格。”\n\n已扩容：${bought} / ${DINGGUANG_BAG_SLOT_LIMIT} 格\n当前背包容量：${g.bagCap||20} 格\n当前灵石：${fmt(g.stones||0)}`,[
+    ...(full?[]:[{text:`交付${fmt(DINGGUANG_BAG_SLOT_COST)}灵石，扩容1格`,alt:true,onClick(){buyDingguangBagSlot()}}]),
+    {text:full?'知道了':'暂不扩容',ghost:true}
+  ]);
+}
+const localNpcsWithDingguangDisciple=localNpcs;
+localNpcs=function(i,spot){let npcs=localNpcsWithDingguangDisciple(i,spot);if(i===10&&spot===16&&!npcs.some(npc=>(npc?.name||npc?.[0])==='定光弟子'))return [...npcs,['定光弟子','以定光纳物符扩展背包，每次+1格，最多16格']];return npcs};
+const localMeetWithDingguangDisciple=localMeet;
+localMeet=function(idx=0){let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];if(name==='定光弟子')return talkDingguangDisciple();return localMeetWithDingguangDisciple(idx)};
+const npcQuestIconWithDingguangDisciple=npcQuestIcon;
+npcQuestIcon=function(name,mapIndex,spot){if(name==='定光弟子')return dingguangBagSlotsBought()>=DINGGUANG_BAG_SLOT_LIMIT?'💬':'❗️';return npcQuestIconWithDingguangDisciple(name,mapIndex,spot)};
 
 function bindUi(){
+ensureMapSettingsUi();
 $('#nav').onclick=e=>{
 let b=e.target.closest('button');if(!b)return;
 document.querySelectorAll('.nav button').forEach(x=>x.classList.toggle('active',x===b));
