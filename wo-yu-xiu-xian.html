@@ -766,6 +766,7 @@
 .map-setting-switch{appearance:none;flex:0 0 auto;width:42px;height:23px;margin:0;border:1px solid #9b9983;border-radius:999px;background:#b9b8ab;box-shadow:inset 0 1px 2px #0003;cursor:pointer;transition:.18s}
 .map-setting-switch:before{content:"";display:block;width:17px;height:17px;margin:2px;border-radius:50%;background:#fffdf4;box-shadow:0 1px 3px #3338;transition:.18s}
 .map-setting-switch:checked{border-color:#477b5f;background:#3b7a5b}.map-setting-switch:checked:before{transform:translateX(18px)}
+.map-setting-row.is-disabled{opacity:.52;cursor:not-allowed}.map-setting-row.is-disabled .map-setting-switch{cursor:not-allowed}
 #mapSettingsModal .bag-actions{margin:0;padding:0 18px 16px;background:#f3eee0}
 #sceneMapModal .scene-map-body.map-expanded{position:relative;display:block;min-height:630px}
 #sceneMapModal .scene-map-body.map-expanded .scene-left{display:block;min-width:0}
@@ -773,13 +774,43 @@
 #sceneMapModal .scene-map-body.map-expanded .scene-player-hud{position:relative;z-index:3;margin-top:10px}
 #sceneMapModal .scene-map-body.map-expanded .scene-side{position:absolute;z-index:4;right:14px;top:230px;width:232px;display:block}
 #sceneMapModal .scene-map-body.map-expanded .compact-region-info,#sceneMapModal .scene-map-body.map-expanded .scene-goal-card{display:none!important}
-#sceneMapModal .scene-map-body.map-expanded .people-card{display:flex;max-height:210px!important;padding:7px;border-color:#7f907d;background:#f8f5e9ed;box-shadow:0 5px 16px #28302073;backdrop-filter:blur(3px)}
+#sceneMapModal .scene-map-body.map-expanded .people-card{display:flex;max-height:210px!important;padding:7px;border-color:#7f907d;background:#f8f5e998;box-shadow:0 5px 16px #28302055}
 #sceneMapModal .scene-map-body.map-expanded .people-card h3{margin-bottom:4px;font-size:15px}
 #sceneMapModal .scene-map-body.map-expanded .people-card h4{margin:4px 0 2px;padding-bottom:2px;font-size:11px}
 #sceneMapModal .scene-map-body.map-expanded .people-card .npc-list{max-height:44px;margin-bottom:3px}
 #sceneMapModal .scene-map-body.map-expanded .people-card .mob-list{max-height:70px;min-height:0}
 #sceneMapModal .scene-map-body.map-expanded .mob-list button,#sceneMapModal .scene-map-body.map-expanded .npc-list button{min-height:24px;padding:3px;font-size:11px}
+#sceneMapModal .scene-map-body.map-expanded .people-card .npc-list button span,#sceneMapModal .scene-map-body.map-expanded .people-card .mob-list button span{font-weight:900;color:#173d2e;letter-spacing:1px;text-shadow:0 1px #fff}
+#sceneMapModal .scene-map-body.map-expanded .people-card .npc-list button b,#sceneMapModal .scene-map-body.map-expanded .people-card .mob-list button b{font-size:16px;filter:drop-shadow(0 1px #fff)}
 #sceneMapModal .scene-map-body.map-expanded .scene-actions{margin-top:7px;gap:6px}
+#sceneMapModal .scene-map-body.map-expanded .scene-player-hud>.scene-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important;margin-top:9px}
+#sceneMapModal .scene-map-body.map-expanded .people-card .map-floating-title{display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:grab;user-select:none;touch-action:none}
+#sceneMapModal .scene-map-body.map-expanded .people-card .map-floating-title:active{cursor:grabbing}
+.map-float-collapse{display:grid;place-items:center;flex:0 0 auto;width:22px;height:22px;padding:0;border:1px solid #729180;border-radius:3px;background:#e9f0e6;color:#244c38;font-size:17px;font-weight:900;line-height:1;cursor:pointer}
+.map-float-collapse:hover{border-color:#b88b38;background:#fff2ca;color:#6e4b13}
+#sceneMapModal .scene-map-body:not(.map-expanded) .map-float-collapse{display:none}
+#sceneMapModal .scene-map-body.map-expanded .scene-side.map-floating-collapsed .people-card{min-height:0!important;max-height:none!important;padding:6px 7px}
+#sceneMapModal .scene-map-body.map-expanded .scene-side.map-floating-collapsed .people-card>h4,#sceneMapModal .scene-map-body.map-expanded .scene-side.map-floating-collapsed .people-card>.npc-list,#sceneMapModal .scene-map-body.map-expanded .scene-side.map-floating-collapsed .people-card>.mob-list,#sceneMapModal .scene-map-body.map-expanded .scene-side.map-floating-collapsed .scene-actions{display:none!important}
+#sceneMapModal .scene-map-body.map-expanded .scene-player-hud>.people-card.map-region-under-map{display:block;max-height:none!important;margin:0 0 8px;padding:8px;background:#f8f5e9f2;box-shadow:0 3px 10px #28302032;backdrop-filter:blur(2px)}
+#sceneMapModal .scene-map-body.map-expanded .scene-player-hud>.people-card.map-region-under-map h3{display:block;margin-bottom:5px;font-size:15px;cursor:default}
+#sceneMapModal .scene-map-body.map-expanded .scene-player-hud>.people-card.map-region-under-map .map-float-collapse{display:none}
+#sceneMapModal .scene-map-body.map-expanded .scene-player-hud>.people-card.map-region-under-map .npc-list,#sceneMapModal .scene-map-body.map-expanded .scene-player-hud>.people-card.map-region-under-map .mob-list{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;max-height:none;overflow:visible;margin-bottom:4px}
+#sceneMapModal .scene-map-body.map-expanded .scene-player-hud>.people-card.map-region-under-map .mob-list{min-height:0}
+#sceneMapModal .scene-map-body.map-expanded .scene-player-hud>.people-card.map-region-under-map .npc-list button,#sceneMapModal .scene-map-body.map-expanded .scene-player-hud>.people-card.map-region-under-map .mob-list button{min-width:0;min-height:30px;padding:4px 5px;gap:4px;border:1px solid #d5c9a9;background:#fffdf5;font-size:11px;line-height:1.35}
+#sceneMapModal .scene-map-body.map-expanded .scene-player-hud>.people-card.map-region-under-map .npc-list button span,#sceneMapModal .scene-map-body.map-expanded .scene-player-hud>.people-card.map-region-under-map .mob-list button span{overflow-wrap:anywhere;font-weight:900}
+#sceneMapModal .scene-map-body.map-expanded .map-player-status-card{display:flex;flex-direction:column;align-items:stretch;max-height:166px!important;padding:7px;border-color:#7f907d;background:#f8f5e998;box-shadow:0 5px 16px #28302055}
+#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .map-floating-title{display:flex;width:100%;box-sizing:border-box;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px;color:#25483c;cursor:grab;user-select:none;touch-action:none}
+#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .map-floating-title:active{cursor:grabbing}
+#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .vital-bars{width:100%;grid-template-columns:1fr;gap:5px}
+#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .vital{height:21px}
+#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .vital span,#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .vital b{font-size:9px}
+#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .cultivation-hud{position:relative;display:block;width:100%;height:21px;margin-top:5px;padding:0}
+#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .cultivation-hud>span,#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .cultivation-hud>b{position:absolute;z-index:2;top:50%;transform:translateY(-50%);font-size:9px;line-height:1;white-space:nowrap}
+#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .cultivation-hud>span{left:7px}
+#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .cultivation-hud>b{right:7px}
+#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .cultivation-track{position:absolute;inset:3px;width:auto;height:auto;margin:0;opacity:.82}
+#sceneMapModal .scene-map-body.map-expanded .map-player-status-card.map-status-collapsed{min-height:0!important;max-height:none!important;padding:6px 7px}
+#sceneMapModal .scene-map-body.map-expanded .map-player-status-card.map-status-collapsed>.vital-bars,#sceneMapModal .scene-map-body.map-expanded .map-player-status-card.map-status-collapsed>.cultivation-hud{display:none!important}
 @media(max-width:850px){#mapSettingsModal>div{width:calc(100vw - 20px)}#sceneMapModal .scene-map-body.map-expanded{position:relative;display:block;min-height:515px;padding:5px}#sceneMapModal .scene-map-body.map-expanded .scene-left{display:block}#sceneMapModal .scene-map-body.map-expanded .local-map{width:100%;height:430px}#sceneMapModal .scene-map-body.map-expanded .scene-player-hud{position:relative;z-index:3;margin-top:7px}#sceneMapModal .scene-map-body.map-expanded .scene-side{position:absolute;z-index:4;right:8px;top:152px;width:142px;display:block}#sceneMapModal .scene-map-body.map-expanded .people-card{display:flex;max-height:178px!important;padding:5px;border-color:#7f907d;background:#f8f5e9ed;box-shadow:0 4px 12px #28302073;backdrop-filter:blur(3px)}#sceneMapModal .scene-map-body.map-expanded .people-card h3{margin-bottom:3px;font-size:12px}#sceneMapModal .scene-map-body.map-expanded .people-card h4{margin:3px 0 1px;padding-bottom:1px;font-size:9px}#sceneMapModal .scene-map-body.map-expanded .people-card .npc-list{max-height:35px;margin-bottom:2px}#sceneMapModal .scene-map-body.map-expanded .people-card .mob-list{max-height:60px}#sceneMapModal .scene-map-body.map-expanded .mob-list button,#sceneMapModal .scene-map-body.map-expanded .npc-list button{min-height:20px;padding:2px;font-size:9px}#sceneMapModal .scene-map-body.map-expanded .scene-actions{margin-top:5px;gap:4px;grid-template-columns:1fr}#sceneMapModal .scene-map-body.map-expanded .scene-actions .btn{padding:5px 3px;font-size:10px}}
 
 </style>
@@ -7633,7 +7664,85 @@ function ensureMapSettingsUi(){
     $('#toggleExpandedMap').onchange=e=>updateMapUiSetting('expanded',e.target.checked);
     $('#closeMapSettingsBtn').onclick=()=>modal.classList.remove('show');
   }
+  if(!$('#toggleMapStatusSwitch')){
+    let row=document.createElement('label');row.className='map-setting-row';row.id='mapStatusSwitchRow';
+    row.innerHTML='<span><b>人物状态与区域状态切换</b><small>人物生命、法力、修为变为可拖动浮层；区域人物与妖兽移至地图下方。</small></span><input class="map-setting-switch" id="toggleMapStatusSwitch" type="checkbox">';
+    modal.querySelector('.map-settings-list')?.appendChild(row);
+    $('#toggleMapStatusSwitch').onchange=e=>{if(!mapUiSettings().expanded){e.target.checked=false;return toast('请先开启扩大地图区域')}updateMapUiSetting('statusSwitch',e.target.checked)};
+  }
   open.onclick=openMapSettings;
+}
+function mapFloatingPanelState(){return mapUiSettings().floatingPanel||(mapUiSettings().floatingPanel={x:null,y:null,collapsed:false})}
+function clampMapFloat(value,min,max){return Math.max(min,Math.min(max,value))}
+function ensureMapFloatingPanel(body,side,expanded){
+  let card=side?.querySelector('.people-card'),heading=card?.querySelector('h3');if(!card||!heading)return;
+  if(!heading.dataset.mapFloatReady){
+    heading.dataset.mapFloatReady='1';let label=document.createElement('span'),toggle=document.createElement('button');
+    label.textContent=heading.textContent;toggle.type='button';toggle.className='map-float-collapse';toggle.title='折叠区域人物与怪物';
+    heading.textContent='';heading.classList.add('map-floating-title');heading.append(label,toggle);
+    toggle.onclick=e=>{e.stopPropagation();let state=mapFloatingPanelState();state.collapsed=!state.collapsed;save();syncMapFloatingPanel(body,side,true)};
+    heading.addEventListener('pointerdown',event=>{
+      if(!body.classList.contains('map-expanded')||event.target.closest('.map-float-collapse'))return;
+      let state=mapFloatingPanelState(),rect=body.getBoundingClientRect(),panel=side.getBoundingClientRect(),offsetX=event.clientX-panel.left,offsetY=event.clientY-panel.top;
+      heading.setPointerCapture?.(event.pointerId);
+      let move=moveEvent=>{let maxX=Math.max(8,body.clientWidth-side.offsetWidth-8),maxY=Math.max(8,body.clientHeight-side.offsetHeight-8);state.x=clampMapFloat(moveEvent.clientX-rect.left-offsetX,8,maxX);state.y=clampMapFloat(moveEvent.clientY-rect.top-offsetY,8,maxY);side.style.left=state.x+'px';side.style.top=state.y+'px';side.style.right='auto'};
+      let end=()=>{window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',end);save()};
+      window.addEventListener('pointermove',move);window.addEventListener('pointerup',end);
+    });
+  }
+  let state=mapFloatingPanelState(),toggle=heading.querySelector('.map-float-collapse');
+  side.classList.toggle('map-floating-collapsed',!!(expanded&&state.collapsed));
+  if(toggle){toggle.textContent=state.collapsed?'＋':'−';toggle.title=state.collapsed?'展开区域人物与怪物':'折叠区域人物与怪物'}
+}
+function syncMapFloatingPanel(body,side,expanded){
+  ensureMapFloatingPanel(body,side,expanded);let state=mapFloatingPanelState();
+  if(!expanded){side.classList.remove('map-floating-collapsed');side.style.left='';return}
+  if(Number.isFinite(state.x)&&Number.isFinite(state.y)){side.style.left=state.x+'px';side.style.top=state.y+'px';side.style.right='auto'}
+  else side.style.left='';
+}
+function syncMapExploreActions(body,side,expanded){
+  let actions=body.querySelector('.scene-actions'),hud=body.querySelector('.scene-player-hud');if(!actions||!hud||!side)return;
+  if(expanded){actions.classList.add('map-actions-under-skills');hud.appendChild(actions)}
+  else{actions.classList.remove('map-actions-under-skills');side.appendChild(actions)}
+}
+function mapPlayerStatusPanelState(){return mapUiSettings().statusPanel||(mapUiSettings().statusPanel={x:null,y:null,collapsed:false})}
+function ensureMapPlayerStatusPanel(body,side){
+  let card=$('#mapPlayerStatusCard');
+  if(!card){
+    card=document.createElement('div');card.id='mapPlayerStatusCard';card.className='scene-card map-player-status-card';
+    card.innerHTML='<h3 class="map-floating-title"><span>人物状态</span><button type="button" class="map-float-collapse" title="折叠人物状态">−</button></h3>';
+    side.appendChild(card);
+    let heading=card.querySelector('.map-floating-title'),toggle=card.querySelector('.map-float-collapse');
+    toggle.onclick=e=>{e.stopPropagation();let state=mapPlayerStatusPanelState();state.collapsed=!state.collapsed;save();syncMapPlayerStatusPanel(body,side)};
+    heading.addEventListener('pointerdown',event=>{
+      if(event.target.closest('.map-float-collapse'))return;
+      let state=mapPlayerStatusPanelState(),rect=body.getBoundingClientRect(),panel=side.getBoundingClientRect(),offsetX=event.clientX-panel.left,offsetY=event.clientY-panel.top;
+      heading.setPointerCapture?.(event.pointerId);
+      let move=moveEvent=>{let maxX=Math.max(8,body.clientWidth-side.offsetWidth-8),maxY=Math.max(8,body.clientHeight-side.offsetHeight-8);state.x=clampMapFloat(moveEvent.clientX-rect.left-offsetX,8,maxX);state.y=clampMapFloat(moveEvent.clientY-rect.top-offsetY,8,maxY);side.style.left=state.x+'px';side.style.top=state.y+'px';side.style.right='auto'};
+      let end=()=>{window.removeEventListener('pointermove',move);window.removeEventListener('pointerup',end);save()};
+      window.addEventListener('pointermove',move);window.addEventListener('pointerup',end);
+    });
+  }
+  return card;
+}
+function syncMapPlayerStatusPanel(body,side){
+  let card=ensureMapPlayerStatusPanel(body,side),state=mapPlayerStatusPanelState(),toggle=card.querySelector('.map-float-collapse');
+  card.classList.toggle('map-status-collapsed',!!state.collapsed);toggle.textContent=state.collapsed?'＋':'−';toggle.title=state.collapsed?'展开人物状态':'折叠人物状态';
+  if(Number.isFinite(state.x)&&Number.isFinite(state.y)){side.style.left=state.x+'px';side.style.top=state.y+'px';side.style.right='auto'}else side.style.left='';
+}
+function syncMapStatusSwitch(body,side,expanded){
+  let hud=body.querySelector('.scene-player-hud'),people=body.querySelector('.people-card'),vitals=body.querySelector('.vital-bars'),cult=body.querySelector('.cultivation-hud'),slots=body.querySelector('.skill-slots');
+  if(!hud||!people||!vitals||!cult||!side)return;
+  let enabled=!!(expanded&&mapUiSettings().statusSwitch);
+  if(enabled){
+    let statusCard=ensureMapPlayerStatusPanel(body,side);statusCard.append(vitals,cult);
+    people.classList.add('map-region-under-map');hud.insertBefore(people,hud.firstChild);syncMapPlayerStatusPanel(body,side);
+  }else{
+    let statusCard=$('#mapPlayerStatusCard');if(statusCard){hud.insertBefore(vitals,hud.firstChild);hud.insertBefore(cult,slots||null);statusCard.remove()}
+    people.classList.remove('map-region-under-map');let actions=side.querySelector('.scene-actions');side.insertBefore(people,actions||null);
+  }
+  side.classList.toggle('map-status-floating',enabled);
+  return enabled;
 }
 function applyMapUiSettings(){
   let body=$('#sceneMapModal .scene-map-body');if(!body)return;
@@ -7656,14 +7765,20 @@ function applyMapUiSettings(){
     hud.style.position='';hud.style.zIndex='';hud.style.marginTop='';
     side.style.position='';side.style.zIndex='';side.style.right='';side.style.top='';side.style.width='';side.style.display='';
   }
+  syncMapExploreActions(body,side,expanded);
+  let statusSwitched=syncMapStatusSwitch(body,side,expanded);
+  if(statusSwitched)side.classList.remove('map-floating-collapsed');
+  else syncMapFloatingPanel(body,side,expanded);
 }
 function openMapSettings(){
   ensureMapSettingsUi();let state=mapUiSettings();
   $('#toggleRandomEvents').checked=state.randomEvents!==false;
   $('#toggleExpandedMap').checked=!!state.expanded;
+  let statusToggle=$('#toggleMapStatusSwitch'),statusRow=$('#mapStatusSwitchRow');
+  if(statusToggle){statusToggle.checked=!!state.statusSwitch;statusToggle.disabled=!state.expanded;statusRow?.classList.toggle('is-disabled',!state.expanded)}
   $('#mapSettingsModal').classList.add('show');
 }
-function updateMapUiSetting(key,value){mapUiSettings()[key]=value;applyMapUiSettings();save()}
+function updateMapUiSetting(key,value){let state=mapUiSettings();state[key]=value;if(key==='expanded'&&!value)state.statusSwitch=false;applyMapUiSettings();save()}
 const renderSceneMapWithMapSettings=renderSceneMap;
 renderSceneMap=function(){let out=renderSceneMapWithMapSettings.apply(this,arguments);applyMapUiSettings();return out};
 const finishLocalMoveWithRandomEvents=finishLocalMove;
