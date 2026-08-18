@@ -603,8 +603,9 @@
 .fighter-figure .boss-portrait{display:grid;height:100%;place-items:end center;width:100%}
 .fighter-figure .boss-portrait img{display:block;height:286px;max-width:290px;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 18px 14px #0009)}
 @media(max-width:650px){.fighter-figure .boss-portrait img{height:175px;max-width:165px}}
-.fighter-figure .boss-portrait.boss-facing-left img{transform:scaleX(-1)}
-.npc-dialog-portrait.tianmo-facing-left,.fighter-figure .boss-portrait.tianmo-facing-left img{transform:scaleX(-1)}
+.fighter-figure .boss-portrait.enemy-facing-left img{transform:scaleX(-1)}
+.fighter-figure .monster.enemy-facing-left{transform:scaleX(-1)}
+.npc-dialog-portrait.tianmo-facing-left{transform:scaleX(-1)}
 .npc-list button.tianmo-elder-npc span{color:#b22b33;font-weight:800}
 .fighter-name em.realm-badge.tianmo-elder-realm{color:#fff!important;background:#111!important;border-color:#111!important;box-shadow:0 2px 9px #000b}
 @keyframes fireballFly{0%{left:27%;top:58%;opacity:0;transform:translate(-50%,-50%) scale(.2) rotate(-12deg)}14%{opacity:1;transform:translate(-50%,-50%) scale(1) rotate(0)}72%{opacity:1}100%{left:74%;top:54%;opacity:0;transform:translate(-50%,-50%) scale(1.35) rotate(18deg)}}
@@ -751,6 +752,7 @@
 #battleModal.author-trial .fighter.enemy{border-color:#4ea9ae;box-shadow:inset 0 0 24px #30aab322,0 0 18px #1fbbc833}
 #battleEnemyFigure.author-skill-frame{position:relative;display:grid;place-items:end center;width:100%;height:100%;overflow:visible;isolation:isolate}
 #battleEnemyFigure.author-skill-frame .author-figure{position:relative;z-index:2;display:block;height:286px;max-width:290px;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 18px 14px #0009);animation:authorFrameMotion .68s cubic-bezier(.2,.78,.2,1) both}
+#battleEnemyFigure.author-skill-frame.enemy-facing-left{transform:scaleX(-1)}
 #battleEnemyFigure.author-skill-frame .author-aura{position:absolute;z-index:1;right:3%;bottom:4%;width:76%;aspect-ratio:1;border-radius:50%;opacity:.72;filter:blur(5px);animation:authorAuraPulse .68s ease-out both}
 #battleEnemyFigure.author-skill-frame[data-author-action="soul"] .author-aura{background:radial-gradient(circle,#b9fffb88 0 8%,#25c4ce55 26%,#0a526466 52%,transparent 72%);box-shadow:0 0 28px #27d9df,0 0 64px #1d8798}
 #battleEnemyFigure.author-skill-frame[data-author-action="heaven"] .author-aura{background:radial-gradient(circle,#fff6b48c 0 8%,#edbc4a66 29%,#874a1e66 54%,transparent 72%);box-shadow:0 0 28px #f3b941,0 0 64px #a65428}
@@ -2799,7 +2801,7 @@ function tickBattleCooldowns(b){
   Object.keys(cooldowns).forEach(key=>{cooldowns[key]=Math.max(0,(cooldowns[key]||0)-1);if(!cooldowns[key])delete cooldowns[key]});
 }
 function renderBattle(){let b=battleState;if(!b)return;let t=b.target;$('#battleTitle').textContent=(t.boss?'Boss战：':'战斗：')+t.name;$('#battleRoundText').textContent='第'+b.round+'回合';$('#battlePlayerName').textContent='你';setBattleRealmBadge('#battlePlayerLevel',realmText(),g.realm);$('#battleEnemyName').textContent=t.name;setBattleRealmBadge('#battleEnemyLevel',b.enemy.realm,battleRealmIndex(b.enemy.realm));$('#battleEnemyFigure').textContent=b.enemy.icon;$('#battlePlayerHp').style.width=battlePct(b.player.hp,b.player.maxHp);$('#battlePlayerMp').style.width=battlePct(b.player.mp,b.player.maxMp);let shield=Math.max(0,b.player.shield||0),shieldPeak=Math.max(1,b.player.shieldPeak||b.player.maxHp||1);$('#battlePlayerShield').style.width=battlePct(shield,shieldPeak);$('#battlePlayerHpText').textContent=`生命 ${fmt(b.player.hp)}/${fmt(b.player.maxHp)}`;$('#battlePlayerMpText').textContent=`法力 ${fmt(b.player.mp)}/${fmt(b.player.maxMp)}`;$('#battlePlayerShieldText').textContent=`护盾 ${fmt(shield)}`;$('#battleEnemyHp').style.width=battlePct(b.enemy.hp,b.enemy.maxHp);$('#battleEnemyMp').style.width=battlePct(b.enemy.mp,b.enemy.maxMp);$('#battleEnemyHpText').textContent=`生命 ${fmt(b.enemy.hp)}/${fmt(b.enemy.maxHp)}`;$('#battleEnemyMpText').textContent=`法力 ${fmt(b.enemy.mp)}/${fmt(b.enemy.maxMp)}`;ensureSkillLayout();let skills=g.activeSkills||[];$('#battleSkillBar').innerHTML=Array.from({length:5},(_,i)=>{let sk=skills[i],cost=sk?battleSkillCost(sk,i):0,reason=sk?battleSkillBlockReason(sk,i,b):'技能未激活',disabled=!sk||!!reason;return`<button class="battle-skill" data-battle-skill="${i}" ${disabled?'disabled':''}><b>${sk?(sk.icon||'✨')+' '+sk.name:'空'}</b><small>${sk?`耗蓝${cost}${reason?' · '+reason:''} · ${sk.desc||'主动技'}`:'技能书激活'}</small></button>`}).join('');document.querySelectorAll('[data-battle-skill]').forEach(btn=>btn.onclick=()=>battlePlayerTurn(+btn.dataset.battleSkill));$('#battleLog').innerHTML=b.log.map(x=>`<div>${x}</div>`).join('')}
-function renderBattleEnemyPortrait(){let b=battleState,figure=$('#battleEnemyFigure'),portrait=b?.enemy?.portrait,name=b?.target?.originalName||b?.target?.name||'';if(!figure)return;if(!portrait){figure.className='monster';figure.classList.remove('tianmo-facing-left','boss-facing-left');return}figure.className='boss-portrait';figure.classList.toggle('tianmo-facing-left',portrait.includes('assets/npc-portraits/tianmo-'));figure.classList.toggle('boss-facing-left',!!bossPortraitFrames[name]&&name!=='BOSS 山魈王');figure.innerHTML=`<img src="${portrait}" alt="${b.target.name}">`}
+function renderBattleEnemyPortrait(){let b=battleState,figure=$('#battleEnemyFigure'),portrait=b?.enemy?.portrait;if(!figure)return;if(!portrait){figure.className='monster enemy-facing-left';return}figure.className='boss-portrait enemy-facing-left';figure.innerHTML=`<img src="${portrait}" alt="${b.target.name}">`}
 const baseRenderBattle=renderBattle;
 renderBattle=function(){baseRenderBattle();renderBattleEnemyPortrait()};
 function battleSkillCost(sk,i){if(!sk)return 0;let masterPath=masterSkillPathFor(sk);if(masterPath)return masterSkillConfig(masterPath,sk.masterSkillLevel||parseInt(sk.name)||1).cost;if(sk.holyLightShield||sk.name==='圣光罩')return 0;if(sk.witheringWood||sk.name==='枯木逢春')return Math.max(1,Math.ceil((battleState?.player?.maxMp||statTotal().mana)*.3));if(sk.flowerSeeking||sk.name==='浪里寻花')return 0;if(sk.starterFireball||sk.name==='火球术')return 20;if(sk.rageSkill||sk.name==='暴怒')return 0;if(sk.bandageLevel||/包扎/.test(sk.name))return bandageConfig(sk.bandageLevel||parseInt(sk.name)||1).cost;if(sk.bigFireballLevel||/大火球术/.test(sk.name))return bigFireballConfig(sk.bigFireballLevel||parseInt(sk.name)||1).cost;if(/回春/.test(sk.name))return 24;if(/雷/.test(sk.name))return 30;if(/冰/.test(sk.name))return 22;if(/御风/.test(sk.name))return 18;return 20+i*3}
@@ -6146,7 +6148,7 @@ async function playAuthorSkillFrames(action){
   let figure=$('#battleEnemyFigure');
   if(!figure)return;
   let token=++authorFrameToken;
-  figure.className='author-skill-frame';
+  figure.className='author-skill-frame enemy-facing-left';
   figure.dataset.authorAction=action;
   figure.innerHTML='<span class="author-aura"></span><img class="author-figure" src="assets/author-animation/mysterious-author.png" alt="神秘的作者">';
   await waitBattle(680);
