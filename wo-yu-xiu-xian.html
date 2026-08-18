@@ -298,6 +298,7 @@
 .scene-tabs button:hover{background:#fff3c9;border-color:#d2ae63;color:#49391f}
 .scene-map-body{
   grid-template-columns:minmax(0,1fr) 270px;
+  align-items:start;
   gap:10px;
   padding:10px;
   background:
@@ -306,7 +307,9 @@
     #e9e5d6;
   background-size:20px 20px;
 }
-.scene-left{gap:10px}
+.scene-left{align-self:start;align-content:start;gap:10px}
+.scene-map-body:not(.map-expanded) .scene-left{align-self:stretch;align-content:stretch;grid-template-rows:minmax(470px,1fr) auto}
+.scene-map-body:not(.map-expanded) .scene-left .local-map{height:100%;min-height:470px}
 .local-map{
   height:470px;
   border:1px solid #887550;
@@ -767,6 +770,7 @@
 .map-setting-switch:before{content:"";display:block;width:17px;height:17px;margin:2px;border-radius:50%;background:#fffdf4;box-shadow:0 1px 3px #3338;transition:.18s}
 .map-setting-switch:checked{border-color:#477b5f;background:#3b7a5b}.map-setting-switch:checked:before{transform:translateX(18px)}
 .map-setting-row.is-disabled{opacity:.52;cursor:not-allowed}.map-setting-row.is-disabled .map-setting-switch{cursor:not-allowed}
+.map-theme-select{min-width:104px;padding:7px 28px 7px 9px;border:1px solid #92a691;border-radius:4px;background:#f9f6ea;color:#294c3b;font-weight:800;cursor:pointer}
 #mapSettingsModal .bag-actions{margin:0;padding:0 18px 16px;background:#f3eee0}
 #sceneMapModal .scene-map-body.map-expanded{position:relative;display:block;min-height:630px}
 #sceneMapModal .scene-map-body.map-expanded .scene-left{display:block;min-width:0}
@@ -784,6 +788,7 @@
 #sceneMapModal .scene-map-body.map-expanded .people-card .npc-list button b,#sceneMapModal .scene-map-body.map-expanded .people-card .mob-list button b{font-size:16px;filter:drop-shadow(0 1px #fff)}
 #sceneMapModal .scene-map-body.map-expanded .scene-actions{margin-top:7px;gap:6px}
 #sceneMapModal .scene-map-body.map-expanded .scene-player-hud>.scene-actions{grid-template-columns:repeat(2,minmax(0,1fr))!important;margin-top:9px}
+#sceneMapModal .scene-map-body.map-expanded .scene-player-hud>.scene-actions.map-actions-before-region{margin:0 0 8px}
 #sceneMapModal .scene-map-body.map-expanded .people-card .map-floating-title{display:flex;align-items:center;justify-content:space-between;gap:8px;cursor:grab;user-select:none;touch-action:none}
 #sceneMapModal .scene-map-body.map-expanded .people-card .map-floating-title:active{cursor:grabbing}
 .map-float-collapse{display:grid;place-items:center;flex:0 0 auto;width:22px;height:22px;padding:0;border:1px solid #729180;border-radius:3px;background:#e9f0e6;color:#244c38;font-size:17px;font-weight:900;line-height:1;cursor:pointer}
@@ -798,8 +803,23 @@
 #sceneMapModal .scene-map-body.map-expanded .scene-player-hud>.people-card.map-region-under-map .mob-list{min-height:0}
 #sceneMapModal .scene-map-body.map-expanded .scene-player-hud>.people-card.map-region-under-map .npc-list button,#sceneMapModal .scene-map-body.map-expanded .scene-player-hud>.people-card.map-region-under-map .mob-list button{min-width:0;min-height:30px;padding:4px 5px;gap:4px;border:1px solid #d5c9a9;background:#fffdf5;font-size:11px;line-height:1.35}
 #sceneMapModal .scene-map-body.map-expanded .scene-player-hud>.people-card.map-region-under-map .npc-list button span,#sceneMapModal .scene-map-body.map-expanded .scene-player-hud>.people-card.map-region-under-map .mob-list button span{overflow-wrap:anywhere;font-weight:900}
+#sceneMapModal .scene-map-body.map-expanded .mob-list button span{display:grid;min-width:0;gap:2px}
+#sceneMapModal .scene-map-body.map-expanded .mob-list button .local-mob-name{font-weight:900;color:#173d2e;line-height:1.25}
+#sceneMapModal .scene-map-body.map-expanded .mob-list button .local-mob-realm{display:block;font-size:10px;font-weight:850;line-height:1.2;letter-spacing:.45px}
+#sceneMapModal .scene-map-body.map-expanded .mob-list button .realm-qi{color:#4b8d61}
+#sceneMapModal .scene-map-body.map-expanded .mob-list button .realm-foundation{color:#327d91}
+#sceneMapModal .scene-map-body.map-expanded .mob-list button .realm-golden{color:#a8751f}
+#sceneMapModal .scene-map-body.map-expanded .mob-list button .realm-nascent{color:#8050ad}
+#sceneMapModal .scene-map-body.map-expanded .mob-list button .realm-spirit{color:#b84351}
+#sceneMapModal .scene-map-body.map-expanded .mob-list button .realm-refining{color:#996037}
+#sceneMapModal .scene-map-body.map-expanded .mob-list button .realm-integration{color:#27877d}
+#sceneMapModal .scene-map-body.map-expanded .mob-list button .realm-ascension{color:#6554aa}
+#sceneMapModal .scene-map-body.map-expanded .mob-list button .realm-tribulation{color:#ae414a}
+#sceneMapModal .scene-map-body.map-expanded .mob-list button .realm-immortal{color:#286eb2}
+#sceneMapModal .scene-map-body.map-expanded .mob-list button .realm-corpse{color:#777d79}
 #sceneMapModal .scene-map-body.map-expanded .map-player-status-card{display:flex;flex-direction:column;align-items:stretch;max-height:166px!important;padding:7px;border-color:#7f907d;background:#f8f5e998;box-shadow:0 5px 16px #28302055}
 #sceneMapModal .scene-map-body.map-expanded .map-player-status-card .map-floating-title{display:flex;width:100%;box-sizing:border-box;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px;color:#25483c;cursor:grab;user-select:none;touch-action:none}
+#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .map-floating-title>span{font:700 15px "STKaiti","KaiTi",serif;letter-spacing:1px}
 #sceneMapModal .scene-map-body.map-expanded .map-player-status-card .map-floating-title:active{cursor:grabbing}
 #sceneMapModal .scene-map-body.map-expanded .map-player-status-card .vital-bars{width:100%;grid-template-columns:1fr;gap:5px}
 #sceneMapModal .scene-map-body.map-expanded .map-player-status-card .vital{height:21px}
@@ -812,6 +832,37 @@
 #sceneMapModal .scene-map-body.map-expanded .map-player-status-card.map-status-collapsed{min-height:0!important;max-height:none!important;padding:6px 7px}
 #sceneMapModal .scene-map-body.map-expanded .map-player-status-card.map-status-collapsed>.vital-bars,#sceneMapModal .scene-map-body.map-expanded .map-player-status-card.map-status-collapsed>.cultivation-hud{display:none!important}
 @media(max-width:850px){#mapSettingsModal>div{width:calc(100vw - 20px)}#sceneMapModal .scene-map-body.map-expanded{position:relative;display:block;min-height:515px;padding:5px}#sceneMapModal .scene-map-body.map-expanded .scene-left{display:block}#sceneMapModal .scene-map-body.map-expanded .local-map{width:100%;height:430px}#sceneMapModal .scene-map-body.map-expanded .scene-player-hud{position:relative;z-index:3;margin-top:7px}#sceneMapModal .scene-map-body.map-expanded .scene-side{position:absolute;z-index:4;right:8px;top:152px;width:142px;display:block}#sceneMapModal .scene-map-body.map-expanded .people-card{display:flex;max-height:178px!important;padding:5px;border-color:#7f907d;background:#f8f5e9ed;box-shadow:0 4px 12px #28302073;backdrop-filter:blur(3px)}#sceneMapModal .scene-map-body.map-expanded .people-card h3{margin-bottom:3px;font-size:12px}#sceneMapModal .scene-map-body.map-expanded .people-card h4{margin:3px 0 1px;padding-bottom:1px;font-size:9px}#sceneMapModal .scene-map-body.map-expanded .people-card .npc-list{max-height:35px;margin-bottom:2px}#sceneMapModal .scene-map-body.map-expanded .people-card .mob-list{max-height:60px}#sceneMapModal .scene-map-body.map-expanded .mob-list button,#sceneMapModal .scene-map-body.map-expanded .npc-list button{min-height:20px;padding:2px;font-size:9px}#sceneMapModal .scene-map-body.map-expanded .scene-actions{margin-top:5px;gap:4px;grid-template-columns:1fr}#sceneMapModal .scene-map-body.map-expanded .scene-actions .btn{padding:5px 3px;font-size:10px}}
+@media(max-width:850px){#sceneMapModal .scene-map-head{grid-template-columns:1fr}#sceneMapModal .scene-tabs{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));width:100%;gap:4px}#sceneMapModal .scene-tabs button{min-width:0;padding:5px 1px;font-size:12px;text-align:center;white-space:nowrap}}
+
+/* 内置主题：仅替换界面色彩，不改变地图、战斗与数值逻辑。 */
+body.game-theme-blue{--skin-bg:#dceef8;--skin-paper:#f3faff;--skin-panel:#e5f3fb;--skin-side:#102b43;--skin-text:#17384d;--skin-muted:#54778d;--skin-border:#73a5bd;--skin-primary:#1f6286;--skin-accent:#4b9fd0;--skin-button-text:#effaff}
+body.game-theme-red{--skin-bg:#f5e3df;--skin-paper:#fff8f5;--skin-panel:#f7e6e0;--skin-side:#481d27;--skin-text:#522833;--skin-muted:#8b6065;--skin-border:#c88c86;--skin-primary:#8d3941;--skin-accent:#d36a5f;--skin-button-text:#fff5ee}
+body.game-theme-night{--skin-bg:#0d1821;--skin-paper:#14232d;--skin-panel:#1a2e39;--skin-side:#081118;--skin-text:#d5e4e7;--skin-muted:#9eb9bf;--skin-border:#44636c;--skin-primary:#245b67;--skin-accent:#58a8b4;--skin-button-text:#efffff}
+body.game-theme-gold{--skin-bg:#eee2bb;--skin-paper:#fff9e9;--skin-panel:#f5ead0;--skin-side:#342714;--skin-text:#4c3919;--skin-muted:#80663a;--skin-border:#c4a25c;--skin-primary:#8a651d;--skin-accent:#d8ae4c;--skin-button-text:#fff9dc}
+body[class*="game-theme-"]{background:var(--skin-bg);color:var(--skin-text);background-image:linear-gradient(120deg,var(--skin-bg),var(--skin-paper) 48%,var(--skin-panel))}
+body[class*="game-theme-"] .side,body[class*="game-theme-"] .logs{background:var(--skin-side);color:var(--skin-button-text)}
+body[class*="game-theme-"] .paper,body[class*="game-theme-"] .box,body[class*="game-theme-"] .stat,body[class*="game-theme-"] .item,body[class*="game-theme-"] .scene-card,body[class*="game-theme-"] .guide>div,body[class*="game-theme-"] .event-modal:not(.battle-modal)>div{border-color:var(--skin-border);background:var(--skin-paper);color:var(--skin-text)}
+body[class*="game-theme-"] .paper h2,body[class*="game-theme-"] .box h3,body[class*="game-theme-"] .realm,body[class*="game-theme-"] .scene-card h3,body[class*="game-theme-"] .scene-card h4,body[class*="game-theme-"] .scene-desc,body[class*="game-theme-"] .route-note{color:var(--skin-text)}
+body[class*="game-theme-"] .rate,body[class*="game-theme-"] .row,body[class*="game-theme-"] .progress-text{color:var(--skin-muted)}
+body[class*="game-theme-"] .btn{border-color:var(--skin-primary);background:var(--skin-primary);color:var(--skin-button-text)}
+body[class*="game-theme-"] .btn.alt{border-color:var(--skin-accent);background:var(--skin-accent);color:var(--skin-button-text)}
+body[class*="game-theme-"] .btn.ghost{border-color:var(--skin-primary);background:transparent;color:var(--skin-primary)}
+body[class*="game-theme-"] #sceneMapModal>div{border-color:var(--skin-border);background:var(--skin-panel);color:var(--skin-text)}
+body[class*="game-theme-"] .scene-map-head{border-color:var(--skin-accent);background:var(--skin-primary)}
+body[class*="game-theme-"] .scene-map-title b,body[class*="game-theme-"] .scene-map-title small{color:var(--skin-button-text)}
+body[class*="game-theme-"] .scene-tabs span,body[class*="game-theme-"] .scene-tabs button{border-color:var(--skin-border);background:var(--skin-paper);color:var(--skin-primary)}
+body[class*="game-theme-"] .scene-map-body{background-color:var(--skin-panel)}
+body[class*="game-theme-"] .mob-list button,body[class*="game-theme-"] .npc-list button{border-color:color-mix(in srgb,var(--skin-border) 55%,transparent);color:var(--skin-text)}
+body[class*="game-theme-"] .battle-modal>div{border-color:var(--skin-accent)}
+body[class*="game-theme-"] .battle-head{border-color:var(--skin-border);background:var(--skin-side)}
+body[class*="game-theme-"] #mapSettingsModal>div{border-color:var(--skin-border);background:var(--skin-paper);color:var(--skin-text)}
+body[class*="game-theme-"] #mapSettingsModal h2{background:var(--skin-primary);color:var(--skin-button-text)}
+body[class*="game-theme-"] .map-settings-list,body[class*="game-theme-"] #mapSettingsModal .bag-actions{background:var(--skin-panel)}
+body[class*="game-theme-"] .map-setting-row{border-color:var(--skin-border);background:var(--skin-paper)}
+body[class*="game-theme-"] .map-setting-row b,body[class*="game-theme-"] .map-theme-select{color:var(--skin-text)}
+body[class*="game-theme-"] .map-theme-select{border-color:var(--skin-border);background:var(--skin-panel)}
+body.game-theme-night .scene-card,body.game-theme-night .map-player-status-card{box-shadow:0 4px 16px #0008}
+body.game-theme-night .local-mob-name,body.game-theme-night .people-card .npc-list button span,body.game-theme-night .people-card .mob-list button span{color:#e0edf0!important}
 
 </style>
 </head>
@@ -7651,6 +7702,14 @@ function triggerMapRandomEvent(area){
   events[Math.floor(Math.random()*events.length)](area);return true;
 }
 function mapUiSettings(){return g.mapUiSettings||(g.mapUiSettings={randomEvents:true,expanded:false})}
+const gameThemeOptions={original:'原皮',blue:'蓝色',red:'红色',night:'夜间',gold:'土豪金'};
+function gameTheme(){return gameThemeOptions[g.uiTheme]?g.uiTheme:'original'}
+function applyGameTheme(){
+  document.body.classList.remove(...Object.keys(gameThemeOptions).filter(x=>x!=='original').map(x=>`game-theme-${x}`));
+  let theme=gameTheme();if(theme!=='original')document.body.classList.add(`game-theme-${theme}`);
+}
+function setGameTheme(theme){g.uiTheme=gameThemeOptions[theme]?theme:'original';applyGameTheme();save()}
+applyGameTheme();
 function ensureMapSettingsUi(){
   let tabs=$('#sceneMapModal .scene-tabs');if(!tabs)return;
   let open=$('#openMapSettingsBtn');
@@ -7658,10 +7717,11 @@ function ensureMapSettingsUi(){
   let modal=$('#mapSettingsModal');
   if(!modal){
     modal=document.createElement('div');modal.id='mapSettingsModal';modal.className='event-modal';
-    modal.innerHTML='<div><h2>地图设置</h2><div class="map-settings-list"><label class="map-setting-row"><span><b>随机事件</b><small>移动路点时触发受伤修士、真假宝箱、临时商队与阵法残页。</small></span><input class="map-setting-switch" id="toggleRandomEvents" type="checkbox"></label><label class="map-setting-row"><span><b>扩大地图区域</b><small>隐藏区域全览和当前目标，扩大当前小地图的显示范围。</small></span><input class="map-setting-switch" id="toggleExpandedMap" type="checkbox"></label></div><div class="bag-actions"><button class="btn ghost" id="closeMapSettingsBtn">关闭</button></div></div>';
+    modal.innerHTML='<div><h2>地图设置</h2><div class="map-settings-list"><label class="map-setting-row"><span><b>随机事件</b><small>移动路点时触发受伤修士、真假宝箱、临时商队与阵法残页。</small></span><input class="map-setting-switch" id="toggleRandomEvents" type="checkbox"></label><label class="map-setting-row"><span><b>扩大地图区域</b><small>隐藏区域全览和当前目标，扩大当前小地图的显示范围。</small></span><input class="map-setting-switch" id="toggleExpandedMap" type="checkbox"></label><label class="map-setting-row"><span><b>主题风格</b><small>切换游戏的主背景、面板、弹窗与战斗边框配色。</small></span><select class="map-theme-select" id="themeSelect"><option value="original">原皮</option><option value="blue">蓝色</option><option value="red">红色</option><option value="night">夜间</option><option value="gold">土豪金</option></select></label></div><div class="bag-actions"><button class="btn ghost" id="closeMapSettingsBtn">关闭</button></div></div>';
     document.body.appendChild(modal);
     $('#toggleRandomEvents').onchange=e=>updateMapUiSetting('randomEvents',e.target.checked);
     $('#toggleExpandedMap').onchange=e=>updateMapUiSetting('expanded',e.target.checked);
+    $('#themeSelect').onchange=e=>setGameTheme(e.target.value);
     $('#closeMapSettingsBtn').onclick=()=>modal.classList.remove('show');
   }
   if(!$('#toggleMapStatusSwitch')){
@@ -7736,10 +7796,12 @@ function syncMapStatusSwitch(body,side,expanded){
   let enabled=!!(expanded&&mapUiSettings().statusSwitch);
   if(enabled){
     let statusCard=ensureMapPlayerStatusPanel(body,side);statusCard.append(vitals,cult);
-    people.classList.add('map-region-under-map');hud.insertBefore(people,hud.firstChild);syncMapPlayerStatusPanel(body,side);
+    people.classList.add('map-region-under-map');hud.insertBefore(people,hud.firstChild);
+    let actions=body.querySelector('.scene-actions');if(actions){actions.classList.add('map-actions-before-region');hud.insertBefore(actions,people)}
+    syncMapPlayerStatusPanel(body,side);
   }else{
     let statusCard=$('#mapPlayerStatusCard');if(statusCard){hud.insertBefore(vitals,hud.firstChild);hud.insertBefore(cult,slots||null);statusCard.remove()}
-    people.classList.remove('map-region-under-map');let actions=side.querySelector('.scene-actions');side.insertBefore(people,actions||null);
+    people.classList.remove('map-region-under-map');let actions=body.querySelector('.scene-actions');if(actions)actions.classList.remove('map-actions-before-region');side.insertBefore(people,side.querySelector('.scene-actions')||null);
   }
   side.classList.toggle('map-status-floating',enabled);
   return enabled;
@@ -7774,13 +7836,54 @@ function openMapSettings(){
   ensureMapSettingsUi();let state=mapUiSettings();
   $('#toggleRandomEvents').checked=state.randomEvents!==false;
   $('#toggleExpandedMap').checked=!!state.expanded;
-  let statusToggle=$('#toggleMapStatusSwitch'),statusRow=$('#mapStatusSwitchRow');
-  if(statusToggle){statusToggle.checked=!!state.statusSwitch;statusToggle.disabled=!state.expanded;statusRow?.classList.toggle('is-disabled',!state.expanded)}
+  $('#themeSelect').value=gameTheme();
+  syncMapSettingsControls();
   $('#mapSettingsModal').classList.add('show');
 }
-function updateMapUiSetting(key,value){let state=mapUiSettings();state[key]=value;if(key==='expanded'&&!value)state.statusSwitch=false;applyMapUiSettings();save()}
+function syncMapSettingsControls(){
+  let state=mapUiSettings();
+  let statusToggle=$('#toggleMapStatusSwitch'),statusRow=$('#mapStatusSwitchRow');
+  if(statusToggle){statusToggle.checked=!!state.statusSwitch;statusToggle.disabled=!state.expanded;statusRow?.classList.toggle('is-disabled',!state.expanded)}
+}
+function updateMapUiSetting(key,value){let state=mapUiSettings();state[key]=value;if(key==='expanded'&&!value)state.statusSwitch=false;applyMapUiSettings();syncMapSettingsControls();save()}
 const renderSceneMapWithMapSettings=renderSceneMap;
 renderSceneMap=function(){let out=renderSceneMapWithMapSettings.apply(this,arguments);applyMapUiSettings();return out};
+function localMobRealmClass(realm){
+  if(!realm)return '';
+  if(/尸体|复活|永不/.test(realm))return 'realm-corpse';
+  if(realm.includes('练气'))return 'realm-qi';
+  if(realm.includes('筑基'))return 'realm-foundation';
+  if(realm.includes('金丹'))return 'realm-golden';
+  if(realm.includes('元婴'))return 'realm-nascent';
+  if(realm.includes('化神'))return 'realm-spirit';
+  if(realm.includes('炼虚'))return 'realm-refining';
+  if(realm.includes('合体'))return 'realm-integration';
+  if(realm.includes('大乘'))return 'realm-ascension';
+  if(realm.includes('渡劫'))return 'realm-tribulation';
+  if(/天仙|真仙|仙/.test(realm))return 'realm-immortal';
+  return 'realm-corpse';
+}
+function formatLocalMobRows(){
+  if(!$('#sceneMapModal .scene-map-body')?.classList.contains('map-expanded'))return;
+  let i=g.selectedScene??g.map,spot=activeSpot(),mobs=localMobs(i,spot);
+  document.querySelectorAll('#localMobList [data-local-mob]').forEach(button=>{
+    let idx=+button.dataset.localMob,mob=mobs[idx],text=button.querySelector('span');
+    if(!mob||!text)return;
+    let realm=mob.permanentCorpse?'永不复活':mob.dead?`复活${Math.ceil(mob.reviveLeft/60000)}分`:mob.type==='采集'?'':localMonsterRealm(i,spot,mob,idx);
+    text.innerHTML=`<strong class="local-mob-name">${mob.name||mob[0]||'未知妖兽'}</strong>${realm?`<small class="local-mob-realm ${localMobRealmClass(realm)}">${realm}</small>`:''}`;
+  });
+}
+const renderSceneMapWithMobRows=renderSceneMap;
+renderSceneMap=function(){let out=renderSceneMapWithMobRows.apply(this,arguments);formatLocalMobRows();return out};
+const renderSceneMapWithListScroll=renderSceneMap;
+renderSceneMap=function(){
+  let npcScroll=$('#localNpcList')?.scrollTop||0,mobScroll=$('#localMobList')?.scrollTop||0;
+  let out=renderSceneMapWithListScroll.apply(this,arguments);
+  let npcList=$('#localNpcList'),mobList=$('#localMobList');
+  if(npcList)npcList.scrollTop=npcScroll;
+  if(mobList)mobList.scrollTop=mobScroll;
+  return out;
+};
 const finishLocalMoveWithRandomEvents=finishLocalMove;
 finishLocalMove=function(i,nextSpot){
   let from=activeSpot(),result=finishLocalMoveWithRandomEvents(i,nextSpot);
