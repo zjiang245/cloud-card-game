@@ -1046,7 +1046,7 @@ bracer:[[],['旧铁护腕','麻布腕带','青铜护手','粗皮腕甲'],['玄�
 };
 function emptyGear(){return{weapon:null,armor:null,treasure:null,helmet:null,boots:null,bracer:null}}
 function guessEquipSlot(name=''){for(let slot of equipSlots){for(let q=1;q<=5;q++){if((equipNamePool[slot]?.[q]||[]).includes(name))return slot}}if(/护腕|腕|护手|臂环|臂甲|护臂|帝腕|天环|腕甲/.test(name))return'bracer';if(/冠|盔|帽|额环|头巾|帝冕/.test(name))return'helmet';if(/靴|履|鞋|行靴/.test(name))return'boots';if(/剑|刃|匕/.test(name))return'weapon';if(/衣|袍|甲|护衣|战衣|仙袍|道袍/.test(name))return'armor';if(/佩|符|铃|印|镜|珠|宝玦|令/.test(name))return'treasure';return''}
-function normalizeEquip(it){if(!it||typeof it!=='object'||(it.type&&it.type!=='equipment'))return null;let q=Math.max(1,Math.min(6,it.quality||equipQuality[it.name]||1)),guessed=guessEquipSlot(it.name||''),slot=guessed|| (equipSlots.includes(it.slot)?it.slot:'weapon'),level=Math.max(1,it.powerLevel||it.level||q);return{type:'equipment',name:it.name||equipBaseName(q,slot),quality:q,slot,level,powerLevel:level,enhance:it.enhance||0,sell:it.sell??q*220,desc:it.desc||'',bonus:it.bonus||null,special:!!it.special,patchStone:!!it.patchStone||it.name==='补天石',tianjingBracer:!!it.tianjingBracer||it.name==='天晶腕甲',quetianBoots:!!it.quetianBoots||it.name==='阙天靴',huangtianHelmet:!!it.huangtianHelmet||it.name==='荒天盔',absorbedCount:Math.max(0,Math.floor(it.absorbedCount||0)),requiredRealm:it.requiredRealm||''}}
+function normalizeEquip(it){if(!it||typeof it!=='object'||(it.type&&it.type!=='equipment'))return null;let q=Math.max(1,Math.min(6,it.quality||equipQuality[it.name]||1)),guessed=guessEquipSlot(it.name||''),slot=guessed|| (equipSlots.includes(it.slot)?it.slot:'weapon'),level=Math.max(1,it.powerLevel||it.level||q);return{type:'equipment',name:it.name||equipBaseName(q,slot),quality:q,slot,level,powerLevel:level,enhance:it.enhance||0,sell:it.sell??q*220,desc:it.desc||'',bonus:it.bonus||null,special:!!it.special,patchStone:!!it.patchStone||it.name==='补天石',tianjingBracer:!!it.tianjingBracer||it.name==='天晶腕甲',quetianBoots:!!it.quetianBoots||it.name==='阙天靴',huangtianHelmet:!!it.huangtianHelmet||it.name==='荒天盔',absorbedCount:Math.max(0,Math.floor(it.absorbedCount||0)),requiredRealm:it.requiredRealm||'',affix:it.affix||null,affixes:Array.isArray(it.affixes)?it.affixes.slice(0,2):[]}}
 function migrateGear(){let cur=g.gear||{},next=emptyGear();equipSlots.forEach(slot=>{let v=cur[slot];if(v&&typeof v==='object'){let it=normalizeEquip(v);if(it)next[it.slot]=it}else if(Number(v)>0){let level=Number(v),q=Math.max(1,Math.min(5,Math.ceil(level/2))),it=normalizeEquip({name:equipBaseName(q,slot),quality:q,slot,powerLevel:level,enhance:g.enhance||0});if(it)next[it.slot]=it}});g.gear=next;if(Array.isArray(g.bag))g.bag=g.bag.map(it=>it&&it.type==='equipment'?normalizeEquip(it):it)}
 function equipBaseName(q,slot){let pool=(equipNamePool[slot]&&equipNamePool[slot][q])||equipNamePool.weapon[q]||equipNamePool.weapon[1];return pool[Math.floor(Math.random()*pool.length)]}
 function equipAttrs(it){it=normalizeEquip(it);
@@ -4872,8 +4872,8 @@ function demonicRiftChallengeState(){return g.demonicRiftChallenge||(g.demonicRi
 function makeDemonicRiftBoots(){let quality=4,slot='boots',equipName=equipBaseName(quality,slot),powerLevel=Math.max(1,realmNameIndex('炼虚初期')+quality),item=normalizeEquip({name:equipName,quality,slot,powerLevel,sell:quality*220});item.desc=`煞气挑战的幸存者所得，成长等级${powerLevel}，加成系数参照铁甲尸·炼虚初期掉落。`+equipEffect(item);return item}
 function acceptDemonicRiftChallenge(){let state=demonicRiftChallengeState();if(state.status)return toast(state.status==='success'?'煞气挑战已经完成':'煞气挑战已经失败');if(bagFree()<=0)return toast('请至少预留1个背包空位，再接受煞气挑战');let damage=26666,before=Math.max(0,g.hp||0);g.hp=Math.max(0,before-damage);if(g.hp<=0){state.status='failed';pushLocalLog('煞气挑战失败：入魔修士的煞气造成26666点伤害，你未能撑住。');handleBattleDeath('入魔修士的煞气');return}let boots=makeDemonicRiftBoots();if(!addBagItem(boots))return toast('背包空间不足，奖励暂无法发放');state.status='success';pushLocalLog(`煞气挑战成功：承受26666点伤害后存活，获得紫色鞋子「${boots.name}」。`);showNpcResult('煞气挑战成功',`煞气穿体而过，你仍站在裂谷边。\n\n受到伤害：26666\n剩余生命：${fmt(g.hp)} / ${fmt(totalHp())}\n\n获得：紫色品质${equipSlotNames.boots}「${boots.name}」\n成长等级：${boots.powerLevel}\n加成系数参照铁甲尸·炼虚初期掉落。`,'good');renderBag();renderSceneMap();render();save()}
 function talkDemonicRiftCultivator(){let state=demonicRiftChallengeState();if(state.status==='success')return showNpcResult('入魔修士','入魔修士望着你离去的背影，裂谷中的煞气也再无法令你驻足。','good');if(state.status==='failed')return showNpcResult('入魔修士','你曾在煞气中倒下。入魔修士收起掌中黑雾：“道心不稳者，不配再入此试。”','danger');openNpcDialog('入魔修士','煞气裂谷中，一名修士双目赤红，掌心翻涌着凝如实质的黑雾。\n\n“想取裂谷机缘，先受我一缕煞气。能撑过便算通过；若身死，挑战即告失败。”',[{text:'接受煞气挑战',alt:true,onClick(){acceptDemonicRiftChallenge()}},{text:'暂不接受',ghost:true}])}
-function talkAncientBattleSoul(){let artifacts=artifactState(),blue=equipmentQualityCount(3),purple=equipmentQualityCount(4),herbs=Math.max(g.herbs||0,bagItemCountByName('药材')),materials=g.materials||0;if(artifacts.donghuangBell)return showNpcResult('远古战魂','钟声曾在天渊战场上镇压万军。东皇钟已认你为主，战魂不再索取祭品。','good');openNpcDialog('远古战魂',`战魂台上，一缕披甲残魂从断戟间苏醒：\n\n“以蓝色法器十件、紫色法器两件、药材五百份、锻造材料二百份祭台，吾便将东皇钟的残响交予你。”\n\n蓝色装备：${blue} / 10\n紫色装备：${purple} / 2\n药材：${herbs} / 500\n锻造材料：${materials} / 200`,[
-  {text:'献祭材料，唤醒东皇钟',alt:true,onClick(){if(equipmentQualityCount(3)<10)return toast('蓝色品质装备不足10件');if(equipmentQualityCount(4)<2)return toast('紫色品质装备不足2件');if(Math.max(g.herbs||0,bagItemCountByName('药材'))<500)return toast('药材不足500份');if((g.materials||0)<200)return toast('锻造材料不足200份');if(!takeEquipmentByQuality(3,10)||!takeEquipmentByQuality(4,2)||!takeHerbResource(500)||!takeForgeMaterials(200))return toast('祭品扣除失败，请重新检查背包');artifacts.donghuangBell={...donghuangBellArtifact(),obtainedAt:Date.now()};pushLocalLog('远古战魂收下祭品，东皇钟在战魂台上苏醒。');showNpcResult('东皇钟','残魂散入钟纹，苍茫钟声在天渊战场上回荡。\n\n获得特殊神器：东皇钟\n效果：技能法力消耗减少30%，生命上限 +3000。\n\n可在“装备”功能的四大神器栏查看。','good');renderSceneMap();render();save()}},
+function talkAncientBattleSoul(){let artifacts=artifactState(),blue=equipmentQualityCount(3),purple=equipmentQualityCount(4),herbs=Math.max(g.herbs||0,bagItemCountByName('药材')),materials=g.materials||0;if(artifacts.donghuangBell)return showNpcResult('远古战魂','钟声曾在天渊战场上镇压万军。东皇钟已认你为主，战魂不再索取祭品。','good');openNpcDialog('远古战魂',`战魂台上，一缕披甲残魂从断戟间苏醒：\n\n“以蓝色法器十件、紫色法器两件、药材五百份、锻造材料五百份祭台，吾便将东皇钟的残响交予你。”\n\n蓝色装备：${blue} / 10\n紫色装备：${purple} / 2\n药材：${herbs} / 500\n锻造材料：${materials} / 500`,[
+  {text:'献祭材料，唤醒东皇钟',alt:true,onClick(){if(equipmentQualityCount(3)<10)return toast('蓝色品质装备不足10件');if(equipmentQualityCount(4)<2)return toast('紫色品质装备不足2件');if(Math.max(g.herbs||0,bagItemCountByName('药材'))<500)return toast('药材不足500份');if((g.materials||0)<500)return toast('锻造材料不足500份');if(!takeEquipmentByQuality(3,10)||!takeEquipmentByQuality(4,2)||!takeHerbResource(500)||!takeForgeMaterials(500))return toast('祭品扣除失败，请重新检查背包');artifacts.donghuangBell={...donghuangBellArtifact(),obtainedAt:Date.now()};pushLocalLog('远古战魂收下祭品，东皇钟在战魂台上苏醒。');showNpcResult('东皇钟','残魂散入钟纹，苍茫钟声在天渊战场上回荡。\n\n获得特殊神器：东皇钟\n效果：技能法力消耗减少30%，生命上限 +3000。\n\n可在“装备”功能的四大神器栏查看。','good');renderSceneMap();render();save()}},
   {text:'暂不献祭',ghost:true}
 ])}
 function talkWoundedFox(){let artifacts=artifactState(),have=bagItemCountByName('妖花粉');if(artifacts.fuxiQin)return showNpcResult('受伤的妖狐','妖狐伏在旗台阴影里，伤口已然愈合。它轻拨伏羲琴弦，向你低低一揖。\n\n伏羲琴已收录于“装备”中的四大神器栏。','good');openNpcDialog('受伤的妖狐',`妖王旗台下，一只白狐被妖藤刺穿了前爪。它望着你背包中的妖花粉，轻声请求：\n\n“十五份妖花粉可解我体内的妖毒。若你愿意相赠，我以祖传的伏羲琴相报。”\n\n当前持有妖花粉：${have} / 15`,[
@@ -8009,7 +8009,7 @@ function equipmentAffixStats(){
 function hasHighQualityEquip(item){let quality=normalizeEquip(item)?.quality||0;return quality>=4&&quality<6}
 function seedHighQualityEquipmentAffixes(){
   if(g.highQualityAffixMigrationV3)return false;
-  let changed=false,seed=item=>{let equip=normalizeEquip(item);if(!equip)return item;if(equip.quality===6){if(item?.affix||item?.affixes?.length)changed=true;return{...item,affix:null,affixes:[]}}if(!hasHighQualityEquip(item)||item?.affix)return item;changed=true;return{...item,affix:rollEquipmentAffix(equip.quality)}};
+  let changed=false,seed=item=>{let equip=normalizeEquip(item);if(!equip)return item;if(equip.quality===6){let preserved=[...(Array.isArray(item?.affixes)?item.affixes:[]),...(item?.affix?[item.affix]:[])].slice(0,2);if(item?.affix)changed=true;return{...item,affix:null,affixes:preserved}}if(!hasHighQualityEquip(item)||item?.affix)return item;changed=true;return{...item,affix:rollEquipmentAffix(equip.quality)}};
   g.bag=(g.bag||[]).map(seed);
   g.gear=g.gear||emptyGear();equipSlots.forEach(slot=>{if(g.gear[slot])g.gear[slot]=seed(g.gear[slot])});
   g.highQualityAffixMigrationV3=true;
@@ -8035,6 +8035,19 @@ addBagItem=function(item){
   if(equip?.quality===6)item={...item,affix:null,affixes:Array.isArray(item?.affixes)?item.affixes:[]};
   return addBagItemWithRandomAffix(item);
 };
+// 旧版启动迁移会在高品质词缀系统加载前标准化装备，曾导致已存档词缀被剥离。
+// 仅补回紫、橙装备缺失的词缀；红装仍必须通过淬炼吞噬获得。
+function repairLostHighQualityEquipmentAffixes(){
+  if(g.highQualityAffixMigrationV4)return false;
+  let changed=false,repair=item=>{
+    let equip=normalizeEquip(item);if(!equip||equip.quality<4||equip.quality===6||equip.affix)return item;
+    changed=true;return {...item,affix:rollEquipmentAffix(equip.quality),affixes:[]};
+  };
+  g.bag=(g.bag||[]).map(repair);
+  g.gear=g.gear||emptyGear();equipSlots.forEach(slot=>{if(g.gear[slot])g.gear[slot]=repair(g.gear[slot])});
+  g.highQualityAffixMigrationV4=true;
+  return changed;
+}
 const equipEffectWithRandomAffix=equipEffect;
 equipEffect=function(item){let base=equipEffectWithRandomAffix(item),affix=equipmentAffixHtml(item);return affix?`${base}<br>${affix}`:base};
 const gearScoreWithRandomAffix=gearScore;
@@ -8081,7 +8094,7 @@ battleSkillEffect=async function(sk,idx=0){
   }
   return result;
 };
-if(seedHighQualityEquipmentAffixes())save();
+if(seedHighQualityEquipmentAffixes()||repairLostHighQualityEquipmentAffixes())save();
 normalizeBookItems();syncScrollsBag();ensureBookTreasuryUi();
 // 兼容旧存档中的 debt 类型欠条：加载脚本时立即归入任务道具。
 syncCabinDebtNotes();
@@ -8141,6 +8154,164 @@ const localMeetWithGengjinWhiteTiger=localMeet;
 localMeet=function(idx=0){let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];if(name==='庚金白虎')return talkGengjinWhiteTiger();return localMeetWithGengjinWhiteTiger(idx)};
 const npcQuestIconWithGengjinWhiteTiger=npcQuestIcon;
 npcQuestIcon=function(name,mapIndex,spot){if(name==='庚金白虎'){let quest=gengjinWhiteTigerQuest();return quest.completed?'💬':gengjinWhiteTigerReady()?'⭕️':'❗️'}return npcQuestIconWithGengjinWhiteTiger(name,mapIndex,spot)};
+
+// ===== 天渊战场 · 战魂台：魔鬼筋肉人的命运转盘 =====
+const MUSCLE_WHEEL_COST=10000;
+const muscleWheelRewards=[
+  {weight:10,label:'500万修为',kind:'cult',amount:5000000},
+  {weight:20,label:'300万修为',kind:'cult',amount:3000000},
+  {weight:30,label:'100万修为',kind:'cult',amount:1000000},
+  {weight:15,label:'10000灵石',kind:'stones',amount:10000},
+  {weight:10,label:'500药材',kind:'herbs',amount:500},
+  {weight:15,label:'谢谢惠顾',kind:'none',amount:0}
+];
+// 每个奖项扇区的中心角；0 度对应顶部指针，顺时针递增。
+const muscleWheelSliceAngles=[18,72,162,243,288,333];
+let muscleWheelSpinning=false,muscleWheelRotation=0;
+function rollMuscleWheelReward(){
+  let roll=Math.random()*100,total=0;
+  return muscleWheelRewards.find(reward=>(total+=reward.weight)>=roll)||muscleWheelRewards[muscleWheelRewards.length-1];
+}
+function canReceiveMuscleWheelHerbs(){return !!(g.bag||[]).find(item=>item?.type==='herb'&&item.name==='药材'&&(item.qty||0)<999)||bagFree()>0}
+function grantMuscleWheelReward(reward){
+  if(reward.kind==='cult'){
+    g.cult=(g.cult||0)+reward.amount;processRealmProgress();return `修为 +${fmt(reward.amount)}`;
+  }
+  if(reward.kind==='stones'){
+    g.stones=(g.stones||0)+reward.amount;return `灵石 +${fmt(reward.amount)}`;
+  }
+  if(reward.kind==='herbs'){
+    let item={type:'herb',name:'药材',qty:reward.amount,max:999,sell:6,icon:'🌿',desc:'基础药材，可用于宗门委托、疗伤与后续炼制。'};
+    if(addBagItem(item)){g.herbs=(g.herbs||0)+reward.amount;return '药材 ×500'};
+    return '药材奖励未能装入背包';
+  }
+  return '谢谢惠顾';
+}
+function ensureMuscleWheelModal(){
+  let modal=$('#muscleWheelModal');if(modal)return modal;
+  if(!$('#muscleWheelStyle')){
+    let style=document.createElement('style');style.id='muscleWheelStyle';style.textContent=`
+      .muscle-wheel-modal{z-index:108!important;background:rgba(6,18,15,.78)!important}
+      .muscle-wheel-panel{width:min(650px,calc(100vw - 28px));padding:24px;border:1px solid #cfac55;border-radius:14px;background:linear-gradient(145deg,#184536,#0b281f);box-shadow:0 24px 60px rgba(0,0,0,.58);color:#f8efd5}
+      .muscle-wheel-title{margin:0;color:#f5d478;font-size:25px;font-family:KaiTi,STKaiti,serif;letter-spacing:2px}.muscle-wheel-subtitle{margin:7px 0 18px;color:#b9d1c2;font-size:14px}
+      .muscle-wheel-body{display:grid;grid-template-columns:286px 1fr;gap:24px;align-items:center}.muscle-wheel-stage{position:relative;width:268px;height:290px;margin:auto;padding-top:17px}
+      .muscle-wheel-pointer{position:absolute;z-index:4;left:50%;top:0;width:0;height:0;transform:translateX(-50%);border-left:15px solid transparent;border-right:15px solid transparent;border-top:35px solid #152019;filter:drop-shadow(0 2px 1px #f5d478)}
+      .muscle-wheel-dial{position:relative;width:252px;height:252px;margin:0 auto;border:8px solid #9edbc5;border-radius:50%;box-sizing:border-box;overflow:hidden;display:grid;place-items:center;background:conic-gradient(#76ab83 0deg 36deg,#9ec98b 36deg 108deg,#c1dca2 108deg 216deg,#87bea1 216deg 270deg,#5d9783 270deg 306deg,#78b49c 306deg 360deg);box-shadow:0 0 0 5px #f2f4df,0 0 0 10px #5c9178,0 0 0 14px #c8d9a4,0 14px 25px rgba(0,0,0,.48);will-change:transform}
+      .muscle-wheel-dial:before{content:'';position:absolute;inset:8px;border:2px solid rgba(255,255,255,.85);border-radius:50%;background:radial-gradient(circle at 50% 0,rgba(255,255,255,.65) 0 2px,transparent 3px) 0 0/22px 22px;pointer-events:none}.muscle-wheel-label{position:absolute;left:50%;top:50%;width:0;height:0;transform:rotate(var(--angle));pointer-events:none}.muscle-wheel-label b{position:absolute;top:-112px;left:-45px;width:90px;color:#fff;text-align:center;font-size:13px;line-height:1.12;font-weight:800;text-shadow:0 1px 2px #3a1408;transform:rotate(0deg)}
+      .muscle-wheel-center{position:relative;z-index:3;width:78px;height:78px;border:4px solid #264d3d;border-radius:50%;background:radial-gradient(circle at 32% 25%,#edf5c9,#a9cc82 52%,#5d9875);box-shadow:inset 0 0 0 3px #e9f3c9,0 2px 0 #2d6049;color:#1c382a;font:800 24px "STKaiti","KaiTi",serif;cursor:pointer}.muscle-wheel-center:active{transform:scale(.94)}.muscle-wheel-center:disabled{cursor:not-allowed;filter:grayscale(.55);opacity:.78}
+      .muscle-wheel-dial.is-spinning{animation:muscle-wheel-spin 1.85s cubic-bezier(.16,.74,.14,1) forwards}@keyframes muscle-wheel-spin{from{transform:rotate(var(--wheel-from))}to{transform:rotate(var(--wheel-to))}}
+      .muscle-wheel-ledger{min-height:170px;padding:16px;border:1px solid rgba(225,202,139,.42);border-radius:8px;background:rgba(4,18,14,.36)}.muscle-wheel-ledger h4{margin:0 0 12px;color:#f0d899;font-size:16px}.muscle-wheel-ledger p{margin:0;color:#bad1c3;font-size:14px;line-height:1.7}.muscle-wheel-result{min-height:49px;margin-top:15px;padding:12px;border:1px solid rgba(225,202,139,.25);border-radius:7px;background:rgba(0,0,0,.2);color:#c5d7cc;font-size:16px;font-weight:700}.muscle-wheel-result.has-result{color:#ff5c51;border-color:#e1453f;background:rgba(112,12,12,.25);text-shadow:0 1px 1px #270000}
+      .muscle-wheel-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:20px}.muscle-wheel-actions .btn{min-width:116px}.muscle-wheel-actions .btn:disabled{opacity:.52;cursor:not-allowed}
+      @media(max-width:520px){.muscle-wheel-panel{padding:18px}.muscle-wheel-body{grid-template-columns:1fr;gap:0}.muscle-wheel-stage{transform:scale(.86);margin:-18px auto -13px}.muscle-wheel-ledger{min-height:auto}.muscle-wheel-actions{margin-top:14px}}
+    `;document.head.appendChild(style);
+  }
+  let labels=muscleWheelRewards.map((reward,index)=>`<i class="muscle-wheel-label" style="--angle:${muscleWheelSliceAngles[index]}deg"><b>${reward.label.replace(/(万|灵石|药材)/,'$1<br>')}</b></i>`).join('');
+  modal=document.createElement('div');modal.id='muscleWheelModal';modal.className='event-modal muscle-wheel-modal';
+  modal.innerHTML=`<div class="muscle-wheel-panel" role="dialog" aria-modal="true"><h3 class="muscle-wheel-title">命运转盘</h3><p class="muscle-wheel-subtitle">每次转动消耗 10000 灵石</p><div class="muscle-wheel-body"><div class="muscle-wheel-stage"><i class="muscle-wheel-pointer"></i><div id="muscleWheelDial" class="muscle-wheel-dial">${labels}<button id="muscleWheelCenter" class="muscle-wheel-center">开始</button></div></div><div class="muscle-wheel-ledger"><h4>魔鬼筋肉人的转盘</h4><p>转盘已经上弦。落针之前，谁也不知道命运会停在哪一格。</p><div id="muscleWheelResult" class="muscle-wheel-result">投入灵石后即可开始。</div></div></div><div class="muscle-wheel-actions"><button id="muscleWheelClose" class="btn ghost">离开</button><button id="muscleWheelSpin" class="btn alt">转动转盘</button></div></div>`;
+  document.body.appendChild(modal);
+  $('#muscleWheelClose').onclick=()=>{if(!muscleWheelSpinning)modal.classList.remove('show')};
+  $('#muscleWheelSpin').onclick=startMuscleWheelSpin;
+  $('#muscleWheelCenter').onclick=startMuscleWheelSpin;
+  return modal;
+}
+function openMuscleWheelModal(){
+  closeNpcDialog();let modal=ensureMuscleWheelModal();
+  let dial=$('#muscleWheelDial'),result=$('#muscleWheelResult'),spin=$('#muscleWheelSpin'),center=$('#muscleWheelCenter');
+  dial.classList.remove('is-spinning');dial.style.transform=`rotate(${muscleWheelRotation}deg)`;result.textContent='投入灵石后即可开始。';result.classList.remove('has-result');spin.disabled=false;center.disabled=false;
+  modal.classList.add('show');
+}
+function startMuscleWheelSpin(){
+  if(muscleWheelSpinning)return;
+  if((g.stones||0)<MUSCLE_WHEEL_COST)return toast(`灵石不足：需要${fmt(MUSCLE_WHEEL_COST)}灵石`);
+  if(!canReceiveMuscleWheelHerbs())return toast('背包至少预留一格空间后才能转盘');
+  let reward=rollMuscleWheelReward(),rewardIndex=muscleWheelRewards.indexOf(reward),dial=$('#muscleWheelDial'),result=$('#muscleWheelResult'),spin=$('#muscleWheelSpin'),center=$('#muscleWheelCenter');
+  g.stones-=MUSCLE_WHEEL_COST;muscleWheelSpinning=true;spin.disabled=true;center.disabled=true;result.textContent='转盘轰鸣，命运正在落针……';result.classList.remove('has-result');
+  let from=muscleWheelRotation,targetAngle=(360-muscleWheelSliceAngles[rewardIndex])%360,landingDelta=(targetAngle-from+360)%360,to=from+1440+landingDelta;dial.style.transform='';dial.style.setProperty('--wheel-from',`${from}deg`);dial.style.setProperty('--wheel-to',`${to}deg`);dial.classList.remove('is-spinning');void dial.offsetWidth;dial.classList.add('is-spinning');
+  setTimeout(()=>{
+    muscleWheelRotation=targetAngle;dial.classList.remove('is-spinning');dial.style.transform=`rotate(${muscleWheelRotation}deg)`;
+    let gain=grantMuscleWheelReward(reward);result.textContent=gain==='谢谢惠顾'?'谢谢惠顾。':'本次获得：'+gain;result.classList.add('has-result');
+    pushLocalLog(`魔鬼筋肉人的命运转盘结算：${gain}。`);muscleWheelSpinning=false;spin.disabled=false;center.disabled=false;render();renderBag();renderSceneMap();save();
+  },1850);
+}
+function talkMuscleWheelMan(){
+  openNpcDialog('魔鬼筋肉人','战魂台旁，一名壮汉单手按住不断震颤的铜盘，咧嘴一笑。\n\n“转一次，便看一次命。”',[
+    {text:'交付10000灵石，试试手气',alt:true,onClick(){openMuscleWheelModal()}},
+    {text:'暂不转动',ghost:true}
+  ]);
+}
+const localNpcsWithMuscleWheelMan=localNpcs;
+localNpcs=function(i,spot){let npcs=localNpcsWithMuscleWheelMan(i,spot);if(i===5&&spot===32&&!npcs.some(npc=>(npc?.name||npc?.[0])==='魔鬼筋肉人'))npcs=[...npcs,['魔鬼筋肉人','守着一面沉重铜盘，等人以灵石转动命运']];return npcs};
+const localMeetWithMuscleWheelMan=localMeet;
+localMeet=function(idx=0){let i=g.selectedScene??g.map,spot=activeSpot(),npc=localNpcs(i,spot)[idx],name=npc?.name||npc?.[0];if(i===5&&spot===32&&name==='魔鬼筋肉人')return talkMuscleWheelMan();return localMeetWithMuscleWheelMan(idx)};
+
+// ===== 天渊战场 · 残剑丘：灵剑残体复苏委托 =====
+const SPIRIT_SWORD_OFFERINGS=['魂晶','尸甲','煞珠','残刃'];
+function spiritSwordRemnantQuest(){
+  let quest=g.spiritSwordRemnantQuest;
+  if(!quest||typeof quest!=='object')quest=g.spiritSwordRemnantQuest={stage:0};
+  return quest;
+}
+function spiritSwordOfferingReady(){return SPIRIT_SWORD_OFFERINGS.every(name=>bagItemCountByName(name)>=10)}
+function spiritSwordOfferingProgress(){return SPIRIT_SWORD_OFFERINGS.map(name=>`${name} ${bagItemCountByName(name)} / 10`).join(' · ')}
+function rewardSpiritSwordCult(title,text,amount){
+  g.cult=(g.cult||0)+amount;processRealmProgress();pushLocalLog(`灵剑残体委托：${text}，修为 +${fmt(amount)}。`);showNpcResult(title,`${text}\n\n获得：修为 +${fmt(amount)}`,'good');render();renderBag();renderSceneMap();save();
+}
+function submitSpiritSwordOfferings(){
+  let quest=spiritSwordRemnantQuest();
+  if(quest.stage!==1)return talkSpiritSwordRemnant();
+  if(!spiritSwordOfferingReady())return toast('魂晶、尸甲、煞珠、残刃均需各10份');
+  if(!SPIRIT_SWORD_OFFERINGS.every(name=>takeBagItemsByName(name,10)))return toast('材料数量发生变化，请重新确认');
+  quest.stage=2;rewardSpiritSwordCult('灵剑残体的谢礼','残体吞纳四种战场遗材，剑鸣终于有了些许完整的回响。\n\n下一步：前往太玄宗炼器峰询问铁无锋，如何恢复灵剑全盛状态。',5000000);
+}
+function consultTieWufengForSpiritSword(){
+  let quest=spiritSwordRemnantQuest();
+  if(quest.stage!==2)return;
+  quest.stage=3;rewardSpiritSwordCult('铁无锋的判断','铁无锋细察剑痕后说道：灵剑的根基尚在，需以足量锻造材料重铸剑脊，方有复苏之望。\n\n请将此法带回残剑丘，告知灵剑残体。',2000000);
+}
+function reportSpiritSwordMethod(){
+  let quest=spiritSwordRemnantQuest();
+  if(quest.stage!==3)return talkSpiritSwordRemnant();
+  quest.stage=4;rewardSpiritSwordCult('灵剑残体的托付','残体记下铁无锋所言，剑身上微弱的灵纹重新亮起。\n\n最后委托：交付锻造材料 ×800，重铸剑脊。',2000000);
+}
+function submitSpiritSwordForgeMaterials(){
+  let quest=spiritSwordRemnantQuest();
+  if(quest.stage!==4)return talkSpiritSwordRemnant();
+  if((g.materials||0)<800)return toast(`锻造材料不足：${fmt(g.materials||0)} / 800`);
+  if(!takeForgeMaterials(800))return toast('锻造材料扣除失败，请重新检查背包');
+  quest.stage=5;rewardSpiritSwordCult('灵剑复苏','八百份锻造材料化作流火，残剑丘上响起清越剑鸣。灵剑残体的剑意终于得以稳住。',5000000);
+}
+function talkSpiritSwordRemnant(){
+  let quest=spiritSwordRemnantQuest();
+  if(quest.stage===0)return openNpcDialog('灵剑残体','残剑丘深处，一截断剑悬在碎石上方，剑身里传来微弱却不肯熄灭的意念。\n\n“我尚未散尽。若能寻来魂晶、尸甲、煞珠与残刃各十份，或可为我续住一线灵性。”',[{text:'领取复苏委托',alt:true,onClick(){quest.stage=1;pushLocalLog('领取灵剑残体委托：收集魂晶、尸甲、煞珠、残刃各10份。');renderSceneMap();render();save();toast('已领取灵剑残体委托')}},{text:'暂不理会',ghost:true}]);
+  if(quest.stage===1)return openNpcDialog('灵剑残体',`断剑在风中轻颤，仍在等待战场遗材。\n\n当前材料：\n${spiritSwordOfferingProgress()}`,[{text:'交付四种遗材各10份',alt:true,onClick(){submitSpiritSwordOfferings()}},{text:'继续收集',ghost:true}]);
+  if(quest.stage===2)return showNpcResult('灵剑残体','“我的灵性暂可维系，却仍无力重铸剑脊。去太玄宗炼器峰寻铁无锋，他或许知晓复苏之法。”','good');
+  if(quest.stage===3)return openNpcDialog('灵剑残体','你带回了铁无锋的判断。断剑上的裂纹随剑意震动，似乎正等待你将方法说出口。',[{text:'告知铁无锋的复苏之法',alt:true,onClick(){reportSpiritSwordMethod()}},{text:'稍后再说',ghost:true}]);
+  if(quest.stage===4)return openNpcDialog('灵剑残体',`“剑脊可重铸，唯缺炉料。”\n\n最后委托：交付锻造材料 ×800\n当前锻造材料：${fmt(g.materials||0)} / 800`,[{text:'交付锻造材料×800',alt:true,onClick(){submitSpiritSwordForgeMaterials()}},{text:'暂不交付',ghost:true}]);
+  return showNpcResult('灵剑残体','断剑上的灵纹已不再黯淡。它静静悬于残剑丘上，以一声清鸣向你致谢。','good');
+}
+const localNpcsWithSpiritSwordRemnant=localNpcs;
+localNpcs=function(i,spot){let npcs=localNpcsWithSpiritSwordRemnant(i,spot);if(i===5&&spot===6&&!npcs.some(npc=>(npc?.name||npc?.[0])==='灵剑残体'))npcs=[...npcs,['灵剑残体','悬在残剑丘深处的断剑残灵，正等待重续剑意']];return npcs};
+const localMeetWithSpiritSwordRemnant=localMeet;
+localMeet=function(idx=0){let i=g.selectedScene??g.map,spot=activeSpot(),npc=localNpcs(i,spot)[idx],name=npc?.name||npc?.[0];if(i===5&&spot===6&&name==='灵剑残体')return talkSpiritSwordRemnant();if(name==='炼器长老 铁无锋'&&spiritSwordRemnantQuest().stage===2)return consultTieWufengForSpiritSword();return localMeetWithSpiritSwordRemnant(idx)};
+const npcQuestIconWithSpiritSwordRemnant=npcQuestIcon;
+npcQuestIcon=function(name,mapIndex,spot){
+  let quest=spiritSwordRemnantQuest();
+  if(name==='灵剑残体'&&mapIndex===5&&spot===6){if(quest.stage===5)return '💬';if(quest.stage===1)return spiritSwordOfferingReady()?'⭕️':'❗️';if(quest.stage===3)return '⭕️';if(quest.stage===4)return (g.materials||0)>=800?'⭕️':'❗️';return '❗️'}
+  if(name==='炼器长老 铁无锋'&&quest.stage===2)return '⭕️';
+  return npcQuestIconWithSpiritSwordRemnant(name,mapIndex,spot);
+};
+
+// 境界来源分堆的回收系统在探索设置之后加载，须在最终掉落入口再次拦截。
+const addTrophyWithExploreMaterialSaleFix=addTrophy;
+addTrophy=function(name,count=1,origin=null){
+  if(localExploreSession?.settings?.sellMaterials){
+    let qty=Math.max(1,Math.floor(count)||1),value=Math.max(0,itemSell({type:'material',name,sell:35}))*qty;
+    g.stones=(g.stones||0)+value;
+    pushLocalLog(`材料自动售卖：${name}×${qty}，灵石+${fmt(value)}。`);
+    return qty;
+  }
+  return addTrophyWithExploreMaterialSaleFix(name,count,origin);
+};
 
 function bindUi(){
 ensureMapSettingsUi();
