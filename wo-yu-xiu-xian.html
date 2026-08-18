@@ -4912,7 +4912,7 @@ function makeStarSandPalmSkill(){return{name:'星砂掌',icon:'✦',kind:'active
 function startStarSandQuest(){let quest=starSandQuestState();quest.active=true;pushLocalLog('海星砂大王请你前往太玄宗04，向二师兄陈长生购取星砂酒。');showNpcResult('星砂酒之约','海星砂大王摊开掌心，几粒星砂在虚空中浮沉。\n\n“太玄宗04有一位二师兄陈长生，只有他的星砂酒能洗去我掌中旧煞。去找他，带酒归来，我便传你星砂掌。”\n\n任务：前往太玄宗04寻找二师兄陈长生。','good');renderSceneMap();render();save()}
 function buyStarSandWine(){let quest=starSandQuestState();if(!quest.active)return toast('请先接受海星砂大王的委托');if(quest.completed||quest.wineBought||bagItemCountByName('星砂酒')>0)return toast('星砂酒已购得，请带回星砂台');if((g.stones||0)<200000)return toast('灵石不足：购买星砂酒需要200000灵石');if(bagFree()<=0)return toast('背包已满，无法收取星砂酒');g.stones-=200000;let wine={type:'quest',name:'星砂酒',qty:1,max:1,icon:'🍶',sell:0,desc:'任务道具：二师兄陈长生珍藏的星砂酒，需交给虚空遗迹·星砂台的海星砂大王。'};if(!addBagItem(wine)){g.stones+=200000;return toast('背包已满，购买取消')}quest.wineBought=true;pushLocalLog('向二师兄陈长生支付灵石×20万，购得任务道具「星砂酒」。');showNpcResult('星砂酒','消耗：灵石 ×20万\n获得任务道具：星砂酒 ×1\n\n请返回虚空遗迹·星砂台，交给海星砂大王。','good');renderBag();renderSceneMap();render();save()}
 function talkSecondBrotherChen(){let quest=starSandQuestState();if(!quest.active)return showNpcResult('二师兄 陈长生','陈长生正翻检账册，抬眼一笑：“师弟若是来寻酒，得先有星砂台那位大王的信物。”','good');if(quest.completed)return showNpcResult('二师兄 陈长生','陈长生收好空酒坛：“看来海星砂大王已经认可你了。这坛酒没白走一遭。”','good');if(quest.wineBought||bagItemCountByName('星砂酒')>0)return showNpcResult('二师兄 陈长生','陈长生看向你怀中的酒坛：“星砂酒既已在手，莫让海星砂大王久等。”','good');openNpcDialog('二师兄 陈长生',`陈长生从柜底取出一坛封着星纹的灵酒：\n\n“星砂酒取自虚空潮汐，二十万灵石一坛。海星砂大王既肯开口，想必你已入了它的眼。”\n\n购买价格：灵石 ×20万\n当前灵石：${fmt(g.stones||0)}`,[{text:'支付20万灵石购买星砂酒',alt:true,onClick(){buyStarSandWine()}},{text:'暂不购买',ghost:true}])}
-function learnStarSandPalm(){let quest=starSandQuestState();if(!quest.active||quest.completed)return toast('星砂掌任务尚未满足');if(!quest.wineBought&&!bagItemCountByName('星砂酒'))return toast('请先前往太玄宗04购买星砂酒');if(!takeBagItemsByName('星砂酒',1))return toast('星砂酒不在背包中');ensureSkillLayout();let skill=makeStarSandPalmSkill();if(!hasStarSandPalm()){if((g.activeSkills||[]).length<5)g.activeSkills.push(skill);else g.skillReserve.push(skill)}quest.completed=true;pushLocalLog('海星砂大王饮下星砂酒，传授主动技「星砂掌」。');showNpcResult('星砂掌','海星砂大王饮尽星砂酒，掌中砂河骤然倒卷。\n\n学会主动技：星砂掌\n效果：消耗当前法力50%，扣除敌人剩余生命50%；对Boss仅生效一半。\n\n技能已加入主动栏或备用栏。','good');renderSkillHud();renderBag();renderSceneMap();render();save()}
+function learnStarSandPalm(){let quest=starSandQuestState();if(!quest.active||quest.completed)return toast('星砂掌任务尚未满足');if(!quest.wineBought&&!bagItemCountByName('星砂酒'))return toast('请先前往太玄宗04购买星砂酒');if(!takeBagItemsByName('星砂酒',1))return toast('星砂酒不在背包中');ensureSkillLayout();let skill=makeStarSandPalmSkill();if(!hasStarSandPalm()){if((g.activeSkills||[]).length<5)g.activeSkills.push(skill);else g.skillReserve.push(skill)}let cultReward=10000000;g.cult=(g.cult||0)+cultReward;processRealmProgress();quest.completed=true;pushLocalLog('海星砂大王饮下星砂酒，传授主动技「星砂掌」，修为+1000万。');showNpcResult('星砂掌','海星砂大王饮尽星砂酒，掌中砂河骤然倒卷。\n\n学会主动技：星砂掌\n效果：消耗当前法力50%，扣除敌人剩余生命50%；对Boss仅生效一半。\n修为奖励：+1000万\n\n技能已加入主动栏或备用栏。','good');renderSkillHud();renderBag();renderSceneMap();render();save()}
 function talkStarSandKing(){let quest=starSandQuestState();if(quest.completed||hasStarSandPalm())return showNpcResult('海星砂大王','海星砂大王盘坐在星砂台上，掌中砂河随你的呼吸起伏：“星砂掌已入经脉，往后莫负虚空潮汐。”','good');if(quest.wineBought||bagItemCountByName('星砂酒')>0)return openNpcDialog('海星砂大王','海星砂大王闻到酒香，眼中星芒骤亮：“正是陈长生的星砂酒。交出来，吾便将星砂掌传你。”',[{text:'交付星砂酒，学习星砂掌',alt:true,onClick(){learnStarSandPalm()}},{text:'暂不交付',ghost:true}]);if(quest.active)return showNpcResult('海星砂大王','海星砂大王以指叩台：“去太玄宗04找二师兄陈长生。没有星砂酒，吾掌中神通便无从相授。”','good');openNpcDialog('海星砂大王','星砂台上，一尊由海蓝星砂凝成的大王缓缓睁眼。\n\n“吾被旧煞所困，唯有太玄宗二师兄陈长生珍藏的星砂酒可解。你若愿意替吾取来，吾便传你一式星砂掌。”',[{text:'接受委托',alt:true,onClick(){startStarSandQuest()}},{text:'暂不理会',ghost:true}])}
 const localNpcsWithStarSandQuest=localNpcs;
 localNpcs=function(i,spot){let npcs=localNpcsWithStarSandQuest(i,spot);if(i===6&&spot===6&&!npcs.some(npc=>(npc.name||npc[0])==='海星砂大王'))npcs=[...npcs,['海星砂大王','被旧煞所困，正在等待一坛星砂酒']];if(i===10&&spot===4&&!npcs.some(npc=>(npc.name||npc[0])==='二师兄 陈长生'))npcs=[...npcs,['二师兄 陈长生','珍藏星砂酒，愿以灵石交换']];return npcs};
@@ -8168,6 +8168,14 @@ const muscleWheelRewards=[
 // 每个奖项扇区的中心角；0 度对应顶部指针，顺时针递增。
 const muscleWheelSliceAngles=[18,72,162,243,288,333];
 let muscleWheelSpinning=false,muscleWheelRotation=0;
+const MUSCLE_WHEEL_REALM_LIMIT=5;
+function muscleWheelTurnsState(){
+  if(!g.muscleWheelTurnsByRealm||typeof g.muscleWheelTurnsByRealm!=='object')g.muscleWheelTurnsByRealm={};
+  let key=String(realmIndex()),used=Math.max(0,Math.min(MUSCLE_WHEEL_REALM_LIMIT,Math.floor(Number(g.muscleWheelTurnsByRealm[key])||0)));
+  g.muscleWheelTurnsByRealm[key]=used;
+  return {key,used,left:Math.max(0,MUSCLE_WHEEL_REALM_LIMIT-used),realm:realmText()};
+}
+function muscleWheelQuotaText(){let state=muscleWheelTurnsState();return `${state.realm}：${state.used} / ${MUSCLE_WHEEL_REALM_LIMIT} 次`}
 function rollMuscleWheelReward(){
   let roll=Math.random()*100,total=0;
   return muscleWheelRewards.find(reward=>(total+=reward.weight)>=roll)||muscleWheelRewards[muscleWheelRewards.length-1];
@@ -8207,7 +8215,7 @@ function ensureMuscleWheelModal(){
   }
   let labels=muscleWheelRewards.map((reward,index)=>`<i class="muscle-wheel-label" style="--angle:${muscleWheelSliceAngles[index]}deg"><b>${reward.label.replace(/(万|灵石|药材)/,'$1<br>')}</b></i>`).join('');
   modal=document.createElement('div');modal.id='muscleWheelModal';modal.className='event-modal muscle-wheel-modal';
-  modal.innerHTML=`<div class="muscle-wheel-panel" role="dialog" aria-modal="true"><h3 class="muscle-wheel-title">命运转盘</h3><p class="muscle-wheel-subtitle">每次转动消耗 10000 灵石</p><div class="muscle-wheel-body"><div class="muscle-wheel-stage"><i class="muscle-wheel-pointer"></i><div id="muscleWheelDial" class="muscle-wheel-dial">${labels}<button id="muscleWheelCenter" class="muscle-wheel-center">开始</button></div></div><div class="muscle-wheel-ledger"><h4>魔鬼筋肉人的转盘</h4><p>转盘已经上弦。落针之前，谁也不知道命运会停在哪一格。</p><div id="muscleWheelResult" class="muscle-wheel-result">投入灵石后即可开始。</div></div></div><div class="muscle-wheel-actions"><button id="muscleWheelClose" class="btn ghost">离开</button><button id="muscleWheelSpin" class="btn alt">转动转盘</button></div></div>`;
+  modal.innerHTML=`<div class="muscle-wheel-panel" role="dialog" aria-modal="true"><h3 class="muscle-wheel-title">命运转盘</h3><p class="muscle-wheel-subtitle">每次转动消耗 10000 灵石 · <b id="muscleWheelQuota"></b></p><div class="muscle-wheel-body"><div class="muscle-wheel-stage"><i class="muscle-wheel-pointer"></i><div id="muscleWheelDial" class="muscle-wheel-dial">${labels}<button id="muscleWheelCenter" class="muscle-wheel-center">开始</button></div></div><div class="muscle-wheel-ledger"><h4>魔鬼筋肉人的转盘</h4><p>转盘已经上弦。落针之前，谁也不知道命运会停在哪一格。</p><div id="muscleWheelResult" class="muscle-wheel-result">投入灵石后即可开始。</div></div></div><div class="muscle-wheel-actions"><button id="muscleWheelClose" class="btn ghost">离开</button><button id="muscleWheelSpin" class="btn alt">转动转盘</button></div></div>`;
   document.body.appendChild(modal);
   $('#muscleWheelClose').onclick=()=>{if(!muscleWheelSpinning)modal.classList.remove('show')};
   $('#muscleWheelSpin').onclick=startMuscleWheelSpin;
@@ -8216,21 +8224,24 @@ function ensureMuscleWheelModal(){
 }
 function openMuscleWheelModal(){
   closeNpcDialog();let modal=ensureMuscleWheelModal();
-  let dial=$('#muscleWheelDial'),result=$('#muscleWheelResult'),spin=$('#muscleWheelSpin'),center=$('#muscleWheelCenter');
-  dial.classList.remove('is-spinning');dial.style.transform=`rotate(${muscleWheelRotation}deg)`;result.textContent='投入灵石后即可开始。';result.classList.remove('has-result');spin.disabled=false;center.disabled=false;
+  let dial=$('#muscleWheelDial'),result=$('#muscleWheelResult'),spin=$('#muscleWheelSpin'),center=$('#muscleWheelCenter'),state=muscleWheelTurnsState(),quota=$('#muscleWheelQuota');
+  dial.classList.remove('is-spinning');dial.style.transform=`rotate(${muscleWheelRotation}deg)`;if(quota)quota.textContent=muscleWheelQuotaText();result.textContent=state.left?`本小境界还可转动 ${state.left} 次。`:'本小境界已转满 5 次，突破至下一小境界后可再次转动。';result.classList.toggle('has-result',!state.left);spin.disabled=!state.left;center.disabled=!state.left;
   modal.classList.add('show');
 }
 function startMuscleWheelSpin(){
   if(muscleWheelSpinning)return;
+  let quota=muscleWheelTurnsState();
+  if(!quota.left)return toast(`本小境界转盘次数已用尽，请突破至下一小境界后再来。`);
   if((g.stones||0)<MUSCLE_WHEEL_COST)return toast(`灵石不足：需要${fmt(MUSCLE_WHEEL_COST)}灵石`);
   if(!canReceiveMuscleWheelHerbs())return toast('背包至少预留一格空间后才能转盘');
   let reward=rollMuscleWheelReward(),rewardIndex=muscleWheelRewards.indexOf(reward),dial=$('#muscleWheelDial'),result=$('#muscleWheelResult'),spin=$('#muscleWheelSpin'),center=$('#muscleWheelCenter');
-  g.stones-=MUSCLE_WHEEL_COST;muscleWheelSpinning=true;spin.disabled=true;center.disabled=true;result.textContent='转盘轰鸣，命运正在落针……';result.classList.remove('has-result');
+  g.stones-=MUSCLE_WHEEL_COST;g.muscleWheelTurnsByRealm[quota.key]=quota.used+1;muscleWheelSpinning=true;spin.disabled=true;center.disabled=true;result.textContent='转盘轰鸣，命运正在落针……';result.classList.remove('has-result');
   let from=muscleWheelRotation,targetAngle=(360-muscleWheelSliceAngles[rewardIndex])%360,landingDelta=(targetAngle-from+360)%360,to=from+1440+landingDelta;dial.style.transform='';dial.style.setProperty('--wheel-from',`${from}deg`);dial.style.setProperty('--wheel-to',`${to}deg`);dial.classList.remove('is-spinning');void dial.offsetWidth;dial.classList.add('is-spinning');
   setTimeout(()=>{
     muscleWheelRotation=targetAngle;dial.classList.remove('is-spinning');dial.style.transform=`rotate(${muscleWheelRotation}deg)`;
     let gain=grantMuscleWheelReward(reward);result.textContent=gain==='谢谢惠顾'?'谢谢惠顾。':'本次获得：'+gain;result.classList.add('has-result');
-    pushLocalLog(`魔鬼筋肉人的命运转盘结算：${gain}。`);muscleWheelSpinning=false;spin.disabled=false;center.disabled=false;render();renderBag();renderSceneMap();save();
+    let nextQuota=muscleWheelTurnsState(),quotaLabel=$('#muscleWheelQuota');if(quotaLabel)quotaLabel.textContent=muscleWheelQuotaText();
+    pushLocalLog(`魔鬼筋肉人的命运转盘结算：${gain}。`);muscleWheelSpinning=false;spin.disabled=!nextQuota.left;center.disabled=!nextQuota.left;render();renderBag();renderSceneMap();save();
   },1850);
 }
 function talkMuscleWheelMan(){
@@ -8312,6 +8323,55 @@ addTrophy=function(name,count=1,origin=null){
   }
   return addTrophyWithExploreMaterialSaleFix(name,count,origin);
 };
+
+// ===== 虚空遗迹 · 遗迹核心：破碎的人工智能数据库修复 =====
+const BROKEN_AI_MATERIALS=[['古铜片',8],['星砂',8]];
+function brokenAiQuestState(){return g.brokenAiQuest||(g.brokenAiQuest={stage:0})}
+function brokenAiMaterialsReady(){return BROKEN_AI_MATERIALS.every(([name,amount])=>bagItemCountByName(name)>=amount)}
+function brokenAiBookCandidates(){return(g.bag||[]).map((item,index)=>({item,index})).filter(({item})=>item&&(item.type==='book'||item.type==='scrollResource')&&(item.qty||1)>0)}
+function brokenAiMaterialProgress(){return BROKEN_AI_MATERIALS.map(([name,amount])=>`${name} ${fmt(bagItemCountByName(name))}/${amount}`).join(' · ')}
+function rewardBrokenAi(title,text,cult){
+  g.cult=(g.cult||0)+cult;processRealmProgress();
+  pushLocalLog(`破碎的人工智能任务结算：修为+${fmt(cult)}。`);
+  showNpcResult(title,`${text}\n\n获得：修为 +${fmt(cult)}`,'good');
+  renderBag();renderSceneMap();render();save();
+}
+function submitBrokenAiMaterials(){
+  let quest=brokenAiQuestState();
+  if(quest.stage!==1)return talkBrokenArtificialIntelligence();
+  if(!brokenAiMaterialsReady())return toast(`材料不足：${brokenAiMaterialProgress()}`);
+  for(let [name,amount] of BROKEN_AI_MATERIALS)if(!takeBagItemsByName(name,amount))return toast(`${name}扣除失败，请整理背包后重试`);
+  quest.stage=2;
+  rewardBrokenAi('数据库恢复','古铜片嵌入裂开的金属外壳，星砂化作点点蓝光。残缺的屏幕重新亮起一行字：\n\n“基础数据库已恢复，申请扩容资料。”',30000000);
+}
+function submitBrokenAiBook(index){
+  let quest=brokenAiQuestState(),candidate=brokenAiBookCandidates().find(entry=>entry.index===index),item=candidate?.item;
+  if(quest.stage!==2)return talkBrokenArtificialIntelligence();
+  if(!item)return toast('这本书籍已不在背包中');
+  if(item.name==='功法残卷'){
+    if(!takeScrolls(1))return toast('功法残卷不足');
+  }else removeBagQty(index,1);
+  quest.stage=3;
+  rewardBrokenAi('数据库扩容完成',`破碎的人工智能扫描并收录了「${item.name}」。它的光屏稳定下来，投出一幅更新后的遗迹星图。`,50000000);
+}
+function openBrokenAiBookMenu(){
+  let choices=brokenAiBookCandidates();
+  if(!choices.length)return toast('背包中没有可交付的书籍类道具');
+  openNpcDialog('破碎的人工智能','“请提供一份书籍类道具。知识将用于扩展数据库，不可返还。”',[...choices.map(({item,index})=>({text:`交付「${item.name}」×1`,alt:true,onClick(){submitBrokenAiBook(index)}})),{text:'暂不交付',ghost:true}]);
+}
+function talkBrokenArtificialIntelligence(){
+  let quest=brokenAiQuestState();
+  if(quest.stage===0)return openNpcDialog('破碎的人工智能','遗迹核心的残骸间，一枚裂开的晶核忽明忽灭。\n\n“检索完成……身份：遗迹管理人工智能。数据库损坏 87%。若能补充古铜片与星砂，我或许还能恢复基础运算。”',[{text:'领取数据库修复任务',alt:true,onClick(){quest.stage=1;pushLocalLog('领取破碎的人工智能任务：交付古铜片×8、星砂×8。');renderSceneMap();render();save();toast('已领取数据库修复任务')}},{text:'暂不协助',ghost:true}]);
+  if(quest.stage===1)return openNpcDialog('破碎的人工智能',`“正在等待物理存储介质。”\n\n当前材料：${brokenAiMaterialProgress()}`,[{text:'交付古铜片×8、星砂×8',alt:true,onClick(){submitBrokenAiMaterials()}},{text:'继续收集',ghost:true}]);
+  if(quest.stage===2){let books=brokenAiBookCandidates();return openNpcDialog('破碎的人工智能',`“基础数据库恢复。仍需一份书籍类道具，扩展知识索引。”\n\n当前可交付书籍：${books.length} 本`,[{text:'选择一本书籍交付',alt:true,onClick(){openBrokenAiBookMenu()}},{text:'暂不扩容',ghost:true}])}
+  return showNpcResult('破碎的人工智能','晶核的光芒已经稳定下来。它正安静整理星图与残存的遗迹档案。','good');
+}
+const localNpcsWithBrokenArtificialIntelligence=localNpcs;
+localNpcs=function(i,spot){let npcs=localNpcsWithBrokenArtificialIntelligence(i,spot);if(i===6&&spot===32&&!npcs.some(npc=>(npc?.name||npc?.[0])==='破碎的人工智能'))npcs=[...npcs,['破碎的人工智能','遗迹核心中损坏的管理晶核，等待资料修复数据库']];return npcs};
+const localMeetWithBrokenArtificialIntelligence=localMeet;
+localMeet=function(idx=0){let i=g.selectedScene??g.map,spot=activeSpot(),npc=localNpcs(i,spot)[idx],name=npc?.name||npc?.[0];if(i===6&&spot===32&&name==='破碎的人工智能')return talkBrokenArtificialIntelligence();return localMeetWithBrokenArtificialIntelligence(idx)};
+const npcQuestIconWithBrokenArtificialIntelligence=npcQuestIcon;
+npcQuestIcon=function(name,mapIndex,spot){if(name==='破碎的人工智能'&&mapIndex===6&&spot===32){let quest=brokenAiQuestState();if(quest.stage>=3)return '💬';if(quest.stage===1)return brokenAiMaterialsReady()?'⭕️':'❗️';if(quest.stage===2)return brokenAiBookCandidates().length?'⭕️':'❗️';return '❗️'}return npcQuestIconWithBrokenArtificialIntelligence(name,mapIndex,spot)};
 
 function bindUi(){
 ensureMapSettingsUi();
