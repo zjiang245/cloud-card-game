@@ -821,14 +821,14 @@
 #sceneMapModal .scene-map-body.map-expanded .map-player-status-card{display:flex;flex-direction:column;align-items:stretch;max-height:166px!important;padding:7px;border-color:#7f907d;background:#f8f5e998;box-shadow:0 5px 16px #28302055}
 #sceneMapModal .scene-map-body.map-expanded .map-player-status-card .map-floating-title{display:flex;width:100%;box-sizing:border-box;align-items:center;justify-content:space-between;gap:8px;margin-bottom:5px;color:#25483c;cursor:grab;user-select:none;touch-action:none}
 #sceneMapModal .scene-map-body.map-expanded .map-player-status-card .map-floating-title>span{font:700 15px "STKaiti","KaiTi",serif;letter-spacing:1px}
+#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .map-floating-title>span.realm-qi{color:#4b8d61}#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .map-floating-title>span.realm-foundation{color:#327d91}#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .map-floating-title>span.realm-golden{color:#a8751f}#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .map-floating-title>span.realm-nascent{color:#8050ad}#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .map-floating-title>span.realm-spirit{color:#b84351}#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .map-floating-title>span.realm-refining{color:#996037}#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .map-floating-title>span.realm-integration{color:#27877d}#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .map-floating-title>span.realm-ascension{color:#6554aa}#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .map-floating-title>span.realm-tribulation{color:#ae414a}#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .map-floating-title>span.realm-immortal{color:#286eb2}
 #sceneMapModal .scene-map-body.map-expanded .map-player-status-card .map-floating-title:active{cursor:grabbing}
 #sceneMapModal .scene-map-body.map-expanded .map-player-status-card .vital-bars{width:100%;grid-template-columns:1fr;gap:5px}
 #sceneMapModal .scene-map-body.map-expanded .map-player-status-card .vital{height:21px}
 #sceneMapModal .scene-map-body.map-expanded .map-player-status-card .vital span,#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .vital b{font-size:9px}
 #sceneMapModal .scene-map-body.map-expanded .map-player-status-card .cultivation-hud{position:relative;display:block;width:100%;height:21px;margin-top:5px;padding:0}
-#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .cultivation-hud>span,#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .cultivation-hud>b{position:absolute;z-index:2;top:50%;transform:translateY(-50%);font-size:9px;line-height:1;white-space:nowrap}
-#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .cultivation-hud>span{left:7px}
-#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .cultivation-hud>b{right:7px}
+#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .cultivation-hud>span{display:none}
+#sceneMapModal .scene-map-body.map-expanded .map-player-status-card .cultivation-hud>b{position:absolute;z-index:2;top:50%;left:50%;right:auto;transform:translate(-50%,-50%);font-size:9px;line-height:1;white-space:nowrap}
 #sceneMapModal .scene-map-body.map-expanded .map-player-status-card .cultivation-track{position:absolute;inset:3px;width:auto;height:auto;margin:0;opacity:.82}
 #sceneMapModal .scene-map-body.map-expanded .map-player-status-card.map-status-collapsed{min-height:0!important;max-height:none!important;padding:6px 7px}
 #sceneMapModal .scene-map-body.map-expanded .map-player-status-card.map-status-collapsed>.vital-bars,#sceneMapModal .scene-map-body.map-expanded .map-player-status-card.map-status-collapsed>.cultivation-hud{display:none!important}
@@ -4883,7 +4883,7 @@ function talkWoundedFox(){let artifacts=artifactState(),have=bagItemCountByName(
 function ensureArtifactStyles(){if($('#artifactStyles'))return;let style=document.createElement('style');style.id='artifactStyles';style.textContent=`.paper-doll{position:relative}.artifact-section.artifact-corner{position:absolute;top:10px;right:10px;z-index:3;width:142px;padding:7px;border:1px solid #a89a72;background:#f7f3e7e8;box-shadow:0 3px 10px #3d37231f}.artifact-heading{margin:0 0 5px;color:#355344}.artifact-heading h3{margin:0;font-size:12px}.artifact-heading small{display:none}.artifact-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}.artifact-slot{min-height:43px;padding:5px 3px;border:1px solid #b9b090;background:#f7f3e7;color:#9a917e;text-align:center;display:grid;place-items:center}.artifact-slot b{display:block;font-size:11px;line-height:1.2;color:#667060}.artifact-slot small{display:none}.artifact-slot.obtained{border-color:#ad8132;background:#fff3c8;box-shadow:inset 0 0 0 1px #e5c96d}.artifact-slot.obtained b{color:#80601d}.artifact-slot.unsealed{opacity:.72}@media(max-width:650px){.artifact-section.artifact-corner{top:7px;right:7px;width:116px;padding:5px}.artifact-heading h3{font-size:10px}.artifact-slot{min-height:35px}.artifact-slot b{font-size:9px}}`;document.head.appendChild(style)}
 function renderArtifactSlots(){let artifacts=artifactState(),slots=[artifacts.fuxiQin?{...artifacts.fuxiQin,obtained:true}:{name:'伏羲琴',obtained:false},artifacts.donghuangBell?{...artifacts.donghuangBell,obtained:true}:{name:'东皇钟',obtained:false},{name:'未现世',obtained:false},{name:'未现世',obtained:false}];return `<section class="artifact-section artifact-corner"><div class="artifact-heading"><h3>四大神器</h3><small>独立于六种常规装备</small></div><div class="artifact-grid">${slots.map(item=>`<div class="artifact-slot ${item.obtained?'obtained':'unsealed'}" title="${item.obtained?item.effect:'尚待机缘'}"><b>${item.obtained?`${item.icon||''} `:''}${item.name}</b><small>${item.effect||''}</small></div>`).join('')}</div></section>`}
 const renderEquipModalWithArtifacts=renderEquipModal;
-renderEquipModal=function(){renderEquipModalWithArtifacts();ensureArtifactStyles();let doll=$('#equipModalContent .paper-doll');if(doll&&!doll.querySelector('.artifact-section'))doll.insertAdjacentHTML('beforeend',renderArtifactSlots())};
+renderEquipModal=function(){renderEquipModalWithArtifacts();ensureArtifactStyles();let doll=$('#equipModalContent .paper-doll');if(doll&&!doll.querySelector('.artifact-section'))doll.insertAdjacentHTML('beforeend',renderArtifactSlots());ensureArtifactLongPress()};
 const localNpcsWithFuxiQin=localNpcs;
 localNpcs=function(i,spot){let npcs=localNpcsWithFuxiQin(i,spot);if(i===4&&spot===6&&!npcs.some(npc=>(npc.name||npc[0])==='受伤的妖狐'))npcs=[...npcs,['受伤的妖狐','身染妖毒，似在等待能够解毒的妖花粉']];if(i===5&&spot===6&&!npcs.some(npc=>(npc.name||npc[0])==='残缺剑阵'))npcs=[...npcs,['残缺剑阵','残剑交错成阵，剑意仍在古战场上回响']];if(i===5&&spot===14&&!npcs.some(npc=>(npc.name||npc[0])==='军械看管'))npcs=[...npcs,['军械看管','看守古战场遗存兵甲，可用旧装换取高阶随机装备']];if(i===5&&spot===23&&!npcs.some(npc=>(npc.name||npc[0])==='药材回购商'))npcs=[...npcs,['药材回购商','按99份一批回收药材，每批可换6000灵石']];if(i===5&&spot===23&&!npcs.some(npc=>(npc.name||npc[0])==='入魔修士'))npcs=[...npcs,['入魔修士','掌控裂谷煞气，向来者发起生死挑战']];if(i===5&&spot===32&&!npcs.some(npc=>(npc.name||npc[0])==='远古战魂'))npcs=[...npcs,['远古战魂','守在战魂台上，等待以高阶祭品唤醒神器']];return npcs};
 const localMeetWithFuxiQin=localMeet;
@@ -5749,8 +5749,16 @@ applyWitheringWoodTurn=function(b){let beforeHp=b?.enemy?.hp||0,result=applyWith
 const renderArtifactSlotsWithHiddenUnobtained=renderArtifactSlots;
 renderArtifactSlots=function(){
   let artifacts=artifactState(),slots=[artifacts.fuxiQin?{...artifacts.fuxiQin,obtained:true}:{obtained:false},artifacts.donghuangBell?{...artifacts.donghuangBell,obtained:true}:{obtained:false},artifacts.kunlunMirror?{...artifacts.kunlunMirror,obtained:true}:{obtained:false},artifacts.xuanyuanSword?{...artifacts.xuanyuanSword,obtained:true}:{obtained:false}];
-  return `<section class="artifact-section artifact-corner"><div class="artifact-heading"><h3>四大神器</h3><small>独立于六种常规装备</small></div><div class="artifact-grid">${slots.map(item=>`<div class="artifact-slot ${item.obtained?'obtained':'unsealed'}" title="${item.obtained?item.effect:'机缘未至'}"><b>${item.obtained?`${item.icon||''} ${item.name}`:'封印中'}</b><small>${item.obtained?item.effect:'尚待机缘'}</small></div>`).join('')}</div></section>`;
+  return `<section class="artifact-section artifact-corner"><div class="artifact-heading"><h3>四大神器</h3><small>独立于六种常规装备</small></div><div class="artifact-grid">${slots.map(item=>`<div class="artifact-slot ${item.obtained?'obtained':'unsealed'}" ${item.obtained?`data-artifact-name="${item.name}" title="长按查看：${item.effect}"`:'title="机缘未至"'}><b>${item.obtained?`${item.icon||''} ${item.name}`:'封印中'}</b><small>${item.obtained?item.effect:'尚待机缘'}</small></div>`).join('')}</div></section>`;
 };
+function artifactByName(name){let artifacts=artifactState();return [artifacts.fuxiQin,artifacts.donghuangBell,artifacts.kunlunMirror,artifacts.xuanyuanSword].find(item=>item?.name===name)}
+function ensureArtifactLongPress(){
+  let root=$('#equipModalContent');if(!root||root.dataset.artifactLongPressReady)return;
+  root.dataset.artifactLongPressReady='1';let timer=null,opened=false,show=slot=>{if(opened)return;let artifact=artifactByName(slot?.dataset.artifactName);if(!artifact)return;opened=true;clear();showNpcResult(artifact.name,`神器效果\n\n${artifact.effect}`,'good')},clear=()=>{if(timer){clearTimeout(timer);timer=null}};
+  root.addEventListener('pointerdown',event=>{let slot=event.target.closest('.artifact-slot.obtained[data-artifact-name]');if(!slot)return;opened=false;clear();timer=setTimeout(()=>show(slot),520)});
+  root.addEventListener('pointerup',clear);root.addEventListener('pointerleave',clear);root.addEventListener('pointercancel',clear);
+  root.addEventListener('contextmenu',event=>{let slot=event.target.closest('.artifact-slot.obtained[data-artifact-name]');if(!slot)return;event.preventDefault();show(slot)});
+}
 
 function formatSectCountdown(seconds){
   if(!seconds)return '可办理';
@@ -7792,7 +7800,7 @@ function ensureMapSettingsUi(){
   let modal=$('#mapSettingsModal');
   if(!modal){
     modal=document.createElement('div');modal.id='mapSettingsModal';modal.className='event-modal';
-    modal.innerHTML='<div><h2>地图设置</h2><div class="map-settings-list"><label class="map-setting-row"><span><b>随机事件</b><small>移动路点时触发受伤修士、真假宝箱、临时商队与阵法残页。</small></span><input class="map-setting-switch" id="toggleRandomEvents" type="checkbox"></label><label class="map-setting-row"><span><b>扩大地图区域</b><small>隐藏区域全览和当前目标，扩大当前小地图的显示范围。</small></span><input class="map-setting-switch" id="toggleExpandedMap" type="checkbox"></label><label class="map-setting-row"><span><b>主题风格</b><small>切换游戏的主背景、面板、弹窗与战斗边框配色。</small></span><select class="map-theme-select" id="themeSelect"><option value="original">原皮</option><option value="blue">蓝色</option><option value="red">红色</option><option value="night">夜间</option><option value="gold">土豪金</option></select></label></div><div class="bag-actions"><button class="btn ghost" id="closeMapSettingsBtn">关闭</button></div></div>';
+    modal.innerHTML='<div><h2>地图设置</h2><div class="map-settings-list"><label class="map-setting-row"><span><b>主题风格</b><small>切换游戏的主背景、面板、弹窗与战斗边框配色。</small></span><select class="map-theme-select" id="themeSelect"><option value="original">原皮</option><option value="blue">蓝色</option><option value="red">红色</option><option value="night">夜间</option><option value="gold">土豪金</option></select></label><label class="map-setting-row"><span><b>随机事件</b><small>移动路点时触发受伤修士、真假宝箱、临时商队与阵法残页。</small></span><input class="map-setting-switch" id="toggleRandomEvents" type="checkbox"></label><label class="map-setting-row"><span><b>扩大地图区域</b><small>隐藏区域全览和当前目标，扩大当前小地图的显示范围。</small></span><input class="map-setting-switch" id="toggleExpandedMap" type="checkbox"></label></div><div class="bag-actions"><button class="btn ghost" id="closeMapSettingsBtn">关闭</button></div></div>';
     document.body.appendChild(modal);
     $('#toggleRandomEvents').onchange=e=>updateMapUiSetting('randomEvents',e.target.checked);
     $('#toggleExpandedMap').onchange=e=>updateMapUiSetting('expanded',e.target.checked);
@@ -7845,7 +7853,7 @@ function ensureMapPlayerStatusPanel(body,side){
   let card=$('#mapPlayerStatusCard');
   if(!card){
     card=document.createElement('div');card.id='mapPlayerStatusCard';card.className='scene-card map-player-status-card';
-    card.innerHTML='<h3 class="map-floating-title"><span>人物状态</span><button type="button" class="map-float-collapse" title="折叠人物状态">−</button></h3>';
+    card.innerHTML='<h3 class="map-floating-title"><span></span><button type="button" class="map-float-collapse" title="折叠人物状态">−</button></h3>';
     side.appendChild(card);
     let heading=card.querySelector('.map-floating-title'),toggle=card.querySelector('.map-float-collapse');
     toggle.onclick=e=>{e.stopPropagation();let state=mapPlayerStatusPanelState();state.collapsed=!state.collapsed;save();syncMapPlayerStatusPanel(body,side)};
@@ -7861,7 +7869,8 @@ function ensureMapPlayerStatusPanel(body,side){
   return card;
 }
 function syncMapPlayerStatusPanel(body,side){
-  let card=ensureMapPlayerStatusPanel(body,side),state=mapPlayerStatusPanelState(),toggle=card.querySelector('.map-float-collapse');
+  let card=ensureMapPlayerStatusPanel(body,side),state=mapPlayerStatusPanelState(),toggle=card.querySelector('.map-float-collapse'),title=card.querySelector('.map-floating-title>span');
+  if(title){title.textContent=realmText();title.className=localMobRealmClass(realmText())}
   card.classList.toggle('map-status-collapsed',!!state.collapsed);toggle.textContent=state.collapsed?'＋':'−';toggle.title=state.collapsed?'展开人物状态':'折叠人物状态';
   if(Number.isFinite(state.x)&&Number.isFinite(state.y)){side.style.left=state.x+'px';side.style.top=state.y+'px';side.style.right='auto'}else side.style.left='';
 }
