@@ -602,9 +602,9 @@
 /* Boss portraits replace the emoji only in boss battles. */
 .fighter-figure .boss-portrait{display:grid;height:100%;place-items:end center;width:100%}
 .fighter-figure .boss-portrait img{display:block;height:286px;max-width:290px;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 18px 14px #0009)}
+.fighter-figure .boss-portrait.enemy-face-player img{transform:scaleX(-1)}
+.fighter-figure .monster.enemy-face-player{transform:scaleX(-1)}
 @media(max-width:650px){.fighter-figure .boss-portrait img{height:175px;max-width:165px}}
-.fighter-figure .boss-portrait.enemy-facing-left img{transform:scaleX(-1)}
-.fighter-figure .monster.enemy-facing-left{transform:scaleX(-1)}
 .npc-dialog-portrait.tianmo-facing-left{transform:scaleX(-1)}
 .npc-list button.tianmo-elder-npc span{color:#b22b33;font-weight:800}
 .fighter-name em.realm-badge.tianmo-elder-realm{color:#fff!important;background:#111!important;border-color:#111!important;box-shadow:0 2px 9px #000b}
@@ -752,7 +752,6 @@
 #battleModal.author-trial .fighter.enemy{border-color:#4ea9ae;box-shadow:inset 0 0 24px #30aab322,0 0 18px #1fbbc833}
 #battleEnemyFigure.author-skill-frame{position:relative;display:grid;place-items:end center;width:100%;height:100%;overflow:visible;isolation:isolate}
 #battleEnemyFigure.author-skill-frame .author-figure{position:relative;z-index:2;display:block;height:286px;max-width:290px;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 18px 14px #0009);animation:authorFrameMotion .68s cubic-bezier(.2,.78,.2,1) both}
-#battleEnemyFigure.author-skill-frame.enemy-facing-left{transform:scaleX(-1)}
 #battleEnemyFigure.author-skill-frame .author-aura{position:absolute;z-index:1;right:3%;bottom:4%;width:76%;aspect-ratio:1;border-radius:50%;opacity:.72;filter:blur(5px);animation:authorAuraPulse .68s ease-out both}
 #battleEnemyFigure.author-skill-frame[data-author-action="soul"] .author-aura{background:radial-gradient(circle,#b9fffb88 0 8%,#25c4ce55 26%,#0a526466 52%,transparent 72%);box-shadow:0 0 28px #27d9df,0 0 64px #1d8798}
 #battleEnemyFigure.author-skill-frame[data-author-action="heaven"] .author-aura{background:radial-gradient(circle,#fff6b48c 0 8%,#edbc4a66 29%,#874a1e66 54%,transparent 72%);box-shadow:0 0 28px #f3b941,0 0 64px #a65428}
@@ -980,7 +979,42 @@ function processRealmProgress(){let changed=false,guard=0;while(g.cult>=realmNee
 function ensureTribulationModal(){let modal=$('#tribulationModal');if(modal)return modal;if(!$('#tribulationStyles')){let style=document.createElement('style');style.id='tribulationStyles';style.textContent=`.tribulation-modal{padding:18px;background:#071612c7;backdrop-filter:blur(7px)}.tribulation-modal>.tribulation-card{width:min(820px,94vw);max-height:calc(100vh - 36px);overflow:auto;padding:0;border:1px solid #d3ad57;border-radius:14px;background:linear-gradient(145deg,#fffdf6,#f3ead6);color:#203c31;box-shadow:0 26px 70px #0009}.tribulation-banner{display:grid;grid-template-columns:auto 1fr auto;gap:18px;align-items:center;padding:26px 30px 22px;border-bottom:1px solid #d8c9a3;background:linear-gradient(105deg,#f7f0dc,#fffcf1)}.tribulation-sigil{display:grid;place-items:center;width:54px;height:54px;border:1px solid #c39a42;border-radius:8px;background:#214f3b;color:#f9d56c;font-size:29px;box-shadow:inset 0 0 0 4px #ffffff30}.tribulation-eyebrow{display:block;margin-bottom:4px;color:#9a7938;font-size:11px;font-weight:700;letter-spacing:.14em}.tribulation-banner h2{margin:0;font:700 27px \"STKaiti\",\"KaiTi\",serif;color:#204032}.tribulation-banner h2 em{margin:0 8px;color:#b78a35;font-style:normal}.tribulation-banner p{margin:6px 0 0;color:#6d7e73;font-size:13px;line-height:1.55}.tribulation-state{padding:5px 9px;border:1px solid #d1ba83;border-radius:999px;background:#fff8df;color:#87652e;font-size:12px;white-space:nowrap}.tribulation-state.ready{border-color:#6d9b78;background:#eaf5e9;color:#286340}.tribulation-body{padding:20px 30px 26px}.tribulation-stats{display:grid;grid-template-columns:repeat(4,1fr);margin-bottom:16px;border:1px solid #d8cdb3;border-radius:10px;background:#fffdf6;overflow:hidden}.tribulation-stat{padding:14px 16px;border-right:1px solid #e1d8c3}.tribulation-stat:last-child{border:0}.tribulation-stat small{display:block;color:#78887e;font-size:12px}.tribulation-stat b{display:block;margin-top:5px;color:#244536;font-size:21px;line-height:1.1}.tribulation-stat b span{font-size:13px}.tribulation-plan{padding:17px 18px;border:1px solid #cfc2a6;border-radius:10px;background:#f9f5e8}.tribulation-plan-head{display:flex;justify-content:space-between;gap:14px;align-items:baseline;margin-bottom:13px}.tribulation-plan-head b{font:700 18px \"STKaiti\",\"KaiTi\",serif;color:#284a3a}.tribulation-plan-head span{color:#7b6a48;font-size:12px;text-align:right}.tribulation-controls{display:flex;gap:10px;align-items:center;flex-wrap:wrap}.tribulation-controls label{display:flex;align-items:center;gap:7px;font-size:13px;color:#52675b}.tribulation-controls input{width:76px;height:36px;padding:6px 8px;border:1px solid #a9b8aa;border-radius:7px;background:#fff;color:#234234;font-size:16px;font-weight:700;text-align:center}.tribulation-controls .btn{padding:7px 12px;border-radius:7px;font-size:13px}.tribulation-meter{height:11px;margin:17px 0 9px;border:1px solid #b6b79d;border-radius:999px;background:#e4e5db;overflow:hidden}.tribulation-meter i{display:block;height:100%;border-radius:inherit;background:linear-gradient(90deg,#446e55,#d1a54c);transition:width .2s}.tribulation-summary{display:flex;justify-content:space-between;gap:10px;color:#6b796f;font-size:13px}.tribulation-summary b{color:#254837}.tribulation-note{margin-top:14px;padding:11px 13px;border-left:3px solid #c79c45;background:#f2ecdc;color:#68766b;font-size:12px;line-height:1.65}.tribulation-note b{color:#755b2f}.tribulation-actions{display:flex;justify-content:flex-end;gap:9px;margin-top:20px}.tribulation-actions .btn{min-width:128px;border-radius:7px;padding:10px 14px}.tribulation-actions .btn.alt{background:linear-gradient(135deg,#9b722d,#c79a42);border-color:#9b722d}.tribulation-actions .btn:disabled{background:#c9b990;border-color:#c9b990;color:#fff}@media(max-width:650px){.tribulation-banner{grid-template-columns:auto 1fr;padding:20px}.tribulation-state{grid-column:1/-1;justify-self:start}.tribulation-body{padding:16px}.tribulation-stats{grid-template-columns:1fr 1fr}.tribulation-stat:nth-child(2){border-right:0}.tribulation-stat:nth-child(-n+2){border-bottom:1px solid #e1d8c3}.tribulation-plan-head{display:block}.tribulation-plan-head span{display:block;margin-top:4px;text-align:left}.tribulation-actions{justify-content:stretch}.tribulation-actions .btn{flex:1;min-width:0}}`;document.head.appendChild(style)}modal=document.createElement('div');modal.id='tribulationModal';modal.className='event-modal tribulation-modal';modal.innerHTML='<div class="tribulation-card"></div>';document.body.appendChild(modal);return modal}
 function renderTribulationModal(){let modal=ensureTribulationModal(),card=modal.firstElementChild,info=tribulationInfo();tribulationPillUse=Math.max(0,Math.min(Math.floor(tribulationPillUse)||0,info.available));let chance=tribulationChance(tribulationPillUse),missing=Math.max(0,info.toCertain-info.available),readyNote=info.ready?'修为圆满，天劫已可引动。':'修为尚未圆满，可先预览本境天劫所需丹药。',state=info.ready?'可以渡劫':'尚未圆满';card.innerHTML=`<div class="tribulation-banner"><div class="tribulation-sigil">⚡</div><div><span class="tribulation-eyebrow">天劫演算</span><h2>${realmText()}<em>→</em>${info.target}</h2><p>${readyNote}</p></div><span class="tribulation-state ${info.ready?'ready':''}">${state}</span></div><div class="tribulation-body"><div class="tribulation-stats"><div class="tribulation-stat"><small>基础成功率</small><b>${info.base}<span>%</span></b></div><div class="tribulation-stat"><small>当前渡劫丹</small><b>${fmt(info.available)}<span> 颗</span></b></div><div class="tribulation-stat"><small>圆满保障</small><b>${info.toCertain}<span> 颗</span></b></div><div class="tribulation-stat"><small>丹药缺口</small><b>${missing?missing:'0'}<span> 颗</span></b></div></div><section class="tribulation-plan"><div class="tribulation-plan-head"><b>本次渡劫方案</b><span>每服 1 颗渡劫丹，成功率 +5%</span></div><div class="tribulation-controls"><label>服用 <input id="tribulationPillInput" type="number" min="0" max="${info.available}" value="${tribulationPillUse}"> 颗</label><button class="btn ghost" id="tribulationCertainBtn" ${info.available<=0?'disabled':''}>补足至 100%</button></div><div class="tribulation-meter"><i style="width:${chance}%"></i></div><div class="tribulation-summary"><span>本次成功率 <b>${chance}%</b></span><span>本次消耗 <b>渡劫丹 ×${tribulationPillUse}</b></span></div></section><div class="tribulation-note"><b>渡劫规则：</b>丹药仅在本次渡劫时消耗。即使不服丹，也可凭自身根基强行渡劫；若失败，修为仍保留在当前大圆满。</div><div class="tribulation-actions"><button class="btn ghost" id="closeTribulationBtn">暂缓渡劫</button><button class="btn alt" id="startTribulationBtn" ${info.ready?'':'disabled'}>${tribulationPillUse?'服丹渡劫':'强行渡劫'} · ${chance}%</button></div></div>`;$('#tribulationPillInput').oninput=e=>{tribulationPillUse=Math.max(0,Math.min(info.available,Math.floor(+e.target.value||0)));renderTribulationModal()};$('#tribulationCertainBtn').onclick=()=>{tribulationPillUse=Math.min(info.available,info.toCertain);renderTribulationModal()};$('#startTribulationBtn').onclick=attemptTribulation;$('#closeTribulationBtn').onclick=()=>modal.classList.remove('show')}
 const renderTribulationModalWithFailureNotice=renderTribulationModal;
-renderTribulationModal=()=>{renderTribulationModalWithFailureNotice();let note=$('#tribulationModal .tribulation-note');if(note)note.innerHTML='<b>渡劫规则：</b>丹药仅在本次渡劫时消耗。即使不服丹，也可凭自身根基强行渡劫；若失败，当前大圆满修为将归零。'};
+function ensureTribulationPolish(){
+  if($('#tribulationPolishStyles'))return;
+  let style=document.createElement('style');style.id='tribulationPolishStyles';style.textContent=`
+    .tribulation-modal{padding:18px;background:#071411de;backdrop-filter:blur(12px)}
+    .tribulation-modal>.tribulation-card{width:min(760px,94vw);max-height:calc(100dvh - 36px);border:1px solid #668173;border-radius:8px;background:#f4f2ea;color:#18372d;box-shadow:0 28px 80px #000b,0 1px 0 #fff8 inset;overflow:auto}
+    .tribulation-banner{grid-template-columns:76px minmax(0,1fr) auto;gap:18px;padding:20px 24px 19px;border-top:4px solid #b9954b;border-bottom:1px solid #cbd0c5;background:#eef0e9}
+    .tribulation-sigil{width:76px;height:76px;padding:5px;border:1px solid #758e7f;border-radius:6px;background:#102e25;box-shadow:inset 0 0 0 1px #d9c48755,0 6px 14px #102c221f;overflow:hidden}
+    .tribulation-sigil img{display:block;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 4px 5px #001d16a8);animation:tribulationCrestFloat 4.6s ease-in-out infinite}
+    .tribulation-eyebrow{margin:0 0 5px;color:#91743a;font-size:11px;font-weight:800;letter-spacing:.16em}
+    .tribulation-banner h2{margin:0;font:700 25px "STKaiti","KaiTi",serif;line-height:1.2;color:#193c30}
+    .tribulation-banner h2 em{margin:0 9px;color:#aa863f;font-family:"PingFang SC","Microsoft YaHei",sans-serif;font-size:18px;font-style:normal}
+    .tribulation-banner p{margin:6px 0 0;color:#61746b;font-size:12px;line-height:1.55}
+    .tribulation-state{align-self:start;padding:7px 10px;border:1px solid #b7bdad;border-radius:4px;background:#f8f8f3;color:#657469;font-size:11px;font-weight:700;letter-spacing:.04em}
+    .tribulation-state.ready{border-color:#5f9078;background:#e6f0e9;color:#236045}
+    .tribulation-body{padding:18px 24px 22px;background:#f8f7f1}
+    .tribulation-stats{grid-template-columns:repeat(2,minmax(0,1fr));margin:0 0 14px;border:1px solid #c3cdc2;border-radius:6px;background:#fff;box-shadow:0 2px 6px #0d33200c}
+    .tribulation-stat{min-height:76px;padding:13px 15px;border-right:1px solid #d8ded6;border-bottom:1px solid #d8ded6}
+    .tribulation-stat:nth-child(2n){border-right:0}.tribulation-stat:nth-last-child(-n+2){border-bottom:0}
+    .tribulation-stat small{color:#718078;font-size:11px;font-weight:700;letter-spacing:.04em}.tribulation-stat b{margin-top:5px;color:#1e493a;font-size:23px;font-variant-numeric:tabular-nums}.tribulation-stat b span{font-size:12px;color:#718078}
+    .tribulation-plan{padding:16px;border:1px solid #bdc9c0;border-radius:6px;background:#fdfdf9;box-shadow:inset 0 1px 0 #fff}
+    .tribulation-plan-head{margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid #dce1da}.tribulation-plan-head b{font:700 17px "STKaiti","KaiTi",serif;color:#244a3a}.tribulation-plan-head span{color:#897750;font-size:11px}
+    .tribulation-controls{gap:9px;padding:10px 12px;border:1px solid #d3dbd3;border-radius:5px;background:#f1f4ef}.tribulation-controls label{gap:7px;color:#3e5b4f;font-size:13px;font-weight:700}.tribulation-controls input{width:82px;height:34px;border:1px solid #9dad9f;border-radius:4px;background:#fff;color:#1e493a;font-size:16px}.tribulation-controls .btn{border-radius:4px;font-size:12px}
+    .tribulation-meter{height:8px;margin:15px 0 10px;border:0;border-radius:2px;background:#dde3dc}.tribulation-meter i{border-radius:2px;background:linear-gradient(90deg,#275f4a,#72a171 68%,#c49a45);box-shadow:none}
+    .tribulation-summary{color:#64766b;font-size:12px}.tribulation-summary b{color:#245441;font-size:14px}.tribulation-note{margin-top:13px;padding:10px 12px;border:1px solid #ded5bd;border-left:3px solid #b7954b;background:#f6f1e5;color:#6e6b5c;font-size:11px;line-height:1.65}.tribulation-note b{color:#7b6436}
+    .tribulation-actions{justify-content:flex-end;margin-top:16px;gap:8px}.tribulation-actions .btn{min-width:126px;border-radius:4px;padding:9px 13px;font-size:13px}.tribulation-actions .btn.ghost{border-color:#82988a;background:#fff;color:#315b48}.tribulation-actions .btn.alt{border-color:#9d7835;background:#a27b37;color:#fff9e8;box-shadow:inset 0 1px 0 #fff5}.tribulation-actions .btn:disabled{background:#b8bdb6;border-color:#b8bdb6;color:#e8ebe7}
+    @keyframes tribulationCrestFloat{0%,100%{transform:translateY(0) scale(1)}50%{transform:translateY(-2px) scale(1.025)}}
+    @media(max-width:650px){.tribulation-modal{padding:8px}.tribulation-modal>.tribulation-card{width:calc(100vw - 16px);max-height:calc(100dvh - 16px)}.tribulation-banner{grid-template-columns:62px minmax(0,1fr);gap:12px;padding:16px;border-top-width:3px}.tribulation-sigil{width:62px;height:62px;padding:4px}.tribulation-banner h2{font-size:22px}.tribulation-banner h2 em{margin:0 5px;font-size:15px}.tribulation-state{grid-column:1/-1;justify-self:stretch;text-align:center;padding:6px}.tribulation-body{padding:14px}.tribulation-stat{min-height:68px;padding:11px}.tribulation-stat b{font-size:20px}.tribulation-plan{padding:13px}.tribulation-plan-head{display:block}.tribulation-plan-head span{display:block;margin-top:4px;text-align:left}.tribulation-controls{padding:9px}.tribulation-controls .btn{margin-left:auto}.tribulation-actions{justify-content:stretch}.tribulation-actions .btn{flex:1;min-width:0}}
+  `;document.head.appendChild(style);
+}
+renderTribulationModal=()=>{
+  renderTribulationModalWithFailureNotice();ensureTribulationPolish();
+  let modal=$('#tribulationModal'),sigil=modal?.querySelector('.tribulation-sigil'),eyebrow=modal?.querySelector('.tribulation-eyebrow'),note=modal?.querySelector('.tribulation-note');
+  if(sigil)sigil.innerHTML='<img src="assets/tribulation-array-crest.png" alt="天劫阵列">';
+  if(eyebrow)eyebrow.textContent='渡劫风险评估';
+  if(note)note.innerHTML='<b>渡劫规则：</b>丹药仅在本次渡劫时消耗。即使不服丹，也可凭自身根基强行渡劫；若失败，当前大圆满修为将归零。';
+};
 function tribulationRequirementNotice(){let info=tribulationInfo(),need=info.need,progress=Math.min(need,Math.floor(g.cult||0));showNpcResult('渡劫条件未满足',`你当前处于${realmText()}。\n\n大境界突破需先修至本阶大圆满，并将修为积累至 ${fmt(need)}。\n当前进度：${fmt(progress)} / ${fmt(need)}。\n\n达成后可在此服用渡劫丹，每颗使本次成功率 +5%；亦可不服丹强行渡劫。若失败，本阶大圆满修为将归零。`,'danger')}
 function openTribulationModal(){let info=tribulationInfo();if(!info.eligible){showNpcResult('渡劫台未开启','金丹期之后，修士每次冲击下一大境界都需面对天劫。届时请将当前境界修至大圆满，再来此处推演渡劫方案。','good');return;}if(!info.ready){tribulationRequirementNotice();return;}tribulationPillUse=Math.min(tribulationPillUse,info.available);renderTribulationModal();ensureTribulationModal().classList.add('show')}
 function attemptTribulation(){let info=tribulationInfo();if(!info.ready)return toast('修为尚未达到当前境界大圆满，无法引动天劫');let use=Math.max(0,Math.min(Math.floor(tribulationPillUse)||0,info.available)),chance=tribulationChance(use);if(use&&!consumeTribPills(use))return toast('渡劫丹数量不足');let success=Math.random()*100<chance;$('#tribulationModal').classList.remove('show');if(success){g.cult-=info.need;g.realm++;g.stage=0;g.tribBonus=0;g.tribFails=0;growBaseStats(2);let st=statTotal();g.hp=Math.min(g.hp,st.hp);g.mana=Math.min(g.mana,st.mana);log(`渡劫成功：成功率${chance}%${use?`，消耗渡劫丹×${use}`:'，未服渡劫丹'}，晋升至${realmText()}。`,'good');showNpcResult('渡劫成功',`天雷洗髓，丹田重开。\n\n本次成功率：${chance}%\n消耗渡劫丹：${use} 颗\n境界晋升：${realmText()}\n基础属性提升100%。`,'good');toast('渡劫成功 · '+realmText())}else{g.cult=0;g.tribFails=(g.tribFails||0)+1;log(`渡劫未成：成功率${chance}%${use?`，渡劫丹×${use}已消耗`:'，本次强行渡劫'}，${realmText()}大圆满修为归零。`,'danger');showNpcResult('渡劫未成',`天劫反噬，经脉中的积累尽数散去。\n\n本次成功率：${chance}%\n消耗渡劫丹：${use} 颗\n惩罚：当前大圆满修为清零。\n\n境界未跌落，重新修炼至圆满后可再次渡劫。`,'danger');toast('渡劫未成 · 本阶修为归零')};tribulationPillUse=0;renderSceneMap();render();save()}
@@ -2801,7 +2835,9 @@ function tickBattleCooldowns(b){
   Object.keys(cooldowns).forEach(key=>{cooldowns[key]=Math.max(0,(cooldowns[key]||0)-1);if(!cooldowns[key])delete cooldowns[key]});
 }
 function renderBattle(){let b=battleState;if(!b)return;let t=b.target;$('#battleTitle').textContent=(t.boss?'Boss战：':'战斗：')+t.name;$('#battleRoundText').textContent='第'+b.round+'回合';$('#battlePlayerName').textContent='你';setBattleRealmBadge('#battlePlayerLevel',realmText(),g.realm);$('#battleEnemyName').textContent=t.name;setBattleRealmBadge('#battleEnemyLevel',b.enemy.realm,battleRealmIndex(b.enemy.realm));$('#battleEnemyFigure').textContent=b.enemy.icon;$('#battlePlayerHp').style.width=battlePct(b.player.hp,b.player.maxHp);$('#battlePlayerMp').style.width=battlePct(b.player.mp,b.player.maxMp);let shield=Math.max(0,b.player.shield||0),shieldPeak=Math.max(1,b.player.shieldPeak||b.player.maxHp||1);$('#battlePlayerShield').style.width=battlePct(shield,shieldPeak);$('#battlePlayerHpText').textContent=`生命 ${fmt(b.player.hp)}/${fmt(b.player.maxHp)}`;$('#battlePlayerMpText').textContent=`法力 ${fmt(b.player.mp)}/${fmt(b.player.maxMp)}`;$('#battlePlayerShieldText').textContent=`护盾 ${fmt(shield)}`;$('#battleEnemyHp').style.width=battlePct(b.enemy.hp,b.enemy.maxHp);$('#battleEnemyMp').style.width=battlePct(b.enemy.mp,b.enemy.maxMp);$('#battleEnemyHpText').textContent=`生命 ${fmt(b.enemy.hp)}/${fmt(b.enemy.maxHp)}`;$('#battleEnemyMpText').textContent=`法力 ${fmt(b.enemy.mp)}/${fmt(b.enemy.maxMp)}`;ensureSkillLayout();let skills=g.activeSkills||[];$('#battleSkillBar').innerHTML=Array.from({length:5},(_,i)=>{let sk=skills[i],cost=sk?battleSkillCost(sk,i):0,reason=sk?battleSkillBlockReason(sk,i,b):'技能未激活',disabled=!sk||!!reason;return`<button class="battle-skill" data-battle-skill="${i}" ${disabled?'disabled':''}><b>${sk?(sk.icon||'✨')+' '+sk.name:'空'}</b><small>${sk?`耗蓝${cost}${reason?' · '+reason:''} · ${sk.desc||'主动技'}`:'技能书激活'}</small></button>`}).join('');document.querySelectorAll('[data-battle-skill]').forEach(btn=>btn.onclick=()=>battlePlayerTurn(+btn.dataset.battleSkill));$('#battleLog').innerHTML=b.log.map(x=>`<div>${x}</div>`).join('')}
-function renderBattleEnemyPortrait(){let b=battleState,figure=$('#battleEnemyFigure'),portrait=b?.enemy?.portrait;if(!figure)return;if(!portrait){figure.className='monster enemy-facing-left';return}figure.className='boss-portrait enemy-facing-left';figure.innerHTML=`<img src="${portrait}" alt="${b.target.name}">`}
+const ENEMY_PORTRAITS_TO_MIRROR=new Set(['迷雾蝶','月狐','山魈','山魈王','青竹妖','暗蛟龙','虾兵','战魂','煞灵','断剑鬼','遗迹守卫','裂隙怪','虚空影','残碑灵','魔修残魂','云兽','雷灵','雷劫真君','天兵残影','守门仙将']);
+function enemyPortraitFacesPlayer(target){return ENEMY_PORTRAITS_TO_MIRROR.has(String(target?.originalName||target?.name||'').replace(/^BOSS\s+/,''))}
+function renderBattleEnemyPortrait(){let b=battleState,figure=$('#battleEnemyFigure'),portrait=b?.enemy?.portrait,facePlayer=enemyPortraitFacesPlayer(b?.target);if(!figure)return;if(!portrait){figure.className=`monster${facePlayer?' enemy-face-player':''}`;figure.style.removeProperty('transform');return}figure.className=`boss-portrait${facePlayer?' enemy-face-player':''}`;figure.style.removeProperty('transform');figure.innerHTML=`<img src="${portrait}" alt="${b.target.name}">`}
 const baseRenderBattle=renderBattle;
 renderBattle=function(){baseRenderBattle();renderBattleEnemyPortrait()};
 function battleSkillCost(sk,i){if(!sk)return 0;let masterPath=masterSkillPathFor(sk);if(masterPath)return masterSkillConfig(masterPath,sk.masterSkillLevel||parseInt(sk.name)||1).cost;if(sk.holyLightShield||sk.name==='圣光罩')return 0;if(sk.witheringWood||sk.name==='枯木逢春')return Math.max(1,Math.ceil((battleState?.player?.maxMp||statTotal().mana)*.3));if(sk.flowerSeeking||sk.name==='浪里寻花')return 0;if(sk.starterFireball||sk.name==='火球术')return 20;if(sk.rageSkill||sk.name==='暴怒')return 0;if(sk.bandageLevel||/包扎/.test(sk.name))return bandageConfig(sk.bandageLevel||parseInt(sk.name)||1).cost;if(sk.bigFireballLevel||/大火球术/.test(sk.name))return bigFireballConfig(sk.bigFireballLevel||parseInt(sk.name)||1).cost;if(/回春/.test(sk.name))return 24;if(/雷/.test(sk.name))return 30;if(/冰/.test(sk.name))return 22;if(/御风/.test(sk.name))return 18;return 20+i*3}
@@ -3922,6 +3958,7 @@ function stopLocalExplore(reason=''){
   if(!localExploreSession)return;
   clearInterval(localExploreSession.timer);
   let session=localExploreSession;localExploreSession=null;
+  if(session.randomEventsWereEnabled)mapUiSettings().randomEvents=true;
   pushLocalLog(`原地探索结束：战斗×${session.battles}，采集×${session.gathers}${reason?'，'+reason:''}。`);
   syncLocalExploreButton();renderSceneMap();render();save();
 }
@@ -3951,8 +3988,10 @@ function beginLocalExplore(settings=localExploreSettings()){
   if(i===10)return toast('宗门事务仅可手动处理');
   if(!areaExploreUnlocked(i))return toast(`需先击败${maps[i][0]}Boss一次，才能在本区域原地探索`);
   if(meditationSession)stopMeditation(false);if(miningSession)stopAutoMining();if(liquidMeditationSession)stopLiquidMeditation();
-  localExploreSession={map:i,spot,settles:0,battles:0,gathers:0,settings,timer:setInterval(localExploreTick,1000)};
-  pushLocalLog(`开始原地探索：${maps[i][0]}·${spotLabel(i,spot)}。每秒结算一次普通妖兽战斗或药材采集。`);
+  let mapSettings=mapUiSettings(),randomEventsWereEnabled=mapSettings.randomEvents!==false;
+  if(randomEventsWereEnabled)mapSettings.randomEvents=false;
+  localExploreSession={map:i,spot,settles:0,battles:0,gathers:0,settings,randomEventsWereEnabled,timer:setInterval(localExploreTick,1000)};
+  pushLocalLog(`开始原地探索：${maps[i][0]}·${spotLabel(i,spot)}。每秒结算一次普通妖兽战斗或药材采集。${randomEventsWereEnabled?'随机事件已暂时关闭。':''}`);
   toast('开始原地探索');syncLocalExploreButton();save();return true;
 }
 function localExploreHere(){
@@ -6148,7 +6187,7 @@ async function playAuthorSkillFrames(action){
   let figure=$('#battleEnemyFigure');
   if(!figure)return;
   let token=++authorFrameToken;
-  figure.className='author-skill-frame enemy-facing-left';
+  figure.className='author-skill-frame';
   figure.dataset.authorAction=action;
   figure.innerHTML='<span class="author-aura"></span><img class="author-figure" src="assets/author-animation/mysterious-author.png" alt="神秘的作者">';
   await waitBattle(680);
@@ -7016,6 +7055,14 @@ function acceptCourierMission(){
   showNpcResult('信使 · 传书委托',`请将密封书信送往：${target.place}\n收信人：${target.name}\n\n送达后返回山门广场复命。\n本时辰已接：${state.count} / ${COURIER_HOURLY_LIMIT}`,'good');
   renderTaskPanel();renderSceneMap();save();
 }
+function cancelCourierMission(){
+  let state=courierState(),mission=state.mission;
+  if(!mission)return toast('当前没有可取消的送信委托');
+  state.mission=null;
+  pushLocalLog(`信使委托已取消：原定送往${mission.place}、交给${mission.name}的书信已退回。`);
+  toast('送信委托已取消，书信已退回信使处');
+  renderTaskPanel();renderSceneMap();save();
+}
 function tryDeliverCourierMission(name,mapIndex,spot){
   let mission=courierState().mission;
   if(!mission||mission.stage!=='deliver'||mission.name!==name||mission.map!==mapIndex||mission.spot!==spot)return false;
@@ -7099,7 +7146,8 @@ renderTaskPanel=function(){
   renderTaskPanelWithCourier();
   let mission=courierState().mission,list=$('#taskList');if(!list||!mission)return;
   let body=mission.stage==='deliver'?`将书信送往${mission.place}，交给${mission.name}。`:`书信已送达，返回太玄宗·山门广场向信使复命。`;
-  list.insertAdjacentHTML('beforeend',taskCard('信使：宗门传书',`${body}\n奖励：当前境界升级所需修为的3%、宗门贡献 +800、宗门声望 +300。`,''));
+  list.insertAdjacentHTML('beforeend',taskCard('信使：宗门传书',`${body}\n奖励：当前境界升级所需修为的3%、宗门贡献 +800、宗门声望 +300。`,`<button class="btn ghost" data-task-cancel-courier="1">取消送信</button>`));
+  list.querySelectorAll('[data-task-cancel-courier]').forEach(button=>button.onclick=()=>cancelCourierMission());
 };
 const npcCanTeachSkillWithYuqe=npcCanTeachSkill;
 npcCanTeachSkill=function(name,mapIndex,spot){
@@ -7329,10 +7377,11 @@ addBagItem=function(item){
 const RED_EQUIP_TEMPER_RATE=.06;
 function redTemperTarget(slot){let item=normalizeEquip(g.gear?.[slot]);return item?.quality===6?item:null}
 function redTemperCandidates(slot){let target=redTemperTarget(slot);if(!target)return[];return(g.bag||[]).map((item,index)=>({item:normalizeEquip(item),index})).filter(entry=>entry.item?.slot===slot&&entry.item.name!==target.name).sort((a,b)=>gearScore(b.item)-gearScore(a.item))}
-function redTemperPreview(item){return Object.entries(equipAttrs(item)).filter(([,value])=>value).map(([key,value])=>`${({hp:'生命',mana:'法力',attack:'攻击',defense:'防御',agility:'身法',crit:'暴击'}[key])}+${Math.floor(value*RED_EQUIP_TEMPER_RATE)}${key==='crit'?'%':''}`).join('，')}
-function temperRedEquipment(slot,indices){let target=redTemperTarget(slot);if(!target)return{count:0};let valid=new Set(redTemperCandidates(slot).map(entry=>entry.index)),picked=(indices||[]).filter(index=>valid.has(index)).sort((a,b)=>b-a);if(!picked.length)return{count:0};let before={...equipAttrs(target)},bonus={...(target.bonus||{})},names=[];picked.forEach(index=>{let source=normalizeEquip(g.bag?.[index]);if(!source)return;Object.entries(equipAttrs(source)).forEach(([key,value])=>bonus[key]=(bonus[key]||0)+value*RED_EQUIP_TEMPER_RATE);names.push(source.name);removeBagQty(index,1)});target.bonus=bonus;target.absorbedCount=(target.absorbedCount||0)+names.length;g.gear[slot]=target;return{count:names.length,names,before,after:equipAttrs(target),target}}
-function finishSingleRedTemper(slot,index){let result=temperRedEquipment(slot,[index]);if(!result.count)return toast('请选择背包中同部位的装备');let label=equipSlotNames[slot];pushLocalLog(`${result.target.name}淬炼完成：吸收${result.names[0]}，继承其属性的6%。`);showNpcResult(`${result.target.name}淬炼完成`,`${result.target.name}吸收了${result.names[0]}。\n\n本次继承（6%）：${formatForgeAttributeDelta(result.before,result.after)}\n累计吸收：${result.target.absorbedCount}件${label}装备。`,'good');renderEquipModal();renderBag();renderSceneMap();render();save()}
-function openRedTemperMenu(slot){let target=redTemperTarget(slot),choices=redTemperCandidates(slot);if(!target)return toast('请先佩戴红色品质装备');if(!choices.length)return showNpcResult('炼器长老 铁无锋',`${target.name}尚无同部位装备可供淬炼。将多余${equipSlotNames[slot]}装备放入背包后再来。`,'good');let options=choices.map(({item,index})=>({text:`吸收${qualityText[item.quality]}色${item.name}${redTemperPreview(item)?`（${redTemperPreview(item)}）`:''}`,alt:true,onClick(){finishSingleRedTemper(slot,index)}}));options.push({text:'暂不淬炼',ghost:true});openNpcDialog('炼器长老 铁无锋',`铁无锋将${target.name}悬于炉心：“赤色器纹可吞纳同部位灵性，每次继承被吸收装备全部属性的6%。”\n\n${target.name}已吸收：${target.absorbedCount||0}件`,options)}
+function redTemperPreview(item){let attrs=Object.entries(equipAttrs(item)).filter(([,value])=>value).map(([key,value])=>`${({hp:'生命',mana:'法力',attack:'攻击',defense:'防御',agility:'身法',crit:'暴击'}[key])}+${Math.floor(value*RED_EQUIP_TEMPER_RATE)}${key==='crit'?'%':''}`).join('，'),affix=equipmentAffixText(item);return[attrs,affix?`词缀：${affix}`:''].filter(Boolean).join('；')}
+function temperRedEquipment(slot,indices,{collectPending=false}={}){let target=redTemperTarget(slot);if(!target)return{count:0};let valid=new Set(redTemperCandidates(slot).map(entry=>entry.index)),picked=(indices||[]).filter(index=>valid.has(index)).sort((a,b)=>b-a);if(!picked.length)return{count:0};let before={...equipAttrs(target)},bonus={...(target.bonus||{})},names=[],affixes=equipmentAffixes(target).slice(0,2),pendingAffixes=[];picked.forEach(index=>{let source=normalizeEquip(g.bag?.[index]);if(!source)return;Object.entries(equipAttrs(source)).forEach(([key,value])=>bonus[key]=(bonus[key]||0)+value*RED_EQUIP_TEMPER_RATE);equipmentAffixes(source).forEach(affix=>{if(affixes.length<2)affixes.push(affix);else if(collectPending)pendingAffixes.push(affix)});names.push(source.name);removeBagQty(index,1)});target.bonus=bonus;target.affix=null;target.affixes=affixes;target.absorbedCount=(target.absorbedCount||0)+names.length;g.gear[slot]=target;return{count:names.length,names,before,after:equipAttrs(target),target,pendingAffixes}}
+function finishRedTemperResult(result){let label=equipSlotNames[result.target.slot],affixText=equipmentAffixText(result.target)||'暂无词缀';pushLocalLog(`${result.target.name}淬炼完成：吸收${result.names.join('、')}，继承其属性的6%。`);showNpcResult(`${result.target.name}淬炼完成`,`${result.target.name}吸收了${result.names.join('、')}。\n\n本次继承（6%）：${formatForgeAttributeDelta(result.before,result.after)}\n当前词缀：${affixText}\n累计吸收：${result.target.absorbedCount}件${label}装备。`,'good');renderEquipModal();renderBag();renderSceneMap();render();save()}
+function finishSingleRedTemper(slot,index){let result=temperRedEquipment(slot,[index],{collectPending:true});if(!result.count)return toast('请选择背包中同部位的装备');let incoming=result.pendingAffixes[0];if(!incoming)return finishRedTemperResult(result);let current=equipmentAffixes(result.target);openNpcDialog('炼器长老 铁无锋',`${result.target.name}已经吞噬${result.names[0]}，属性继承已完成。\n\n当前词缀（最多两条）：\n① ${current[0]?.name||'空'}：${current[0]?.text||''}\n② ${current[1]?.name||'空'}：${current[1]?.text||''}\n\n新词缀：${incoming.name}：${incoming.text}\n\n选择要替换的词缀，或保留现有词缀。`,[...current.map((affix,replaceIndex)=>({text:`以「${incoming.name}」替换「${affix.name}」`,alt:true,onClick(){result.target.affixes[replaceIndex]=incoming;g.gear[slot]=result.target;finishRedTemperResult(result)}})),{text:'保留现有词缀',ghost:true,onClick(){finishRedTemperResult(result)}}])}
+function openRedTemperMenu(slot){let target=redTemperTarget(slot),choices=redTemperCandidates(slot);if(!target)return toast('请先佩戴红色品质装备');if(!choices.length)return showNpcResult('炼器长老 铁无锋',`${target.name}尚无同部位装备可供淬炼。将多余${equipSlotNames[slot]}装备放入背包后再来。`,'good');let options=choices.map(({item,index})=>({text:`吸收${qualityText[item.quality]}色${item.name}${redTemperPreview(item)?`（${redTemperPreview(item)}）`:''}`,alt:true,onClick(){finishSingleRedTemper(slot,index)}}));options.push({text:'暂不淬炼',ghost:true});openNpcDialog('炼器长老 铁无锋',`铁无锋将${target.name}悬于炉心：“赤色器纹初成时没有词缀。它可吞纳同部位装备的属性与词缀，最多保留两条；第三条词缀入炉时，由你决定替换或保留。”\n\n${target.name}已吸收：${target.absorbedCount||0}件\n当前词缀：${equipmentAffixText(target)||'暂无'}`,options)}
 openPatchStoneAbsorbMenu=function(){openRedTemperMenu('treasure')};
 absorbTreasureIntoPatchStone=function(index){finishSingleRedTemper('treasure',index)};
 openTianjingAbsorbMenu=function(){openRedTemperMenu('bracer')};
@@ -7348,7 +7397,7 @@ absorbWeaponIntoXianwangSword=function(index){finishSingleRedTemper('weapon',ind
 function redTemperSettings(){return g.redTemperSettings||(g.redTemperSettings={})}
 function redTemperSlots(){return equipSlots.filter(slot=>!!redTemperTarget(slot))}
 function renderRedTemperTools(){let slots=redTemperSlots(),settings=redTemperSettings();if(!slots.length)return'<section class="equip-temper-tools"><h3>红装淬炼</h3><small>当前未佩戴红色品质装备。</small></section>';return`<section class="equip-temper-tools"><h3>红装淬炼</h3><small>勾选需要处理的红色装备后，一键吸收背包内全部同部位装备。每件继承 6% 属性。</small><div class="equip-temper-list">${slots.map(slot=>{let item=redTemperTarget(slot),count=redTemperCandidates(slot).length;return`<label><input type="checkbox" data-red-temper-slot="${slot}" ${settings[slot]?'checked':''}><span><b>${equipSlotNames[slot]} · ${item.name}</b><small>可淬炼 ${count} 件</small></span></label>`}).join('')}</div><div class="actions"><button class="btn alt" id="runRedTemperBtn">一键淬炼</button></div></section>`}
-function runConfiguredRedTemper(){let settings=redTemperSettings(),slots=redTemperSlots().filter(slot=>settings[slot]);if(!slots.length)return toast('请先勾选要一键淬炼的红色装备');let total=0,names=[];slots.forEach(slot=>{let result=temperRedEquipment(slot,redTemperCandidates(slot).map(entry=>entry.index));if(result.count){total+=result.count;names.push(`${result.target.name}×${result.count}`)}});if(!total)return toast('所选红色装备暂无可吸收的同部位装备');pushLocalLog(`一键淬炼完成：${names.join('、')}，共吸收${total}件装备，继承比例6%。`);toast(`一键淬炼完成：吸收${total}件装备`);render();renderBag();renderEquipModal();renderSceneMap();save()}
+function runConfiguredRedTemper(){let settings=redTemperSettings(),slots=redTemperSlots().filter(slot=>settings[slot]);if(!slots.length)return toast('请先勾选要一键淬炼的红色装备');let total=0,names=[],heldAffixSources=0;slots.forEach(slot=>{let free=Math.max(0,2-equipmentAffixes(redTemperTarget(slot)).length),indices=[];redTemperCandidates(slot).forEach(entry=>{let affixCount=equipmentAffixes(entry.item).length;if(affixCount>free){if(affixCount)heldAffixSources++;return}indices.push(entry.index);free-=affixCount});let result=temperRedEquipment(slot,indices);if(result.count){total+=result.count;names.push(`${result.target.name}×${result.count}`)}});if(!total)return toast(heldAffixSources?'已有两条词缀，含新词缀的装备请在铁无锋处逐件淬炼后选择替换':'所选红色装备暂无可吸收的同部位装备');pushLocalLog(`一键淬炼完成：${names.join('、')}，共吸收${total}件装备，继承比例6%。`);toast(`一键淬炼完成：吸收${total}件装备${heldAffixSources?'，保留含第三词缀的装备供手动选择':''}`);render();renderBag();renderEquipModal();renderSceneMap();save()}
 const renderEquipModalWithRedTemperTools=renderEquipModal;
 renderEquipModal=function(){renderEquipModalWithRedTemperTools();let content=$('#equipModalContent');if(!content)return;content.querySelector('.equip-temper-tools')?.remove();content.insertAdjacentHTML('beforeend',renderRedTemperTools());document.querySelectorAll('[data-red-temper-slot]').forEach(input=>input.onchange=()=>{redTemperSettings()[input.dataset.redTemperSlot]=input.checked;save()});$('#runRedTemperBtn')?.addEventListener('click',runConfiguredRedTemper,{once:true})};
 const normalizeEquipWithRedTemperText=normalizeEquip;
@@ -7934,11 +7983,12 @@ function rollEquipmentAffix(quality){
   let ids=Object.keys(equipmentAffixDefs),id=ids[Math.floor(Math.random()*ids.length)];
   return normalizeEquipmentAffix({id},quality);
 }
-function equipmentAffixText(item){let equip=normalizeEquip(item),affix=equip?.affix;return affix?`${affix.name}：${affix.text}`:''}
-function equipmentAffixHtml(item){let equip=normalizeEquip(item),affix=equip?.affix;if(!affix)return'';return`<span class="equipment-affix affix-${affix.id}"><b>词缀</b><strong>${affix.name}</strong><em>${affix.text}</em></span>`}
+function equipmentAffixes(item){let equip=normalizeEquip(item);if(!equip)return[];return equip.quality===6?(equip.affixes||[]):(equip.affix?[equip.affix]:[])}
+function equipmentAffixText(item){return equipmentAffixes(item).map(affix=>`${affix.name}：${affix.text}`).join('；')}
+function equipmentAffixHtml(item){return equipmentAffixes(item).map(affix=>`<span class="equipment-affix affix-${affix.id}"><b>词缀</b><strong>${affix.name}</strong><em>${affix.text}</em></span>`).join('')}
 function equipmentAffixStats(){
   let total={fireDamageBonus:0,waterDamageBonus:0,lightningDamageBonus:0,shieldBonus:0,lightningWoundTurns:0,critManaRatio:0};
-  equipSlots.forEach(slot=>{let affix=normalizeEquip(g.gear?.[slot])?.affix;if(!affix)return;Object.keys(total).forEach(key=>total[key]+=Number(affix[key])||0)});
+  equipSlots.forEach(slot=>equipmentAffixes(g.gear?.[slot]).forEach(affix=>Object.keys(total).forEach(key=>total[key]+=Number(affix[key])||0)));
   total.fireDamageBonus=Math.min(.3,total.fireDamageBonus);
   total.waterDamageBonus=Math.min(.3,total.waterDamageBonus);
   total.lightningDamageBonus=Math.min(.3,total.lightningDamageBonus);
@@ -7947,45 +7997,53 @@ function equipmentAffixStats(){
   total.critManaRatio=Math.min(.3,total.critManaRatio);
   return total;
 }
-function hasHighQualityEquip(item){return normalizeEquip(item)?.quality>=4}
+function hasHighQualityEquip(item){let quality=normalizeEquip(item)?.quality||0;return quality>=4&&quality<6}
 function seedHighQualityEquipmentAffixes(){
-  if(g.highQualityAffixMigrationV2)return false;
-  let changed=false,seed=item=>{if(!hasHighQualityEquip(item)||item?.affix)return item;changed=true;return{...item,affix:rollEquipmentAffix(normalizeEquip(item).quality)}};
+  if(g.highQualityAffixMigrationV3)return false;
+  let changed=false,seed=item=>{let equip=normalizeEquip(item);if(!equip)return item;if(equip.quality===6){if(item?.affix||item?.affixes?.length)changed=true;return{...item,affix:null,affixes:[]}}if(!hasHighQualityEquip(item)||item?.affix)return item;changed=true;return{...item,affix:rollEquipmentAffix(equip.quality)}};
   g.bag=(g.bag||[]).map(seed);
   g.gear=g.gear||emptyGear();equipSlots.forEach(slot=>{if(g.gear[slot])g.gear[slot]=seed(g.gear[slot])});
-  g.highQualityAffixMigrationV2=true;
+  g.highQualityAffixMigrationV3=true;
   return changed;
 }
 const normalizeEquipWithRandomAffix=normalizeEquip;
 normalizeEquip=function(item){
   let equip=normalizeEquipWithRandomAffix(item);
-  if(equip)equip.affix=normalizeEquipmentAffix(item?.affix,equip.quality);
+  if(!equip)return equip;
+  if(equip.quality===6){
+    equip.affix=null;
+    equip.affixes=(Array.isArray(item?.affixes)?item.affixes:[]).map(affix=>normalizeEquipmentAffix(affix,equip.quality)).filter(Boolean).slice(0,2);
+  }else{
+    equip.affix=normalizeEquipmentAffix(item?.affix,equip.quality);
+    equip.affixes=[];
+  }
   return equip;
 };
 const addBagItemWithRandomAffix=addBagItem;
 addBagItem=function(item){
   let equip=normalizeEquip(item);
-  if(equip?.quality>=4&&!equip.affix)item={...item,affix:rollEquipmentAffix(equip.quality)};
+  if(equip?.quality>=4&&equip.quality<6&&!equip.affix)item={...item,affix:rollEquipmentAffix(equip.quality)};
+  if(equip?.quality===6)item={...item,affix:null,affixes:Array.isArray(item?.affixes)?item.affixes:[]};
   return addBagItemWithRandomAffix(item);
 };
 const equipEffectWithRandomAffix=equipEffect;
 equipEffect=function(item){let base=equipEffectWithRandomAffix(item),affix=equipmentAffixHtml(item);return affix?`${base}<br>${affix}`:base};
 const gearScoreWithRandomAffix=gearScore;
-gearScore=function(item){return gearScoreWithRandomAffix(item)+(normalizeEquip(item)?.affix?.score||0)};
+gearScore=function(item){return gearScoreWithRandomAffix(item)+equipmentAffixes(item).reduce((sum,affix)=>sum+(affix.score||0),0)};
 const renderBagWithEquipmentAffixMarks=renderBag;
 renderBag=function(){
   renderBagWithEquipmentAffixMarks();
   document.querySelectorAll('[data-bag]').forEach(button=>{
-    let affix=normalizeEquip(g.bag?.[+button.dataset.bag])?.affix,label=button.querySelector('small');
-    if(affix&&label&&!label.querySelector('.equipment-affix-mark'))label.insertAdjacentHTML('beforeend',` <span class="equipment-affix-mark affix-${affix.id}">词缀</span>`);
+    let affixes=equipmentAffixes(g.bag?.[+button.dataset.bag]),label=button.querySelector('small');
+    if(affixes.length&&label&&!label.querySelector('.equipment-affix-mark'))label.insertAdjacentHTML('beforeend',` <span class="equipment-affix-mark affix-${affixes[0].id}">词缀${affixes.length>1?'×'+affixes.length:''}</span>`);
   });
 };
 const renderEquipModalWithEquipmentAffixMarks=renderEquipModal;
 renderEquipModal=function(){
   renderEquipModalWithEquipmentAffixMarks();
   document.querySelectorAll('#equipModalContent .equip-slot').forEach(button=>{
-    let affix=normalizeEquip(g.gear?.[button.dataset.modalEquipSlot])?.affix,label=button.querySelector('small');
-    if(affix&&label&&!label.querySelector('.equipment-affix-mark'))label.insertAdjacentHTML('beforeend',` <span class="equipment-affix-mark affix-${affix.id}">词缀</span>`);
+    let affixes=equipmentAffixes(g.gear?.[button.dataset.modalEquipSlot]),label=button.querySelector('small');
+    if(affixes.length&&label&&!label.querySelector('.equipment-affix-mark'))label.insertAdjacentHTML('beforeend',` <span class="equipment-affix-mark affix-${affixes[0].id}">词缀${affixes.length>1?'×'+affixes.length:''}</span>`);
   });
 };
 const addBattleShieldWithRandomAffix=addBattleShield;
@@ -8040,9 +8098,40 @@ function talkDingguangDisciple(){
 const localNpcsWithDingguangDisciple=localNpcs;
 localNpcs=function(i,spot){let npcs=localNpcsWithDingguangDisciple(i,spot);if(i===10&&spot===16&&!npcs.some(npc=>(npc?.name||npc?.[0])==='定光弟子'))return [...npcs,['定光弟子','以定光纳物符扩展背包，每次+1格，最多16格']];return npcs};
 const localMeetWithDingguangDisciple=localMeet;
-localMeet=function(idx=0){let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];if(name==='定光弟子')return talkDingguangDisciple();return localMeetWithDingguangDisciple(idx)};
+localMeet=function(idx=0){let mapIndex=g.selectedScene??g.map,spot=activeSpot(),npc=localNpcs(mapIndex,spot)[idx],name=npc?.name||npc?.[0];if(tryDeliverCourierMission(name,mapIndex,spot))return;if(name==='定光弟子')return talkDingguangDisciple();return localMeetWithDingguangDisciple(idx)};
 const npcQuestIconWithDingguangDisciple=npcQuestIcon;
-npcQuestIcon=function(name,mapIndex,spot){if(name==='定光弟子')return dingguangBagSlotsBought()>=DINGGUANG_BAG_SLOT_LIMIT?'💬':'❗️';return npcQuestIconWithDingguangDisciple(name,mapIndex,spot)};
+npcQuestIcon=function(name,mapIndex,spot){if(name==='定光弟子'){let mission=courierState().mission;if(mission?.stage==='deliver'&&mission.name===name&&mission.map===mapIndex&&mission.spot===spot)return '❗️';return dingguangBagSlotsBought()>=DINGGUANG_BAG_SLOT_LIMIT?'💬':'❗️'}return npcQuestIconWithDingguangDisciple(name,mapIndex,spot)};
+
+// ===== 万妖古域 · 古兽坟：庚金白虎的古兽祭礼 =====
+const GENGJIN_WHITE_TIGER_OFFERING=['巨树妖心','熔岩核心','山魈王角','龙鳞玉令','血藤','荒骨','毒囊','妖花粉'];
+function gengjinWhiteTigerQuest(){return g.gengjinWhiteTigerQuest||(g.gengjinWhiteTigerQuest={completed:false})}
+function gengjinWhiteTigerReady(){return GENGJIN_WHITE_TIGER_OFFERING.every(name=>bagItemCountByName(name)>=3)}
+function gengjinWhiteTigerProgress(){return GENGJIN_WHITE_TIGER_OFFERING.map(name=>`${name} ${bagItemCountByName(name)} / 3`).join(' · ')}
+function submitGengjinWhiteTigerOffering(){
+  let quest=gengjinWhiteTigerQuest();
+  if(quest.completed)return talkGengjinWhiteTiger();
+  if(!gengjinWhiteTigerReady())return toast('古兽祭礼材料尚未集齐');
+  if(!GENGJIN_WHITE_TIGER_OFFERING.every(name=>takeBagItemsByName(name,3)))return toast('材料数量发生变化，请重新确认');
+  quest.completed=true;
+  g.cult+=880000;addJades(1);addScrolls(2);processRealmProgress();
+  pushLocalLog('向庚金白虎献上八种古兽遗材各3份，获得修为+88万、灵玉×1、功法残卷×2。');
+  showNpcResult('庚金白虎的回馈','庚金白虎吞下祭礼，额前金纹化作一道锐光没入你的识海。\n\n获得：\n修为 +88万\n灵玉 ×1\n功法残卷 ×2','good');
+  render();renderBag();renderSceneMap();save();
+}
+function talkGengjinWhiteTiger(){
+  let quest=gengjinWhiteTigerQuest();
+  if(quest.completed)return showNpcResult('庚金白虎','白虎伏在古兽骸骨上，金瞳中的饥色已褪。\n\n“祭礼已成。你身上有了万妖古域认可的气息，往后的路，自己走稳。”','good');
+  openNpcDialog('庚金白虎',`古兽坟深处，一头通体雪白、额生庚金纹的白虎从残骨间现身。\n\n“旧日兽王遗材散落各地。我需以八种遗材各三份重续金行血脉。若你愿意相助，我以古兽坟的福缘相报。”\n\n所需材料：\n${gengjinWhiteTigerProgress()}\n\n报酬：修为 +88万 · 灵玉×1 · 功法残卷×2`,[
+    {text:'交付八种材料各3份',alt:true,onClick(){submitGengjinWhiteTigerOffering()}},
+    {text:'暂不献纳',ghost:true}
+  ]);
+}
+const localNpcsWithGengjinWhiteTiger=localNpcs;
+localNpcs=function(i,spot){let npcs=localNpcsWithGengjinWhiteTiger(i,spot);if(i===4&&spot===23&&!npcs.some(npc=>(npc?.name||npc?.[0])==='庚金白虎'))npcs=[...npcs,['庚金白虎','急需八种古兽遗材各三份，重续庚金血脉']];return npcs};
+const localMeetWithGengjinWhiteTiger=localMeet;
+localMeet=function(idx=0){let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];if(name==='庚金白虎')return talkGengjinWhiteTiger();return localMeetWithGengjinWhiteTiger(idx)};
+const npcQuestIconWithGengjinWhiteTiger=npcQuestIcon;
+npcQuestIcon=function(name,mapIndex,spot){if(name==='庚金白虎'){let quest=gengjinWhiteTigerQuest();return quest.completed?'💬':gengjinWhiteTigerReady()?'⭕️':'❗️'}return npcQuestIconWithGengjinWhiteTiger(name,mapIndex,spot)};
 
 function bindUi(){
 ensureMapSettingsUi();
