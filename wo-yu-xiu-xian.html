@@ -701,6 +701,7 @@
 /* Developer monster controls */
 #devModal>div{width:min(760px,94vw);max-height:92vh;overflow:auto}#devModal .dev-grid{max-height:34vh}.dev-monster-tools{margin-top:14px;padding:12px;border:1px solid #b6c1b4;border-radius:8px;background:#f4f7f1}.dev-monster-head{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:9px}.dev-monster-head b{color:#315844;font-size:15px}.dev-monster-head small{color:#6f7e73;font-size:11px}.dev-monster-editor{display:grid;grid-template-columns:1.25fr repeat(4,minmax(72px,1fr)) 1fr;gap:7px;align-items:end}.dev-monster-editor label{display:grid;gap:4px;color:#64756c;font-size:11px}.dev-monster-editor input,.dev-monster-editor select{width:100%;padding:8px;border:1px solid #aeb7ad;border-radius:6px;background:#fff;color:#26392e}.dev-monster-actions{display:flex;gap:7px;flex-wrap:wrap;margin-top:10px}.dev-monster-actions .btn{padding:7px 10px;font-size:12px}@media(max-width:650px){#devModal{padding:8px}#devModal .dev-grid{grid-template-columns:repeat(2,1fr);max-height:28vh}.dev-monster-head{align-items:flex-start;flex-direction:column}.dev-monster-editor{grid-template-columns:repeat(2,minmax(0,1fr))}.dev-monster-editor label:first-child{grid-column:1/-1}.dev-monster-actions .btn{flex:1}}
 #npcDialogActions .npc-dialog-choice{border-color:#4d8462!important;background:linear-gradient(180deg,#4f8b66,#2f6446)!important;color:#fff9e5!important;box-shadow:inset 0 1px #ffffff45,0 2px 5px #183b2780}#npcDialogActions .npc-dialog-choice:hover{border-color:#7fb18b!important;background:linear-gradient(180deg,#609d75,#397451)!important;filter:brightness(1.06)}#npcDialogActions .npc-dialog-choice:disabled{border-color:#94a99a!important;background:#708276!important;color:#dce5dc!important;box-shadow:none}.danchi-quantity-picker{display:grid;grid-template-columns:auto minmax(90px,1fr) auto;align-items:center;gap:8px;margin-top:12px;padding:10px 12px;border:1px solid #b8c8b9;border-radius:6px;background:#f5faef;color:#31533e;font-weight:700}.danchi-quantity-picker input{width:100%;min-width:0;padding:7px 8px;border:1px solid #7fa185;border-radius:4px;background:#fff;color:#244634;font:700 16px Georgia,serif}.danchi-quantity-picker small{color:#667b69;font-weight:600}@media(max-width:600px){.danchi-quantity-picker{grid-template-columns:1fr 82px;gap:6px}.danchi-quantity-picker small{grid-column:1/-1}}
+.battle-fx.passive{color:#ffca67;text-shadow:0 3px #5a3305,0 0 18px #ffe3a5,0 0 4px #fff}.battle-fx.affix{color:#a9eaff;text-shadow:0 3px #123e57,0 0 18px #74cfff,0 0 4px #fff}.battle-fx.wound{color:#d7adff;text-shadow:0 3px #3b1d5d,0 0 18px #d5a4ff,0 0 4px #fff}
 </style>
 <style>
 .toast{z-index:1000}
@@ -1286,7 +1287,7 @@ renderBag=()=>{
   }
 };
 function changeBagPage(delta){g.bagPage=Math.max(0,Math.min((g.bagPage||0)+delta,bagPages()-1));g.bagSelected=-1;renderBag()}
-function sortBag(){let source=[...(g.bag||[])],merged=[],rank={skillbook:0,pill:1,equipment:2,herb:3,material:4};source.forEach(it=>{if(it.type==='equipment'){merged.push({...it,qty:1});return}let max=it.max||99,qty=it.qty||1;for(let s of merged){if(s.type===it.type&&s.name===it.name&&s.qty<max){let add=Math.min(max-s.qty,qty);s.qty+=add;qty-=add;if(qty<=0)break}}while(qty>0){let add=Math.min(max,qty);merged.push({...it,qty:add,max});qty-=add}});g.bag=merged.sort((a,b)=>(rank[a.type]??9)-(rank[b.type]??9)||(b.quality||0)-(a.quality||0)||String(a.name).localeCompare(String(b.name),'zh-Hans-CN'));g.bagSelected=-1;g.bagPage=0;toast('背包已自动整理');renderBag();save()}
+function sortBag(){let source=[...(g.bag||[])],merged=[],rank={skillbook:0,pill:1,equipment:2,herb:3,material:4};source.forEach(it=>{if(it.type==='equipment'){merged.push({...it,qty:1});return}let max=it.max||99,qty=it.qty||1;for(let s of merged){if(s.type===it.type&&s.name===it.name&&!!s.locked===!!it.locked&&s.qty<max){let add=Math.min(max-s.qty,qty);s.qty+=add;qty-=add;if(qty<=0)break}}while(qty>0){let add=Math.min(max,qty);merged.push({...it,qty:add,max});qty-=add}});g.bag=merged.sort((a,b)=>(rank[a.type]??9)-(rank[b.type]??9)||(b.quality||0)-(a.quality||0)||String(a.name).localeCompare(String(b.name),'zh-Hans-CN'));g.bagSelected=-1;g.bagPage=0;toast('背包已自动整理');renderBag();save()}
 function useBagItem(){let idx=g.bagSelected,it=g.bag[idx];if(!it)return;if(it.type==='herb')return toast('药材不能直接使用，可用于任务、疗伤或炼制');if(it.type==='material')return toast('妖兽材料不能使用，只能售卖');if(it.type==='skillbook'){if(learnSkillBook(it))removeBagQty(idx,1);render();renderBag();renderSkillHud();save();return}if(it.type==='pill'){if(it.name==='小还丹'||it.name==='大还丹'){let regen=it.name==='大还丹'?30:10;g.nextBattleRegen=regen;toast('服用'+it.name+'，下次战斗每回合恢复'+regen+'点生命')}else if(it.name.includes('回春')){let heal=20+(rootKind()==='木'?4:0);g.hp=Math.min(totalHp(),g.hp+heal);toast(`使用回春丹，生命+${heal}`)}else if(it.name.includes('修为')){let gain=it.cultGain||realmNeed()*.18;g.cult+=gain;toast(`服用${it.name}，修为+${fmt(gain)}`)}else if(it.name.includes('渡劫')){g.tribBonus+=.12;toast('使用渡劫丹，渡劫成功率提升')}else{g.activeBoostUntil=Math.max(Date.now(),g.activeBoostUntil)+600000;toast('服用五行增幅丹，修炼速度提升')}if(it.key&&g[it.key]>0)g[it.key]--;removeBagQty(idx,1)}else if(it.type==='equipment'){let item=normalizeEquip(it),slot=item.slot,old=g.gear[slot],oldPower=power();g.gear[slot]=item;if(old)addBagItem(old);let diff=power()-oldPower;g.hp=Math.min(totalHp(),g.hp);toast(`装备${item.name}，战力${diff>=0?'+':''}${diff}`);log(`装备${qualityText[item.quality]}色${equipSlotNames[slot]}：${item.name}${old?'，旧装备已放回背包':''}`,'good');removeBagQty(idx,1)}render();renderBag();save()}
 const baseUseBagItem=useBagItem;
 useBagItem=()=>{let it=g.bag[g.bagSelected];if(it?.type==='pill'&&it.name.includes('渡劫'))return toast('渡劫丹请在小地图顶部“渡劫”中选择服用数量');return baseUseBagItem()};
@@ -2724,10 +2725,33 @@ function battleEnemyStats(target,area=g.selectedScene??g.map,spot=activeSpot(),i
     multiplier
   };
 }
-function openBattle(target,idx){battleBusy=false;setBattleControlsDisabled(false);if(!target||target.dead)return toast('目标尚未复活');if(target.type!=='战斗')return resolveLocalTarget(target,false);let st=statTotal(),area=g.selectedScene??g.map,spot=activeSpot(),es=battleEnemyStats(target,area,spot,idx),battleRegen=finiteStat(g.nextBattleRegen,0),formation=formationBattleState(),playerHp=Math.max(1,Math.min(st.hp,finiteStat(g.hp,st.hp))),playerMp=Math.max(0,Math.min(st.mana,finiteStat(g.mana,st.mana)));g.hp=playerHp;g.mana=playerMp;g.nextBattleRegen=0;target._cultivationMultiplier=formation.spirit?2:1;battleState={target,idx,area,spot,round:1,formation,player:{hp:playerHp,mp:playerMp,maxHp:st.hp,maxMp:st.mana,regenPerRound:battleRegen,shield:0,shieldPeak:st.hp,cooldowns:{},attackMultiplier:formation.blood?1.05:1,dodgeBonus:formation.mist?0.15:0},enemy:{hp:es.hp,mp:es.mp,maxHp:es.hp,maxMp:es.mp,attack:es.attack,defense:es.defense,realm:es.realm,portrait:es.portrait,icon:es.icon,passives:es.passives||[]},log:[`遭遇 ${target.name}，战斗开始！${formation.mist?' 迷雾阵护体。':''}${formation.blood?' 血煞阵加持。':''}${formation.spirit?' 聚灵阵引灵。':''}${(es.passives||[]).includes('识破')?' 识破：你的闪避率降低80%。':''}`]};resetBattleHeroFrame();['#battlePlayerFx','#battleEnemyFx'].forEach(sel=>{let el=$(sel);if(el){el.textContent='';el.classList.remove('pop','heal')}});$('#battleModal').classList.add('show');renderBattle()}
+function openBattle(target,idx){battleBusy=false;setBattleControlsDisabled(false);if(!target||target.dead)return toast('目标尚未复活');if(target.type!=='战斗')return resolveLocalTarget(target,false);let st=statTotal(),area=g.selectedScene??g.map,spot=activeSpot(),es=battleEnemyStats(target,area,spot,idx),battleRegen=finiteStat(g.nextBattleRegen,0),formation=formationBattleState(),playerHp=Math.max(1,Math.min(st.hp,finiteStat(g.hp,st.hp))),playerMp=Math.max(0,Math.min(st.mana,finiteStat(g.mana,st.mana)));g.hp=playerHp;g.mana=playerMp;g.nextBattleRegen=0;target._cultivationMultiplier=formation.spirit?2:1;battleState={target,idx,area,spot,round:1,formation,player:{hp:playerHp,mp:playerMp,maxHp:st.hp,maxMp:st.mana,regenPerRound:battleRegen,shield:0,shieldPeak:st.hp,cooldowns:{},attackMultiplier:formation.blood?1.05:1,dodgeBonus:formation.mist?0.15:0},enemy:{hp:es.hp,mp:es.mp,maxHp:es.hp,maxMp:es.mp,attack:es.attack,defense:es.defense,realm:es.realm,portrait:es.portrait,icon:es.icon,passives:es.passives||[]},log:[`遭遇 ${target.name}，战斗开始！${formation.mist?' 迷雾阵护体。':''}${formation.blood?' 血煞阵加持。':''}${formation.spirit?' 聚灵阵引灵。':''}${(es.passives||[]).includes('识破')?' 识破：你的闪避率降低80%。':''}`]};resetBattleHeroFrame();clearBattleFxQueue();['#battlePlayerFx','#battleEnemyFx'].forEach(sel=>{let el=$(sel);if(el){el.textContent='';el.classList.remove('pop','heal','passive','affix','wound')}});$('#battleModal').classList.add('show');renderBattle()}
 function battlePct(v,m){return Math.max(0,Math.min(100,(m? v/m:0)*100))+'%'}
 function battleLog(t){if(!battleState)return;battleState.log.unshift(t);battleState.log=battleState.log.slice(0,30)}
-function battleFx(side,t,heal=false){let el=$(side==='player'?'#battlePlayerFx':'#battleEnemyFx');if(!el)return;el.textContent=t;el.classList.remove('pop','heal');if(heal)el.classList.add('heal');void el.offsetWidth;el.classList.add('pop')}
+const battleFxQueues={player:[],enemy:[]},battleFxQueueBusy={player:false,enemy:false};
+let battleFxGeneration=0;
+function clearBattleFxQueue(){battleFxGeneration++;for(let side of ['player','enemy']){battleFxQueues[side].length=0;battleFxQueueBusy[side]=false}}
+function battleFx(side,t,heal=false,kind='main'){
+  if(!battleFxQueues[side])return;
+  battleFxQueues[side].push({t,heal,kind});
+  if(battleFxQueueBusy[side])return;
+  battleFxQueueBusy[side]=true;
+  const generation=battleFxGeneration;
+  const next=()=>{
+    if(generation!==battleFxGeneration)return;
+    let item=battleFxQueues[side].shift(),el=$(side==='player'?'#battlePlayerFx':'#battleEnemyFx');
+    if(!item){battleFxQueueBusy[side]=false;return}
+    if(!el){setTimeout(next,0);return}
+    el.textContent=item.t;
+    el.classList.remove('pop','heal','passive','affix','wound');
+    if(item.heal)el.classList.add('heal');
+    if(item.kind&&item.kind!=='main')el.classList.add(item.kind);
+    void el.offsetWidth;
+    el.classList.add('pop');
+    setTimeout(next,700);
+  };
+  next();
+}
 const bossPortraitFrames={
   'BOSS 山魈王':['assets/boss-portraits/shanxiao-wang.png','assets/boss-portraits/shanxiao-wang-windup.png','assets/boss-portraits/shanxiao-wang-strike.png','assets/boss-portraits/shanxiao-wang.png'],
   'BOSS 巨树妖':['assets/boss-portraits/jushu-yao.png','assets/boss-portraits/jushu-yao-windup.png','assets/boss-portraits/jushu-yao-strike.png','assets/boss-portraits/jushu-yao.png'],
@@ -5315,7 +5339,7 @@ battleSkillEffect=async function(sk,idx=0){
     let wound=b?.enemy?.thunderWound;
     if(result!==false&&b&&battleState===b&&isLightningSkill(sk)&&wound?.turns>0&&before>b.enemy.hp){
       let extra=Math.min(b.enemy.hp,before-b.enemy.hp);
-      if(extra>0){b.enemy.hp=Math.max(0,b.enemy.hp-extra);battleFx('enemy','-'+fmt(extra));battleLog(`雷系创伤引爆，额外造成${fmt(extra)}点雷系伤害。`)}
+      if(extra>0){b.enemy.hp=Math.max(0,b.enemy.hp-extra);battleFx('enemy',`创伤 -${fmt(extra)}`,false,'wound');battleLog(`雷系创伤引爆，额外造成${fmt(extra)}点雷系伤害。`)}
     }
     return result;
   }
@@ -5390,7 +5414,7 @@ battleSkillEffect=async function(sk,idx=0){
     let wound=b?.enemy?.waterWound;
     if(result!==false&&b&&battleState===b&&isWaterSkill(sk)&&wound?.turns>0&&before>b.enemy.hp){
       let extra=Math.min(b.enemy.hp,before-b.enemy.hp);
-      if(extra>0){b.enemy.hp=Math.max(0,b.enemy.hp-extra);battleFx('enemy','-'+fmt(extra));battleLog(`水系创伤引爆，额外造成${fmt(extra)}点水系伤害。`)}
+      if(extra>0){b.enemy.hp=Math.max(0,b.enemy.hp-extra);battleFx('enemy',`创伤 -${fmt(extra)}`,false,'wound');battleLog(`水系创伤引爆，额外造成${fmt(extra)}点水系伤害。`)}
     }
     return result;
   }
@@ -5469,7 +5493,7 @@ battleSkillEffect=async function(sk,idx=0){
   if(!isLightningFlash&&!isWildfire){
     let b=battleState,before=b?.enemy?.hp||0,result=await battleSkillEffectWithThunderPlatform(sk,idx);
     let wound=b?.enemy?.fireWound;
-    if(result!==false&&b&&battleState===b&&isFireSkill(sk)&&wound?.turns>0&&before>b.enemy.hp){let extra=Math.min(b.enemy.hp,before-b.enemy.hp);if(extra>0){b.enemy.hp=Math.max(0,b.enemy.hp-extra);battleFx('enemy','-'+fmt(extra));battleLog(`火系创伤引爆，额外造成${fmt(extra)}点火系伤害。`)}}
+    if(result!==false&&b&&battleState===b&&isFireSkill(sk)&&wound?.turns>0&&before>b.enemy.hp){let extra=Math.min(b.enemy.hp,before-b.enemy.hp);if(extra>0){b.enemy.hp=Math.max(0,b.enemy.hp-extra);battleFx('enemy',`创伤 -${fmt(extra)}`,false,'wound');battleLog(`火系创伤引爆，额外造成${fmt(extra)}点火系伤害。`)}}
     return result;
   }
   let b=battleState,reason=battleSkillBlockReason(sk,idx,b);
@@ -5737,7 +5761,7 @@ renderArtifactSlots=function(){let artifacts=artifactState(),slots=[artifacts.fu
 function applyXuanyuanSwordDamage(b,beforeHp){
   if(!b||!hasXuanyuanSword()||beforeHp<=b.enemy.hp)return 0;
   let raw=Math.max(0,beforeHp-b.enemy.hp),finalDamage=Math.max(1,Math.floor(raw*1.5)),extra=Math.min(Math.max(0,b.enemy.hp),Math.max(0,finalDamage-raw));
-  if(extra>0){b.enemy.hp=Math.max(0,b.enemy.hp-extra);battleFx('enemy','-'+fmt(extra));battleLog(`轩辕剑剑意加持，额外造成${fmt(extra)}点最终伤害。`)}
+  if(extra>0){b.enemy.hp=Math.max(0,b.enemy.hp-extra);battleFx('enemy',`被动 -${fmt(extra)}`,false,'passive');battleLog(`轩辕剑剑意加持，额外造成${fmt(extra)}点最终伤害。`)}
   return extra;
 }
 const battleSkillEffectWithXuanyuanSword=battleSkillEffect;
@@ -6152,7 +6176,7 @@ battleSkillEffect=async function(sk,idx=0){
   let battle=battleState,beforeHp=battle?.enemy?.hp||0,result=await battleSkillEffectWithTianhuoHuihui(sk,idx);
   if(result!==false&&battle&&battleState===battle&&hasTianhuoHuihuiEquipped()&&skillThemeClass(sk)==='theme-fire'){
     let damage=Math.max(0,beforeHp-battle.enemy.hp),extra=Math.min(Math.max(0,battle.enemy.hp),Math.floor(damage*.08));
-    if(extra>0){battle.enemy.hp=Math.max(0,battle.enemy.hp-extra);battleFx('enemy','-'+fmt(extra));battleLog(`天火晖晖加持，火系术法额外造成${fmt(extra)}点伤害。`)}
+    if(extra>0){battle.enemy.hp=Math.max(0,battle.enemy.hp-extra);battleFx('enemy',`被动 -${fmt(extra)}`,false,'passive');battleLog(`天火晖晖加持，火系术法额外造成${fmt(extra)}点伤害。`)}
   }
   return result;
 };
@@ -7543,8 +7567,8 @@ addBagItem=function(item){let equip=normalizeEquip(item),worn=equip&&normalizeEq
 const autoExploreSellOverflowWithRedBuyback=autoExploreSellOverflowItem;
 autoExploreSellOverflowItem=function(){let before=(g.bag||[]).filter(item=>normalizeEquip(item)?.quality===6).map(item=>({item,price:itemSell(item)})),result=autoExploreSellOverflowWithRedBuyback();before.forEach(record=>{if(!g.bag.includes(record.item))recordRedEquipmentSale(record.item,record.price)});return result};
 function treasuryCultPillItem(level,rate,maxRealm,maxStage){return{type:'pill',name:`${level}级修为丹`,qty:1,max:99,icon:'💊',sell:level*120,cultNeedRate:rate,maxCultRealm:maxRealm,maxCultStage:maxStage,desc:`服用后获得当前升级所需修为的${Math.round(rate*100)}%。仅限${realms[maxRealm]}${stages[maxStage]}及以下使用。`}}
-if(!sectGoods.some(item=>item[2]==='cultPill6'))sectGoods.push(['💊 6级修为丹·当前需求5%',200,'cultPill6',1,1]);
-if(!sectGoods.some(item=>item[2]==='cultPill7'))sectGoods.push(['💊 7级修为丹·当前需求18%',600,'cultPill7',1,1]);
+if(!sectGoods.some(item=>item[2]==='cultPill6'))sectGoods.push(['💊 6级修为丹·当前需求5%',2000,'cultPill6',1,1]);
+if(!sectGoods.some(item=>item[2]==='cultPill7'))sectGoods.push(['💊 7级修为丹·当前需求18%',6000,'cultPill7',1,1]);
 const buySectGoodWithCultPills=buySectGood;
 buySectGood=function(index){
   let item=sectGoods[index];if(!item||!['cultPill6','cultPill7'].includes(item[2]))return buySectGoodWithCultPills(index);
@@ -8086,7 +8110,7 @@ battleSkillEffect=async function(sk,idx=0){
   let elementAffix=isEquipmentFireSkill(sk)?{name:'焚脉·燎原',label:'火系',bonus:affixes.fireDamageBonus}:isEquipmentWaterSkill(sk)?{name:'沧澜·叠浪',label:'水系',bonus:affixes.waterDamageBonus}:isEquipmentLightningSkill(sk)?{name:'雷印·续电',label:'雷系',bonus:affixes.lightningDamageBonus}:null;
   if(elementAffix?.bonus>0){
     let dealt=Math.max(0,beforeHp-battle.enemy.hp),extra=Math.min(Math.max(0,battle.enemy.hp),Math.floor(dealt*elementAffix.bonus));
-    if(extra>0){battle.enemy.hp=Math.max(0,battle.enemy.hp-extra);battleFx('enemy','-'+fmt(extra));battleLog(`${elementAffix.name}加持，${elementAffix.label}术法额外造成${fmt(extra)}点伤害。`)}
+    if(extra>0){battle.enemy.hp=Math.max(0,battle.enemy.hp-extra);battleFx('enemy',`词缀 -${fmt(extra)}`,false,'affix');battleLog(`${elementAffix.name}加持，${elementAffix.label}术法额外造成${fmt(extra)}点伤害。`)}
   }
   if(isEquipmentThunderWoundSkill(sk)&&affixes.lightningWoundTurns>0&&battle.enemy.thunderWound?.turns>0){
     battle.enemy.thunderWound.turns+=affixes.lightningWoundTurns;
@@ -8372,6 +8396,60 @@ const localMeetWithBrokenArtificialIntelligence=localMeet;
 localMeet=function(idx=0){let i=g.selectedScene??g.map,spot=activeSpot(),npc=localNpcs(i,spot)[idx],name=npc?.name||npc?.[0];if(i===6&&spot===32&&name==='破碎的人工智能')return talkBrokenArtificialIntelligence();return localMeetWithBrokenArtificialIntelligence(idx)};
 const npcQuestIconWithBrokenArtificialIntelligence=npcQuestIcon;
 npcQuestIcon=function(name,mapIndex,spot){if(name==='破碎的人工智能'&&mapIndex===6&&spot===32){let quest=brokenAiQuestState();if(quest.stage>=3)return '💬';if(quest.stage===1)return brokenAiMaterialsReady()?'⭕️':'❗️';if(quest.stage===2)return brokenAiBookCandidates().length?'⭕️':'❗️';return '❗️'}return npcQuestIconWithBrokenArtificialIntelligence(name,mapIndex,spot)};
+
+// ===== 背包锁定：双击锁定，锁定物品不会参与任何售卖 =====
+function bagItemLockKey(item){return `${item?.type||'item'}:${item?.key||item?.name||''}`}
+function isBagItemLocked(item){return !!item&&(!!item.locked||!!g.bagLockKeys?.[bagItemLockKey(item)])}
+function toggleBagItemLock(index){
+  let item=g.bag?.[index];if(!item)return;
+  let syncedResource=['forgeMaterial','scrollResource'].includes(item.type)||(item.type==='book'&&item.name==='功法残卷');
+  if(syncedResource){g.bagLockKeys=g.bagLockKeys||{};let key=bagItemLockKey(item);g.bagLockKeys[key]=!g.bagLockKeys[key];if(!g.bagLockKeys[key])delete g.bagLockKeys[key];}
+  else item.locked=!item.locked;
+  g.bagSelected=index;let locked=isBagItemLocked(item);toast(locked?`${item.name}已锁定，不会被售卖`:`${item.name}已解除锁定`);renderBag();save();
+}
+function ensureBagLockStyles(){
+  if($('#bagLockStyles'))return;
+  let style=document.createElement('style');style.id='bagLockStyles';style.textContent='.bag-slot.item-locked{box-shadow:inset 0 0 0 2px #b78e32;background:linear-gradient(145deg,#fffdf7,#f2e7c8)}.bag-item-lock{position:absolute;left:4px;bottom:3px;font-size:13px;line-height:1;filter:drop-shadow(0 1px 1px #fff)}';document.head.appendChild(style);
+}
+let bagSingleClickTimer=0;
+const renderBagWithItemLocks=renderBag;
+renderBag=function(){
+  renderBagWithItemLocks();ensureBagLockStyles();
+  document.querySelectorAll('[data-bag]').forEach(button=>{
+    let index=+button.dataset.bag,item=g.bag?.[index],locked=isBagItemLocked(item);
+    button.classList.toggle('item-locked',locked);if(locked&&!button.querySelector('.bag-item-lock'))button.insertAdjacentHTML('beforeend','<span class="bag-item-lock" title="已锁定，不可售卖">🔒</span>');
+    button.onclick=()=>{clearTimeout(bagSingleClickTimer);bagSingleClickTimer=setTimeout(()=>{g.bagSelected=index;renderBag()},180)};
+    button.ondblclick=event=>{event.preventDefault();clearTimeout(bagSingleClickTimer);toggleBagItemLock(index)};
+  });
+  let item=g.bag?.[g.bagSelected];if(isBagItemLocked(item)){
+    let detail=$('#bagDetail');if(detail&&!detail.textContent.startsWith('🔒'))detail.innerHTML=`<b>🔒 已锁定</b><br>该道具不会被任何售卖功能处理。<br>${detail.innerHTML}`;
+    $('#sellBagItemBtn').disabled=true;$('#sellAllBagItemBtn')&&($('#sellAllBagItemBtn').disabled=true);
+  }
+};
+const sellBagItemWithItemLocks=sellBagItem;
+sellBagItem=function(){let item=g.bag?.[g.bagSelected];if(isBagItemLocked(item))return toast('该道具已锁定，无法售卖');return sellBagItemWithItemLocks()};
+const sellAllBagItemWithItemLocks=sellAllBagItem;
+sellAllBagItem=function(){let item=g.bag?.[g.bagSelected];if(isBagItemLocked(item))return toast('该道具已锁定，无法售卖');return sellAllBagItemWithItemLocks()};
+sellEquipmentByQuality=function(){
+  let q=+($('#sellQualitySelect')?.value||1),sold=0,value=0,locked=0;
+  g.bag=(g.bag||[]).filter(item=>{if(item?.type==='equipment'&&(item.quality||equipQuality[item.name]||1)===q){if(isBagItemLocked(item)){locked++;return true}sold++;value+=itemSell(item);return false}return true});
+  if(!sold)return toast(locked?`该品质装备均已锁定，未出售`:`背包里没有${qualityText[q]}装`);
+  g.stones+=value;g.bagSelected=-1;syncBagPage();toast(`售卖${qualityText[q]}装×${sold}，灵石+${fmt(value)}${locked?`；已跳过锁定装备×${locked}`:''}`);log(`批量售卖${qualityText[q]}色装备×${sold}，获得${fmt(value)}灵石`,'good');render();renderBag();save();
+};
+autoExploreSellOverflowItem=function(){
+  let priority={material:0,equipment:1,herb:2},choices=(g.bag||[]).map((item,index)=>({item,index,rank:priority[item?.type]??9})).filter(entry=>entry.rank<9&&!isBagItemLocked(entry.item)&&itemSell(entry.item)>0).sort((a,b)=>a.rank-b.rank||(a.item.type==='equipment'?gearScore(normalizeEquip(a.item)):0)-(b.item.type==='equipment'?gearScore(normalizeEquip(b.item)):0));
+  let pick=choices[0];if(!pick)return false;let item=pick.item,qty=item.qty||1,value=itemSell(item)*qty;
+  g.stones+=value;if(item.type==='herb')g.herbs=Math.max(0,(g.herbs||0)-qty);if(normalizeEquip(item)?.quality===6)recordRedEquipmentSale(item,value);g.bag.splice(pick.index,1);syncBagPage();pushLocalLog(`背包整理：售卖${item.name}×${qty}，灵石+${fmt(value)}。`);return true;
+};
+cabinForcedLiquidation=function(amount){
+  let due=Math.max(0,Math.floor(amount||0)),paid=0,refund=0,sold=[],candidates=()=>g.bag.map((item,index)=>({item,index,value:itemSell(item)})).filter(entry=>entry.item&&!isBagItemLocked(entry.item)&&entry.item.type!=='quest'&&entry.item.type!=='forgeMaterial'&&entry.value>0).sort((a,b)=>a.value-b.value||a.index-b.index);
+  while(paid<due){let pick=candidates()[0];if(!pick)break;let item=pick.item,unit=pick.value,available=Math.max(1,Math.floor(item.qty||1)),need=Math.min(available,Math.max(1,Math.ceil((due-paid)/unit))),gross=unit*need,used=Math.min(gross,due-paid);if(item.type==='herb'||item.name==='药材')g.herbs=Math.max(0,(g.herbs||0)-need);if(item.type==='jadeResource'||item.name==='灵玉')g.jades=Math.max(0,(g.jades||0)-need);if(item.key&&g[item.key])g[item.key]=Math.max(0,(g[item.key]||0)-need);removeBagQty(pick.index,need);sold.push(`${item.name}×${need}`);paid+=used;refund+=gross-used}
+  if(refund>0)g.stones=(g.stones||0)+refund;g.bagSelected=Math.min(g.bagSelected??-1,(g.bag||[]).length-1);syncBagPage();return{paid,refund,sold,shortfall:Math.max(0,due-paid)};
+};
+sellAllMonsterMaterialsToSect=function(){
+  let sold=0,total=0,bonus=0,locked=0;for(let index=(g.bag||[]).length-1;index>=0;index--){let item=g.bag[index];if(item?.type!=='material')continue;if(isBagItemLocked(item)){locked+=item.qty||1;continue}let qty=Math.max(1,item.qty||1),base=itemSell(item)*qty,value=recoveryMaterialUnitPrice(item)*qty;sold+=qty;total+=value;bonus+=Math.max(0,value-base);g.bag.splice(index,1)}
+  if(!sold)return toast(locked?'妖兽材料均已锁定，未回收':'背包中暂无可回收的妖兽材料');g.stones+=total;g.bagSelected=-1;syncBagPage();pushLocalLog(`宗门回收员回收妖兽材料×${sold}，灵石+${fmt(total)}。`);showNpcResult('宗门回收员 · 结算',`回收妖兽材料：${fmt(sold)} 份${locked?`\n跳过锁定材料：${fmt(locked)} 份`:''}\n境界与 Boss 加价：+${fmt(bonus)} 灵石\n\n获得灵石：+${fmt(total)}`,'good');render();renderBag();renderSceneMap();save();
+};
 
 function bindUi(){
 ensureMapSettingsUi();
