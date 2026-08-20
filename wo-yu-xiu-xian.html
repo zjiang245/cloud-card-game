@@ -6300,8 +6300,9 @@ const finishBattleWinWithMysteriousAuthor=finishBattleWin;
 finishBattleWin=function(){
   if(!battleState?.target?.mysteriousAuthor)return finishBattleWinWithMysteriousAuthor();
   closeBattle(true);
+  let noteGranted=grantMysteriousAuthorNote();
   pushLocalLog('山魈洞：你在神秘作者的最难试炼中撑过了最后一笔。');
-  showNpcResult('最难试炼结束','墨卷无风自合。神秘的作者收起笔锋，只留下一句：\n“这一页，你写下来了。”','good');
+  showNpcResult('最难试炼结束',`墨卷无风自合。神秘的作者收起笔锋，只留下一句：\n“这一页，你写下来了。”${noteGranted?'\n\n获得任务道具：神秘纸条':'\n\n神秘纸条暂由作者保管，清出背包格后再来领取。'}`,'good');
   renderSceneMap();render();save();
 };
 const closeBattleWithMysteriousAuthor=closeBattle;
@@ -7408,7 +7409,7 @@ addBagItem=function(item){
 };
 const RED_EQUIP_TEMPER_RATE=.06;
 function redTemperTarget(slot){let item=normalizeEquip(g.gear?.[slot]);return item?.quality===6?item:null}
-function redTemperCandidates(slot){let target=redTemperTarget(slot);if(!target)return[];return(g.bag||[]).map((item,index)=>({item:normalizeEquip(item),index})).filter(entry=>entry.item?.slot===slot&&entry.item.name!==target.name).sort((a,b)=>gearScore(b.item)-gearScore(a.item))}
+function redTemperCandidates(slot){let target=redTemperTarget(slot);if(!target)return[];return(g.bag||[]).map((item,index)=>({item:normalizeEquip(item),index})).filter(entry=>entry.item?.slot===slot&&entry.item.name!==target.name&&!isBagItemLocked(entry.item)).sort((a,b)=>gearScore(b.item)-gearScore(a.item))}
 function redTemperPreview(item){let attrs=Object.entries(equipAttrs(item)).filter(([,value])=>value).map(([key,value])=>`${({hp:'生命',mana:'法力',attack:'攻击',defense:'防御',agility:'身法',crit:'暴击'}[key])}+${Math.floor(value*RED_EQUIP_TEMPER_RATE)}${key==='crit'?'%':''}`).join('，'),affix=equipmentAffixText(item);return[attrs,affix?`词缀：${affix}`:''].filter(Boolean).join('；')}
 function temperRedEquipment(slot,indices,{collectPending=false}={}){let target=redTemperTarget(slot);if(!target)return{count:0};let valid=new Set(redTemperCandidates(slot).map(entry=>entry.index)),picked=(indices||[]).filter(index=>valid.has(index)).sort((a,b)=>b-a);if(!picked.length)return{count:0};let before={...equipAttrs(target)},bonus={...(target.bonus||{})},names=[],affixes=equipmentAffixes(target).slice(0,2),pendingAffixes=[];picked.forEach(index=>{let source=normalizeEquip(g.bag?.[index]);if(!source)return;Object.entries(equipAttrs(source)).forEach(([key,value])=>bonus[key]=(bonus[key]||0)+value*RED_EQUIP_TEMPER_RATE);equipmentAffixes(source).forEach(affix=>{if(affixes.length<2)affixes.push(affix);else if(collectPending)pendingAffixes.push(affix)});names.push(source.name);removeBagQty(index,1)});target.bonus=bonus;target.affix=null;target.affixes=affixes;target.absorbedCount=(target.absorbedCount||0)+names.length;g.gear[slot]=target;return{count:names.length,names,before,after:equipAttrs(target),target,pendingAffixes}}
 function finishRedTemperResult(result){let label=equipSlotNames[result.target.slot],affixText=equipmentAffixText(result.target)||'暂无词缀';pushLocalLog(`${result.target.name}淬炼完成：吸收${result.names.join('、')}，继承其属性的6%。`);showNpcResult(`${result.target.name}淬炼完成`,`${result.target.name}吸收了${result.names.join('、')}。\n\n本次继承（6%）：${formatForgeAttributeDelta(result.before,result.after)}\n当前词缀：${affixText}\n累计吸收：${result.target.absorbedCount}件${label}装备。`,'good');renderEquipModal();renderBag();renderSceneMap();render();save()}
@@ -7605,6 +7606,7 @@ renderBag=function(){
   }
 };
 // ===== 淬体大妖与残碑阵守护兽 =====
+const RESIDUAL_GUARDIAN_REQUIRED=500;
 function canReceiveNpcCultivationRewards(rootPills,scrolls){
   let slots=0,bag=g.bag||[];
   if(rootPills&&!bag.some(item=>item?.rootBonePill&&(item.qty||1)<(item.max||99)))slots++;
@@ -7662,7 +7664,7 @@ function residualGuardianQuest(){return g.residualGuardianQuest||(g.residualGuar
 function allMonsterMaterialCount(){return(g.bag||[]).reduce((total,item)=>total+(item?.type==='material'?(item.qty||1):0),0)}
 function feedResidualGuardian(amount){
   let state=residualGuardianQuest();if(state.claimed)return talkResidualGuardian();
-  let remaining=Math.max(0,1000-(state.fed||0)),offer=Math.max(0,Math.min(Math.floor(amount||0),remaining,allMonsterMaterialCount()));
+  let remaining=Math.max(0,RESIDUAL_GUARDIAN_REQUIRED-(state.fed||0)),offer=Math.max(0,Math.min(Math.floor(amount||0),remaining,allMonsterMaterialCount()));
   if(!offer)return toast(remaining?'背包中没有可投喂的妖兽材料':'守护兽已吃饱');
   if(offer===remaining&&!canReceiveNpcCultivationRewards(3,15))return toast('背包至少需预留2格空间领取奖励');
   let left=offer;
@@ -7673,20 +7675,20 @@ function feedResidualGuardian(amount){
     if(item.qty<=0)g.bag.splice(index,1);
   }
   state.fed=(state.fed||0)+offer;syncBagPage();
-  if(state.fed>=1000){
-    state.fed=1000;state.claimed=true;giveNpcCultivationRewards({rootPills:3,scrolls:15,cult:450000000});
+  if(state.fed>=RESIDUAL_GUARDIAN_REQUIRED){
+    state.fed=RESIDUAL_GUARDIAN_REQUIRED;state.claimed=true;giveNpcCultivationRewards({rootPills:3,scrolls:15,cult:450000000});
     pushLocalLog('残碑阵守护兽吃饱妖兽材料，获得根骨丹×3、功法残卷×15、修为+4.5亿。');
-    showNpcResult('守护兽的赠礼',`累计投喂妖兽材料：1000份\n\n获得：\n根骨丹 ×3\n功法残卷 ×15\n修为 +4.5亿`,'good');
+    showNpcResult('守护兽的赠礼',`累计投喂妖兽材料：${RESIDUAL_GUARDIAN_REQUIRED}份\n\n获得：\n根骨丹 ×3\n功法残卷 ×15\n修为 +4.5亿`,'good');
   }else{
-    toast(`守护兽吞下妖兽材料×${offer}，累计${state.fed}/1000`);pushLocalLog(`向残碑阵守护兽投喂妖兽材料×${offer}，累计${state.fed}/1000。`);
+    toast(`守护兽吞下妖兽材料×${offer}，累计${state.fed}/${RESIDUAL_GUARDIAN_REQUIRED}`);pushLocalLog(`向残碑阵守护兽投喂妖兽材料×${offer}，累计${state.fed}/${RESIDUAL_GUARDIAN_REQUIRED}。`);
   }
   render();renderBag();renderSceneMap();save();
 }
 function talkResidualGuardian(){
   let state=residualGuardianQuest();
   if(state.claimed)return showNpcResult('守护兽','守护兽伏在残碑旁，鼻息平稳。它已经将千份妖兽材料炼成护阵灵性，不再向你索取祭品。','good');
-  let remaining=Math.max(0,1000-(state.fed||0)),available=allMonsterMaterialCount();
-  openNpcDialog('守护兽',`残碑阵中央的石兽自裂纹间抬起头，低沉的咆哮震得碑文微颤。\n\n“以妖兽材料饲我。千份灵性足以补全此地守阵残魂。”\n\n累计投喂：${state.fed||0} / 1000\n背包妖兽材料：${available}\n\n完成报酬：根骨丹×3、功法残卷×15、修为+4.5亿`,[
+  let remaining=Math.max(0,RESIDUAL_GUARDIAN_REQUIRED-(state.fed||0)),available=allMonsterMaterialCount();
+  openNpcDialog('守护兽',`残碑阵中央的石兽自裂纹间抬起头，低沉的咆哮震得碑文微颤。\n\n“以妖兽材料饲我。五百份灵性足以补全此地守阵残魂。”\n\n累计投喂：${state.fed||0} / ${RESIDUAL_GUARDIAN_REQUIRED}\n背包妖兽材料：${available}\n\n完成报酬：根骨丹×3、功法残卷×15、修为+4.5亿`,[
     {text:'投喂1份妖兽材料',alt:true,onClick(){feedResidualGuardian(1)}},
     {text:'投喂10份妖兽材料',alt:true,onClick(){feedResidualGuardian(10)}},
     {text:'投喂100份妖兽材料',alt:true,onClick(){feedResidualGuardian(100)}},
@@ -8175,9 +8177,9 @@ function talkGengjinWhiteTiger(){
 const localNpcsWithGengjinWhiteTiger=localNpcs;
 localNpcs=function(i,spot){let npcs=localNpcsWithGengjinWhiteTiger(i,spot);if(i===4&&spot===23&&!npcs.some(npc=>(npc?.name||npc?.[0])==='庚金白虎'))npcs=[...npcs,['庚金白虎','急需八种古兽遗材各三份，重续庚金血脉']];return npcs};
 const localMeetWithGengjinWhiteTiger=localMeet;
-localMeet=function(idx=0){let npc=localNpcs(g.selectedScene??g.map,activeSpot())[idx],name=npc?.name||npc?.[0];if(name==='庚金白虎')return talkGengjinWhiteTiger();return localMeetWithGengjinWhiteTiger(idx)};
+localMeet=function(idx=0){let mapIndex=g.selectedScene??g.map,spot=activeSpot(),npc=localNpcs(mapIndex,spot)[idx],name=npc?.name||npc?.[0];if(tryDeliverCourierMission(name,mapIndex,spot))return;if(name==='庚金白虎')return talkGengjinWhiteTiger();return localMeetWithGengjinWhiteTiger(idx)};
 const npcQuestIconWithGengjinWhiteTiger=npcQuestIcon;
-npcQuestIcon=function(name,mapIndex,spot){if(name==='庚金白虎'){let quest=gengjinWhiteTigerQuest();return quest.completed?'💬':gengjinWhiteTigerReady()?'⭕️':'❗️'}return npcQuestIconWithGengjinWhiteTiger(name,mapIndex,spot)};
+npcQuestIcon=function(name,mapIndex,spot){let mission=courierState().mission;if(mission?.stage==='deliver'&&mission.name===name&&mission.map===mapIndex&&mission.spot===spot)return '❗️';if(name==='庚金白虎'){let quest=gengjinWhiteTigerQuest();return quest.completed?'💬':gengjinWhiteTigerReady()?'⭕️':'❗️'}return npcQuestIconWithGengjinWhiteTiger(name,mapIndex,spot)};
 
 // ===== 天渊战场 · 战魂台：魔鬼筋肉人的命运转盘 =====
 const MUSCLE_WHEEL_COST=10000;
@@ -8449,6 +8451,70 @@ cabinForcedLiquidation=function(amount){
 sellAllMonsterMaterialsToSect=function(){
   let sold=0,total=0,bonus=0,locked=0;for(let index=(g.bag||[]).length-1;index>=0;index--){let item=g.bag[index];if(item?.type!=='material')continue;if(isBagItemLocked(item)){locked+=item.qty||1;continue}let qty=Math.max(1,item.qty||1),base=itemSell(item)*qty,value=recoveryMaterialUnitPrice(item)*qty;sold+=qty;total+=value;bonus+=Math.max(0,value-base);g.bag.splice(index,1)}
   if(!sold)return toast(locked?'妖兽材料均已锁定，未回收':'背包中暂无可回收的妖兽材料');g.stones+=total;g.bagSelected=-1;syncBagPage();pushLocalLog(`宗门回收员回收妖兽材料×${sold}，灵石+${fmt(total)}。`);showNpcResult('宗门回收员 · 结算',`回收妖兽材料：${fmt(sold)} 份${locked?`\n跳过锁定材料：${fmt(locked)} 份`:''}\n境界与 Boss 加价：+${fmt(bonus)} 灵石\n\n获得灵石：+${fmt(total)}`,'good');render();renderBag();renderSceneMap();save();
+};
+
+// ===== 天命台 · 天命之人：功法残卷回收 =====
+const DESTINY_SCROLL_STONE_VALUE=50000;
+function stackedItemSlotsNeeded(item,qty){
+  let remaining=Math.max(0,Math.floor(qty||0)),max=item?.max||99;
+  (g.bag||[]).forEach(entry=>{if(entry?.type===item?.type&&entry?.name===item?.name)remaining-=Math.max(0,max-(entry.qty||1))});
+  return Math.ceil(Math.max(0,remaining)/max);
+}
+function canReceiveDestinyScrollTrade(qty){return bagFree()>=stackedItemSlotsNeeded(treasuryCultPillItem(7,.18,8,3),qty)}
+function recycleDestinyScrolls(amount){
+  let available=Math.max(0,Math.floor(g.scrolls||0)),qty=Math.min(available,Math.max(0,Math.floor(amount||0)));
+  if(!qty)return toast('功法残卷不足');
+  if(!canReceiveDestinyScrollTrade(qty))return toast('背包空间不足，无法收取对应数量的7级修为丹');
+  if(!takeScrolls(qty))return toast('功法残卷数量发生变化，请重新确认');
+  let pill={...treasuryCultPillItem(7,.18,8,3),qty};
+  if(!addBagItem(pill)){addScrolls(qty);return toast('背包空间不足，已返还功法残卷');}
+  let stones=qty*DESTINY_SCROLL_STONE_VALUE;g.stones=(g.stones||0)+stones;
+  pushLocalLog(`天命之人回收功法残卷×${qty}：灵石+${fmt(stones)}，7级修为丹×${qty}。`);
+  showNpcResult('天命回响',`回收功法残卷 ×${qty}\n\n获得：\n灵石 +${fmt(stones)}\n7级修为丹 ×${qty}`,'good');
+  render();renderBag();renderSceneMap();save();
+}
+function talkDestinyChosen(){
+  let scrolls=Math.max(0,Math.floor(g.scrolls||0));
+  openNpcDialog('天命之人',`天命台上，一名青衣修士拂过残卷边缘，纸上旧字化作点点星辉。\n\n“散卷留在你手，未必能补全大道；交给我回收，或许能换来眼下可用的机缘。”\n\n每交付 1 份功法残卷：\n灵石 +5万 · 7级修为丹 ×1\n\n当前持有功法残卷：${fmt(scrolls)}`,[
+    {text:'回收功法残卷×1',alt:true,onClick(){recycleDestinyScrolls(1)}},
+    {text:'回收功法残卷×10',alt:true,onClick(){recycleDestinyScrolls(10)}},
+    {text:`全部回收（${fmt(scrolls)}）`,alt:true,onClick(){recycleDestinyScrolls(scrolls)}},
+    {text:'暂不回收',ghost:true}
+  ]);
+}
+const localNpcsWithDestinyChosen=localNpcs;
+localNpcs=function(i,spot){let npcs=localNpcsWithDestinyChosen(i,spot);if(i===7&&spot===32&&!npcs.some(npc=>(npc?.name||npc?.[0])==='天命之人'))npcs=[...npcs,['天命之人','回收功法残卷，以天命灵丹与灵石相换']];return npcs};
+const localMeetWithCourierPriorityAndDestinyChosen=localMeet;
+localMeet=function(idx=0){let mapIndex=g.selectedScene??g.map,spot=activeSpot(),npc=localNpcs(mapIndex,spot)[idx],name=npc?.name||npc?.[0];if(tryDeliverCourierMission(name,mapIndex,spot))return;if(name==='天命之人')return talkDestinyChosen();return localMeetWithCourierPriorityAndDestinyChosen(idx)};
+const npcQuestIconWithDestinyChosen=npcQuestIcon;
+npcQuestIcon=function(name,mapIndex,spot){let mission=courierState().mission;if(mission?.stage==='deliver'&&mission.name===name&&mission.map===mapIndex&&mission.spot===spot)return '❗️';if(name==='天命之人')return (g.scrolls||0)>0?'❗️':'💬';return npcQuestIconWithDestinyChosen(name,mapIndex,spot)};
+
+// ===== 山魈洞 · 神秘纸条与限定兑换码 =====
+function mysteriousAuthorNoteItem(){return{type:'quest',name:'神秘纸条',qty:1,max:1,icon:'📝',sell:0,authorCodeNote:true,desc:'纸条上写着：兑换码是282526，去主页输入282526，即可获得6级修为丹×10、7级修为丹×5。'}}
+function hasMysteriousAuthorNote(){return !!g.authorCodeNoteClaimed||(g.bag||[]).some(item=>item?.authorCodeNote||item?.name==='神秘纸条')}
+function grantMysteriousAuthorNote(){
+  if(hasMysteriousAuthorNote())return true;
+  if(!addBagItem(mysteriousAuthorNoteItem())){g.authorCodeNotePending=true;return false;}
+  g.authorCodeNoteClaimed=true;g.authorCodeNotePending=false;return true;
+}
+const talkMysteriousAuthorWithCodeNote=talkMysteriousAuthor;
+talkMysteriousAuthor=function(){
+  if(g.authorCodeNotePending&&grantMysteriousAuthorNote())return showNpcResult('神秘的作者','作者从卷底抽出一张折好的纸条递来。\n\n获得任务道具：神秘纸条\n纸条上写着：兑换码是282526，去主页输入282526，即可获得6级修为丹×10、7级修为丹×5。','good');
+  return talkMysteriousAuthorWithCodeNote();
+};
+function canReceiveAuthorCodeRewards(){return bagFree()>=stackedItemSlotsNeeded(treasuryCultPillItem(6,.05,8,0),10)+stackedItemSlotsNeeded(treasuryCultPillItem(7,.18,8,3),5)}
+const redeemCodeWithAuthorNote=redeemCode;
+redeemCode=function(){
+  let code=$('#redeemInput')?.value.trim().toLowerCase();
+  if(code!=='282526')return redeemCodeWithAuthorNote();
+  if(!hasMysteriousAuthorNote())return toast('你尚未获得写有此兑换码的神秘纸条');
+  if(g.authorCodeRedeemed)return toast('这张神秘纸条上的兑换码已经使用过');
+  if(!canReceiveAuthorCodeRewards())return toast('背包空间不足，无法收取兑换奖励');
+  if(!addBagItem({...treasuryCultPillItem(6,.05,8,0),qty:10})||!addBagItem({...treasuryCultPillItem(7,.18,8,3),qty:5}))return toast('背包空间不足，兑换失败');
+  g.authorCodeRedeemed=true;$('#redeemModal')?.classList.remove('show');
+  pushLocalLog('使用神秘纸条兑换码282526，获得6级修为丹×10、7级修为丹×5。');
+  showNpcResult('神秘纸条 · 兑换成功','墨迹在纸上浮起一瞬，随即化作两只丹瓶落入背包。\n\n获得：\n6级修为丹 ×10\n7级修为丹 ×5','good');
+  render();renderBag();save();
 };
 
 function bindUi(){
