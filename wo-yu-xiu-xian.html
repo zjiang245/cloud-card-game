@@ -641,11 +641,12 @@
 @keyframes enemyPortraitNormalAttack{0%,100%{transform:translateX(0) scale(1)}38%{transform:translateX(-12%) translateY(-2px) scale(1.045)}62%{transform:translateX(-6%) translateY(0) scale(1.02)}}
 @keyframes bossPowerWave{0%{left:77%;opacity:0;transform:translate(-50%,-50%) scaleX(.25)}13%{opacity:1;transform:translate(-50%,-50%) scaleX(.92)}68%{left:29%;opacity:.96;transform:translate(-50%,-50%) scaleX(1.2)}100%{left:21%;opacity:0;transform:translate(-50%,-50%) scaleX(1.4)}}
 @keyframes enemyPortraitSkillHit{0%{transform:translateX(0)}34%{transform:translateX(12px) rotate(1deg)}66%{transform:translateX(-7px) rotate(-.6deg)}100%{transform:translateX(0)}}
-@media(max-width:650px){.ink-map{min-height:560px;background-size:contain}.map-node i{width:46px;height:46px;font-size:22px}.map-node span{font-size:10px;padding:3px 6px}}
+@media(max-width:650px){.ink-map{min-height:560px;width:100%;margin-inline:auto;background-size:100% 100%;background-position:center}.map-node i{width:46px;height:46px;font-size:22px}.map-node span{font-size:10px;padding:3px 6px}.map-enter-pop.map-enter-pop-above{transform:translate(-50%,-100px)}}
 
 /* Battle realm badges and unavailable skill states. */
-.fighter-name em.realm-badge{display:inline-flex;align-items:center;justify-content:center;min-width:72px;padding:5px 10px;border:2px solid currentColor;border-radius:6px;font-style:normal;font-size:12px;font-weight:900;line-height:1;letter-spacing:0;text-shadow:none;box-shadow:0 2px 9px #0009}
+.fighter-name em.realm-badge{display:inline-flex;align-items:center;justify-content:center;min-width:72px;padding:5px 10px;border:2px solid currentColor;border-radius:6px;font-style:normal;font-size:12px;font-weight:900;line-height:1;letter-spacing:0;-webkit-text-stroke:.35px #07170f99;paint-order:stroke fill;text-shadow:0 1px 0 #000b,0 -1px 0 #ffffff2e;box-shadow:0 2px 9px #0009}
 .fighter-name em.realm-badge.realm-tier-0{color:#efffe5;background:#326e49;border-color:#9ee58f}.fighter-name em.realm-badge.realm-tier-1{color:#dcffff;background:#097d8d;border-color:#68e3e6}.fighter-name em.realm-badge.realm-tier-2{color:#edf6ff;background:#245fa7;border-color:#8cc9ff}.fighter-name em.realm-badge.realm-tier-3{color:#f5eaff;background:#7143aa;border-color:#d5a4ff}.fighter-name em.realm-badge.realm-tier-4{color:#fff0e8;background:#ad3e3c;border-color:#ff9a85}.fighter-name em.realm-badge.realm-tier-5{color:#fff3ca;background:#a45c19;border-color:#ffd66a}.fighter-name em.realm-badge.realm-tier-6{color:#e5f7ff;background:#2e718f;border-color:#8ed7f5}.fighter-name em.realm-badge.realm-tier-7{color:#efffd9;background:#55783a;border-color:#b9e575}.fighter-name em.realm-badge.realm-tier-8{color:#fff0bf;background:#8b6220;border-color:#ffd261}.fighter-name em.realm-badge.realm-tier-9{color:#ffe4f2;background:#a13970;border-color:#ff9ecd}
+#localRealmLabel,.cultivation-hud>span,.map-player-status-card .map-floating-title>span{font-weight:800;-webkit-text-stroke:.3px #07170f88;paint-order:stroke fill;text-shadow:0 1px 0 #07170faa,0 -1px 0 #ffffff80}
 .battle-skill:disabled{background:#2e3940!important;border-color:#566169!important;color:#9aa3a8!important;filter:grayscale(1);opacity:.55;box-shadow:none;cursor:not-allowed}.battle-skill:disabled small{color:#838e94!important}
 
 /* Apprenticeship shields are battle-only protection and absorb damage before HP. */
@@ -927,7 +928,7 @@ const mapScenePortraits=[
   ['assets/world-map/map-node-portraits-v2.png','0% 50%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','33.333% 50%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','66.667% 50%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','100% 50%','400% 300%'],
   ['assets/world-map/map-node-portraits-v2.png','0% 100%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','33.333% 100%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','66.667% 100%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','100% 100%','400% 300%']
 ];
-function fresh(){let root=roots[Math.floor(Math.random()*roots.length)];return{v:1,last:Date.now(),created:Date.now(),realm:0,stage:0,cult:0,stones:100,materials:0,herbs:0,fragments:0,scrolls:0,petEggs:0,jades:0,tribPills:0,cultPills:0,boostPills:0,root:root[0],rootMul:root[1],aptitude:40+Math.floor(Math.random()*61),hp:100,maxHp:100,mana:80,baseMana:80,attack:12,defense:7,agility:5,crit:5,map:0,gear:{weapon:null,armor:null,treasure:null,helmet:null,boots:null,bracer:null},enhance:0,temper:0,jadeSlots:0,skillLevel:1,skillTier:0,insight:0,pet:null,sect:'太玄宗',sectContribution:0,autoAlchemy:true,tribBonus:0,tribFails:0,kills:0,deaths:0,encounters:0,logs:[],offline:null,newbieGuideDone:false,prologueDone:false,mainQuest:'血月之仇'}};
+function fresh(){let root=roots[Math.floor(Math.random()*roots.length)];return{v:1,last:Date.now(),created:Date.now(),realm:0,stage:0,cult:0,stones:100,materials:0,herbs:0,fragments:0,scrolls:0,petEggs:0,jades:0,tribPills:0,cultPills:0,boostPills:0,root:root[0],rootMul:root[1],aptitude:40+Math.floor(Math.random()*61),hp:100,maxHp:100,mana:80,baseMana:80,attack:12,defense:7,agility:5,crit:5,map:0,gear:{weapon:null,armor:null,treasure:null,helmet:null,boots:null,bracer:null},enhance:0,temper:0,jadeSlots:0,skillLevel:1,skillTier:0,insight:0,pet:null,sect:'太玄宗',sectContribution:0,autoAlchemy:true,tribBonus:0,tribFails:0,kills:0,deaths:0,encounters:0,logs:[],offline:null,newbieGuideDone:false,prologueDone:false,mainQuest:'血月之仇',mapUiSettings:{randomEvents:true,expanded:true,statusSwitch:true,layoutDefaultsV2:true}}};
 localMapBackgrounds.push('assets/map-backgrounds/taixuan-zong.png');
 localMapBackgrounds.push('assets/map-backgrounds/tianmo-zong.png');
 // 天魔宗在击败仙界天门守门仙将后才会显现在大地图右上角。
@@ -1571,7 +1572,7 @@ function panWorld(world,coord){let left=Math.max(-90,Math.min(0,50-coord[0]*1.9)
 function stableRand(seed){let h=2166136261;for(let c of String(seed)){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return(h>>>0)/4294967296}
 function recommendedMonsterMajor(i){let req=maps[i]?.[1]||0;return Math.max(0,Math.min(realms.length-1,Math.floor(req/4)))}
 function monsterStageMultiplier(stage){return Math.pow(1.05,Math.max(0,Math.min(3,stage||0)))}
-function localMonsterRealm(i,spot,m,idx){if(!m||m.type==='采集'||m.dead)return'';let name=m.originalName||m.name,fixed=getMonsterStats(name),overridden=!!g.devMonsterOverrides?.[name];if(m.boss||overridden)return fixed?.realm||`${realms[Math.min(realms.length-1,recommendedMonsterMajor(i)+1)]}${stages[0]}`;let stage=Math.floor(stableRand(`${i}:${spot}:${m.name}:${idx}`)*4);return`${realms[recommendedMonsterMajor(i)]}${stages[stage]}`}
+function localMonsterRealm(i,spot,m,idx){if(!m||m.type==='采集'||m.dead)return'';if(m.wanderingMonster?.realm)return m.wanderingMonster.realm;let name=m.originalName||m.name,fixed=getMonsterStats(name),overridden=!!g.devMonsterOverrides?.[name];if(m.boss||overridden)return fixed?.realm||`${realms[Math.min(realms.length-1,recommendedMonsterMajor(i)+1)]}${stages[0]}`;let stage=Math.floor(stableRand(`${i}:${spot}:${m.name}:${idx}`)*4);return`${realms[recommendedMonsterMajor(i)]}${stages[stage]}`}
 function transferGuideText(from,to){
   let target=mapScenes[to][1],req=sceneReqText(to);
   return `前方通往${target}的界门尚未响应。\n\n你在大地图上还没有取得进入${target}的资格，需要先满足：${req}。\n\n请留在${mapScenes[from][1]}继续修炼、挑战首领；等大地图上的${target}解锁后，再回到这个传送路点通行。`;
@@ -3011,7 +3012,8 @@ const npcDialogPortraits={
   '千年狐王':'fox-king','夜行狼王':'wolf-king','千年古树':'ancient-tree','巡山妖将':'mountain-demon-general',
   '驿站掌柜':'innkeeper','黑市商人':'black-market-merchant','秘宝商人':'treasure-merchant','洞府残魂':'cave-remnant',
   '讲经弟子':'mo-tianhe','值守弟子':'sun-mingli','守阁弟子':'shen-zhibai','巡峰弟子':'zhou-shouyue','护峰道童':'ayan',
-  '紫云峰评语':'qiu-zishan','掌教法旨':'lin-xuanyi','太玄宗宗门册':'lin-xuanyi','牛五':'niuwu','石砚':'shiyan','异火已成':'xiao-huo'
+  '紫云峰评语':'qiu-zishan','掌教法旨':'lin-xuanyi','太玄宗宗门册':'lin-xuanyi','牛五':'niuwu','石砚':'shiyan','异火已成':'xiao-huo',
+  '萧焱':'battle-xiao-yan','小木屋打手':'battle-cabin-enforcer','叛教修士':'battle-renegade-cultivator'
 };
 function npcPortraitFor(title){let label=String(title||'');let key=Object.keys(npcDialogPortraits).find(name=>label===name)||Object.keys(npcDialogPortraits).find(name=>label.includes(name));return key?`assets/npc-portraits/${npcDialogPortraits[key]}.png`:''}
 function openNpcDialog(title,text,buttons=[{text:'知道了'}],portraitOverride=''){let portrait=portraitOverride||npcPortraitFor(title),card=$('#npcDialogCard'),image=$('#npcDialogPortrait');$('#npcDialogTitle').textContent=title;$('#npcDialogText').textContent=text;if(card)card.classList.toggle('has-portrait',!!portrait);if(image){image.src=portrait||'';image.alt=portrait?`${title}人物特写`:'';image.classList.toggle('tianmo-facing-left',portrait.includes('assets/npc-portraits/tianmo-'))}$('#npcDialogActions').innerHTML=buttons.map((b,i)=>`<button class="btn npc-dialog-choice" data-npc-dialog-btn="${i}">${b.text}</button>`).join('');document.querySelectorAll('[data-npc-dialog-btn]').forEach(btn=>btn.onclick=()=>{let action=buttons[+btn.dataset.npcDialogBtn];if(action?.close!==false)closeNpcDialog();action?.onClick?.()});$('#npcDialogModal').classList.add('show')}
@@ -3954,7 +3956,7 @@ pushLocalLog(`拜访${name}：${npc[1]}，修为+${fmt(gain)}，参悟+1`);
 log(`小地图NPC：${name}给予点拨`,'good');
 renderSceneMap();render();save();
 }
-function resolveLocalTarget(target,batch=false){let i=g.selectedScene??g.map,spot=activeSpot();if(!target||target.dead)return false;if(target.type==='采集'){let left=gatherLeft(i,spot,target.name);if(left){if(!batch)toast(`此处药材尚需${Math.ceil(left/60000)}分钟后再生`);return false}g.gatherCooldowns=g.gatherCooldowns||{};let amount=1+i*5+Math.floor(Math.random()*5);addHerbResource(amount);g.gatherCooldowns[gatherKey(i,spot,target.name)]=Date.now()+3600000;pushLocalLog(`采集：${target.name}，药材+${amount}，已存入背包。此处药材1小时后再生。`);log(`小地图采集：${target.name}，药材+${amount}`,'good');return {type:'采集',name:target.name}}if(target.type!=='战斗')return false;g.deadMobs=g.deadMobs||{};let realName=target.originalName||target.name,loot=target.loot||getMonsterStats(realName)?.loot||{materials:[],equipment:{rolls:0,chance:0},skillBookChance:0},cult=monsterCultivationReward(i,target.boss);g.cult+=cult;g.kills++;trackForestDisputeKill(realName);if(target.boss){g.bossKills=g.bossKills||{};g.bossKills[i]=(g.bossKills[i]||0)+1;syncMainQuestProgress()}let materialRewards=grantMonsterMaterials(loot.materials),materialText=materialRewards.map(x=>`${x.name}${x.count>1?'×'+x.count:''}`).join('、');g.deadMobs[deadMobKey(i,spot,realName)]=Date.now()+(target.boss?30:5)*60000;let monsterRealm=target._battleRealm||localMonsterRealm(i,spot,target,0);delete target._battleRealm;let equips=dropEquip(realName,target.boss,monsterRealm,i,loot.equipment),bookDrop=Math.random()<(loot.skillBookChance||0),bookText='';if(bookDrop){let book=randomSkillBook(i);addBagItem(book);bookText=`，获得${book.name}`}let equipText=equips.length?`，掉落${equips.join('、')}`:'，未掉落装备';pushLocalLog(`${target.boss?'Boss战':'战斗'}：${realName}，修为+${fmt(cult)}，获得${materialText||'无材料'}${equipText}${bookText}。${target.boss?'30分钟':'5分钟'}后复活。`);log(`小地图战斗：${realName}，获得${materialText||'无材料'}${equips.length?'，装备掉落':''}`,'good');return {type:'战斗',name:realName,materials:materialRewards}}
+function resolveLocalTarget(target,batch=false){let i=g.selectedScene??g.map,spot=activeSpot();if(!target||target.dead)return false;if(target.type==='采集'){let left=gatherLeft(i,spot,target.name);if(left){if(!batch)toast(`此处药材尚需${Math.ceil(left/60000)}分钟后再生`);return false}g.gatherCooldowns=g.gatherCooldowns||{};let amount=1+i*5+Math.floor(Math.random()*5);addHerbResource(amount);g.gatherCooldowns[gatherKey(i,spot,target.name)]=Date.now()+3600000;pushLocalLog(`采集：${target.name}，药材+${amount}，已存入背包。此处药材1小时后再生。`);log(`小地图采集：${target.name}，药材+${amount}`,'good');return {type:'采集',name:target.name}}if(target.type!=='战斗')return false;g.deadMobs=g.deadMobs||{};let realName=target.originalName||target.name,loot=target.loot||getMonsterStats(realName)?.loot||{materials:[],equipment:{rolls:0,chance:0},skillBookChance:0},cult=target.wanderingMonster?.cultReward??monsterCultivationReward(i,target.boss),stoneReward=Math.max(0,Math.floor(target.wanderingMonster?.stoneReward||0));g.cult+=cult;if(stoneReward)g.stones=(g.stones||0)+stoneReward;g.kills++;trackForestDisputeKill(realName);if(target.boss){g.bossKills=g.bossKills||{};g.bossKills[i]=(g.bossKills[i]||0)+1;syncMainQuestProgress()}let materialRewards=grantMonsterMaterials(loot.materials),materialText=materialRewards.map(x=>`${x.name}${x.count>1?'×'+x.count:''}`).join('、');g.deadMobs[deadMobKey(i,spot,realName)]=Date.now()+(target.boss?30:5)*60000;let monsterRealm=target._battleRealm||localMonsterRealm(i,spot,target,0);delete target._battleRealm;let equips=dropEquip(realName,target.boss,monsterRealm,i,loot.equipment),bookDrop=Math.random()<(loot.skillBookChance||0),bookText='';if(bookDrop){let book=randomSkillBook(i);addBagItem(book);bookText=`，获得${book.name}`}let equipText=equips.length?`，掉落${equips.join('、')}`:'，未掉落装备',rewardText=`修为+${fmt(cult)}${stoneReward?`，灵石+${fmt(stoneReward)}`:''}`,battleKind=target.wanderingMonster?'游荡妖兽':target.boss?'Boss战':'战斗';pushLocalLog(`${battleKind}：${realName}，${rewardText}，获得${materialText||'无材料'}${equipText}${bookText}。${target.boss?'30分钟':'5分钟'}后复活。`);log(`小地图战斗：${realName}，${rewardText}`,'good');return {type:'战斗',name:realName,materials:materialRewards}}
 function localHunt(idx=0){let target=localMobs(g.selectedScene??g.map,activeSpot())[idx];if(!target)return toast('此处暂无可探索目标');if(target.dead)return toast(target.permanentCorpse?'萧焱已伏诛，不会复活':`${target.originalName||target.name}尚未复活`);if(target.type==='战斗')return openBattle(target,idx);let ok=resolveLocalTarget(target,false);if(!ok)return toast('此目标暂不可探索');renderSceneMap();render();save()}
 let localExploreSession=null;
 function areaExploreUnlocked(i){return i>=0&&i<10&&(g.bossKills?.[i]||0)>0}
@@ -4088,7 +4090,7 @@ function renderHomeMap(){
   let s=mapScenes[g.selectedScene];
   if(sceneUnlocked(g.selectedScene)){
     let enter=document.createElement('button');
-    enter.className='map-enter-pop';
+    enter.className='map-enter-pop'+(s[5]>=80?' map-enter-pop-above':'');
     enter.style.setProperty('--x',s[4]+'%');
     enter.style.setProperty('--y',s[5]+'%');
     enter.textContent='进入';
@@ -4621,7 +4623,7 @@ talkTieWufeng=function(){
   ]);
 };
 
-const xiaoYanStats={hp:3900,mp:1200,attack:435,defense:255,realm:'金丹中期',icon:'🔥'};
+const xiaoYanStats={hp:3900,mp:1200,attack:435,defense:255,realm:'金丹中期',icon:'🔥',portrait:'assets/npc-portraits/battle-xiao-yan.png'};
 let xiaoYanPursuitTimer=null;
 function xiaoYanHuntActive(){return !!g.xiaoYanHunt?.active}
 function xiaoYanBlocksMovement(){return xiaoYanHuntActive()&&g.xiaoYanHunt?.phase==='pursuitDialog'}
@@ -6399,7 +6401,7 @@ function repayCabinDebts(){
 }
 function cabinCollectionActive(){return cabinDebtState().collectionRemaining>0}
 function cabinEnforcerTarget(){
-  return {name:'小木屋打手',type:'战斗',cabinEnforcer:true,noRun:true,customStats:{hp:25000,mp:1200,attack:1800,defense:1000,realm:'化神后期',icon:'🗡️'}};
+  return {name:'小木屋打手',type:'战斗',cabinEnforcer:true,noRun:true,customStats:{hp:25000,mp:1200,attack:1800,defense:1000,realm:'化神后期',icon:'🗡️',portrait:'assets/npc-portraits/battle-cabin-enforcer.png'}};
 }
 function cabinEnforcerLootPenalty(){
   let candidates=(g.bag||[]).map((item,index)=>({item,index})).filter(x=>x.item&&x.item.type!=='debt');
@@ -6772,7 +6774,7 @@ battleSkillEffect=async function(sk,idx=0){
 
 // 万妖古域 · 血藤林：叛教修士事件。
 function renegadeCultivatorTarget(){
-  return {name:'叛教修士',type:'战斗',renegadeCultivator:true,loot:{materials:[],equipment:{rolls:0,chance:0},skillBookChance:0},customStats:{hp:12000,mp:1200,attack:3200,defense:4500,realm:'化神大圆满',icon:'🧙'}};
+  return {name:'叛教修士',type:'战斗',renegadeCultivator:true,loot:{materials:[],equipment:{rolls:0,chance:0},skillBookChance:0},customStats:{hp:12000,mp:1200,attack:3200,defense:4500,realm:'化神大圆满',icon:'🧙',portrait:'assets/npc-portraits/battle-renegade-cultivator.png'}};
 }
 function talkRenegadeCultivator(){
   if(g.renegadeCultivatorDefeated){
@@ -7810,7 +7812,13 @@ function triggerMapRandomEvent(area){
   let events=[randomWoundedCultivator,randomTrueFalseChest,randomTravelingMerchant,randomArrayFragment];
   events[Math.floor(Math.random()*events.length)](area);return true;
 }
-function mapUiSettings(){return g.mapUiSettings||(g.mapUiSettings={randomEvents:true,expanded:false})}
+function mapUiSettings(){
+  let settings=g.mapUiSettings||(g.mapUiSettings={randomEvents:true,expanded:true,statusSwitch:true,layoutDefaultsV2:true});
+  // Upgrade older saves once while preserving any choices made after this migration.
+  if(!settings.layoutDefaultsV2){settings.expanded=true;settings.statusSwitch=true;settings.layoutDefaultsV2=true}
+  if(settings.randomEvents===undefined)settings.randomEvents=true;
+  return settings;
+}
 const gameThemeOptions={original:'原皮',blue:'蓝色',red:'红色',night:'夜间',gold:'土豪金'};
 function gameTheme(){return gameThemeOptions[g.uiTheme]?g.uiTheme:'original'}
 function applyGameTheme(){
@@ -8515,6 +8523,93 @@ redeemCode=function(){
   pushLocalLog('使用神秘纸条兑换码282526，获得6级修为丹×10、7级修为丹×5。');
   showNpcResult('神秘纸条 · 兑换成功','墨迹在纸上浮起一瞬，随即化作两只丹瓶落入背包。\n\n获得：\n6级修为丹 ×10\n7级修为丹 ×5','good');
   render();renderBag();save();
+};
+
+// ===== 非宗门地图 · 游荡妖兽 =====
+// 每次成功走到新路点才进行一次判定；每只最多停留一小时。
+const WANDERING_MONSTER_NAMES=['山魈','石皮鼠','青竹妖','岩甲虫','月狐','树精','迷雾蝶','夜行狼','赤炎兽','火鸦','岩浆虫','炎魔','虾兵','蟹将','老海龟','海蛇','血藤妖','荒骨狼','毒雾虫','妖王花','战魂','铁甲尸','煞灵','断剑鬼','虚空影','星砂虫','裂隙怪','遗迹守卫','魔修残魂','黑莲妖','魔焰鬼','残碑灵','雷灵','云兽','电光虫','雷鸟','天门守卫','仙鹤','金甲力士','天兵残影'];
+const WANDERING_STAT_REFERENCES=['岩甲虫','夜行狼','炎魔','海蛇','妖王花','断剑鬼','遗迹守卫','残碑灵','雷鸟','天兵残影'];
+const WANDERING_MONSTER_STAY_MS=60*60*1000;
+const WANDERING_MONSTER_MAP_LIMIT=2;
+function wanderingMonsterAllowed(area){return area>=0&&area<10&&!deepSeaActive()&&!smallWorldActive()&&!cabinWorldActive()}
+function wanderingMonsterState(){return g.wanderingMonsters||(g.wanderingMonsters={})}
+function wanderingMonsterKey(area,spot){return `${area}:${spot}`}
+function clearExpiredWanderingMonsters(area=null){
+  let state=wanderingMonsterState(),now=Date.now();
+  Object.entries(state).forEach(([key,record])=>{
+    let recordArea=Number(key.split(':')[0]);
+    if(area!==null&&recordArea!==area)return;
+    let expiresAt=Number(record?.expiresAt)||((Number(record?.createdAt)||now)+WANDERING_MONSTER_STAY_MS);
+    if(expiresAt<=now)delete state[key];
+    else if(!record.expiresAt)record.expiresAt=expiresAt;
+  });
+}
+function wanderingMonsterCount(area){
+  clearExpiredWanderingMonsters(area);
+  return Object.keys(wanderingMonsterState()).filter(key=>Number(key.split(':')[0])===area).length;
+}
+function wanderingBossCultivationReward(major){
+  let best=0;
+  Object.entries(spotBosses).forEach(([key,[name]])=>{
+    let stats=getMonsterStats(name),area=+key.split(':')[0];
+    if(stats&&Math.floor(Math.max(0,realmNameIndex(stats.realm||''))/4)===major)best=Math.max(best,monsterCultivationReward(area,true));
+  });
+  return best||monsterCultivationReward(Math.max(0,Math.min(9,major)),true);
+}
+function rollWanderingMonster(area,spot){
+  if(!wanderingMonsterAllowed(area))return false;
+  let key=wanderingMonsterKey(area,spot),state=wanderingMonsterState();
+  clearExpiredWanderingMonsters(area);
+  if(state[key]||wanderingMonsterCount(area)>=WANDERING_MONSTER_MAP_LIMIT||Math.random()>=.05)return false;
+  let sourceName=WANDERING_MONSTER_NAMES[Math.floor(Math.random()*WANDERING_MONSTER_NAMES.length)],major=Math.floor(Math.random()*realms.length),stage=Math.floor(Math.random()*stages.length);
+  let createdAt=Date.now();
+  state[key]={sourceName,major,stage,scale:.92+Math.random()*.16,createdAt,expiresAt:createdAt+WANDERING_MONSTER_STAY_MS};
+  return true;
+}
+function makeWanderingMonster(area,spot){
+  if(!wanderingMonsterAllowed(area))return null;
+  let key=wanderingMonsterKey(area,spot),state=wanderingMonsterState(),record=state[key];
+  if(!record)return null;
+  let expiresAt=Number(record.expiresAt)||((Number(record.createdAt)||Date.now())+WANDERING_MONSTER_STAY_MS);
+  if(expiresAt<=Date.now()){delete state[key];return null}
+  if(!record.expiresAt)record.expiresAt=expiresAt;
+  let sourceName=record.sourceName,source=getMonsterStats(sourceName);
+  if(!source)return null;
+  let major=Math.max(0,Math.min(realms.length-1,record.major||0)),stage=Math.max(0,Math.min(stages.length-1,record.stage||0)),realm=`${realms[major]}${stages[stage]}`;
+  let reference=getMonsterStats(WANDERING_STAT_REFERENCES[major])||source,scale=Math.max(.5,Number(record.scale)||1)*monsterStageMultiplier(stage);
+  let stats={
+    hp:Math.max(1,Math.round(reference.hp*scale)),mp:Math.max(0,Math.round(reference.mp*scale)),attack:Math.max(1,Math.round(reference.attack*scale)),defense:Math.max(0,Math.round(reference.defense*scale)),
+    realm,icon:source.icon||'✦',portrait:source.portrait||''
+  };
+  return {
+    name:`游荡${sourceName}`,type:'战斗',wanderingMonster:{realm,cultReward:wanderingBossCultivationReward(major)*50,stoneReward:1000*Math.min(10,major+1)},
+    customStats:stats,loot:{materials:[],equipment:{rolls:0,chance:0},skillBookChance:0}
+  };
+}
+const localMobsWithWanderingMonsters=localMobs;
+localMobs=function(i,spot){
+  let mobs=localMobsWithWanderingMonsters(i,spot),wanderer=makeWanderingMonster(i,spot);
+  if(wanderer)mobs.push(withMobState(i,spot,wanderer));
+  return mobs;
+};
+const finishLocalMoveWithWanderingMonsters=finishLocalMove;
+finishLocalMove=function(i,nextSpot){
+  let from=activeSpot(),result=finishLocalMoveWithWanderingMonsters(i,nextSpot);
+  if(activeSpot()!==from&&rollWanderingMonster(i,activeSpot())){
+    let wanderer=makeWanderingMonster(i,activeSpot());
+    pushLocalLog(`【游荡妖兽】${wanderer?.name||'未知妖兽'}出现在${spotLabel(i,activeSpot())}。`);
+    toast('前方有游荡妖兽出没',2600);renderSceneMap();save();
+  }
+  return result;
+};
+const resolveLocalTargetWithWanderingMonsterLifecycle=resolveLocalTarget;
+resolveLocalTarget=function(target,batch=false){
+  let area=g.selectedScene??g.map,spot=activeSpot(),result=resolveLocalTargetWithWanderingMonsterLifecycle(target,batch);
+  if(result?.type==='战斗'&&target?.wanderingMonster){
+    delete wanderingMonsterState()[wanderingMonsterKey(area,spot)];
+    if(g.deadMobs)delete g.deadMobs[deadMobKey(area,spot,target.name)];
+  }
+  return result;
 };
 
 function bindUi(){
