@@ -8612,6 +8612,101 @@ resolveLocalTarget=function(target,batch=false){
   return result;
 };
 
+// ===== CC0 游戏音频 =====
+// 首次用户点击后才开始播放，避开浏览器对自动播放的限制。
+const GAME_AUDIO={
+  bgm:{
+    overworld:'assets/audio/bgm/map-dark-ambient.ogg',
+    forest:'assets/audio/bgm/map-forest.mp3',
+    underwater:'assets/audio/bgm/map-underwater.ogg',
+    danger:'assets/audio/bgm/map-dark-temple.ogg',
+    battle:'assets/audio/bgm/battle.ogg',
+    boss:'assets/audio/bgm/boss-battle.mp3'
+  },
+  sfx:{
+    move:'assets/audio/sfx/move.ogg',
+    attack:'assets/audio/sfx/attack.ogg',
+    hit:'assets/audio/sfx/hit.mp3',
+    escape:'assets/audio/sfx/escape.ogg',
+    victory:'assets/audio/sfx/victory.mp3',
+    fire:'assets/audio/sfx/skill-fire.ogg',
+    arcane:'assets/audio/sfx/skill-arcane.ogg',
+    water:'assets/audio/sfx/skill-water.ogg',
+    heal:'assets/audio/sfx/skill-heal.ogg',
+    thunder:'assets/audio/sfx/skill-thunder.ogg'
+  }
+};
+let gameAudioUnlocked=false,gameBgm=null,gameBgmKey='',gameSfxPool=[];
+function audioIsMuted(){return !!g.audioMuted}
+function mapBgmKey(area=g.selectedScene??g.map){
+  if(deepSeaActive()||area===3)return 'underwater';
+  if([2,4,5,6,7,8,9,11].includes(area))return 'danger';
+  return area===0||area===1||area===10?'forest':'overworld';
+}
+function playGameBgm(key){
+  if(!gameAudioUnlocked||audioIsMuted()||!GAME_AUDIO.bgm[key]||gameBgmKey===key)return;
+  if(gameBgm){gameBgm.pause();gameBgm.currentTime=0}
+  gameBgmKey=key;
+  gameBgm=new Audio(GAME_AUDIO.bgm[key]);
+  gameBgm.loop=true;gameBgm.preload='auto';gameBgm.volume=.22;
+  gameBgm.play().catch(()=>{});
+}
+function playCurrentBgm(){
+  if(!gameAudioUnlocked||audioIsMuted())return;
+  if($('#battleModal')?.classList.contains('show')&&battleState)return playGameBgm(battleState.target?.boss?'boss':'battle');
+  if(!$('#sceneMapModal')?.classList.contains('show'))return playGameBgm('overworld');
+  playGameBgm(mapBgmKey());
+}
+function playGameSfx(kind,volume=.45){
+  let src=GAME_AUDIO.sfx[kind];
+  if(!gameAudioUnlocked||audioIsMuted()||!src)return;
+  let clip=new Audio(src);clip.preload='auto';clip.volume=volume;
+  gameSfxPool.push(clip);
+  clip.addEventListener('ended',()=>{gameSfxPool=gameSfxPool.filter(item=>item!==clip)},{once:true});
+  clip.play().catch(()=>{});
+}
+function skillSfxKind(skill){
+  let name=String(skill?.name||'');
+  if(/雷|星砂掌|破碎星寰|电闪/.test(name))return 'thunder';
+  if(/水|浪|冰|海/.test(name))return 'water';
+  if(/火/.test(name))return 'fire';
+  if(/包扎|回春|枯木|紫霞|圣光/.test(name))return 'heal';
+  return 'arcane';
+}
+window.addEventListener('pointerdown',()=>{if(!gameAudioUnlocked){gameAudioUnlocked=true;playCurrentBgm()}},{once:true,passive:true});
+const openSceneMapWithAudio=openSceneMap;
+openSceneMap=function(){let result=openSceneMapWithAudio();playCurrentBgm();return result};
+const renderSceneMapWithAudio=renderSceneMap;
+renderSceneMap=function(){let result=renderSceneMapWithAudio();playCurrentBgm();return result};
+const finishLocalMoveWithAudio=finishLocalMove;
+finishLocalMove=function(i,nextSpot){let before=activeSpot(),result=finishLocalMoveWithAudio(i,nextSpot);if(activeSpot()!==before){playGameSfx('move',.32);playCurrentBgm()}return result};
+const openBattleWithAudio=openBattle;
+openBattle=function(target,idx){let result=openBattleWithAudio(target,idx);playCurrentBgm();return result};
+const closeBattleWithAudio=closeBattle;
+closeBattle=function(keep=false){let result=closeBattleWithAudio(keep);playCurrentBgm();return result};
+document.addEventListener('click',e=>{if(e.target.closest('#closeSceneMap'))setTimeout(playCurrentBgm,0)});
+const battleSkillEffectWithAudio=battleSkillEffect;
+battleSkillEffect=async function(skill,idx=0){
+  if(skill&&!battleSkillBlockReason(skill,idx,battleState))playGameSfx(skillSfxKind(skill),.5);
+  return battleSkillEffectWithAudio(skill,idx);
+};
+const playNormalAttackAnimationWithAudio=playNormalAttackAnimation;
+playNormalAttackAnimation=async function(side){
+  playGameSfx('attack',side==='player'?.34:.27);
+  return playNormalAttackAnimationWithAudio(side);
+};
+const battleFxWithAudio=battleFx;
+battleFx=function(side,text,heal=false,kind='main'){
+  if(!heal&&String(text||'').startsWith('-'))playGameSfx('hit',.24);
+  return battleFxWithAudio(side,text,heal,kind);
+};
+const playRunAnimationWithAudio=playRunAnimation;
+playRunAnimation=async function(){playGameSfx('escape',.34);return playRunAnimationWithAudio()};
+const finishBattleWinWithAudioSfx=finishBattleWin;
+finishBattleWin=function(){if(battleState)playGameSfx('victory',.4);return finishBattleWinWithAudioSfx()};
+const handleBattleDeathWithAudioSfx=handleBattleDeath;
+handleBattleDeath=function(enemyName){playGameSfx('hit',.36);return handleBattleDeathWithAudioSfx(enemyName)};
+
 function bindUi(){
 ensureMapSettingsUi();
 $('#nav').onclick=e=>{
