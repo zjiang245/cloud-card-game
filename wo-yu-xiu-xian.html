@@ -928,7 +928,7 @@ const mapScenePortraits=[
   ['assets/world-map/map-node-portraits-v2.png','0% 50%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','33.333% 50%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','66.667% 50%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','100% 50%','400% 300%'],
   ['assets/world-map/map-node-portraits-v2.png','0% 100%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','33.333% 100%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','66.667% 100%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','100% 100%','400% 300%']
 ];
-function fresh(){let root=roots[Math.floor(Math.random()*roots.length)];return{v:1,last:Date.now(),created:Date.now(),realm:0,stage:0,cult:0,stones:100,materials:0,herbs:0,fragments:0,scrolls:0,petEggs:0,jades:0,tribPills:0,cultPills:0,boostPills:0,root:root[0],rootMul:root[1],aptitude:40+Math.floor(Math.random()*61),hp:100,maxHp:100,mana:80,baseMana:80,attack:12,defense:7,agility:5,crit:5,map:0,gear:{weapon:null,armor:null,treasure:null,helmet:null,boots:null,bracer:null},enhance:0,temper:0,jadeSlots:0,skillLevel:1,skillTier:0,insight:0,pet:null,sect:'太玄宗',sectContribution:0,autoAlchemy:true,tribBonus:0,tribFails:0,kills:0,deaths:0,encounters:0,logs:[],offline:null,newbieGuideDone:false,prologueDone:false,mainQuest:'血月之仇',mapUiSettings:{randomEvents:true,expanded:true,statusSwitch:true,layoutDefaultsV2:true}}};
+function fresh(){let root=roots[Math.floor(Math.random()*roots.length)];return{v:1,last:Date.now(),created:Date.now(),realm:0,stage:0,cult:0,stones:100,materials:0,herbs:0,fragments:0,scrolls:0,petEggs:0,jades:0,tribPills:0,cultPills:0,boostPills:0,root:root[0],rootMul:root[1],aptitude:40+Math.floor(Math.random()*61),hp:100,maxHp:100,mana:80,baseMana:80,attack:12,defense:7,agility:5,crit:5,map:0,gear:{weapon:null,armor:null,treasure:null,helmet:null,boots:null,bracer:null},enhance:0,temper:0,jadeSlots:0,skillLevel:1,skillTier:0,insight:0,pet:null,sect:'太玄宗',sectContribution:0,autoAlchemy:true,tribBonus:0,tribFails:0,kills:0,deaths:0,encounters:0,logs:[],offline:null,newbieGuideDone:false,prologueDone:false,mainQuest:'血月之仇',mapUiSettings:{randomEvents:true,expanded:true,statusSwitch:true,audioEnabled:true,layoutDefaultsV2:true}}};
 localMapBackgrounds.push('assets/map-backgrounds/taixuan-zong.png');
 localMapBackgrounds.push('assets/map-backgrounds/tianmo-zong.png');
 // 天魔宗在击败仙界天门守门仙将后才会显现在大地图右上角。
@@ -7817,6 +7817,7 @@ function mapUiSettings(){
   // Upgrade older saves once while preserving any choices made after this migration.
   if(!settings.layoutDefaultsV2){settings.expanded=true;settings.statusSwitch=true;settings.layoutDefaultsV2=true}
   if(settings.randomEvents===undefined)settings.randomEvents=true;
+  if(settings.audioEnabled===undefined)settings.audioEnabled=true;
   return settings;
 }
 const gameThemeOptions={original:'原皮',blue:'蓝色',red:'红色',night:'夜间',gold:'土豪金'};
@@ -7834,10 +7835,11 @@ function ensureMapSettingsUi(){
   let modal=$('#mapSettingsModal');
   if(!modal){
     modal=document.createElement('div');modal.id='mapSettingsModal';modal.className='event-modal';
-    modal.innerHTML='<div><h2>地图设置</h2><div class="map-settings-list"><label class="map-setting-row"><span><b>主题风格</b><small>切换游戏的主背景、面板、弹窗与战斗边框配色。</small></span><select class="map-theme-select" id="themeSelect"><option value="original">原皮</option><option value="blue">蓝色</option><option value="red">红色</option><option value="night">夜间</option><option value="gold">土豪金</option></select></label><label class="map-setting-row"><span><b>随机事件</b><small>移动路点时触发受伤修士、真假宝箱、临时商队与阵法残页。</small></span><input class="map-setting-switch" id="toggleRandomEvents" type="checkbox"></label><label class="map-setting-row"><span><b>扩大地图区域</b><small>隐藏区域全览和当前目标，扩大当前小地图的显示范围。</small></span><input class="map-setting-switch" id="toggleExpandedMap" type="checkbox"></label></div><div class="bag-actions"><button class="btn ghost" id="closeMapSettingsBtn">关闭</button></div></div>';
+    modal.innerHTML='<div><h2>地图设置</h2><div class="map-settings-list"><label class="map-setting-row"><span><b>主题风格</b><small>切换游戏的主背景、面板、弹窗与战斗边框配色。</small></span><select class="map-theme-select" id="themeSelect"><option value="original">原皮</option><option value="blue">蓝色</option><option value="red">红色</option><option value="night">夜间</option><option value="gold">土豪金</option></select></label><label class="map-setting-row"><span><b>音乐与音效</b><small>控制背景音乐、战斗、技能与路点移动音效。</small></span><input class="map-setting-switch" id="toggleGameAudio" type="checkbox"></label><label class="map-setting-row"><span><b>随机事件</b><small>移动路点时触发受伤修士、真假宝箱、临时商队与阵法残页。</small></span><input class="map-setting-switch" id="toggleRandomEvents" type="checkbox"></label><label class="map-setting-row"><span><b>扩大地图区域</b><small>隐藏区域全览和当前目标，扩大当前小地图的显示范围。</small></span><input class="map-setting-switch" id="toggleExpandedMap" type="checkbox"></label></div><div class="bag-actions"><button class="btn ghost" id="closeMapSettingsBtn">关闭</button></div></div>';
     document.body.appendChild(modal);
     $('#toggleRandomEvents').onchange=e=>updateMapUiSetting('randomEvents',e.target.checked);
     $('#toggleExpandedMap').onchange=e=>updateMapUiSetting('expanded',e.target.checked);
+    $('#toggleGameAudio').onchange=e=>setGameAudioEnabled(e.target.checked);
     $('#themeSelect').onchange=e=>setGameTheme(e.target.value);
     $('#closeMapSettingsBtn').onclick=()=>modal.classList.remove('show');
   }
@@ -7954,6 +7956,7 @@ function openMapSettings(){
   ensureMapSettingsUi();let state=mapUiSettings();
   $('#toggleRandomEvents').checked=state.randomEvents!==false;
   $('#toggleExpandedMap').checked=!!state.expanded;
+  $('#toggleGameAudio').checked=state.audioEnabled!==false;
   $('#themeSelect').value=gameTheme();
   syncMapSettingsControls();
   $('#mapSettingsModal').classList.add('show');
@@ -8620,6 +8623,16 @@ const GAME_AUDIO={
     forest:'assets/audio/bgm/map-forest.mp3',
     underwater:'assets/audio/bgm/map-underwater.ogg',
     danger:'assets/audio/bgm/map-dark-temple.ogg',
+    qingyun:'assets/audio/bgm/map-qingyun.ogg',
+    youyue:'assets/audio/bgm/map-youyue.ogg',
+    chiyan:'assets/audio/bgm/map-chiyan.ogg',
+    wanyao:'assets/audio/bgm/map-wanyao.ogg',
+    tianyuan:'assets/audio/bgm/map-tianyuan.ogg',
+    xukong:'assets/audio/bgm/map-xukong.mp3',
+    xianmo:'assets/audio/bgm/map-xianmo.mp3',
+    jiutian:'assets/audio/bgm/map-jiutian.ogg',
+    xianjie:'assets/audio/bgm/map-xianjie.ogg',
+    tianmo:'assets/audio/bgm/map-tianmo.ogg',
     battle:'assets/audio/bgm/battle.ogg',
     boss:'assets/audio/bgm/boss-battle.mp3'
   },
@@ -8637,10 +8650,13 @@ const GAME_AUDIO={
   }
 };
 let gameAudioUnlocked=false,gameBgm=null,gameBgmKey='',gameSfxPool=[];
-function audioIsMuted(){return !!g.audioMuted}
+const GAME_SFX_MAX_MS={move:900,attack:900,hit:900,escape:1200,victory:2800,fire:1600,arcane:1600,water:1600,heal:1900,thunder:1900};
+const GAME_BGM_GAIN={overworld:.20,forest:.20,underwater:.19,danger:.18,qingyun:.18,youyue:.17,chiyan:.18,wanyao:.18,tianyuan:.17,xukong:.17,xianmo:.17,jiutian:.16,xianjie:.20,tianmo:.17,battle:.19,boss:.18};
+function audioIsMuted(){return mapUiSettings().audioEnabled===false||!!g.audioMuted}
 function mapBgmKey(area=g.selectedScene??g.map){
   if(deepSeaActive()||area===3)return 'underwater';
-  if([2,4,5,6,7,8,9,11].includes(area))return 'danger';
+  let mapTracks={0:'qingyun',1:'youyue',2:'chiyan',4:'wanyao',5:'tianyuan',6:'xukong',7:'xianmo',8:'jiutian',9:'xianjie',11:'tianmo'};
+  if(mapTracks[area])return mapTracks[area];
   return area===0||area===1||area===10?'forest':'overworld';
 }
 function playGameBgm(key){
@@ -8648,7 +8664,7 @@ function playGameBgm(key){
   if(gameBgm){gameBgm.pause();gameBgm.currentTime=0}
   gameBgmKey=key;
   gameBgm=new Audio(GAME_AUDIO.bgm[key]);
-  gameBgm.loop=true;gameBgm.preload='auto';gameBgm.volume=.22;
+  gameBgm.loop=true;gameBgm.preload='auto';gameBgm.volume=GAME_BGM_GAIN[key]??.18;
   gameBgm.play().catch(()=>{});
 }
 function playCurrentBgm(){
@@ -8660,10 +8676,24 @@ function playCurrentBgm(){
 function playGameSfx(kind,volume=.45){
   let src=GAME_AUDIO.sfx[kind];
   if(!gameAudioUnlocked||audioIsMuted()||!src)return;
-  let clip=new Audio(src);clip.preload='auto';clip.volume=volume;
+  let clip=new Audio(src),finished=false,stopTimer=0;
+  let cleanup=()=>{if(finished)return;finished=true;clearTimeout(stopTimer);gameSfxPool=gameSfxPool.filter(item=>item!==clip)};
+  clip.loop=false;clip.preload='auto';clip.volume=volume;
   gameSfxPool.push(clip);
-  clip.addEventListener('ended',()=>{gameSfxPool=gameSfxPool.filter(item=>item!==clip)},{once:true});
+  clip.addEventListener('ended',cleanup,{once:true});
+  stopTimer=setTimeout(()=>{clip.pause();clip.currentTime=0;cleanup()},GAME_SFX_MAX_MS[kind]||1600);
   clip.play().catch(()=>{});
+}
+function stopGameAudio(){
+  if(gameBgm){gameBgm.pause();gameBgm.currentTime=0}
+  gameBgm=null;gameBgmKey='';
+  gameSfxPool.splice(0).forEach(clip=>{clip.pause();clip.currentTime=0});
+}
+function setGameAudioEnabled(enabled){
+  let state=mapUiSettings();state.audioEnabled=!!enabled;g.audioMuted=!enabled;
+  if(!enabled)stopGameAudio();
+  else if(gameAudioUnlocked)playCurrentBgm();
+  save();
 }
 function skillSfxKind(skill){
   let name=String(skill?.name||'');
