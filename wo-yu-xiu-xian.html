@@ -1061,7 +1061,18 @@ function ensureLiquidMeditationModal(){let modal=$('#liquidMeditationModal');if(
 function renderLiquidMeditationProgress(){if(!liquidMeditationSession)return;let now=Date.now();while(now>=liquidMeditationSession.nextAt){let gain=Math.max(1,Math.floor(realmNeed()*.005));g.cult+=gain;liquidMeditationSession.yield+=gain;liquidMeditationSession.nextAt+=2000;pushLocalLog(`灵液池打坐：修为 +${fmt(gain)}（当前所需修为的0.5%，累计${fmt(liquidMeditationSession.yield)}）`);processRealmProgress();renderSceneMap();render();save()}let left=Math.max(0,liquidMeditationSession.nextAt-now),fill=$('#liquidMeditationProgressFill'),text=$('#liquidMeditationProgressText'),yieldText=$('#liquidMeditationYieldText');if(fill)fill.style.width=Math.max(0,Math.min(100,(1-left/2000)*100))+'%';if(text)text.textContent=`下一次吐纳：${(left/1000).toFixed(1)} 秒`;if(yieldText)yieldText.textContent=`本次累计：修为×${fmt(liquidMeditationSession.yield)}`}
 function startLiquidMeditation(){if(g.sectRank<2)return toast('灵液池仅对执事及以上职位开放');if(liquidMeditationSession)return true;if(meditationSession)stopMeditation(false);liquidMeditationSession={yield:0,nextAt:Date.now()+2000,timer:null};let modal=ensureLiquidMeditationModal();modal.classList.add('show');liquidMeditationSession.timer=setInterval(renderLiquidMeditationProgress,100);renderLiquidMeditationProgress();pushLocalLog('在灵液池开始自动打坐：每2秒获得当下所需修为的0.5%。');save();return true}
 function stopLiquidMeditation(){if(!liquidMeditationSession)return;clearInterval(liquidMeditationSession.timer);let total=liquidMeditationSession.yield;liquidMeditationSession=null;$('#liquidMeditationModal')?.classList.remove('show');pushLocalLog(`离开灵液池，本次自动打坐获得修为 +${fmt(total)}。`);renderSceneMap();render();save()}
-function tick(){tickCount++;meditationTick();processRealmProgress();sanitize();if(tickCount%2===0)render();if(tickCount%5===0)save()}
+function tick(){
+  // Mobile browsers batch timers after returning from the background.  Do not
+  // rebuild the full route map from this heartbeat; explicit actions already
+  // refresh it, while this only maintains game state.
+  if(document.hidden)return;
+  tickCount++;
+  meditationTick();
+  let realmChanged=processRealmProgress();
+  sanitize();
+  if(realmChanged&&!$('#sceneMapModal')?.classList.contains('show'))render();
+  if(tickCount%10===0)save();
+}
 function rows(obj){return Object.entries(obj).map(([k,v])=>`<div class="row"><span>${k}</span><b>${v}</b></div>`).join('')}
 const equipQuality={白色装备:1,绿色装备:2,蓝色装备:3,紫色装备:4,橙色装备:5,红色装备:6},qualityClass=['','quality-white','quality-green','quality-blue','quality-purple','quality-orange','quality-red'],qualityText=['','白','绿','蓝','紫','橙','红'];
 const pillEffects={回春丹:'使用效果：恢复20点生命；木灵根额外恢复4点。',小还丹:'使用效果：下次战斗中，每回合恢复10点生命。',大还丹:'使用效果：下次战斗中，每回合恢复30点生命。',修为丹:'使用效果：分等级固定增加修为。',渡劫丹:'使用效果：在小地图“渡劫”面板中服用，每颗使本次渡劫成功率+5%。'};
@@ -1403,15 +1414,19 @@ function applyDevMode(){if(!g.devMode)return;document.querySelectorAll('[data-de
 function hydrateFreshState(base){base.selectedScene=base.map??0;base.sect='太玄宗';Object.assign(base,{sectRank:0,sectReputation:0,sectLevel:1,sectExp:0,sectRealmAt:0,sectWarAt:0,sectTasks:0,sectManualTaskAt:0,sectOfficeTaskAt:0,sectLectureAt:0,sectSparAt:0,sectTreasurySelected:0,sectTreasuryTab:'丹药',sectSisterQuest:null,nalanQuest:null,xiaoHuoQuest:null,qiuQuest:null});Object.assign(base,{alchemyLevel:1,alchemyExp:0,selectedRecipe:0,activeBoostUntil:0,healPills:0,cultPills:0,boostPills:0});Object.assign(base,{sectPermanentBuys:{},marketHour:-1,marketStock:[],marketManualHour:-1,gatherCooldowns:{},deadMobs:{},bossKills:{},trophies:{},bag:[],bagCap:20,bagSelected:-1,bagPage:0,passiveSkills:[],activeSkills:[],skillReserve:[],selectedEquipSlot:'weapon',skillSchemaV2:true,defaultActiveSkillsGranted:false,bigFireballLevel:0,caveSoulLoops:{},rageLearned:false});return base}
 function resetDevGame(){if(!g.devMode)return;if(!confirm('确定要一键重置到刚开局状态吗？当前存档、背包、装备、宗门贡献、地图击杀等都会清空；开发者模式会保留。'))return;g=hydrateFreshState(fresh());g.devMode=true;pendingOffline=0;tickCount=0;localStorage.setItem(KEY,JSON.stringify(g));$('#redeemBtn').textContent='开发者面板';document.querySelectorAll('.event-modal.show').forEach(x=>x.classList.remove('show'));render();renderLogs();openDevMode();log('开发者模式：已一键重置为新开局状态','good');toast('已重置为刚开局状态')}
 function render(){
-processRealmProgress();
-let st=statTotal();
-g.hp=Math.min(g.hp,st.hp);
-$('#realmName').textContent=realmText();
-$('#rateText').textContent=`手动收益模式 · 当前地图 ${maps[g.map][0]}`;
-renderHomeMap();
-renderSceneMap();
-if($('#hpStatus'))$('#hpStatus').textContent='气血：'+(g.hp<st.hp*.35?'需要手动处理':'充盈');
-if($('#bagStatus'))$('#bagStatus').textContent=`背包：${bagUsed()}/${g.bagCap||20}`;
+  processRealmProgress();
+  let st=statTotal(),sceneOpen=$('#sceneMapModal')?.classList.contains('show');
+  g.hp=Math.min(g.hp,st.hp);
+  $('#realmName').textContent=realmText();
+  $('#rateText').textContent=`手动收益模式 · 当前地图 ${maps[g.map][0]}`;
+  // The large world map is hidden beneath an opened local map. Rebuilding it
+  // here also caused a second full local-map rebuild after most interactions.
+  if(!sceneOpen){
+    renderHomeMap();
+    renderSceneMap();
+  }
+  if($('#hpStatus'))$('#hpStatus').textContent='气血：'+(g.hp<st.hp*.35?'需要手动处理':'充盈');
+  if($('#bagStatus'))$('#bagStatus').textContent=`背包：${bagUsed()}/${g.bagCap||20}`;
 }
 function labelDir(idx){return{0:'label-right',5:'label-left',6:'label-top',8:'label-right',10:'label-left',14:'label-left',23:'label-left',32:'label-right',45:'label-left'}[idx]||''}
 function clampPoint(v,min,max){return Math.max(min,Math.min(max,v))}
@@ -3074,7 +3089,12 @@ function warmBattleMedia(state=battleState){
   if(!state)return Promise.resolve();
   let bossFrames=bossPortraitFrames[state.target?.originalName||state.target?.name]||[];
   let skillFrames=(g.activeSkills||[]).flatMap(skill=>heroActionFrames[battleSkillAction(skill)]||[]);
-  return warmImageAssets([optimizedBattleAsset(state.enemy?.portrait),...bossFrames,...heroActionFrames.attack,...heroActionFrames.run,...skillFrames]);
+  // Show battle immediately once the two visible first frames are ready.
+  // The remaining frames decode on idle instead of holding up the first turn.
+  let primary=[optimizedBattleAsset(state.enemy?.portrait),bossFrames[0],heroActionFrames.attack[0]];
+  let deferred=[...bossFrames.slice(1),...heroActionFrames.attack.slice(1),...heroActionFrames.run,...skillFrames];
+  deferMediaWork(()=>warmImageAssets(deferred));
+  return warmImageAssets(primary);
 }
 function warmSceneMedia(area=g.selectedScene??g.map){return warmImageAssets([localMapBackgrounds[area],'assets/figure1/figure1.webp']);}
 const playHeroFramesWithPreload=playHeroFrames;
@@ -9045,7 +9065,7 @@ function deferMediaWork(task){
   let run=()=>Promise.resolve().then(task).catch(()=>{});
   if('requestIdleCallback'in window)window.requestIdleCallback(run,{timeout:1400});else setTimeout(run,280);
 }
-const GAME_SFX_MAX_MS={move:900,attack:900,hit:900,escape:1200,victory:2800,fire:1600,arcane:1600,water:1600,heal:1900,thunder:1900};
+const GAME_SFX_MAX_MS={move:900,attack:900,hit:900,escape:1200,victory:3200,fire:1600,arcane:1600,water:1600,heal:1900,thunder:1900};
 const GAME_BGM_GAIN={overworld:.20,forest:.20,underwater:.19,danger:.18,qingyun:.18,youyue:.17,chiyan:.18,wanyao:.18,tianyuan:.17,xukong:.17,xianmo:.17,jiutian:.16,xianjie:.20,tianmo:.17,battle:.19,boss:.18};
 function audioIsMuted(){return mapUiSettings().audioEnabled===false||!!g.audioMuted}
 function mapBgmKey(area=g.selectedScene??g.map){
@@ -9078,6 +9098,50 @@ function playGameSfx(kind,volume=.45){
   clip.addEventListener('ended',cleanup,{once:true});
   stopTimer=setTimeout(()=>{clip.pause();clip.currentTime=0;cleanup()},GAME_SFX_MAX_MS[kind]||1600);
   clip.play().catch(()=>{});
+}
+function gameAudioContext(){
+  let Ctx=window.AudioContext||window.webkitAudioContext;
+  if(!Ctx)return null;
+  if(!window.__gameAudioContext)window.__gameAudioContext=new Ctx();
+  let ctx=window.__gameAudioContext;
+  if(ctx.state==='suspended')ctx.resume().catch(()=>{});
+  return ctx;
+}
+function playVictoryFanfare(){
+  if(!gameAudioUnlocked||audioIsMuted())return;
+  let ctx=gameAudioContext();
+  if(!ctx){playGameSfx('victory',.42);return}
+  let start=ctx.currentTime+.02,master=ctx.createGain();
+  master.gain.setValueAtTime(.0001,start);master.gain.exponentialRampToValueAtTime(.22,start+.05);master.gain.exponentialRampToValueAtTime(.0001,start+3.05);master.connect(ctx.destination);
+  let notes=[
+    [0,.22,523.25,'triangle',.42],[.11,.24,659.25,'triangle',.38],[.23,.34,783.99,'triangle',.38],
+    [.45,.46,659.25,'triangle',.35],[.45,.46,783.99,'triangle',.35],[.45,.46,1046.5,'triangle',.4],
+    [.98,.38,783.99,'sine',.27],[1.1,.4,1046.5,'sine',.3],[1.22,.48,1318.51,'sine',.3],
+    [1.72,.98,1046.5,'triangle',.36],[1.72,.98,1318.51,'triangle',.32],[1.72,.98,1567.98,'sine',.22]
+  ];
+  notes.forEach(([offset,duration,freq,type,gain])=>{
+    let osc=ctx.createOscillator(),env=ctx.createGain(),at=start+offset;
+    osc.type=type;osc.frequency.setValueAtTime(freq,at);
+    env.gain.setValueAtTime(.0001,at);env.gain.exponentialRampToValueAtTime(gain,at+.018);env.gain.exponentialRampToValueAtTime(.0001,at+duration);
+    osc.connect(env);env.connect(master);osc.start(at);osc.stop(at+duration+.03);
+  });
+}
+function playFireballSfx(){
+  if(!gameAudioUnlocked||audioIsMuted())return;
+  // Keep only a soft texture from the original sample; the audible motion is
+  // the cast rise followed by an impact burst aligned with the projectile.
+  playGameSfx('fire',.14);
+  let ctx=gameAudioContext();
+  if(!ctx)return setTimeout(()=>playGameSfx('hit',.2),470);
+  let castAt=ctx.currentTime+.01,caster=ctx.createOscillator(),castGain=ctx.createGain(),castFilter=ctx.createBiquadFilter();
+  caster.type='sawtooth';caster.frequency.setValueAtTime(190,castAt);caster.frequency.exponentialRampToValueAtTime(880,castAt+.42);
+  castFilter.type='lowpass';castFilter.frequency.setValueAtTime(620,castAt);castFilter.frequency.exponentialRampToValueAtTime(2400,castAt+.38);
+  castGain.gain.setValueAtTime(.0001,castAt);castGain.gain.exponentialRampToValueAtTime(.065,castAt+.07);castGain.gain.exponentialRampToValueAtTime(.0001,castAt+.44);
+  caster.connect(castFilter);castFilter.connect(castGain);castGain.connect(ctx.destination);caster.start(castAt);caster.stop(castAt+.46);
+  let start=ctx.currentTime+.42,noise=ctx.createBufferSource(),buffer=ctx.createBuffer(1,Math.floor(ctx.sampleRate*.22),ctx.sampleRate),data=buffer.getChannelData(0),filter=ctx.createBiquadFilter(),gain=ctx.createGain();
+  for(let i=0;i<data.length;i++)data[i]=(Math.random()*2-1)*(1-i/data.length);
+  noise.buffer=buffer;filter.type='bandpass';filter.frequency.setValueAtTime(760,start);filter.Q.value=1.8;gain.gain.setValueAtTime(.0001,start);gain.gain.exponentialRampToValueAtTime(.16,start+.015);gain.gain.exponentialRampToValueAtTime(.0001,start+.22);
+  noise.connect(filter);filter.connect(gain);gain.connect(ctx.destination);noise.start(start);noise.stop(start+.23);
 }
 function stopGameAudio(){
   if(gameBgm){gameBgm.pause();gameBgm.currentTime=0}
@@ -9112,7 +9176,11 @@ closeBattle=function(keep=false){let result=closeBattleWithAudio(keep);playCurre
 document.addEventListener('click',e=>{if(e.target.closest('#closeSceneMap'))setTimeout(playCurrentBgm,0)});
 const battleSkillEffectWithAudio=battleSkillEffect;
 battleSkillEffect=async function(skill,idx=0){
-  if(skill&&!battleSkillBlockReason(skill,idx,battleState)){await battleState?.mediaReady;playGameSfx(skillSfxKind(skill),.5)}
+  if(skill&&!battleSkillBlockReason(skill,idx,battleState)){
+    await battleState?.mediaReady;
+    if(/火球术/.test(String(skill.name||'')))playFireballSfx();
+    else playGameSfx(skillSfxKind(skill),.5);
+  }
   return battleSkillEffectWithAudio(skill,idx);
 };
 const playNormalAttackAnimationWithAudio=playNormalAttackAnimation;
@@ -9134,7 +9202,7 @@ let localHeroPortrait=$('#localHero img');
 if(localHeroPortrait){localHeroPortrait.src='assets/figure1/figure1.webp';localHeroPortrait.decoding='async'}
 deferMediaWork(()=>warmSceneMedia());
 const finishBattleWinWithAudioSfx=finishBattleWin;
-finishBattleWin=function(){if(battleState)playGameSfx('victory',.4);return finishBattleWinWithAudioSfx()};
+finishBattleWin=function(){if(battleState)playVictoryFanfare();return finishBattleWinWithAudioSfx()};
 const handleBattleDeathWithAudioSfx=handleBattleDeath;
 handleBattleDeath=function(enemyName){playGameSfx('hit',.36);return handleBattleDeathWithAudioSfx(enemyName)};
 
@@ -9192,5 +9260,5 @@ on('#battleAutoBtn',battleAuto);
 on('#battleRunBtn',async()=>{if(!battleState||battleBusy)return;if(battleState.target?.deepSeaPuppet)return toast('秘境傀儡战中无法逃跑');battleBusy=true;setBattleControlsDisabled(true);let name=battleState.target.name,xiaoYan=!!battleState.target.xiaoYan;battleLog(`你转身撤离，试图摆脱${name}。`);renderBattle();await playRunAnimation();closeBattle(false);battleBusy=false;if(xiaoYan){g.xiaoYanHunt={...(g.xiaoYanHunt||{}),active:true,resolved:false,phase:'pursuit',escaped:true};pushLocalLog('【萧焱追杀】你暂时脱身，萧焱的神识却仍锁定着你。你有两秒时间决定下一步。');toast('萧焱正在追来');resumeXiaoYanHunt();save();return}pushLocalLog(`避开${name}，暂退一步。`);toast('已逃离战斗')});
 let redeem=$('#redeemInput');if(redeem)redeem.onkeydown=e=>{if(e.key==='Enter')redeemCode()};
 }
-offlineSettle();bindUi();installDeepSeaBattleRun();render();renderLogs();updateRecommendation();$('#redeemBtn').textContent=g.devMode?'开发者面板':'兑换码';startOpeningFlow();log('智能体接管洞府：挂机收益已关闭，收益主要来自手动战斗、采集与宗门事务');setInterval(tick,1000);setInterval(updateRecommendation,1000);setInterval(()=>save(),5000);window.addEventListener('beforeunload',()=>save());
+offlineSettle();bindUi();installDeepSeaBattleRun();render();renderLogs();updateRecommendation();$('#redeemBtn').textContent=g.devMode?'开发者面板':'兑换码';startOpeningFlow();log('智能体接管洞府：挂机收益已关闭，收益主要来自手动战斗、采集与宗门事务');setInterval(tick,1000);setInterval(updateRecommendation,1000);window.addEventListener('pagehide',()=>save());window.addEventListener('beforeunload',()=>save());
 </script></body></html>
