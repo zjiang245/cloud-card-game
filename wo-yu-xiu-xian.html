@@ -1407,12 +1407,12 @@ function ensureDevMonsterTools(){
   }
   renderDevMonsterEditor($('#devMonsterName')?.value);
 }
-function openRedeem(){if(g.devMode)return openDevMode();$('#redeemInput').value='';$('#redeemModal').classList.add('show');setTimeout(()=>$('#redeemInput').focus(),80)}
-function redeemCode(){let code=$('#redeemInput').value.trim().toLowerCase();if(code!=='jzhnb')return toast('兑换码无效');g.devMode=true;$('#redeemBtn').textContent='开发者面板';$('#redeemModal').classList.remove('show');save();toast('开发者模式已开启');openDevMode()}
+function openRedeem(){$('#redeemInput').value='';$('#redeemModal').classList.add('show');setTimeout(()=>$('#redeemInput').focus(),80)}
+function redeemCode(){let code=$('#redeemInput').value.trim().toLowerCase();if(code!=='jzhnb')return toast('兑换码无效');g.devMode=true;$('#redeemModal').classList.remove('show');save();toast('开发者面板已解锁，请从独立入口打开')}
 function openDevMode(){if(!g.devMode)return;let realmOptions=realms.map((x,i)=>`<option value="${i}" ${g.realm===i?'selected':''}>${x}</option>`).join(''),stageOptions=stages.map((x,i)=>`<option value="${i}" ${g.stage===i?'selected':''}>${x}</option>`).join('');$('#devFields').innerHTML=`<label class="dev-field">大境界<select data-dev-select="realm">${realmOptions}</select></label><label class="dev-field">境界阶段<select data-dev-select="stage">${stageOptions}</select></label><label class="dev-field">灵根名称<input data-dev-text="root" value="${g.root}"></label>`+devNumbers.map(([k,label])=>`<label class="dev-field">${label}<input type="number" step="any" data-dev-number="${k}" value="${g[k]??0}"></label>`).join('');ensureDevMonsterTools();$('#devModal').classList.add('show')}
 function applyDevMode(){if(!g.devMode)return;document.querySelectorAll('[data-dev-number]').forEach(el=>{let v=Number(el.value);if(Number.isFinite(v))g[el.dataset.devNumber]=clamp(v)});g.realm=Math.max(0,Math.min(9,+document.querySelector('[data-dev-select="realm"]').value||0));g.stage=Math.max(0,Math.min(3,+document.querySelector('[data-dev-select="stage"]').value||0));g.root=document.querySelector('[data-dev-text="root"]').value.trim()||'自定义灵根';g.maxHp=Math.max(1,g.maxHp);g.hp=Math.min(g.maxHp,g.hp);sanitize();save();render();$('#devModal').classList.remove('show');log('开发者模式：手动数值已应用','good');toast('开发者数值已保存')}
 function hydrateFreshState(base){base.selectedScene=base.map??0;base.sect='太玄宗';Object.assign(base,{sectRank:0,sectReputation:0,sectLevel:1,sectExp:0,sectRealmAt:0,sectWarAt:0,sectTasks:0,sectManualTaskAt:0,sectOfficeTaskAt:0,sectLectureAt:0,sectSparAt:0,sectTreasurySelected:0,sectTreasuryTab:'丹药',sectSisterQuest:null,nalanQuest:null,xiaoHuoQuest:null,qiuQuest:null});Object.assign(base,{alchemyLevel:1,alchemyExp:0,selectedRecipe:0,activeBoostUntil:0,healPills:0,cultPills:0,boostPills:0});Object.assign(base,{sectPermanentBuys:{},marketHour:-1,marketStock:[],marketManualHour:-1,gatherCooldowns:{},deadMobs:{},bossKills:{},trophies:{},bag:[],bagCap:20,bagSelected:-1,bagPage:0,passiveSkills:[],activeSkills:[],skillReserve:[],selectedEquipSlot:'weapon',skillSchemaV2:true,defaultActiveSkillsGranted:false,bigFireballLevel:0,caveSoulLoops:{},rageLearned:false});return base}
-function resetDevGame(){if(!g.devMode)return;if(!confirm('确定要一键重置到刚开局状态吗？当前存档、背包、装备、宗门贡献、地图击杀等都会清空；开发者模式会保留。'))return;g=hydrateFreshState(fresh());g.devMode=true;pendingOffline=0;tickCount=0;localStorage.setItem(KEY,JSON.stringify(g));$('#redeemBtn').textContent='开发者面板';document.querySelectorAll('.event-modal.show').forEach(x=>x.classList.remove('show'));render();renderLogs();openDevMode();log('开发者模式：已一键重置为新开局状态','good');toast('已重置为刚开局状态')}
+function resetDevGame(){if(!g.devMode)return;if(!confirm('确定要一键重置到刚开局状态吗？当前存档、背包、装备、宗门贡献、地图击杀等都会清空；开发者模式会保留。'))return;g=hydrateFreshState(fresh());g.devMode=true;pendingOffline=0;tickCount=0;localStorage.setItem(KEY,JSON.stringify(g));document.querySelectorAll('.event-modal.show').forEach(x=>x.classList.remove('show'));render();renderLogs();openDevMode();log('开发者模式：已一键重置为新开局状态','good');toast('已重置为刚开局状态')}
 function render(){
   processRealmProgress();
   let st=statTotal(),sceneOpen=$('#sceneMapModal')?.classList.contains('show');
@@ -2642,12 +2642,12 @@ function taskCard(title,body,actions='',kind='side'){
 }
 const lateMainBossSteps={
   10:{map:3,base:'mainQuestBoss4Base',next:11,title:'第四章·沉月灯影（二）：龙宫取令',body:'前往东海龙宫路点23，击败Boss龙太子，夺回龙鳞玉令与冰魄残焰。',start:'第四章推进：龙鳞玉令在东海龙宫，前往击败龙太子。',complete:'龙太子败亡，龙鳞玉令中的冰魄残焰重燃。返回太玄宗掌教内殿，向苏青雪复命。'},
-  13:{map:4,base:'mainQuestBoss5Base',next:14,title:'第五章·万妖血契（二）：骨冠血誓',body:'前往万妖古域路点32，击败Boss巫妖王，夺回束缚沉月水府的血契骨冠。',start:'第五章推进：前往万妖古域，击败巫妖王夺回血契骨冠。',complete:'巫妖王骨冠上的血契已经松动。返回掌教内殿，向掌教复命。'},
-  15:{map:5,base:'mainQuestBoss6Base',next:16,title:'第六章·天渊旧誓（一）：断誓残魂',body:'前往天渊战场路点32，击败Boss古战神残魂，寻找被遗忘的断誓战旗。',start:'第六章推进：前往天渊战场，击败古战神残魂，取回断誓战旗。',complete:'古战神残魂散去，断誓战旗显出巡天令的旧纹。返回掌教内殿复命。'},
-  17:{map:6,base:'mainQuestBoss7Base',next:18,title:'第七章·虚空归门（一）：空门灵核',body:'前往虚空遗迹路点32，击败Boss虚空吞灵，取得能够定位沉月水府的空门灵核。',start:'第七章推进：前往虚空遗迹，击败虚空吞灵，取得空门灵核。',complete:'虚空吞灵湮灭，空门灵核映出一条通往仙魔战场的裂隙。返回掌教内殿，向苏青雪说明。'},
-  19:{map:7,base:'mainQuestBoss8Base',next:20,title:'第八章·仙魔残印（一）：镜中魔君',body:'前往仙魔战场路点23，击败Boss堕仙魔君，夺取能伪造血脉的魔君残印。',start:'第八章推进：前往仙魔战场，击败堕仙魔君，夺取魔君残印。',complete:'魔君残印碎裂，玄月使的献祭手段终于暴露。返回掌教内殿复命。'},
-  21:{map:8,base:'mainQuestBoss9Base',next:22,title:'第九章·九霄雷印（一）：雷印归位',body:'前往九天雷域路点32，击败Boss雷劫真君，取得开启仙界天门所需的九霄雷印。',start:'第九章推进：前往九天雷域，击败雷劫真君，取回九霄雷印。',complete:'雷劫真君留下的雷印与冰魄命灯共鸣，失踪宗主的方位直指仙界天门。返回掌教内殿，向苏青雪复命。'},
-  23:{map:9,base:'mainQuestBoss10Base',next:24,title:'第十章·天门终局（一）：守门之人',body:'前往仙界天门路点32，击败Boss守门仙将，取得最后一枚镇门剑印。',start:'第十章推进：前往仙界天门，击败守门仙将，取得镇门剑印。',complete:'守门仙将卸甲行礼，留下镇门剑印。返回太玄宗掌教内殿，向掌教复命。'}
+  13:{map:4,base:'mainQuestBoss5Base',next:14,title:'第五章·万妖血契（二）：骨冠血誓',body:'沉月水府的锁由巫妖王骨冠维系。前往万妖古域路点32，击败Boss巫妖王，夺回血契骨冠。',start:'第五章推进：前往万妖古域，夺回维系沉月水府封锁的血契骨冠。',complete:'巫妖王骨冠上的血契已经松动。返回掌教内殿，向掌教辨明下一道封锁的源头。'},
+  15:{map:5,base:'mainQuestBoss6Base',next:16,title:'第六章·天渊旧誓（一）：断誓残魂',body:'血契源自被篡改的古战誓。前往天渊战场路点32，击败Boss古战神残魂，寻找被遗忘的断誓战旗。',start:'第六章推进：前往天渊战场，击败古战神残魂，取回能还原旧誓的断誓战旗。',complete:'古战神残魂散去，断誓战旗显出巡天令的旧纹。返回掌教内殿复命。'},
+  17:{map:6,base:'mainQuestBoss7Base',next:18,title:'第七章·虚空归门（一）：空门灵核',body:'阵眼封印正被虚空吞灵啃噬。前往虚空遗迹路点32，击败Boss虚空吞灵，取得能够重定位沉月水府的空门灵核。',start:'第七章推进：前往虚空遗迹，击败虚空吞灵，夺回即将被吞没的空门灵核。',complete:'虚空吞灵湮灭，空门灵核映出一条通往仙魔战场的裂隙。返回掌教内殿，向苏青雪说明。'},
+  19:{map:7,base:'mainQuestBoss8Base',next:20,title:'第八章·仙魔残印（一）：镜中魔君',body:'空门灵核显示祭钥遭人伪造。前往仙魔战场路点23，击败Boss堕仙魔君，夺取能伪造血脉的魔君残印。',start:'第八章推进：前往仙魔战场，击败堕仙魔君，夺取伪造祭钥的魔君残印。',complete:'魔君残印碎裂，玄月使的献祭手段终于暴露。返回掌教内殿复命。'},
+  21:{map:8,base:'mainQuestBoss9Base',next:22,title:'第九章·九霄雷印（一）：雷印归位',body:'要让天门辨出真正的巡天令，须以雷印洗去伪造祭钥的残痕。前往九天雷域路点32，击败Boss雷劫真君，取得九霄雷印。',start:'第九章推进：前往九天雷域，击败雷劫真君，取回能验明巡天令的九霄雷印。',complete:'雷劫真君留下的雷印与冰魄命灯共鸣，失踪宗主的方位直指仙界天门。返回掌教内殿，向苏青雪复命。'},
+  23:{map:9,base:'mainQuestBoss10Base',next:24,title:'第十章·天门终局（一）：守门之人',body:'雷印已验明巡天令，天门只差镇门剑印便可松动。前往仙界天门路点32，击败Boss守门仙将，取得最后一枚镇门剑印。',start:'第十章推进：前往仙界天门，击败守门仙将，取得开启归路的镇门剑印。',complete:'守门仙将卸甲行礼，留下镇门剑印。返回太玄宗掌教内殿，向掌教辨明天门背后的最后阻碍。'}
 };
 function lateMainBossDone(step){return(g.bossKills?.[step.map]||0)>(g[step.base]||0)}
 function syncMainQuestProgress(){
@@ -4073,11 +4073,11 @@ if(name==='掌教 林玄一'){
 if((g.mainQuestStage||0)===4){
 openNpcDialog('掌教 林玄一',`内殿烛火无风自晃。掌教将你的青铜令牌与血月铜片并列放在案上。
 
-“玄月使并非一人之名，而是暗月教负责渗透各宗的使者代号。十二年前的那一任玄月使，曾借本宗巡令进入临河镇。”
+	“玄月使并非一个人的名字，而是暗月教渗透各宗时沿用的使者代号。十二年前那一任玄月使，正是借本宗巡令混入临河镇；血月铜片证明，他还在沿着同一条暗线传递消息。”
 
-掌教取出一张封存地图：“幽月森林深处出现过暗月祭坛。祭坛被一头巨树妖吞入体内，你要取回它的木芯。”
+	掌教取出一张封存地图：“幽月森林深处出现过暗月祭坛。祭坛被巨树妖吞入体内，木芯会保留祭坛最后接收的指令。取回它，我们才能知道玄月使的下一处落脚点。”
 
-他随即按住地图：“但你如今实力尚浅，贸然暗查无异于送死。接下此任务后，先从太上长老何强、紫云峰长老邱紫山、定光峰主陆定光三人中择一拜师，学成一术，再动身。”`,[
+	他按住地图：“但你如今带着巡天令，已是暗月教会优先盯上的目标。贸然暗查只会把线索和性命一同送出去。先从太上长老何强、紫云峰长老邱紫山、定光峰主陆定光三人中择一拜师，学成一术，再带着自保之力进入幽月森林。”`,[
 {text:'接下暗查任务',alt:true,onClick(){beginMasterQuest()}},
 {text:'稍后出发',ghost:true}
 ]);
@@ -4088,7 +4088,9 @@ openNpcDialog('掌教 林玄一',`掌教剖开祭坛木芯，暗红纹路在木�
 
 “以炎为炉，以魂为钥。赤焰三更，迎玄月归位。”
 
-“这是暗月教的接引密文。赤炎秘境中的熔岩领主，极可能吞下了他们传递消息的赤铜密简。”`,[
+	“这是暗月教的接引密文。它说明祭坛的消息会被地火焚成赤铜密简，再由赤炎秘境的熔岩领主代为吞藏。巨树妖只保留了前一段指令，下一段去向就藏在那枚密简里。”
+
+	掌教收起木芯：“去赤炎秘境，不是为了另寻一场战斗，而是要截下玄月使尚未来得及销毁的联络记录。”`,[
 {text:'继续追查赤炎秘境',alt:true,onClick(){g.mainQuestChapter2Done=true;g.mainQuestBoss3Base=g.bossKills?.[2]||0;g.stones+=1200;addFixedCultPill(2,100,5);let advanced=advanceMainQuest(7,'第二章完成，第三章开启：前往赤炎秘境路点23，击败熔岩领主。');if(advanced)rewardMainQuestStep('returnHeadmasterWithCore',10);showNpcResult('第二章完成·木芯密文',`奖励：灵石×1200\n奖励：2级修为丹×5\n\n第三章目标：前往赤炎秘境路点23，击败Boss熔岩领主，寻找赤铜密简。`,'good');render();}},
 {text:'先行整备',ghost:true}
 ]);
@@ -4101,36 +4103,38 @@ openNpcDialog('掌教 林玄一',`赤铜密简遇到青铜令牌后自行展开�
 “玄月东行，沉月水府。”
 “龙鳞为令，血脉为钥。”
 
-掌教沉声道：“玄月使已转往东海。临河镇惨案并未结束，你父亲留下的令牌，很可能也是开启沉月水府的钥匙之一。”
+	掌教沉声道：“玄月使已转往东海。临河镇惨案并未结束，你父亲留下的令牌，很可能也是开启沉月水府的钥匙之一。可密简只有坐标，没有说明水府为何至今未开。”
 
-他又将一枚裂纹金丹置于案上：“你已亲见金丹层次的凶险。从金丹开始，突破下一大境界不再只靠积累修为。须先将本阶修至大圆满，再于小地图的渡劫台引动天劫。每服用一颗渡劫丹，本次成功率便提高 5%；丹药不足仍可强行渡劫，但失败会使本阶大圆满修为尽散。”`,[
+	他望向内殿深处：“太上长老苏青雪掌着宗主留下的冰魄命灯。令牌、密简与命灯同源，只有她能验证东海线索是否仍连着失踪宗主。你先去见她；若命灯有应，我们才知道该从东海哪一层封锁下手。”
+
+	掌教又将一枚裂纹金丹置于案上：“你已亲见金丹层次的凶险。从金丹开始，突破下一大境界不再只靠积累修为。须先将本阶修至大圆满，再于小地图的渡劫台引动天劫。每服用一颗渡劫丹，本次成功率便提高 5%；丹药不足仍可强行渡劫，但失败会使本阶大圆满修为尽散。”`,[
 {text:'收下密简',alt:true,onClick(){let advanced=advanceMainQuest(9,'第三章完成：赤铜密简显示玄月使已前往东海沉月水府。');if(advanced)rewardMainQuestStep('returnHeadmasterWithBrief',10);g.mainQuestChapter3Done=true;g.stones+=2500;addFixedCultPill(3,1000,3);log('主线第三章完成：赤焰追凶。获得灵石2500、3级修为丹×3。','good');pushLocalLog('【主线】第三章完成：玄月使的行踪指向东海沉月水府。');showNpcResult('第三章完成·玄月东行',`你已完成前三章主线。\n\n奖励：灵石×2500\n奖励：3级修为丹×3\n\n新线索：东海、沉月水府、龙鳞玉令。`,'good');renderTaskPanel();renderSceneMap();render();save();}},
 {text:'再看一遍密简',ghost:true}
 ]);
 return;
 }
 if((g.mainQuestStage||0)===12){
-openNpcDialog('掌教 林玄一',`掌教将龙鳞玉令的残屑置入阵盘，盘中浮现一顶白骨王冠。\n\n“万妖血契本是上古镇妖之约，后被暗月教篡改成困人之锁。巫妖王用骨冠保管血契，它既锁着沉月水府，也在不断抽取宗主的神魂。取回骨冠，才能先断一层锁。”`,[{text:'前往万妖古域',alt:true,onClick(){if(beginLateMainBoss(13,'chapter5Headmaster'))showNpcResult('第五章·万妖血契',`掌教以法旨开放万妖古域的追查权限。\n\n主线分步奖励：当前升级所需修为的 8%\n\n目标：击败巫妖王，夺回血契骨冠。`,'good');}},{text:'查看阵盘',ghost:true}]);
+	openNpcDialog('掌教 林玄一',`掌教将龙鳞玉令的残屑置入阵盘，盘中浮现一顶白骨王冠。\n\n“万妖血契本是上古镇妖之约，后被暗月教篡改成困人之锁。龙太子的玉令只能照出锁在何处，真正驱动锁链的是巫妖王手中的血契骨冠。”\n\n他指向沉月水府的虚影：“骨冠一日不毁，水府外的血契便会持续抽取宗主神魂。我们现在不该强闯水府，而要先去万妖古域夺回骨冠，断掉最外层的锁。”`,[{text:'前往万妖古域',alt:true,onClick(){if(beginLateMainBoss(13,'chapter5Headmaster'))showNpcResult('第五章·万妖血契',`掌教以法旨开放万妖古域的追查权限。\n\n主线分步奖励：当前升级所需修为的 8%\n\n目标：击败巫妖王，夺回血契骨冠，先断沉月水府最外层封锁。`,'good');}},{text:'查看阵盘',ghost:true}]);
 return;
 }
 if((g.mainQuestStage||0)===14){
-openNpcDialog('掌教 林玄一',`血契骨冠一离开万妖古域，密密麻麻的契文便化作战场旗号。\n\n“原来如此。玄月使不是某一个人，而是一套会换宿主的仪式。天渊战场上仍有一缕古战神残魂记得初代誓约；只有它知道巡天令为何会落到你父亲手中。”`,[{text:'前往天渊战场',alt:true,onClick(){if(beginLateMainBoss(15,'chapter5HeadmasterReport'))showNpcResult('第六章·天渊旧誓',`血契已破，真正的旧誓浮出水面。\n\n主线分步奖励：当前升级所需修为的 8%\n\n目标：击败古战神残魂，取回断誓战旗。`,'good');}},{text:'收起骨冠',ghost:true}]);
+	openNpcDialog('掌教 林玄一',`血契骨冠一离开万妖古域，密密麻麻的契文便化作战场旗号。\n\n“原来如此。玄月使不是某一个人，而是一套会换宿主的仪式；它把原本守护两界的誓约，改成了筛选祭品的锁链。”\n\n掌教展开旗号残影：“天渊战场上仍有一缕古战神残魂记得初代誓约。只有找回它守护过的断誓战旗，我们才能还原巡天令的本来用途，也才能知道你父亲当年为何必须把令牌送出临河镇。”`,[{text:'前往天渊战场',alt:true,onClick(){if(beginLateMainBoss(15,'chapter5HeadmasterReport'))showNpcResult('第六章·天渊旧誓',`血契已破，真正的旧誓浮出水面。\n\n主线分步奖励：当前升级所需修为的 8%\n\n目标：击败古战神残魂，取回断誓战旗，还原巡天令的来历。`,'good');}},{text:'收起骨冠',ghost:true}]);
 return;
 }
 if((g.mainQuestStage||0)===16){
-openNpcDialog('掌教 林玄一',`断誓战旗上的字迹与青铜令牌完全一致：巡天令原是镇守两界的钥匙，而不是开启天门的凭证。\n\n掌教沉默良久，才道：“你父亲发现暗月教要把令牌变成祭钥，便毁掉自己的退路，将它送出临河镇。宗主赶到时，只来得及接下令牌、封住阵眼。如今虚空遗迹里的吞灵正在啃噬那道封印，必须先取回空门灵核。”`,[{text:'前往虚空遗迹',alt:true,onClick(){if(beginLateMainBoss(17,'chapter6Headmaster'))showNpcResult('第七章·虚空归门',`临河镇旧火的真相终于有了答案。\n\n主线分步奖励：当前升级所需修为的 8%\n\n目标：击败虚空吞灵，取得空门灵核。`,'good');}},{text:'静听旧事',ghost:true}]);
+	openNpcDialog('掌教 林玄一',`断誓战旗上的字迹与青铜令牌完全一致：巡天令原是镇守两界的钥匙，而不是开启天门的凭证。\n\n掌教沉默良久，才道：“你父亲发现暗月教要把令牌变成祭钥，便毁掉自己的退路，将它送出临河镇。宗主赶到时，只来得及接下令牌、封住阵眼。”\n\n他将战旗按在阵盘上，封印投影立刻裂开一道缺口：“如今虚空遗迹里的吞灵正啃噬这道封印。若任由它吞掉阵门坐标，即使我们找回宗主，也再无法找到归路。必须先夺回空门灵核，把散掉的阵眼重新定位。”`,[{text:'前往虚空遗迹',alt:true,onClick(){if(beginLateMainBoss(17,'chapter6Headmaster'))showNpcResult('第七章·虚空归门',`临河镇旧火的真相终于有了答案。\n\n主线分步奖励：当前升级所需修为的 8%\n\n目标：击败虚空吞灵，取得空门灵核，保住阵眼归路。`,'good');}},{text:'静听旧事',ghost:true}]);
 return;
 }
 if((g.mainQuestStage||0)===20){
-openNpcDialog('掌教 林玄一',`魔君残印在火中发出尖啸，映出玄月使借血脉伪造祭钥的画面。\n\n“你父亲不是临阵逃脱的人。”掌教抬起眼，“他带走令牌，是为了让玄月使永远找不到真正的祭钥。宗主留在阵眼，也是为了等一个能自行选择的人回来。现在残印已毁，只差九霄雷印便能让天门承认这份选择。”`,[{text:'前往九天雷域',alt:true,onClick(){if(beginLateMainBoss(21,'chapter8Headmaster'))showNpcResult('第九章·九霄雷印',`玄月教的献祭伪术已经失效。\n\n主线分步奖励：当前升级所需修为的 8%\n\n目标：击败雷劫真君，取回九霄雷印。`,'good');}},{text:'再看残印',ghost:true}]);
+	openNpcDialog('掌教 林玄一',`魔君残印在火中发出尖啸，映出玄月使借血脉伪造祭钥的画面。\n\n“你父亲不是临阵逃脱的人。”掌教抬起眼，“他带走令牌，是为了让玄月使永远找不到真正的祭钥。宗主留在阵眼，也是为了等一个能自行选择的人回来。”\n\n他以剑气震碎残印：“伪造之法虽毁，天门仍分不清你手中的巡天令与曾被污染过的祭钥。九霄雷印能照出令牌本源、洗去暗月留下的伪痕。取回它，天门才会承认你是归还者，而不是新的祭品。”`,[{text:'前往九天雷域',alt:true,onClick(){if(beginLateMainBoss(21,'chapter8Headmaster'))showNpcResult('第九章·九霄雷印',`玄月教的献祭伪术已经失效。\n\n主线分步奖励：当前升级所需修为的 8%\n\n目标：击败雷劫真君，取回九霄雷印，验明巡天令本源。`,'good');}},{text:'再看残印',ghost:true}]);
 return;
 }
 if((g.mainQuestStage||0)===24){
-openNpcDialog('掌教 林玄一',`镇门剑印落在案上，掌教起身，第一次向你郑重行了一礼。\n\n“守门仙将并未真正败给你，它是在确认巡天令没有被祭法污染。可剑印认主的一瞬，天门背后又映出另一道阵纹。”\n\n阵盘上浮现太玄宗22号路点的残缺传送阵，黑雾正从裂缝里向外渗出。苏青雪面色微白：“这是天魔宗的界印。玄月使虽然覆灭，替它保管血月阵核的人还藏在那里；阵核不毁，宗主便无法真正离开阵眼。”\n\n掌教合上剑印：“去天魔宗一窥究竟。查清是谁延续了献祭，毁掉阵核，再回来迎宗主归山。”`,[{text:'接下天魔调查',alt:true,onClick(){finishLateMainDialogue(25,'chapter10HeadmasterReport','镇门剑印指向天魔宗残阵。前往太玄宗22号破碎传送阵，潜入天魔宗追查血月阵核。','终章·魔雾溯源',`守门仙将留下的剑印揭开了最后一层暗幕：血月大阵的阵核仍藏在天魔宗。\n\n主线分步奖励：当前升级所需修为的 8%\n\n下一步：前往太玄宗路点22，与破碎的传送阵对话。`)}},{text:'收好剑印',ghost:true}]);
+	openNpcDialog('掌教 林玄一',`镇门剑印落在案上，掌教起身，第一次向你郑重行了一礼。\n\n“守门仙将并未真正败给你，它是在确认巡天令没有被祭法污染。剑印既已认主，天门本该开启归途；可它认主的一瞬，反而映出一座藏在门后的阵纹。”\n\n阵盘上浮现太玄宗22号路点的残缺传送阵，黑雾正从裂缝里向外渗出。苏青雪面色微白：“这是天魔宗的界印。玄月使虽覆灭，血月阵核却被人转移到天魔宗；阵核仍在，宗主便会继续被阵眼拖住，归门只能开一线、随时再度闭合。”\n\n掌教合上剑印：“所以不能立刻迎宗主归山。先去太玄宗22号破碎传送阵，进入天魔宗，确认是谁接过了玄月使的献祭之术，毁掉阵核。只有断了根，带他回来才不是把他带进下一场封锁。”`,[{text:'接下天魔调查',alt:true,onClick(){finishLateMainDialogue(25,'chapter10HeadmasterReport','镇门剑印指向天魔宗残阵。前往太玄宗22号破碎传送阵，潜入天魔宗追查血月阵核。','终章·魔雾溯源',`守门仙将留下的剑印揭开了最后一层暗幕：血月大阵的阵核仍藏在天魔宗。\n\n主线分步奖励：当前升级所需修为的 8%\n\n下一步：前往太玄宗路点22，与破碎的传送阵对话，切断宗主归山路上的最后封锁。`)}},{text:'收好剑印',ghost:true}]);
 return;
 }
 if((g.mainQuestStage||0)===27){
-openNpcDialog('掌教 林玄一',`你带回的天魔阵核仍在案上跳动，像一颗不肯熄灭的黑色心脏。苏青雪以冰魄命灯照向它，阵核中浮出无极天尊留下的最后一句话：\n\n“玄月使早已不在人间，真正延续献祭的，是所有相信牺牲他人理所当然的人。”\n\n掌教沉默片刻，将镇门剑印交到你手中：“这便是我们要斩断的东西。把巡天令放入阵心吧。今日之后，太玄宗不再以任何人的性命换取安稳。”\n\n你与掌教、苏青雪、何强并立阵盘四方。冰魄命灯、九霄雷印、镇门剑印与天魔阵核同时亮起，封印深处传来一道久违的剑鸣。`,[{text:'完成归山仪式',alt:true,onClick(){let advanced=advanceMainQuest(28,'终章完成：天魔阵核已封，失踪宗主归山，血月大阵与临河旧案的真相皆已落幕。');if(advanced){rewardLateMainDialogue('finaleHeadmaster');g.mainQuestFinaleDone=true;g.stones+=5000;addFixedCultPill(3,1000,5);}showNpcResult('终章完成·太玄新月',`失踪宗主归山，临河镇旧案昭雪。\n\n主线分步奖励：当前升级所需修为的 8%\n终章奖励：灵石×5000、3级修为丹×5\n\n血月之仇并非以复仇收场，而是以守住“不让任何人被迫献祭”的选择收场。太玄宗的新巡天路，由你亲手开启。`,'good');renderTaskPanel();renderSceneMap();render();save();}},{text:'静候钟声',ghost:true}]);
+	openNpcDialog('掌教 林玄一',`你带回的天魔阵核仍在案上跳动，像一颗不肯熄灭的黑色心脏。苏青雪以冰魄命灯照向它，阵核中浮出无极天尊留下的最后一句话：\n\n“玄月使早已不在人间，真正延续献祭的，是所有相信牺牲他人理所当然的人。”\n\n掌教沉默片刻，将镇门剑印交到你手中：“阵核既已离开天魔宗，天门、命灯与巡天令终于能落在同一座阵盘上。现在不是再去追新的敌人，而是回到一切开始的地方：用这四件信物封死献祭的根，让宗主循着没有血祭的归路回来。”\n\n“把巡天令放入阵心吧。今日之后，太玄宗不再以任何人的性命换取安稳。”\n\n你与掌教、苏青雪、何强并立阵盘四方。冰魄命灯、九霄雷印、镇门剑印与天魔阵核同时亮起，封印深处传来一道久违的剑鸣。`,[{text:'完成归山仪式',alt:true,onClick(){let advanced=advanceMainQuest(28,'终章完成：天魔阵核已封，失踪宗主归山，血月大阵与临河旧案的真相皆已落幕。');if(advanced){rewardLateMainDialogue('finaleHeadmaster');g.mainQuestFinaleDone=true;g.stones+=5000;addFixedCultPill(3,1000,5);}showNpcResult('终章完成·太玄新月',`失踪宗主归山，临河镇旧案昭雪。\n\n主线分步奖励：当前升级所需修为的 8%\n终章奖励：灵石×5000、3级修为丹×5\n\n血月之仇并非以复仇收场，而是以守住“不让任何人被迫献祭”的选择收场。太玄宗的新巡天路，由你亲手开启。`,'good');renderTaskPanel();renderSceneMap();render();save();}},{text:'静候钟声',ghost:true}]);
 return;
 }
 if(g.sectRank>=5){
@@ -6227,8 +6231,8 @@ openNpcDialog=function(title,text,buttons=[{text:'知道了'}]){
 
 // ===== 太玄宗 · 凉亭：悬赏榜 =====
 const bountyBoardDefs={
-  dali:{title:'缉拿蟊贼·牛大力',target:'蟊贼 牛大力',place:'赤炎秘境·炎魔洞',reward:{cult:8000,reputation:300,contribution:500},customStats:{hp:4000,mp:1200,attack:500,defense:300,realm:'金丹后期',icon:'🗡️',portrait:'assets/monster-portraits/yanmo.png'}},
-  carp:{title:'缉拿蟊贼·鲤鱼精',target:'蟊贼 鲤鱼精',place:'东海龙宫·龙宫偏殿',reward:{cult:40000,reputation:400,contribution:1000},customStats:{hp:11000,mp:1200,attack:1500,defense:900,realm:'元婴后期',icon:'🗡️',portrait:'assets/monster-portraits/laohai-gui.png'}},
+  dali:{title:'缉拿蟊贼·牛大力',target:'蟊贼 牛大力',place:'赤炎秘境·炎魔洞',reward:{cult:18000,reputation:300,contribution:500},customStats:{hp:4000,mp:1200,attack:500,defense:300,realm:'金丹后期',icon:'🗡️',portrait:'assets/monster-portraits/yanmo.png'}},
+  carp:{title:'缉拿蟊贼·鲤鱼精',target:'蟊贼 鲤鱼精',place:'东海龙宫·龙宫偏殿',reward:{cult:45000,reputation:400,contribution:1000},customStats:{hp:11000,mp:1200,attack:1500,defense:900,realm:'元婴后期',icon:'🗡️',portrait:'assets/monster-portraits/laohai-gui.png'}},
   wolf:{title:'清剿荒骨狼',target:'荒骨狼',place:'万妖古域',reward:{cult:300000,reputation:300,contribution:500},realm:'化神大圆满'},
   ghost:{title:'讨伐断剑鬼',target:'断剑鬼',place:'天渊战场',reward:{cult:2500000,reputation:800,contribution:1500},realm:'炼虚大圆满'}
 };
@@ -6403,7 +6407,7 @@ function talkFlameUnicorn(){
   let quest=flameUnicornQuest();
   if(quest.completed)return showNpcResult('火焰独角兽','赤焰已从独角兽的伤口褪去。它低下头颅致意，蹄下只余温和的火光。','good');
   if(!quest.active){quest.active=true;pushLocalLog('火焰独角兽请求药材1000份与回春丹100枚，以续其火脉。');renderTaskPanel();save();}
-  let text=`火焰独角兽伏在万妖洞的熔岩边，鬃毛黯淡，独角裂开一道伤痕。\n\n“外来修士，我被阴煞所伤，需以千份药材与百枚回春丹续住火脉。若肯相助，吾愿以天火真意相赠。”\n\n当前持有：${flameUnicornResourceText()}`;
+  let text=`火焰独角兽伏在万妖洞的熔岩边，鬃毛黯淡，独角裂开一道伤痕。\n\n“我被阴煞所伤，需以1000份药材与100枚回春丹续住火脉。若肯相助，吾愿以天火真意相赠。”\n\n当前持有：${flameUnicornResourceText()}`;
   let choices=[];
   if(flameUnicornReady())choices.push({text:'交付药材与回春丹',onClick(){
     if(!flameUnicornReady())return toast('所需药材或回春丹不足');
@@ -6414,7 +6418,7 @@ function talkFlameUnicorn(){
     g.cult=(g.cult||0)+800000;
     pushLocalLog('救治火焰独角兽，获得修为80万与火系被动技能书「天火晖晖」。');
     toast('获得修为80万、天火晖晖技能书');
-    showNpcResult('火焰独角兽','炽热的火息重新流过它的独角。“这缕天火真意，当助你焚尽前路迷障。”\n\n获得：修为 +80万\n获得：火系被动技能书「天火晖晖」','good');
+    showNpcResult('火焰独角兽','炽热的火息重新流过它的独角。“这缕天火真意已传授与你。”\n\n获得：修为 +80万\n获得：火系被动技能书「天火晖晖」','good');
     renderTaskPanel();renderSceneMap();render();renderBag();save();
   }});
   choices.push({text:'暂且离开',ghost:true});
@@ -6576,7 +6580,7 @@ finishBattleWin=function(){
   closeBattle(true);
   let noteGranted=grantMysteriousAuthorNote();
   pushLocalLog('山魈洞：你在神秘作者的最难试炼中撑过了最后一笔。');
-  showNpcResult('最难试炼结束',`墨卷无风自合。神秘的作者收起笔锋，只留下一句：\n“这一页，你写下来了。”${noteGranted?'\n\n获得任务道具：神秘纸条':'\n\n神秘纸条暂由作者保管，清出背包格后再来领取。'}`,'good');
+  showNpcResult('最难试炼结束',`墨卷无风自合。神秘的作者收起笔锋，只留下一句：\n“你得到了我的认可。”${noteGranted?'\n\n获得任务道具：神秘纸条':'\n\n神秘纸条暂由作者保管，清出背包格后再来领取。'}`,'good');
   renderSceneMap();render();save();
 };
 const closeBattleWithMysteriousAuthor=closeBattle;
@@ -7052,7 +7056,7 @@ function talkRenegadeCultivator(){
   if(g.renegadeCultivatorDefeated){
     return showNpcResult('叛教修士','血藤林间只余被火焚过的残符。叛教修士已伏诛，林中的血藤也渐渐安静下来。','good');
   }
-  openNpcDialog('叛教修士','叛教修士立在血藤阴影里，掌心悬着一团炽白火焰。\n\n“太玄宗的规矩束缚不了我。既然撞见了，便把你身上的机缘一并留下。”\n\n此人已将火球术修至第五重，法力未尽前会持续施展火球术。',[
+  openNpcDialog('叛教修士','叛教修士立在血藤阴影里，掌心悬着一团炽白火焰。\n\n“太玄宗的走狗，既然撞见了，便把你身上的机缘一并留下。”\n\n此人已将火球术修至第五重，法力未尽前会持续施展火球术。',[
     {text:'出手诛灭叛徒',alt:true,onClick(){closeNpcDialog();openBattle(renegadeCultivatorTarget(),0)}},
     {text:'暂且退去',ghost:true}
   ]);
@@ -7188,7 +7192,7 @@ function defyLightningEmpress(){
 function talkLightningEmpress(){
   let state=lightningEmpressState();
   if(state.outcome==='surrender')return showNpcResult('闪电娘娘','闪电娘娘端坐天劫眼上方，雷云在她身后缓缓退散。\n\n“既已臣服，便去走你的路。”','good');
-  if(state.outcome==='defy')return showNpcResult('闪电娘娘','闪电娘娘远望劫云，唇角带着一丝笑意。\n\n“你的不服，我记下了。”','good');
+  if(state.outcome==='defy')return showNpcResult('闪电娘娘','闪电娘娘远望劫云，唇角带着一丝笑意。\n\n“你这小辈日后定前途无量。”','good');
   openNpcDialog('闪电娘娘',`天劫眼上空，闪电娘娘踏雷而立，万千电芒在裙角生灭。\n\n“修士，见我雷威，是臣服，还是不服？”`,[
     {text:'臣服',alt:true,onClick(){surrenderToLightningEmpress()}},
     {text:'不服',onClick(){defyLightningEmpress()}},
@@ -7603,7 +7607,7 @@ function tianmoSpotHasEnemies(spot){if(spot===1&&tianmoAllVisibleDefeated()&&!g.
 function tianmoBattleTarget(info){return{name:info.displayName,type:'战斗',tianmoCultivator:true,tianmoKey:info.tianmoKey,tianmoInfo:info,customStats:{hp:info.hp,mp:info.mp,attack:info.attack,defense:info.defense,realm:info.realmText,icon:'🕷️',portrait:tianmoPortraitFor(info),stage:info.stage,multiplier:1},loot:{materials:[],equipment:{rolls:0,chance:0},skillBookChance:0}}}
 function talkTianmoCultivator(info){openNpcDialog(info.displayName,`你在${spotLabel(11,info.spot)}遇见${info.displayName}。\n\n“${info.story}”\n\n${info.title} · 境界：${info.realmText}\n\n他没有立刻出手，只把目光落在你身后的退路上。天魔宗的规矩很简单：想继续深入，就要让眼前的人相信你有资格活着走过去。\n\n击败后可获得：宗门声望 +${fmt(info.reputation)}、宗门贡献 +${fmt(info.contribution)}`,[{text:'出手击杀',alt:true,onClick(){openBattle(tianmoBattleTarget(info),0)}},{text:'暂且离开',ghost:true}],tianmoPortraitFor(info))}
 function talkTianmoCorpse(info){showNpcResult(`${info.displayName}的尸体`,`${info.title}已经倒在${spotLabel(11,info.spot)}，魔气散尽，只剩一具无人收殓的尸身。`,'good')}
-function talkTianmoElder(){openNpcDialog('太上长老','你清空了天魔宗明面上的所有守卫，刚踏入01号路点，便看见一位白发老者横剑立在石阶中央。\n\n太上长老抬眼道：“传送阵只负责把人送进来，能不能走出这座魔宗，要看你有没有活着走到这里的本事。”\n\n“我守的不是一条路，而是宗门最后的颜面。想返回太玄宗，先证明你配得上那道退路。”\n\n境界：真仙初期\n击败他后，00号传送阵才会真正解封；若在他手下败亡，宗门护阵会将你送回太玄宗。',[{text:'迎战太上长老',alt:true,onClick(){openBattle(tianmoElderTarget(),0)}},{text:'暂不应战',ghost:true}],tianmoPortraitFor(tianmoElderInfo))}
+function talkTianmoElder(){openNpcDialog('太上长老','你清空了天魔宗明面上的所有守卫，刚踏入01号路点，便看见一位白发老者横剑立在石阶中央。\n\n太上长老抬眼道：“正派的鹰犬，既然来了我天魔宗，就不要走了。”\n\n境界：真仙初期\n击败他后，00号传送阵才会真正解封；若在他手下败亡，宗门护阵会将你送回太玄宗。',[{text:'迎战太上长老',alt:true,onClick(){openBattle(tianmoElderTarget(),0)}},{text:'暂不应战',ghost:true}],tianmoPortraitFor(tianmoElderInfo))}
 const localNpcsBeforeTianmo=localNpcs;
 localNpcs=function(i,spot){if(i!==11)return localNpcsBeforeTianmo(i,spot);let list=tianmoSpotNpcList(spot);if(spot===0)list.unshift(['天魔传送门','返回太玄宗22号天魔传送阵']);if(spot===1&&tianmoAllVisibleDefeated())list.unshift(tianmoElderEntry());return list};
 const renderSceneMapWithTianmoElderStyle=renderSceneMap;
@@ -9249,7 +9253,7 @@ on('#marketModalRefreshBtn',manualRefreshMarket);
 document.querySelectorAll('[data-treasury-tab]').forEach(btn=>btn.onclick=()=>{g.sectTreasuryTab=btn.dataset.treasuryTab;renderSectTreasury()});
 on('#confirmEventResult',()=>$('#eventResultModal').classList.remove('show'));
 on('#redeemBtn',openRedeem);
-on('#devHomeBtn',()=>g.devMode?openDevMode():openRedeem());
+on('#devHomeBtn',()=>g.devMode?openDevMode():toast('开发者面板尚未解锁，请先在兑换码入口输入开发者兑换码'));
 on('#confirmRedeem',redeemCode);
 on('#closeRedeem',()=>$('#redeemModal').classList.remove('show'));
 on('#saveDev',applyDevMode);
@@ -9260,5 +9264,5 @@ on('#battleAutoBtn',battleAuto);
 on('#battleRunBtn',async()=>{if(!battleState||battleBusy)return;if(battleState.target?.deepSeaPuppet)return toast('秘境傀儡战中无法逃跑');battleBusy=true;setBattleControlsDisabled(true);let name=battleState.target.name,xiaoYan=!!battleState.target.xiaoYan;battleLog(`你转身撤离，试图摆脱${name}。`);renderBattle();await playRunAnimation();closeBattle(false);battleBusy=false;if(xiaoYan){g.xiaoYanHunt={...(g.xiaoYanHunt||{}),active:true,resolved:false,phase:'pursuit',escaped:true};pushLocalLog('【萧焱追杀】你暂时脱身，萧焱的神识却仍锁定着你。你有两秒时间决定下一步。');toast('萧焱正在追来');resumeXiaoYanHunt();save();return}pushLocalLog(`避开${name}，暂退一步。`);toast('已逃离战斗')});
 let redeem=$('#redeemInput');if(redeem)redeem.onkeydown=e=>{if(e.key==='Enter')redeemCode()};
 }
-offlineSettle();bindUi();installDeepSeaBattleRun();render();renderLogs();updateRecommendation();$('#redeemBtn').textContent=g.devMode?'开发者面板':'兑换码';startOpeningFlow();log('智能体接管洞府：挂机收益已关闭，收益主要来自手动战斗、采集与宗门事务');setInterval(tick,1000);setInterval(updateRecommendation,1000);window.addEventListener('pagehide',()=>save());window.addEventListener('beforeunload',()=>save());
+offlineSettle();bindUi();installDeepSeaBattleRun();render();renderLogs();updateRecommendation();$('#redeemBtn').textContent='兑换码';startOpeningFlow();log('智能体接管洞府：挂机收益已关闭，收益主要来自手动战斗、采集与宗门事务');setInterval(tick,1000);setInterval(updateRecommendation,1000);window.addEventListener('pagehide',()=>save());window.addEventListener('beforeunload',()=>save());
 </script></body></html>
