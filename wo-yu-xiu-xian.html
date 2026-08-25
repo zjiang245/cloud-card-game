@@ -1771,7 +1771,7 @@ function bindLocalMapPan(canvas,world,i,coord){
 function stableRand(seed){let h=2166136261;for(let c of String(seed)){h^=c.charCodeAt(0);h=Math.imul(h,16777619)}return(h>>>0)/4294967296}
 function recommendedMonsterMajor(i){let req=maps[i]?.[1]||0;return Math.max(0,Math.min(realms.length-1,Math.floor(req/4)))}
 function monsterStageMultiplier(stage){return Math.pow(1.05,Math.max(0,Math.min(3,stage||0)))}
-function localMonsterRealm(i,spot,m,idx){if(!m||m.type==='采集'||m.dead)return'';if(m.wanderingMonster?.realm)return m.wanderingMonster.realm;let name=m.originalName||m.name,fixed=getMonsterStats(name),overridden=!!g.devMonsterOverrides?.[name];if(m.boss||overridden)return fixed?.realm||`${realms[Math.min(realms.length-1,recommendedMonsterMajor(i)+1)]}${stages[0]}`;let stage=Math.floor(stableRand(`${i}:${spot}:${m.name}:${idx}`)*4);return`${realms[recommendedMonsterMajor(i)]}${stages[stage]}`}
+function localMonsterRealm(i,spot,m,idx){if(!m||m.type==='采集'||m.dead||m.treasureMonster)return'';if(m.wanderingMonster?.realm)return m.wanderingMonster.realm;let name=m.originalName||m.name,fixed=getMonsterStats(name),overridden=!!g.devMonsterOverrides?.[name];if(m.boss||overridden)return fixed?.realm||`${realms[Math.min(realms.length-1,recommendedMonsterMajor(i)+1)]}${stages[0]}`;let stage=Math.floor(stableRand(`${i}:${spot}:${m.name}:${idx}`)*4);return`${realms[recommendedMonsterMajor(i)]}${stages[stage]}`}
 function normalMonsterMidRealmIndex(area){let major=recommendedMonsterMajor(area);return major*stages.length+1}
 function normalMonsterMidPowerLevel(area,quality=1){return Math.max(1,normalMonsterMidRealmIndex(area)+Math.max(1,Number(quality)||1))}
 function normalMonsterMidRealm(area){let major=recommendedMonsterMajor(area);return `${realms[major]}${stages[1]}`}
@@ -2778,12 +2778,11 @@ function renderTaskPanel(){
   let forestDisputes=forestDisputeState();
   for(let id of ['fox','wolf']){let q=forestDisputes[id],d=forestDisputeDefs[id];if(q.active&&!q.claimed)html+=taskCard(d.title,`目标：击败${d.target} ${q.kills}/8；奖励：固定修为800、药材×300。完成后返回${d.place}复命。`,'')}
   if(forestDisputes.fox.claimed&&forestDisputes.wolf.claimed&&!forestDisputes.tree.done)html+=taskCard('千年古树：幽月调停',`调停进度：${forestDisputes.tree.stage}/5；前往古树洞府、妖狐巢穴与月下草径传达双方条件。每次关键对话奖励修为+200、灵石+200。`,'');
-  let inSquare=(g.selectedScene??g.map)===10&&activeSpot()===31;
-  if(inSquare&&!g.sectSisterQuest){
-    html+=taskCard('可接：柳如烟材料回收','选择一个境界委托，随机回收妖兽材料×5，奖励对应等级修为丹、锻造材料、宗门贡献与声望。',sisterQuestRealms.map((q,i)=>`<button class="btn ghost" data-task-accept-sister="${i}">${q.name}</button>`).join(''));
+  if(!g.sectSisterQuest){
+    html+=taskCard('可接：柳如烟材料回收','前往太玄宗路点31·宗门广场，选择一个境界委托。任务目标为妖兽材料×5，完成后回宗门广场提交，可获得修为丹、锻造材料、宗门贡献与声望。',sisterQuestRealms.map((q,i)=>`<button class="btn ghost" data-task-accept-sister="${i}">${q.name}</button>`).join(''));
   }
-  if(inSquare&&!g.nalanQuest&&!g.nalanQuestDone&&realmIndex()>1){
-    html+=taskCard('可接：小师妹 纳兰清月委托','高于练气中期可接。提交回春丹×10、石鼠皮×10，奖励紫色法器×1、2级修为丹×2。',`<button class="btn" data-task-accept-nalan="1">接取</button>`);
+  if(!g.nalanQuest&&!g.nalanQuestDone&&realmIndex()>1){
+    html+=taskCard('可接：小师妹 纳兰清月委托','前往太玄宗路点31·宗门广场，向小师妹接取丹房回收委托。提交回春丹×10、石鼠皮×10，奖励紫色法器×1、2级修为丹×2。',`<button class="btn" data-task-accept-nalan="1">接取</button>`);
   }
   if(!html)html='<div class="task-empty">当前没有可接或进行中的任务。前往太玄宗 · 宗门广场可查看宗门委托。</div>';
   $('#taskList').innerHTML=html;
@@ -4264,7 +4263,7 @@ function localExploreTick(){
   let session=localExploreSession;if(!session)return;
   let i=g.selectedScene??g.map,spot=activeSpot();
   if(i!==session.map||spot!==session.spot)return stopLocalExplore('已离开当前路点');
-  let choices=localMobs(i,spot).filter(target=>!target.dead&&!target.boss&&!target.mining&&!target.wanderingMonster&&(target.type==='战斗'||target.type==='采集'));
+  let choices=localMobs(i,spot).filter(target=>!target.dead&&!target.boss&&!target.mining&&!target.wanderingMonster&&!target.treasureMonster&&(target.type==='战斗'||target.type==='采集'));
   if(!choices.length){
     let total=routeCoords(i).length,next=(spot+1)%total;
     session.spot=next;
@@ -9209,6 +9208,98 @@ const finishBattleWinWithAudioSfx=finishBattleWin;
 finishBattleWin=function(){if(battleState)playVictoryFanfare();return finishBattleWinWithAudioSfx()};
 const handleBattleDeathWithAudioSfx=handleBattleDeath;
 handleBattleDeath=function(enemyName){playGameSfx('hit',.36);return handleBattleDeathWithAudioSfx(enemyName)};
+
+// ===== 路点特殊刷新 · 宝箱妖兽 =====
+const TREASURE_MONSTER_CHANCE=.001;
+function treasureMonsterState(){return g.treasureMonsters||(g.treasureMonsters={})}
+function treasureMonsterKey(area,spot){return `${area}:${spot}`}
+function treasureMonsterAllowed(area){return area>=0&&area<10&&!deepSeaActive()&&!smallWorldActive()&&!cabinWorldActive()}
+function rollTreasureMonster(area,spot){
+  if(!treasureMonsterAllowed(area))return false;
+  let state=treasureMonsterState(),key=treasureMonsterKey(area,spot);
+  if(state[key]||Math.random()>=TREASURE_MONSTER_CHANCE)return false;
+  state[key]={createdAt:Date.now()};
+  return true;
+}
+function makeTreasureMonster(area,spot){
+  if(!treasureMonsterAllowed(area)||!treasureMonsterState()[treasureMonsterKey(area,spot)])return null;
+  return{name:'宝箱',type:'战斗',treasureMonster:true,icon:'🪎'};
+}
+const localMobsWithTreasureMonster=localMobs;
+localMobs=function(i,spot){
+  let mobs=localMobsWithTreasureMonster(i,spot),treasure=makeTreasureMonster(i,spot);
+  if(treasure)mobs.push(treasure);
+  return mobs;
+};
+const finishLocalMoveWithTreasureMonster=finishLocalMove;
+finishLocalMove=function(i,nextSpot){
+  let from=activeSpot(),result=finishLocalMoveWithTreasureMonster(i,nextSpot),spawned=[];
+  if(activeSpot()!==from){
+    if(rollTreasureMonster(i,activeSpot()))spawned.push('宝箱');
+  }
+  if(spawned.length){
+    pushLocalLog(`【特殊刷新】${spawned.join('、')}出现在${spotLabel(i,activeSpot())}，点击妖兽栏中的🪎进入战斗。`);
+    toast('路点出现了神秘宝箱',3000);renderSceneMap();save();
+  }
+  return result;
+};
+const battleEnemyStatsWithTreasureMonster=battleEnemyStats;
+battleEnemyStats=function(target,area=g.selectedScene??g.map,spot=activeSpot(),idx=0){
+  if(target?.treasureMonster){
+    let player=statTotal();
+    return{realm:'秘宝',hp:Math.max(1,Math.round(player.hp*100)),mp:0,attack:1,defense:Math.max(0,Math.floor(player.defense)),icon:'🪎',portrait:'',stage:0,multiplier:1};
+  }
+  return battleEnemyStatsWithTreasureMonster(target,area,spot,idx);
+};
+function treasureAttributeReward(){
+  let choices=[['maxHp','生命上限'],['baseMana','法力上限'],['attack','攻击'],['defense','防御'],['agility','身法'],['crit','暴击率']];
+  if(Number(g.crit||0)>=40)choices=choices.filter(x=>x[0]!=='crit');
+  let [key,label]=choices[Math.floor(Math.random()*choices.length)],before=Math.max(0,finiteStat(g[key],0)),gain;
+  if(key==='crit'){
+    gain=.1;g.crit=Math.min(40,Math.round((before+gain)*100)/100);gain=Math.round((g.crit-before)*100)/100;
+  }else{
+    gain=Math.max(.01,Math.round(before*.001*100)/100);g[key]=Math.round((before+gain)*100)/100;
+    if(key==='maxHp'&&finiteStat(g.hp,0)>=before)g.hp=Math.round((g.hp+gain)*100)/100;
+    if(key==='baseMana'&&finiteStat(g.mana,0)>=before)g.mana=Math.round((g.mana+gain)*100)/100;
+  }
+  let amount=key==='crit'?`+${gain.toFixed(1)}%`:`+${gain.toFixed(2)}`;
+  return{key,label,gain,text:`${label} ${amount}（提升0.1%）`};
+}
+const resolveLocalTargetWithTreasureMonster=resolveLocalTarget;
+resolveLocalTarget=function(target,batch=false){
+  if(target?.treasureMonster){
+    let area=g.selectedScene??g.map,spot=activeSpot(),state=treasureMonsterState();
+    delete state[treasureMonsterKey(area,spot)];
+    let attribute=treasureAttributeReward(),stones=1+Math.floor(Math.random()*10000),book=randomSkillBook(area),bookReceived=addBagItem(book);
+    g.stones=(g.stones||0)+stones;g.kills++;
+    let bookText=bookReceived?`获得${book.name}`:'背包已满，技能书未能收取';
+    pushLocalLog(`宝箱战斗胜利：${attribute.text}，灵石+${fmt(stones)}，${bookText}。`);
+    log(`小地图特殊战斗：宝箱，${attribute.text}，灵石+${fmt(stones)}`,'good');
+    return{type:'treasure',name:'宝箱',treasureReward:attribute.text,materials:[]};
+  }
+  return resolveLocalTargetWithTreasureMonster(target,batch);
+};
+const finishBattleWinWithTreasureMonster=finishBattleWin;
+finishBattleWin=function(){
+  let battle=battleState,target=battle?.target;
+  if(!target?.treasureMonster)return finishBattleWinWithTreasureMonster();
+  let rewards=battleRewardSnapshot();
+  playVictoryFanfare();
+  closeBattle(true);
+  let result=resolveLocalTarget(target,false),lines=battleRewardLines(rewards);
+  if(result?.treasureReward)lines.unshift(`随机属性：${result.treasureReward}`);
+  pushLocalLog('战胜宝箱，战斗结束。');
+  toast(`本次获得：${lines.join(' · ')}`,5200);
+  renderSceneMap();render();save();
+};
+const renderSceneMapWithTreasureIcon=renderSceneMap;
+renderSceneMap=function(){
+  renderSceneMapWithTreasureIcon();
+  let i=g.selectedScene??g.map,spot=activeSpot(),mobs=localMobs(i,spot);
+  document.querySelectorAll('#localMobList [data-local-mob]').forEach((button,idx)=>{
+    if(mobs[idx]?.treasureMonster){let icon=button.querySelector('b');if(icon)icon.textContent='🪎'}
+  });
+};
 
 function bindUi(){
 ensureMapSettingsUi();
