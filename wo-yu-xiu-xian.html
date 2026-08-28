@@ -931,7 +931,7 @@ body.game-theme-night #sceneMapModal .people-card .npc-list button span,body.gam
 <div class="guide" id="guide"><div><h2>新手指引</h2><p>初入仙途不必慌张，先记住下面几件事：</p><div class="guide-steps"><div class="guide-step"><b>① 去哪里学习技能？</b><br>首页选择“太玄宗”并进入小地图，前往路点 <b>14 · 练功房</b>，与“传功长老 莫天河”对话，可学习主动技能与疗伤技能。已获得的技能可点击小地图顶部“技能”查看和装备。</div><div class="guide-step"><b>② 去哪里看属性、装备和背包？</b><br>进入任意小地图后，顶部有“属性、装备、道具、宗门、技能”按钮。属性面板可查看攻击、防御、生命、法力等完整数值。</div><div class="guide-step"><b>③ 怎么回血和回蓝？</b><br>可在“道具”中使用回春丹等恢复物品；战斗中装备“包扎”等恢复技能后也能回血。战败会损失当前境界约 1% 修为，并送回 <b>太玄宗路点31 · 宗门广场</b>，生命与法力恢复。</div><div class="guide-step"><b>④ 前期应该做什么？</b><br>先去青云山麓低级路点战斗、采药；再回太玄宗路点31找大师姐 柳如烟或小师妹 纳兰清月接取委托。随时点击“任务”查看进度。</div></div><div class="guide-actions"><button class="btn ghost" id="skipGuide">跳过指引</button><button class="btn" id="closeGuide">看完了，继续</button></div></div></div><div class="guide" id="prologueModal"><div><h2 class="prologue-title">序章 · 血夜余烬</h2><div class="prologue-viewport"><div class="prologue-scroll"><p>十二年前，临河镇一夜覆灭。<br>大火烧了三天三夜，镇中三百余口无一生还。</p><p>你从焦土中醒来时，怀里只剩父亲塞给你的半块青铜令牌。<br>令牌背面刻着一个被血浸透的“玄”字。</p><p>恍惚间，你记得一个披着黑袍的人站在火海尽头。<br>他的袖口绣着一轮血月，掌中剑光落下前，父亲只来得及对你说一句：</p><p>“活下去……去太玄宗。”</p><p>十二年后，你终于来到太玄宗山门。<br>你不是为了长生，也不是为了逍遥。</p><p>你来修仙，只为查明临河镇覆灭的真相，找到那个血月之人。</p><p>但黑袍人是谁？血月印记属于哪个势力？<br>父亲为何早已准备好那块令牌？</p><p>答案，都藏在漫长仙路的尽头。</p><div class="story-goal"><b>主线目标：血月之仇</b><br>加入太玄宗，提升修为，调查血月印记与青铜令牌的来历。终有一日，找到临河镇惨案的幕后之人。</div></div></div><div class="guide-actions prologue-actions"><button class="btn ghost" id="skipPrologue">跳过剧情</button><button class="btn alt" id="startJourney">踏入山门</button></div></div></div><div class="toast" id="toast"></div>
 <div class="event-modal" id="eventResultModal"><div><h2 id="eventResultTitle">奇遇结果</h2><div class="event-result" id="eventResultText"></div><div class="actions"><button class="btn" id="confirmEventResult">收下因果</button></div></div></div>
 <div class="npc-dialog-modal" id="npcDialogModal"><div class="npc-dialog-card" id="npcDialogCard"><img class="npc-dialog-portrait" id="npcDialogPortrait" alt=""><h2 id="npcDialogTitle">掌教法旨</h2><div class="event-result" id="npcDialogText"></div><div class="actions" id="npcDialogActions"></div></div></div>
-<div class="event-modal battle-modal" id="battleModal"><div><div class="battle-head"><div class="battle-actions battle-actions-head"><button class="btn ghost" id="battleNormalBtn" title="普通攻击"><span class="battle-action-icon" aria-hidden="true">🗡️</span>普攻</button><button class="btn alt" id="battleAutoBtn" title="自动战斗">自动</button><button class="btn ghost" id="battleRunBtn" title="逃跑">逃跑</button></div><b id="battleTitle" class="battle-title-sr">遭遇妖兽</b><span id="battleRoundText">第1回合</span></div><div class="battle-arena"><div class="fighter player"><div class="fighter-name"><span id="battlePlayerName">你</span><em id="battlePlayerLevel">修士</em></div><div class="battle-bar hp"><i id="battlePlayerHp"></i><b id="battlePlayerHpText">生命 0/0</b></div><div class="battle-bar mp"><i id="battlePlayerMp"></i><b id="battlePlayerMpText">法力 0/0</b></div><div class="battle-bar shield"><i id="battlePlayerShield"></i><b id="battlePlayerShieldText">护盾 0</b></div></div><div class="fighter enemy"><div class="fighter-name"><span id="battleEnemyName">妖兽</span><em id="battleEnemyLevel">练气初期</em></div><div class="battle-bar hp"><i id="battleEnemyHp"></i><b id="battleEnemyHpText">0/0</b></div><div class="battle-bar mp"><i id="battleEnemyMp"></i><b id="battleEnemyMpText">0/0</b></div></div><div class="fighter-figure player"><img id="battlePlayerFigure" src="assets/hero-animation/attack-1.png" alt="修士"></div><div class="fighter-figure enemy"><div class="monster" id="battleEnemyFigure">👹</div></div><div class="battle-fx player" id="battlePlayerFx"></div><div class="battle-fx enemy" id="battleEnemyFx"></div><div class="fireball-projectile" id="fireballProjectile"></div><div class="fireball-impact" id="fireballImpact"></div><div class="battle-skills" id="battleSkillBar"></div></div><div class="battle-log" id="battleLog"></div></div></div>
+<div class="event-modal battle-modal" id="battleModal"><div><div class="battle-head"><div class="battle-actions battle-actions-head"><button class="btn ghost" id="battleNormalBtn" title="普通攻击"><span class="battle-action-icon" aria-hidden="true">🗡️</span>普攻</button><button class="btn alt" id="battleAutoBtn" title="自动战斗">自动</button><button class="btn ghost" id="battleRunBtn" title="逃跑">逃跑</button></div><b id="battleTitle" class="battle-title-sr">遭遇妖兽</b><span id="battleRoundText">第1回合</span></div><div class="battle-arena"><div class="fighter player"><div class="fighter-name"><span id="battlePlayerName">你</span><em id="battlePlayerLevel">修士</em></div><div class="battle-bar hp"><i id="battlePlayerHp"></i><b id="battlePlayerHpText">生命 0/0</b></div><div class="battle-bar mp"><i id="battlePlayerMp"></i><b id="battlePlayerMpText">法力 0/0</b></div><div class="battle-bar shield"><i id="battlePlayerShield"></i><b id="battlePlayerShieldText">护盾 0</b></div></div><div class="fighter enemy"><div class="fighter-name"><span id="battleEnemyName">妖兽</span><em id="battleEnemyLevel">练气初期</em></div><div class="battle-bar hp"><i id="battleEnemyHp"></i><b id="battleEnemyHpText">0/0</b></div><div class="battle-bar mp"><i id="battleEnemyMp"></i><b id="battleEnemyMpText">0/0</b></div></div><div class="fighter-figure player"><img id="battlePlayerFigure" src="assets/hero-animation/attack-1.png" alt="修士"></div><div class="spirit-beast-figure" id="battleSpiritBeastFigure" aria-label="临时灵兽"><img alt=""><small></small></div><div class="fighter-figure enemy"><div class="monster" id="battleEnemyFigure">👹</div></div><div class="battle-fx player" id="battlePlayerFx"></div><div class="battle-fx enemy" id="battleEnemyFx"></div><div class="fireball-projectile" id="fireballProjectile"></div><div class="fireball-impact" id="fireballImpact"></div><div class="battle-skills" id="battleSkillBar"></div></div><div class="battle-log" id="battleLog"></div></div></div>
 <div class="event-modal scene-map-modal" id="sceneMapModal"><div><div class="scene-map-head"><div class="scene-map-title"><b id="localMapName">幽月森林</b><small id="localMapDesc">当前区域小地图</small></div><div class="scene-header-overview" id="sceneHeaderOverview"></div><div class="scene-tabs"><button class="scene-tab-btn" id="openTaskBtn">任务</button><button class="scene-tab-btn" id="openAttrBtn">属性</button><button class="scene-tab-btn" id="openEquipBtn">装备</button><button class="scene-tab-btn" id="openBagBtn">道具</button><button class="scene-tab-btn" id="openSectBtn">宗门</button><button class="scene-tab-btn" id="openSkillBtn">技能</button></div></div><div class="scene-map-body"><div class="scene-left"><div class="local-map forest" id="localMapCanvas"><div class="map-world" id="localMapWorld"><div class="local-hero" id="localHero"><img src="assets/figure1/figure1.png" alt="修士形象"></div></div></div><div class="scene-player-hud"><div class="vital-bars"><div class="vital hp"><span>生命</span><i id="localHpBar"></i><b id="localHpText">100/100</b></div><div class="vital mp"><span>法力</span><i id="localMpBar"></i><b id="localMpText">80/80</b></div></div><div class="cultivation-hud" title="当前境界修为进度"><span id="localRealmLabel">练气初期</span><div class="cultivation-track"><i id="localCultBar"></i></div><b id="localCultText">0 / 100</b></div><div class="skill-slots" id="skillSlots"></div></div></div><div class="scene-side"><div class="scene-card compact-region-info"><h3>区域信息</h3><div id="localMapInfo"></div></div><div class="scene-card people-card"><h3>区域人物与怪物</h3><h4>NPC / 事件</h4><div class="npc-list" id="localNpcList"></div><h4>妖兽 / 灵草 <small style="font-weight:400">整点随机刷新</small></h4><div class="mob-list" id="localMobList"></div></div><div class="scene-actions"><button class="btn" id="localExploreBtn">原地探索</button><button class="btn ghost" id="closeSceneMap">收起地图</button></div></div></div><div class="scene-chat" id="localMapLog"></div></div></div><div class="event-modal bag-modal" id="taskModal"><div><h2>任务</h2><div class="bag-detail">这里显示当前可接取任务、已接任务与完成进度。已接任务可手动放弃。</div><div class="shop-list" id="taskList"></div><div class="bag-actions"><button class="btn ghost" id="closeTaskBtn">关闭</button></div></div></div><div class="event-modal attr-modal" id="attrModal"><div><h2>自身属性</h2><div class="attr-grid" id="attrModalGrid"></div><div class="attr-note" id="attrModalNote"></div><div class="actions"><button class="btn ghost" id="closeAttrBtn">关闭</button></div></div></div><div class="event-modal equip-modal" id="equipModal"><div><h2>装备详情</h2><div id="equipModalContent"></div><div class="actions"><button class="btn ghost" id="closeEquipBtn">关闭</button></div></div></div><div class="event-modal bag-modal" id="skillManageModal"><div><h2>技能管理</h2><div class="bag-detail">可拆卸已装备技能并放入备用栏；备用技能可重新装备到被动栏或主动栏。</div><div id="skillManageContent" class="skill-manage"></div><div class="bag-actions"><button class="btn ghost" id="closeSkillBtn">关闭</button></div></div></div><div class="event-modal bag-modal market-modal" id="marketModal"><div><h2>黑市商人</h2><div class="bag-top"><div><b>黑市货品</b> · <span>下次刷新 <b id="marketModalCountdown">--:--</b></span></div><div class="bag-top-actions"><button class="btn alt" id="marketModalRefreshBtn">花500灵石手动刷新</button><span id="marketModalRefreshHint"></span></div></div><div class="shop-list" id="marketModalShop"></div><div class="bag-actions"><button class="btn ghost" id="closeMarketModalBtn">关闭</button></div></div></div><div class="event-modal bag-modal" id="bagModal"><div><h2>道具背包</h2><div class="bag-top"><div><b id="bagStoneText">灵石：0</b> · <span id="bagCapText">容量 0/20</span></div><div class="bag-top-actions"><button class="btn ghost" id="sortBagBtn">自动整理</button><button class="btn alt" id="expandBagBtn">扩充背包</button></div></div><div class="bag-pagebar"><button class="btn ghost" id="bagPrevBtn">上一页</button><b id="bagPageText">第1/1页</b><button class="btn ghost" id="bagNextBtn">下一页</button></div><div class="bag-grid" id="bagGrid"></div><div class="bag-detail" id="bagDetail">请选择一个道具。</div><div class="bag-sell-tools"><label>售卖数量 <input id="sellQtyInput" type="number" min="1" value="1"></label><label>装备品质 <select id="sellQualitySelect"><option value="1">白装</option><option value="2">绿装</option><option value="3">蓝装</option><option value="4">紫装</option><option value="5">橙装</option></select></label><button class="btn ghost" id="sellQualityBtn">按品质售卖装备</button></div><div class="bag-actions"><button class="btn" id="useBagItemBtn">使用</button><button class="btn ghost" id="sellBagItemBtn">售卖</button><button class="btn ghost" id="closeBagBtn">关闭</button></div></div></div><div class="event-modal bag-modal" id="sectTreasuryModal"><div><h2>太玄宗宝库</h2><div class="bag-top"><div><b id="treasuryContributionText">宗门贡献：0</b> · <span id="treasuryLevelText">宝库等级 1</span></div><div class="bag-top-actions"><button class="btn ghost" id="closeTreasuryBtnTop">关闭</button></div></div><div class="bag-detail" id="treasuryGuide">守阁长老 沈知白：宝库分丹药、材料、秘典三列。你可逐类翻阅，挑中哪件便兑换哪件。</div><div class="actions" id="treasuryTabs"><button class="btn ghost" data-treasury-tab="丹药">丹药</button><button class="btn ghost" data-treasury-tab="材料">材料</button><button class="btn ghost" data-treasury-tab="秘典">秘典</button></div><div class="shop-list" id="sectTreasuryList"></div><div class="bag-detail" id="sectTreasuryDetail">请先选择一件想兑换的物资。</div><div class="bag-actions"><button class="btn" id="buySectTreasuryBtn">兑换当前选中</button><button class="btn ghost" id="closeTreasuryBtn">关闭</button></div></div></div><div class="event-modal" id="redeemModal"><div><h2>兑换码</h2><p>输入兑换码后确认。兑换码不区分大小写。</p><input class="code-input" id="redeemInput" maxlength="24" placeholder="请输入兑换码"><div class="actions"><button class="btn" id="confirmRedeem">确认兑换</button><button class="btn ghost" id="closeRedeem">取消</button></div></div></div><div class="event-modal" id="devModal"><div><h2>开发者模式</h2><p class="dev-warning">修改数值会直接影响当前存档，请确认后再保存。</p><div class="dev-grid" id="devFields"></div><div class="actions"><button class="btn" id="saveDev">应用并保存</button><button class="btn alt" id="resetDev">一键重置开局</button><button class="btn ghost" id="closeDev">关闭</button></div></div></div>
 <script>
 const KEY='woYuXiuXianSaveV1',MAX=9e15,realms=['练气','筑基','金丹','元婴','化神','炼虚','合体','大乘','渡劫','天仙'],stages=['初期','中期','后期','大圆满'],maps=[['青云山麓',0,1],['幽月森林',4,2.1],['赤炎秘境',8,4.6],['东海龙宫',12,9],['万妖古域',16,18],['天渊战场',20,38],['虚空遗迹',24,80],['仙魔战场',28,170],['九天雷域',32,360],['仙界天门',36,800],['太玄宗',0,.25]],roots=[['金灵根',1.08],['木灵根',1.1],['水灵根',1.12],['火灵根',1.15],['土灵根',1.06],['变异天灵根',1.55]],skillNames=['引气诀','青元剑诀','五行真解','太虚仙经','混沌道典'];
@@ -958,7 +958,7 @@ const mapScenePortraits=[
   ['assets/world-map/map-node-portraits-v2.png','0% 50%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','33.333% 50%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','66.667% 50%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','100% 50%','400% 300%'],
   ['assets/world-map/map-node-portraits-v2.png','0% 100%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','33.333% 100%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','66.667% 100%','400% 300%'],['assets/world-map/map-node-portraits-v2.png','100% 100%','400% 300%']
 ];
-function fresh(){let root=roots[Math.floor(Math.random()*roots.length)];return{v:1,last:Date.now(),created:Date.now(),realm:0,stage:0,cult:0,stones:100,materials:0,herbs:0,fragments:0,scrolls:0,petEggs:0,jades:0,tribPills:0,cultPills:0,boostPills:0,root:root[0],rootMul:root[1],aptitude:40+Math.floor(Math.random()*61),hp:100,maxHp:100,mana:80,baseMana:80,attack:12,defense:7,agility:5,crit:0,map:0,gear:{weapon:null,armor:null,treasure:null,helmet:null,boots:null,bracer:null},enhance:0,temper:0,jadeSlots:0,skillLevel:1,skillTier:0,insight:0,pet:null,sect:'太玄宗',sectContribution:0,autoAlchemy:true,tribBonus:0,tribFails:0,kills:0,deaths:0,encounters:0,logs:[],offline:null,newbieGuideDone:false,prologueDone:false,mainQuest:'血月之仇',mapUiSettings:{randomEvents:true,expanded:true,statusSwitch:true,freeMapView:true,audioEnabled:true,layoutDefaultsV2:true}}};
+function fresh(){let root=roots[Math.floor(Math.random()*roots.length)];return{v:1,last:Date.now(),created:Date.now(),realm:0,stage:0,cult:0,stones:100,materials:0,herbs:0,fragments:0,scrolls:0,petEggs:0,jades:0,tribPills:0,cultPills:0,boostPills:0,root:root[0],rootMul:root[1],aptitude:40+Math.floor(Math.random()*61),hp:100,maxHp:100,mana:80,baseMana:80,attack:12,defense:7,agility:5,crit:0,map:0,gear:{weapon:null,armor:null,treasure:null,helmet:null,boots:null,bracer:null},enhance:0,temper:0,jadeSlots:0,skillLevel:1,skillTier:0,insight:0,pet:null,spiritBeast:null,spiritBeastCandidate:null,spiritBeastCandidates:[],poisonStates:{},poisonCures:{},sect:'太玄宗',sectContribution:0,autoAlchemy:true,tribBonus:0,tribFails:0,kills:0,deaths:0,encounters:0,logs:[],offline:null,newbieGuideDone:false,prologueDone:false,mainQuest:'血月之仇',mapUiSettings:{randomEvents:true,expanded:true,statusSwitch:true,freeMapView:true,audioEnabled:true,layoutDefaultsV2:true}}};
 localMapBackgrounds.push('assets/map-backgrounds/taixuan-zong.webp');
 localMapBackgrounds.push('assets/map-backgrounds/tianmo-zong.webp');
 // 天魔宗在击败仙界天门守门仙将后才会显现在大地图右上角。
@@ -982,11 +982,12 @@ if((g.selectedScene===10||g.map===10)&&g.localSpot===2&&(g.sectRank||0)<2)g.loca
 // 兼容旧存档：旧宗主峰路点32现改为打坐台，宗主峰迁至路点33。
 if(g.baseMana==null)g.baseMana=Math.max(1,80+(g.realm||0)*20);
 g.meditating=false;
-Object.assign(g,{sectRank:g.sectRank??0,sectReputation:g.sectReputation??0,sectLevel:g.sectLevel??1,sectExp:g.sectExp??0,sectRealmAt:g.sectRealmAt??0,sectWarAt:g.sectWarAt??0,sectTasks:g.sectTasks??0,sectManualTaskAt:g.sectManualTaskAt??0,sectOfficeTaskAt:g.sectOfficeTaskAt??0,sectLectureAt:g.sectLectureAt??0,sectSparAt:g.sectSparAt??0,sectTreasurySelected:g.sectTreasurySelected??0,sectTreasuryTab:g.sectTreasuryTab||'丹药',sectSisterQuest:g.sectSisterQuest||null,nalanQuest:g.nalanQuest||null,nalanQuestDone:g.nalanQuestDone??false,xiaoHuoQuest:g.xiaoHuoQuest||null,qiuQuest:g.qiuQuest||null});
+Object.assign(g,{sectRank:g.sectRank??0,sectReputation:g.sectReputation??0,sectLevel:g.sectLevel??1,sectExp:g.sectExp??0,sectRealmAt:g.sectRealmAt??0,sectWarAt:g.sectWarAt??0,sectLectureAt:g.sectLectureAt??0,sectSparAt:g.sectSparAt??0,sectTreasurySelected:g.sectTreasurySelected??0,sectTreasuryTab:g.sectTreasuryTab||'丹药',sectSisterQuest:g.sectSisterQuest||null,nalanQuest:g.nalanQuest||null,nalanQuestDone:g.nalanQuestDone??false,xiaoHuoQuest:g.xiaoHuoQuest||null,qiuQuest:g.qiuQuest||null,spiritBeast:g.spiritBeast||null,spiritBeastCandidate:g.spiritBeastCandidate||null,spiritBeastCandidates:Array.isArray(g.spiritBeastCandidates)?g.spiritBeastCandidates:(g.spiritBeastCandidate?[g.spiritBeastCandidate]:[])});
 Object.assign(g,{mainQuest:g.mainQuest||'血月之仇',mainQuestStage:g.mainQuestStage??0,mainQuestBossBase:g.mainQuestBossBase??0,mainQuestChapter1Done:g.mainQuestChapter1Done??false,mainQuestChapter2Done:g.mainQuestChapter2Done??false,mainQuestChapter3Done:g.mainQuestChapter3Done??false,mainQuestBoss2Base:g.mainQuestBoss2Base??0,mainQuestBoss3Base:g.mainQuestBoss3Base??0,mainQuestBoss4Base:g.mainQuestBoss4Base??0,mainQuestBoss5Base:g.mainQuestBoss5Base??0,mainQuestBoss6Base:g.mainQuestBoss6Base??0,mainQuestBoss7Base:g.mainQuestBoss7Base??0,mainQuestBoss8Base:g.mainQuestBoss8Base??0,mainQuestBoss9Base:g.mainQuestBoss9Base??0,mainQuestBoss10Base:g.mainQuestBoss10Base??0,mainQuestLateDialogueRewards:g.mainQuestLateDialogueRewards||{},mainQuestFinaleDone:g.mainQuestFinaleDone??false,mainQuestFinaleScrollSeen:g.mainQuestFinaleScrollSeen??false,suQingxueQuest:g.suQingxueQuest||null,suQingxueQuestDone:g.suQingxueQuestDone??false});
 if(g.healPills==null){g.healPills=g.cultPills||0;g.cultPills=0}Object.assign(g,{alchemyLevel:g.alchemyLevel??1,alchemyExp:g.alchemyExp??0,selectedRecipe:g.selectedRecipe??0,activeBoostUntil:g.activeBoostUntil??0});
 Object.assign(g,{sectPermanentBuys:g.sectPermanentBuys||{},marketHour:g.marketHour??-1,marketStock:g.marketStock||[],marketManualHour:g.marketManualHour??-1,gatherCooldowns:g.gatherCooldowns||{},deadMobs:g.deadMobs||{},bossKills:g.bossKills||{},trophies:g.trophies||{},bag:g.bag||[],bagCap:g.bagCap||20,bagSelected:g.bagSelected??-1,bagPage:g.bagPage??0,passiveSkills:g.passiveSkills||[],activeSkills:g.activeSkills||[],skillReserve:g.skillReserve||[],selectedEquipSlot:g.selectedEquipSlot||'weapon',defaultActiveSkillsGranted:g.defaultActiveSkillsGranted??!!g.skillSchemaV2,deathGuideSeen:g.deathGuideSeen??false,bigFireballLevel:g.bigFireballLevel??0,caveSoulLoops:g.caveSoulLoops||{},rageLearned:g.rageLearned??false,disciplineQuests:g.disciplineQuests||{},masterQuest:g.masterQuest||null,forestDisputes:g.forestDisputes||{},formationBuffs:g.formationBuffs||{mist:0,blood:0},xiaoYanHunt:g.xiaoYanHunt||null});
 Object.assign(g,{warehouse:g.warehouse||[],warehouseCap:100,warehouseSelected:g.warehouseSelected??-1,warehousePage:g.warehousePage??0,warehouseBagSelected:g.warehouseBagSelected??-1,warehouseBagPage:g.warehouseBagPage??0});
+Object.assign(g,{poisonStates:g.poisonStates&&typeof g.poisonStates==='object'?g.poisonStates:{},poisonCures:g.poisonCures&&typeof g.poisonCures==='object'?g.poisonCures:{}});
 Object.assign(g,{tribulationGuideSeen:g.tribulationGuideSeen??(g.realm>2),tribulationGuidePending:g.tribulationGuidePending??(g.realm===2&&g.stage===3),tribulationGuideConfirmReady:g.tribulationGuideConfirmReady??false});
 Object.assign(g,{featureGuideSeen:g.featureGuideSeen??false,featureGuideActive:g.featureGuideActive??false,featureGuideStep:g.featureGuideStep??0,foundationFireballGuideSeen:g.foundationFireballGuideSeen??(g.realm>0),foundationFireballGuideActive:g.foundationFireballGuideActive??false,foundationFireballGuidePending:g.foundationFireballGuidePending??false,foundationFireballGuideConfirmReady:g.foundationFireballGuideConfirmReady??false});
 if(!g.skillSchemaV2){g.passiveSkills=(g.passiveSkills&&g.passiveSkills.length)?g.passiveSkills:(g.activeSkills||[]);g.activeSkills=[];g.skillSchemaV2=true}
@@ -3079,7 +3080,7 @@ function battleSkillAction(skill){
   if(/耳光|星砂掌|破碎星寰|电闪雷鸣|九曲黄河阵/.test(name))return 'palmStrike';
   return '';
 }
-function optimizedBattleAsset(src){return /assets\/(hero-animation|boss-portraits|monster-portraits|npc-portraits)\/.+\.png$/.test(String(src||''))?String(src).replace(/\.png$/,'.webp'):src;}
+function optimizedBattleAsset(src){return /assets\/(hero-animation|boss-portraits|monster-portraits|npc-portraits)\/.+\.png$/.test(String(src||''))&&!/-dialog\.png$/.test(String(src||''))?String(src).replace(/\.png$/,'.webp'):src;}
 Object.values(bossPortraitFrames).forEach(frames=>frames.forEach((src,index)=>frames[index]=optimizedBattleAsset(src)));
 Object.values(heroActionFrames).forEach(frames=>frames.forEach((src,index)=>frames[index]=optimizedBattleAsset(src)));
 let initialBattleHero=$('#battlePlayerFigure');
@@ -3208,7 +3209,7 @@ async function playNormalAttackAnimation(side){
   let frames=side==='player'?playHeroFrames('attack',[100,140,190,170]):null;
   attacker.classList.remove('normal-attack');target?.classList.remove('hit-shake');void attacker.offsetWidth;attacker.classList.add('normal-attack');await waitBattle(300);target?.classList.add('hit-shake');await waitBattle(300);attacker.classList.remove('normal-attack');target?.classList.remove('hit-shake');if(frames)await frames
 }
-async function playRunAnimation(){let player=battleFigure('player');if(!player)return;let frames=playHeroFrames('run',[130,160,220,310]);player.classList.remove('run-away');void player.offsetWidth;player.classList.add('run-away');await waitBattle(820);player.classList.remove('run-away');await frames}
+async function playRunAnimation(){let player=battleFigure('player');if(!player)return;let petRun=playSpiritBeastRunAnimation();let frames=playHeroFrames('run',[130,160,220,310]);player.classList.remove('run-away');void player.offsetWidth;player.classList.add('run-away');await waitBattle(820);player.classList.remove('run-away');await Promise.all([frames,petRun])}
 function setBattleControlsDisabled(disabled){
   document.querySelectorAll('#battleModal button').forEach(btn=>{
     if(disabled){btn.disabled=!(btn.id==='battleAutoBtn'&&battleAutoRunning);return}
@@ -3222,7 +3223,7 @@ function setBattleControlsDisabled(disabled){
   syncBattleAutoButton();
 }
 function syncBattleAutoButton(){let button=$('#battleAutoBtn');if(!button)return;let running=!!battleAutoRunning&&!!battleState;button.textContent=running?'停止':'自动';button.title=running?'停止自动战斗':'自动战斗';button.classList.toggle('is-running',running);button.disabled=!running&&!!battleBusy}
-function handleBattleDeath(enemyName){if(!battleState)return;let need=realmNeed(),lost=Math.max(1,Math.floor(need*.01)),actualLost=Math.min(g.cult,lost),firstDeath=!g.deathGuideSeen;g.cult=Math.max(0,g.cult-lost);g.deaths++;battleState.player.hp=statTotal().hp;battleState.player.mp=statTotal().mana;closeBattle(false);g.selectedScene=10;g.map=10;g.localSpot=31;g.hp=statTotal().hp;g.mana=statTotal().mana;g.deathGuideSeen=true;pushLocalLog(`不敌${enemyName}，损失修为${fmt(actualLost)}，已被送回太玄宗·宗门广场。`);log(`小地图战斗：败于${enemyName}，损失当前境界1%修为（${fmt(actualLost)}）`,'danger');renderSceneMap();render();save();let guide=firstDeath?`师兄，你终于醒了。巡山弟子发现你倒在外面，是宗门长老护住了你的神魂。\n\n此番身死，你损失了 ${fmt(actualLost)} 点修为（当前境界修为需求的1%），现已被送回宗门广场。\n\n往后若遇强敌，记得先检查装备、技能和丹药；若胜算不高，及时逃跑也不丢人。宗门广场永远是你的退路。`:`师兄，这次损失了 ${fmt(actualLost)} 点修为（当前境界1%）。我已经托巡山弟子把你送回宗门广场了。下次遇到强敌，记得量力而行。`;openNpcDialog('小师妹 纳兰清月',guide,[{text:'我记住了'}]);toast(`战败：损失修为 ${fmt(actualLost)}，已返回宗门广场`)}
+function handleBattleDeath(enemyName){if(!battleState)return;let need=realmNeed(),lost=Math.max(1,Math.floor(need*.01)),actualLost=Math.min(g.cult,lost),firstDeath=!g.deathGuideSeen;g.cult=Math.max(0,g.cult-lost);g.deaths++;battleState.player.hp=statTotal().hp;battleState.player.mp=statTotal().mana;closeBattle(false);g.selectedScene=10;g.map=10;g.localSpot=31;g.hp=statTotal().hp;g.mana=statTotal().mana;g.deathGuideSeen=true;pushLocalLog(`不敌${enemyName}，损失修为${fmt(actualLost)}，已被送回太玄宗·宗门广场。`);log(`小地图战斗：败于${enemyName}，损失当前境界1%修为（${fmt(actualLost)}）`,'danger');renderSceneMap();render();save();let guide=firstDeath?`师兄，你终于醒了。巡山弟子发现你倒在外面，是宗门长老护住了你的神魂。\n\n此番身死，你损失了 ${fmt(actualLost)} 点修为，现已被送回宗门广场。\n\n往后若遇强敌，记得先检查装备、技能和丹药；若胜算不高，及时逃跑也不丢人。宗门广场永远是你的退路。`:`师兄，这次损失了 ${fmt(actualLost)} 点修为。我已经托巡山弟子把你送回宗门广场了。下次遇到强敌，记得量力而行。`;openNpcDialog('小师妹 纳兰清月',guide,[{text:'我记住了'}]);toast(`战败：损失修为 ${fmt(actualLost)}，已返回宗门广场`)}
 async function battleEnemyTurn(){let b=battleState;if(!b||b.enemy.hp<=0)return;if((b.enemy.skipTurns||0)>0){b.enemy.skipTurns--;battleLog(`${b.target.name}神魂震荡，本回合无法行动。`);return}await playNormalAttackAnimation('enemy');if(!battleState)return;let st=statTotal(),tacticalMiss=(b.player.wind&&Math.random()<.28)||(b.enemy.slow&&Math.random()<.18),dodge=dodgeChance(st.agility,b.player.dodgeBonus||0);if((b.enemy.passives||[]).includes('识破'))dodge*=.2;if(tacticalMiss||Math.random()<dodge){battleLog(tacticalMiss?`${b.target.name}攻势落空。`:`你身法流转，闪避了${b.target.name}的攻击（闪避${(dodge*100).toFixed(1)}%）。`);if(tacticalMiss){b.player.wind=0;b.enemy.slow=0}return}let dmg=Math.max(1,Math.floor(b.enemy.attack+Math.random()*b.enemy.attack*.35-st.defense*.65)),result=absorbBattleDamage(b,dmg);g.hp=b.player.hp;battleFx('player',result.hpDamage?'-'+result.hpDamage:'盾挡',result.hpDamage===0);battleLog(`${b.target.name}反击，原始伤害${dmg}点${result.blocked?`，护盾吸收${result.blocked}点`:''}${result.hpDamage?`，生命受到${result.hpDamage}点伤害`:'，生命未受伤害'}。`);if(b.player.hp<=0){if(b.target.spar){g.sectSparAt=Date.now()+600000;b.player.hp=Math.max(1,Math.floor(statTotal().hp*.35));b.player.mp=Math.max(0,Math.floor(statTotal().mana*.35));closeBattle(false);pushLocalLog(`练功长老 付云山点到即止，切磋结束。`);showNpcResult('压制切磋落败','练功长老 付云山收剑而立：根基仍需打磨。\n本次切磋不获得奖励。\n切磋冷却：10分钟。','danger');renderSceneMap();render();save();return}handleBattleDeath(b.target.name)}}
 function applyWitheringWoodTurn(b){
   let effect=b?.player?.witheringWood;
@@ -3276,15 +3277,18 @@ const npcDialogPortraits={
   '药堂弟子 萧火':'xiao-huo','丹童 青禾':'qinghe','器童 石砚':'shiyan','泼皮 牛五':'niuwu',
   '执事弟子':'zhishi-dizi','山门执事 周守岳':'zhou-shouyue','内务执事 孙明礼':'sun-mingli','守阁长老 沈知白':'shen-zhibai',
   '浪子 柳杰仁':'liu-jieren','太玄宗矿脉监管':'mining-overseer','看守长老':'pool-guardian','阵童 阿衍':'ayan',
+  '仓库管理员':'warehouse-manager-dialog.png','二师兄 陈长生':'chen-changsheng-dialog.png','紫云峰弟子 沈墨离':'shen-moli-dialog.png',
+  '信使':'messenger-dialog.png','宗门回收员':'sect-reclaimer-dialog.png','定光弟子':'dingguang-disciple-dialog.png','太上长老 余缺':'yuque-dialog.png',
+  '悬赏榜':'bounty-board-dialog.png','破碎的传送阵':'broken-tianmo-gate-dialog.png',
   '千年狐王':'fox-king','夜行狼王':'wolf-king','千年古树':'ancient-tree','巡山妖将':'mountain-demon-general',
   '驿站掌柜':'innkeeper','黑市商人':'black-market-merchant','秘宝商人':'treasure-merchant','洞府残魂':'cave-remnant',
   '讲经弟子':'mo-tianhe','值守弟子':'sun-mingli','守阁弟子':'shen-zhibai','巡峰弟子':'zhou-shouyue','护峰道童':'ayan',
   '紫云峰评语':'qiu-zishan','掌教法旨':'lin-xuanyi','太玄宗宗门册':'lin-xuanyi','牛五':'niuwu','石砚':'shiyan','异火已成':'xiao-huo',
   '萧焱':'battle-xiao-yan','小木屋打手':'battle-cabin-enforcer','叛教修士':'battle-renegade-cultivator'
 };
-function npcPortraitFor(title){let label=String(title||'');let key=Object.keys(npcDialogPortraits).find(name=>label===name)||Object.keys(npcDialogPortraits).find(name=>label.includes(name));return key?`assets/npc-portraits/${npcDialogPortraits[key]}.webp`:''}
+function npcPortraitFor(title){let label=String(title||''),key=Object.keys(npcDialogPortraits).find(name=>label===name)||Object.keys(npcDialogPortraits).find(name=>label.includes(name)),asset=key?npcDialogPortraits[key]:'';return key?`assets/npc-portraits/${asset}${/\.(?:png|webp)$/i.test(asset)?'':'.webp'}`:''}
 function openNpcDialog(title,text,buttons=[{text:'知道了'}],portraitOverride=''){let portrait=optimizedBattleAsset(portraitOverride||npcPortraitFor(title)),card=$('#npcDialogCard'),image=$('#npcDialogPortrait');$('#npcDialogTitle').textContent=title;$('#npcDialogText').textContent=text;if(card)card.classList.toggle('has-portrait',!!portrait);if(image){image.src=portrait||'';image.decoding='async';image.alt=portrait?`${title}人物特写`:'';image.classList.toggle('tianmo-facing-left',portrait.includes('assets/npc-portraits/tianmo-'))}$('#npcDialogActions').innerHTML=buttons.map((b,i)=>`<button class="btn npc-dialog-choice" data-npc-dialog-btn="${i}">${b.text}</button>`).join('');document.querySelectorAll('[data-npc-dialog-btn]').forEach(btn=>btn.onclick=()=>{let action=buttons[+btn.dataset.npcDialogBtn];if(action?.close!==false)closeNpcDialog();action?.onClick?.()});$('#npcDialogModal').classList.add('show')}
-function showNpcResult(title,text,type='good'){openNpcDialog(title,text,[{text:'收下因果'}]);if(type)log(`小地图NPC：${title}`,type)}
+function showNpcResult(title,text,type='good',portraitOverride=''){if(!portraitOverride&&/悬赏/.test(String(title)))portraitOverride='assets/npc-portraits/bounty-board-dialog.png';openNpcDialog(title,text,[{text:'收下因果'}],portraitOverride);if(type)log(`小地图NPC：${title}`,type)}
 function merchantEquip(quality,source='merchant',area=g.selectedScene??g.map){let slot=equipSlots[Math.floor(Math.random()*equipSlots.length)],level=normalMonsterMidPowerLevel(area,quality),item=normalizeEquip({name:equipBaseName(quality,slot),quality,slot,powerLevel:level,sell:quality*320});item.desc=(source==='merchant'?'秘宝商人货品。':'奇珍异宝。')+` 加成系数参照${mapScenes[area]?.[1]||'当前区域'}普通妖兽的${normalMonsterMidRealm(area)}。`;return item}
 function buyMerchantGoods(price,pool){if(g.stones<price){toast('灵石不足');return false}let roll=Math.random(),sum=0,reward=pool[pool.length-1];for(let item of pool){sum+=item[1];if(roll<sum){reward=item;break}}g.stones-=price;let got,rewardText='';if(reward[0]==='skillbook'){got=randomSkillBook();rewardText=`技能书：${got.name}`}else{got=merchantEquip(reward[0],'merchant');rewardText=`${qualityText[got.quality]}色${equipSlotNames[got.slot]}：${got.name}`}if(!addBagItem(got)){g.stones+=price;toast('背包已满，购买取消');return false}pushLocalLog(`秘宝商人出手：花费${fmt(price)}灵石，购得${rewardText}。`);showNpcResult('秘宝交易成功',`花费 ${fmt(price)} 灵石。\n获得 ${rewardText}。`,'good');return true}
 function sectGoodOwnedCount(x){
@@ -3402,7 +3406,7 @@ function talkToTransmissionElder(){
     renderSceneMap();save();
   }
   let fire=g.bigFireballLevel||0,fireName=fire?bigFireballConfig(fire).name:'未学习',bandage=g.bandageLevel||0;
-  openNpcDialog('传功长老 莫天河',`传功长老 莫天河道：“攻守相济，方能走得长远。你想修习哪门术法？”\n\n大火球术：当前${fireName}\n包扎：当前${bandage?bandage+'级':'未学习'}（每次学习或升级花费200灵石）`,[
+  openNpcDialog('传功长老 莫天河',`“攻守相济，方能走得长远。你想修习哪门术法？”\n\n大火球术：当前${fireName}\n包扎：当前${bandage?bandage+'级':'未学习'}（每次学习或升级花费200灵石）`,[
     {text:`${fire?'升级':'学习'}大火球术`,alt:true,onClick(){talkBigFireballTraining()}},
     {text:`${bandage?'升级':'学习'}包扎`,onClick(){talkBandageTraining()}},
     {text:'离开',ghost:true}
@@ -3725,6 +3729,7 @@ let freeHeal=realmIndex()<4,healCost=freeHeal?0:50,canQuest=realmIndex()>1;
 let q=g.nalanQuest,questDone=!!g.nalanQuestDone,healCount=pillCountByName('回春丹','healPills'),skinCount=bagItemCountByName('石鼠皮');
 openNpcDialog('小师妹 纳兰清月',`小师妹 纳兰清月眨眨眼：师兄若受了伤，我这里可帮你调息。\n${freeHeal?'筑基以前同门互助，不收灵石。':'筑基以后药材用度渐重，疗伤需收50灵石。'}${canQuest?(questDone?'\n\n丹房回收已经整理妥当，多谢师兄先前相助。':'\n\n另外我正在整理丹房名录，正缺回春丹与石鼠皮。'):'\n\n等师兄修为高过练气中期，我再托你办一件丹房小事。'}`,[
   {text:freeHeal?'免费疗伤':'花50灵石疗伤',onClick(){
+    if(hasActiveToxin())return toast('你身上的奇毒未解，先去赤砂坡找跛脚医生研究。');
     if(!freeHeal&&g.stones<healCost)return toast('灵石不足');
     if(!freeHeal)g.stones-=healCost;
     let st=statTotal();
@@ -3844,7 +3849,7 @@ return;
 
 if(name==='外务执事 白景川'){
 let realmLeft=Math.max(0,Math.ceil((g.sectRealmAt+1800000-Date.now())/60000)),warLeft=Math.max(0,Math.ceil((g.sectWarAt+600000-Date.now())/60000));
-openNpcDialog('外务执事 白景川',`外务执事 白景川拱手：${rank}，东执事厅掌宗门杂务案牍。\n你可在此咨询晋升、捐献灵石、宗门秘境与宗门团战。`,[
+openNpcDialog('外务执事 白景川',`${rank}，你可在此咨询晋升、捐献灵石、宗门秘境与宗门团战。`,[
 {text:'宗门晋升',onClick(){
 if(g.sectRank===0&&g.sectReputation>=next[1]){
   openNpcDialog('外务执事 白景川',`白景川翻开宗门名册：\n\n“你的声望已经达到内门弟子的标准。外门升入内门由东执事厅直接核验，无需再去掌教峰请示。”`,[
@@ -4191,6 +4196,7 @@ if(name==='驿站掌柜'){
 let healCost=Math.max(100,Math.floor(120*(i+1)+difficulty*40)),fullMana=statTotal().mana,needHeal=g.hp<fullHp||g.mana<fullMana;
 openNpcDialog('驿站掌柜',`掌柜拨了拨算盘：\n花费 ${fmt(healCost)} 灵石，可回满生命与法力；\n另有回春丹一粒，售价 200 灵石。`,[
 {text:'回满气血法力',onClick(){
+if(hasActiveToxin())return toast('你身上的奇毒未解，驿站掌柜无法清除。请去赤砂坡找跛脚医生。');
 if(g.stones<healCost)return toast('灵石不足');
 if(!needHeal)return toast('当前状态已满，无需补给');
 g.stones-=healCost;g.hp=fullHp;g.mana=fullMana;
@@ -6149,16 +6155,22 @@ function startShenMoliQuest(){
   quest.stage=1;
   pushLocalLog('接取支线：沈墨离遗失的手链。前往打坐台向大师兄叶凡打听。');
   refreshShenMoliQuest();
-  showNpcResult('遗失的手链','已接取支线任务。\n\n前往太玄宗打坐台，向大师兄叶凡询问手链的下落。','good');
+  showNpcResult('遗失的手链','已接取支线任务。\n\n前往太玄宗打坐台，向大师兄叶凡询问手链的下落。','good',shenMoliPortraitFor(1));
+}
+function shenMoliPortraitFor(stage){
+  if(stage>=5)return 'assets/npc-portraits/shen-moli-relieved-dialog.png';
+  if(stage>=4)return 'assets/npc-portraits/shen-moli-angry-dialog.png';
+  if(stage>=1)return 'assets/npc-portraits/shen-moli-curious-dialog.png';
+  return 'assets/npc-portraits/shen-moli-dialog.png';
 }
 function talkShenMoli(){
   let quest=shenMoliQuest();
-  if(quest.stage===0)return openNpcDialog('紫云峰弟子 沈墨离','沈墨离按着空荡荡的腕间，神色焦急：\n“我那条手链不见了。最后一次见到它，是在打坐台附近。你能替我寻一寻吗？”',[{text:'答应帮她寻找手链',onClick(){startShenMoliQuest()}},{text:'暂不接取',ghost:true}]);
-  if(quest.stage===1)return showNpcResult('紫云峰弟子 沈墨离','“手链最后是在打坐台附近见到的。大师兄叶凡常在那边静修，或许他知道些什么。”','good');
-  if(quest.stage===2)return showNpcResult('紫云峰弟子 沈墨离','“叶凡师兄提到了陈长生？那便去太玄宗04找他问个明白。若他真拿了我的东西，可不能再让他敷衍过去。”','good');
+  if(quest.stage===0)return openNpcDialog('紫云峰弟子 沈墨离','沈墨离按着空荡荡的腕间，神色焦急：\n“我那条手链不见了。最后一次见到它，是在打坐台附近。你能替我寻一寻吗？”',[{text:'答应帮她寻找手链',onClick(){startShenMoliQuest()}},{text:'暂不接取',ghost:true}],shenMoliPortraitFor(quest.stage));
+  if(quest.stage===1)return showNpcResult('紫云峰弟子 沈墨离','“手链最后是在打坐台附近见到的。大师兄叶凡常在那边静修，或许他知道些什么。”','good',shenMoliPortraitFor(quest.stage));
+  if(quest.stage===2)return showNpcResult('紫云峰弟子 沈墨离','“叶凡师兄提到了陈长生？那便去太玄宗04找他问个明白。若他真拿了我的东西，可不能再让他敷衍过去。”','good',shenMoliPortraitFor(quest.stage));
   if(quest.stage===3){quest.stage=4;grantShenMoliCult(33,'向沈墨离复命');refreshShenMoliQuest()}
-  if(quest.stage===4)return openNpcDialog('紫云峰弟子 沈墨离','沈墨离听完经过，眸中寒意渐起：\n“陈长生分明是在故意藏匿我的财物。我要去找他讨个说法。你愿意站在哪一边？”',[{text:'支持她讨回手链',onClick(){resolveShenMoliQuest('support')}},{text:'劝她暂且阻拦复仇',onClick(){resolveShenMoliQuest('block')}},{text:'容我再想想',ghost:true}]);
-  return showNpcResult('紫云峰弟子 沈墨离',quest.outcome==='support'?'陈长生已被发现藏匿手链。沈墨离向你一揖，心中郁结终于消散。':'陈长生已主动归还手链。沈墨离将这段风波记在心里，也记下了你的劝解。','good');
+  if(quest.stage===4)return openNpcDialog('紫云峰弟子 沈墨离','沈墨离听完经过，眸中寒意渐起：\n“陈长生分明是在故意藏匿我的财物。我要去找他讨个说法。你愿意站在哪一边？”',[{text:'支持她讨回手链',onClick(){resolveShenMoliQuest('support')}},{text:'劝她暂且阻拦复仇',onClick(){resolveShenMoliQuest('block')}},{text:'容我再想想',ghost:true}],shenMoliPortraitFor(quest.stage));
+  return showNpcResult('紫云峰弟子 沈墨离',quest.outcome==='support'?'陈长生已被发现藏匿手链。沈墨离向你一揖，心中郁结终于消散。':'陈长生已主动归还手链。沈墨离将这段风波记在心里，也记下了你的劝解。','good',shenMoliPortraitFor(quest.stage));
 }
 function talkYeFanForShenMoli(){
   let quest=shenMoliQuest();
@@ -6183,11 +6195,11 @@ function resolveShenMoliQuest(outcome){
     g.sectReputation=(g.sectReputation||0)+200;
     pushLocalLog('沈墨离追查出陈长生藏匿手链，宗门声望 +200。');
     refreshShenMoliQuest();
-    return showNpcResult('手链风波','陈长生最终被发现藏匿了手链。沈墨离取回失物，对你郑重致谢。\n\n获得：宗门声望 +200','good');
+    return showNpcResult('手链风波','陈长生最终被发现藏匿了手链。沈墨离取回失物，对你郑重致谢。\n\n获得：宗门声望 +200','good',shenMoliPortraitFor(5));
   }
   pushLocalLog('沈墨离接受劝阻。数日后陈长生主动归还手链，并赠予根骨丹×2。');
   refreshShenMoliQuest();
-  return showNpcResult('手链风波','沈墨离看在你的面子上暂且按下怒火。数日后，陈长生主动归还了手链，并托人送来赔礼。\n\n获得：根骨丹 ×2','good');
+  return showNpcResult('手链风波','沈墨离看在你的面子上暂且按下怒火。数日后，陈长生主动归还了手链，并托人送来赔礼。\n\n获得：根骨丹 ×2','good',shenMoliPortraitFor(5));
 }
 const localNpcsWithShenMoli=localNpcs;
 localNpcs=function(i,spot){
@@ -6213,8 +6225,8 @@ npcQuestIcon=function(name,mapIndex,spot){
 };
 
 const openNpcDialogWithRedReturnChoices=openNpcDialog;
-openNpcDialog=function(title,text,buttons=[{text:'知道了'}]){
-  openNpcDialogWithRedReturnChoices(title,text,buttons);
+openNpcDialog=function(title,text,buttons=[{text:'知道了'}],portraitOverride=''){
+  openNpcDialogWithRedReturnChoices(title,text,buttons,portraitOverride);
   if(!$('#npcDialogDangerStyles')){
     let style=document.createElement('style');
     style.id='npcDialogDangerStyles';
@@ -7642,14 +7654,15 @@ function enterTianmoFromBrokenGate(){
 }
 function talkBrokenTianmoGate(){
   let unlocked=tianmoUnlocked(),qualified=(g.realm||0)>=7;
-  if(!unlocked)return openNpcDialog('破碎的传送阵','这座传送阵只剩半边阵纹，另一半被守门仙将镇压的天门气息遮住了。先击败守门仙将，天魔宗才会从魔雾中显形。',[{text:'知道了'}]);
+  let gatePortrait=unlocked?'assets/npc-portraits/repaired-tianmo-gate-dialog.png':'assets/npc-portraits/broken-tianmo-gate-dialog.png';
+  if(!unlocked)return openNpcDialog('破碎的传送阵','这座传送阵只剩半边阵纹，另一半被守门仙将镇压的天门气息遮住了。先击败守门仙将，天魔宗才会从魔雾中显形。',[{text:'知道了'}],gatePortrait);
   if(!qualified)return openNpcDialog('破碎的传送阵',`残缺阵纹在你脚下亮起一线黑光，随即又归于沉寂。
 
-“你的境界还不足以承受天魔宗的界压。至少达到大乘初期，才有资格踏入那座魔门。”`,[{text:'暂不传送'}]);
-  if((g.mainQuestStage||0)===25)return openNpcDialog('破碎的传送阵',`镇门剑印贴近阵纹，黑雾中浮出一条仅容一人通过的界缝。\n\n苏青雪的传音在耳畔响起：“阵核就在天魔宗最深处。记住，我们要毁的是献祭的根，而不是把每个被困在魔门里的人都当成同一种罪。”\n\n你握紧巡天令，踏入界缝。天魔宗的山门在雾后缓缓显现。`,[{text:'潜入天魔宗',alt:true,onClick(){let advanced=advanceMainQuest(26,'已通过破碎传送阵进入天魔宗。深入魔门，击败宗主无极天尊，夺回血月大阵阵核。');if(advanced)rewardLateMainDialogue('tianmoGateEntry');closeNpcDialog();enterTianmoFromBrokenGate();}},{text:'容我准备',ghost:true}]);
+ “你的境界还不足以承受天魔宗的界压。至少达到大乘初期，才有资格踏入那座魔门。”`,[{text:'暂不传送'}],gatePortrait);
+  if((g.mainQuestStage||0)===25)return openNpcDialog('破碎的传送阵',`镇门剑印贴近阵纹，黑雾中浮出一条仅容一人通过的界缝。\n\n苏青雪的传音在耳畔响起：“阵核就在天魔宗最深处。记住，我们要毁的是献祭的根，而不是把每个被困在魔门里的人都当成同一种罪。”\n\n你握紧巡天令，踏入界缝。天魔宗的山门在雾后缓缓显现。`,[{text:'潜入天魔宗',alt:true,onClick(){let advanced=advanceMainQuest(26,'已通过破碎传送阵进入天魔宗。深入魔门，击败宗主无极天尊，夺回血月大阵阵核。');if(advanced)rewardLateMainDialogue('tianmoGateEntry');closeNpcDialog();enterTianmoFromBrokenGate();}},{text:'容我准备',ghost:true}],gatePortrait);
   openNpcDialog('破碎的传送阵',`阵眼里传来低沉的回声，像是另一片天地正在隔着裂缝呼吸。
 
-“天魔宗的门已经开了。进去之后，路上的每一名魔修都可能成为你的敌人；若想回来，仍可从宗门广场的传送门退出。”`,[{text:'传送至天魔宗入口',alt:true,onClick:enterTianmoFromBrokenGate},{text:'稍后再来',ghost:true}]);
+ “天魔宗的门已经开了。进去之后，路上的每一名魔修都可能成为你的敌人；若想回来，仍可从宗门广场的传送门退出。”`,[{text:'传送至天魔宗入口',alt:true,onClick:enterTianmoFromBrokenGate},{text:'稍后再来',ghost:true}],gatePortrait);
 }
 const localNpcsBeforeBrokenTianmoGate=localNpcs;
 localNpcs=function(i,spot){let npcs=localNpcsBeforeBrokenTianmoGate(i,spot);if(i===10&&spot===22&&!npcs.some(npc=>(npc.name||npc[0])==='破碎的传送阵'))npcs=[['破碎的传送阵','残缺界门，达到大乘初期后可对话传送至天魔宗入口'],...npcs];return npcs};
@@ -8548,8 +8561,8 @@ function buyDingguangBagSlot(){
 }
 function talkDingguangDisciple(){
   let bought=dingguangBagSlotsBought(),full=bought>=DINGGUANG_BAG_SLOT_LIMIT;
-  openNpcDialog('定光弟子',full?'定光弟子收起最后一枚纳物符：\n\n“师兄的储物空间已由我峰符箓拓至极限，往后再多一格，便会伤及灵台。”':`定光弟子抱着一叠朱砂符纸，向你一礼：\n\n“定光峰的纳物符能为储物袋再开一寸虚空。每枚需以灵石 ${fmt(DINGGUANG_BAG_SLOT_COST)} 枚温养，可增加背包 1 格。”\n\n已扩容：${bought} / ${DINGGUANG_BAG_SLOT_LIMIT} 格\n当前背包容量：${g.bagCap||20} 格\n当前灵石：${fmt(g.stones||0)}`,[
-    ...(full?[]:[{text:`交付${fmt(DINGGUANG_BAG_SLOT_COST)}灵石，扩容1格`,alt:true,onClick(){buyDingguangBagSlot()}}]),
+  openNpcDialog('定光弟子',full?'定光弟子收起最后一枚纳物符：\n\n“师兄的储物空间已由我峰符箓拓至极限，往后再多一格，便会伤及灵台。”':`“定光峰的纳物符能为储物袋再开一寸虚空。每枚纳物符需以灵石 ${fmt(DINGGUANG_BAG_SLOT_COST)} 枚购买。”\n\n已扩容：${bought} / ${DINGGUANG_BAG_SLOT_LIMIT} 格\n当前背包容量：${g.bagCap||20} 格\n当前灵石：${fmt(g.stones||0)}`,[
+    ...(full?[]:[{text:`交付灵石，扩容1格`,alt:true,onClick(){buyDingguangBagSlot()}}]),
     {text:full?'知道了':'暂不扩容',ghost:true}
   ]);
 }
@@ -9033,6 +9046,48 @@ buySectGood=function(index){
   g.sectContribution-=item[1];limits.greatDragonBook=count+1;
   log('宗门宝库兑换：大微天龙','good');toast('获得书籍：大微天龙');render();renderBag();renderSectTreasury();save();
 };
+// 永久契约书：将当前临时灵兽固定为永久契约，不再受三场战斗限制。
+function permanentContractBookItem(){return{type:'book',name:'永久契约书',qty:1,max:1,icon:'📜',sell:0,permanentContractBook:true,desc:'书籍：使用后将当前契约妖兽锁定为永久灵兽。不可售卖。'}}
+if(!sectGoods.some(item=>item[2]==='permanentContractBook'))sectGoods.push(['📜 永久契约书',20000,'permanentContractBook',1,35,'permanentContractBook',1]);
+const sectGoodCategoryWithPermanentContract=sectGoodCategory;
+sectGoodCategory=function(item){return item?.[2]==='permanentContractBook'?'书籍':sectGoodCategoryWithPermanentContract(item)};
+const buySectGoodWithPermanentContract=buySectGood;
+buySectGood=function(index){
+  let item=sectGoods[index];
+  if(item?.[2]!=='permanentContractBook')return buySectGoodWithPermanentContract(index);
+  if(!g.sect||g.sectLevel<item[4])return toast('宗门宝库等级不足');
+  let limits=g.sectPermanentBuys[g.sect]||(g.sectPermanentBuys[g.sect]={}),count=limits.permanentContractBook||0;
+  if(count>=1)return toast('永久契约书仅可兑换一次');
+  if(g.sectContribution<item[1])return toast('宗门贡献不足');
+  if(!addBagItem(permanentContractBookItem()))return toast('背包已满，无法兑换该书籍');
+  g.sectContribution-=item[1];limits.permanentContractBook=count+1;
+  log('宗门宝库兑换：永久契约书','good');toast('获得书籍：永久契约书');render();renderBag();renderSectTreasury();save();
+};
+const useBagItemWithPermanentContract=useBagItem;
+useBagItem=function(){
+  let idx=g.bagSelected,item=g.bag?.[idx];
+  if(item?.permanentContractBook||item?.name==='永久契约书'){
+    if(!g.spiritBeast)return toast('当前没有契约妖兽，暂时无法使用永久契约书');
+    if(g.spiritBeast.permanent)return toast('当前契约妖兽已经是永久灵兽');
+    g.spiritBeast={...g.spiritBeast,permanent:true};removeBagQty(idx,1);
+    pushLocalLog(`${g.spiritBeast.name}已被永久契约锁定，将不再受三场战斗次数限制。`);toast('永久契约生效：当前灵兽可永久出战');
+    render();renderBag();renderSceneMap();save();return;
+  }
+  return useBagItemWithPermanentContract();
+};
+const itemEffectWithPermanentContract=itemEffect;
+itemEffect=function(item){
+  if(item?.permanentContractBook||item?.name==='永久契约书')return '书籍效果：将当前契约妖兽锁定为永久灵兽。不可售卖。';
+  return itemEffectWithPermanentContract(item);
+};
+const renderBagWithPermanentContract=renderBag;
+renderBag=function(){
+  renderBagWithPermanentContract();
+  let item=g.bag?.[g.bagSelected];if(item?.permanentContractBook||item?.name==='永久契约书'){
+    $('#bagDetail').innerHTML=`<b>📜 永久契约书</b><br>类型：书籍 · 数量：1<br>使用效果：将当前契约妖兽锁定为永久灵兽。${g.spiritBeast?`<br>当前契约：${g.spiritBeast.name}${g.spiritBeast.permanent?'（已是永久契约）':'（可使用）'}`:'<br>当前没有契约妖兽。'}`;
+    $('#useBagItemBtn').disabled=!g.spiritBeast||!!g.spiritBeast.permanent;$('#sellBagItemBtn').disabled=true;$('#sellAllBagItemBtn')&&($('#sellAllBagItemBtn').disabled=true);
+  }
+};
 const battleSkillCostWithGreatDragon=battleSkillCost;
 battleSkillCost=function(sk,index){return sk?.greatDragon||sk?.name==='大微天龙'?0:battleSkillCostWithGreatDragon(sk,index)};
 const battleSkillBlockReasonWithGreatDragon=battleSkillBlockReason;
@@ -9393,6 +9448,236 @@ attemptTribulation=async function(){
     showNpcResult('渡劫未成',['天劫反噬，经脉中的积累尽数散去。','',`本次成功率：${chance}%`,`消耗渡劫丹：${use} 颗`,'惩罚：当前大圆满修为清零。','', '境界未跌落，重新修炼至圆满后可再次渡劫。'].join(String.fromCharCode(10)),'danger');toast('渡劫未成 · 本阶修为归零');
   }
   tribulationPillUse=0;tribulationAnimationBusy=false;renderSceneMap();render();save();
+};
+
+// 灵兽驯养师：只接纳普通妖兽，临时契约持续三场战斗。
+const spiritBeastIconByName={
+  '山魈':'🐒','石皮鼠':'🐭','青竹妖':'🐍','岩甲虫':'🪲','月狐':'🦊','树精':'🌳','迷雾蝶':'🦋','夜行狼':'🐺',
+  '赤炎兽':'🔥','火鸦':'🐦','岩浆虫':'🐛','炎魔':'👹','虾兵':'🦐','蟹将':'🦀','老海龟':'🐢','海蛇':'🐍',
+  '血藤妖':'🌿','荒骨狼':'🐺','毒雾虫':'🐛','妖王花':'🌺','战魂':'👻','铁甲尸':'🧟','煞灵':'👤','断剑鬼':'👻',
+  '虚空影':'🌑','星砂虫':'🐛','裂隙怪':'🕳️','遗迹守卫':'🗿','魔修残魂':'👻','黑莲妖':'🪷','魔焰鬼':'👹',
+  '残碑灵':'🪨','雷灵':'⚡','云兽':'☁️','电光虫':'🪲','雷鸟':'🦅','天门守卫':'🛡️','仙鹤':'🦢','金甲力士':'🛡️','天兵残影':'👼'
+};
+function spiritBeastIcon(name,icon=''){
+  let value=String(icon||'');
+  return value&&value!=='🗡️'?value:spiritBeastIconByName[String(name||'')]||'🐾';
+}
+function spiritBeastSummary(beast){
+  if(!beast)return '当前没有临时灵兽。';
+  return `${beast.name} · ${beast.realm}\n攻击 ${fmt(beast.attack)} · 防御 ${fmt(beast.defense)}\n${beast.permanent?'契约类型：永久灵兽':'剩余出战：'+Math.max(0,beast.uses||0)+' 场'}\n每回合协同造成约 ${fmt(Math.max(1,Math.floor((beast.attack||0)*.2)))} 点伤害。`;
+}
+function spiritBeastCandidates(){
+  let list=Array.isArray(g.spiritBeastCandidates)?g.spiritBeastCandidates:[];
+  if(!list.length&&g.spiritBeastCandidate)list=[g.spiritBeastCandidate];
+  g.spiritBeastCandidates=list.filter(Boolean).reduce((out,item)=>{if(!out.some(existing=>existing.name===item.name))out.push(item);return out},[]).slice(0,3);
+  g.spiritBeastCandidate=g.spiritBeastCandidates[0]||null;
+  return g.spiritBeastCandidates;
+}
+function adoptSpiritBeast(index=0){
+  let candidates=spiritBeastCandidates(),candidate=candidates[index];
+  if(!candidate)return toast('当前没有可驯化的妖兽');
+  g.spiritBeast={...candidate,uses:3};
+  g.spiritBeastCandidates=candidates.filter((_,candidateIndex)=>candidateIndex!==index);
+  g.spiritBeastCandidate=g.spiritBeastCandidates[0]||null;
+  pushLocalLog(`灵兽驯养师：${candidate.name}已签订三场临时契约。`);
+  showNpcResult('临时契约已成',`驯服对象：${candidate.name}\n境界：${candidate.realm}\n\n它会在接下来的3场战斗中随你出战，每回合协同攻击一次。`,'good');
+  renderSceneMap();render();save();
+}
+function talkSpiritBeastTamer(){
+  let beast=g.spiritBeast,candidates=spiritBeastCandidates();
+  if(beast){
+    let buttons=[
+      {text:'查看契约',alt:true,onClick(){showNpcResult('灵兽契约',spiritBeastSummary(beast),'good')}},
+      ...(!beast.permanent&&candidates.length?[{text:'更换灵兽',onClick(){openNpcDialog('更换临时灵兽',`当前契约：${beast.name}\n\n请选择一只最近击败的候选妖兽替换当前契约：`,[...candidates.map((candidate,index)=>({text:`${index+1}. ${candidate.name} · ${candidate.realm}`,alt:index===0,onClick(){adoptSpiritBeast(index)}})),{text:'暂不更换',ghost:true}])}}]:[]),
+      {text:'结束契约',ghost:true,onClick(){g.spiritBeast=null;pushLocalLog('灵兽驯养师：临时灵兽契约已结束。');showNpcResult('契约已解除','灵兽返回水府。你可以重新击败普通妖兽后再来签订契约。','good');renderSceneMap();render();save()}},
+      {text:'告辞',ghost:true}
+    ];
+    openNpcDialog('灵兽驯养师',`驯养师抚过玉笛，检查着随你而来的灵兽：\n\n${spiritBeastSummary(beast)}\n\n${beast.permanent?'“永久契约已立，它会一直回应你的召唤。”':'“临时契约只维持三场战斗，契约结束后灵兽会回到水府。”'}`,buttons);
+    return;
+  }
+  if(candidates.length){
+    openNpcDialog('灵兽驯养师',`驯养师望向你带回的妖兽气息：\n\n最近击败的${candidates.length}只普通妖兽可供选择，最多保留3只。签下临时契约后，灵兽会在接下来三场战斗中助你一臂之力。`,[
+      ...candidates.map((candidate,index)=>({text:`签订 ${index+1}. ${candidate.name}`,alt:index===0,onClick(){adoptSpiritBeast(index)}})),
+      {text:'查看候选详情',onClick(){showNpcResult('候选灵兽',candidates.map((candidate,index)=>`${index+1}. ${spiritBeastSummary({...candidate,uses:3})}`).join('\n\n'),'good')}},
+      {text:'清空候选',ghost:true,onClick(){g.spiritBeastCandidates=[];g.spiritBeastCandidate=null;pushLocalLog('你清空了可驯化妖兽候选。');renderSceneMap();render();save()}},
+      {text:'告辞',ghost:true}
+    ]);
+    return;
+  }
+  openNpcDialog('灵兽驯养师','龟丞相府的驯养师轻敲玉笛：\n\n“若想让妖兽暂随你征战，先在路点击败一只普通妖兽，再带着它留下的气息回来。我只收普通妖兽，不收 Boss、游荡妖兽或剧情强敌。”\n\n每次只能携带一只临时灵兽，契约持续三场战斗。',[{text:'记下规矩',alt:true},{text:'告辞',ghost:true}]);
+}
+const localNpcsBeforeSpiritBeastTamer=localNpcs;
+localNpcs=(i,spot)=>{
+  let npcs=localNpcsBeforeSpiritBeastTamer(i,spot);
+  if(i===3&&spot===14&&!npcs.some(npc=>(npc.name||npc[0])==='灵兽驯养师'))npcs=[...npcs,['灵兽驯养师','捕获普通妖兽，签订三场临时战斗契约']];
+  return npcs;
+};
+const localMeetBeforeSpiritBeastTamer=localMeet;
+localMeet=(idx=0)=>{
+  let i=g.selectedScene??g.map,spot=activeSpot(),npc=localNpcs(i,spot)[idx],name=npc?.name||npc?.[0];
+  if(i===3&&spot===14&&name==='灵兽驯养师')return talkSpiritBeastTamer();
+  return localMeetBeforeSpiritBeastTamer(idx);
+};
+const finishBattleWinBeforeSpiritBeast=finishBattleWin;
+finishBattleWin=function(){
+  let b=battleState,target=b?.target,eligible=!!(target&&target.type==='战斗'&&!target.boss&&!target.wanderingMonster&&!target.customStats&&!target.treasureMonster&&!target.discipline&&!target.spar);
+  let candidate=eligible?{name:target.name,realm:b.enemy.realm,attack:b.enemy.attack,defense:b.enemy.defense,hp:b.enemy.maxHp,mp:b.enemy.maxMp,icon:spiritBeastIcon(target.name,b.enemy.icon),portrait:b.enemy.portrait||''}:null;
+  let result=finishBattleWinBeforeSpiritBeast.apply(this,arguments);
+  if(candidate){let candidates=spiritBeastCandidates().filter(item=>item.name!==candidate.name);candidates.unshift(candidate);g.spiritBeastCandidates=candidates.slice(0,3);g.spiritBeastCandidate=g.spiritBeastCandidates[0]||null;pushLocalLog(`击败${candidate.name}后，你留下了可供驯养的妖兽气息。可前往东海龙宫·龟丞相府寻找灵兽驯养师。`);save();}
+  return result;
+};
+const battleSkillEffectBeforeSpiritBeast=battleSkillEffect;
+battleSkillEffect=async function(sk,idx=0){
+  let b=battleState,result=await battleSkillEffectBeforeSpiritBeast.apply(this,arguments);
+  if(result===false||!b||battleState!==b||b.enemy.hp<=0)return result;
+  let beast=g.spiritBeast;if(!beast||b.player.spiritBeastAssistRound===b.round)return result;
+  b.player.spiritBeastAssistRound=b.round;
+  let figure=$('#battleSpiritBeastFigure');
+  if(figure){figure.classList.remove('spirit-beast-attacking');void figure.offsetWidth;figure.classList.add('spirit-beast-attacking');await waitBattle(520);figure.classList.remove('spirit-beast-attacking')}
+  let damage=Math.max(1,Math.floor(Number(beast.attack||0)*.2));
+  b.enemy.hp=Math.max(0,b.enemy.hp-damage);
+  battleFx('enemy','灵兽协击 -'+damage);
+  battleLog(`${beast.name}协同出击，造成 ${damage} 点伤害。`);
+  return result;
+};
+const closeBattleBeforeSpiritBeast=closeBattle;
+closeBattle=function(keep=false){
+  let active=battleState?.player?.spiritBeast,hadBattle=!!battleState;
+  let result=closeBattleBeforeSpiritBeast.apply(this,arguments);
+  if(hadBattle&&active&&g.spiritBeast&&!g.spiritBeast.permanent){
+    g.spiritBeast.uses=Math.max(0,(g.spiritBeast.uses||0)-1);
+    if(g.spiritBeast.uses<=0){pushLocalLog(`${active.name}的临时契约已结束。`);g.spiritBeast=null}
+    else pushLocalLog(`${active.name}完成一次协战，临时契约还可出战${g.spiritBeast.uses}场。`);
+    save();
+  }else if(hadBattle&&active&&g.spiritBeast?.permanent){
+    pushLocalLog(`${active.name}完成一次协战，永久契约仍然有效。`);
+    save();
+  }
+  return result;
+};
+const openBattleBeforeSpiritBeast=openBattle;
+openBattle=function(target,idx){
+  let result=openBattleBeforeSpiritBeast.apply(this,arguments);
+  if(battleState&&g.spiritBeast){
+    battleState.player.spiritBeast={...g.spiritBeast};
+    battleLog(`${g.spiritBeast.name}随你进入战场，准备协同攻击。`);
+    renderBattle();
+  }
+  return result;
+};
+function ensureSpiritBeastBattleStyles(){
+  if($('#spiritBeastBattleStyles'))return;
+  let style=document.createElement('style');style.id='spiritBeastBattleStyles';style.textContent=`
+    .spirit-beast-figure{display:none;position:absolute;z-index:3;left:7%;top:154px;width:106px;height:126px;place-items:center;align-content:end;gap:2px;pointer-events:none;filter:drop-shadow(0 12px 8px #06141d88)}
+    .spirit-beast-figure.is-active{display:grid;animation:spiritBeastFloat 2.2s ease-in-out infinite}
+    .spirit-beast-figure.spirit-beast-attacking{animation:spiritBeastLunge .52s cubic-bezier(.18,.78,.2,1) both;z-index:4}
+    .spirit-beast-figure.spirit-beast-running{animation:spiritBeastRun .82s ease-in forwards;z-index:4}
+    .spirit-beast-figure img{display:block;width:100%;height:108px;object-fit:contain;object-position:center bottom;transform:scaleX(-1);filter:drop-shadow(0 10px 7px #0008)}
+    .spirit-beast-figure small{max-width:118px;padding:1px 5px;border:1px solid #8eb3a8;border-radius:4px;background:#071b18dd;color:#edf7ed;font-size:9px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    @keyframes spiritBeastFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+    @keyframes spiritBeastLunge{0%{transform:translate(0,0) scale(1)}28%{transform:translate(4px,2px) scale(1.02)}62%{transform:translate(54px,-4px) scale(1.08)}100%{transform:translate(0,0) scale(1)}}
+    @keyframes spiritBeastRun{0%{transform:translate(0,0) scale(1);opacity:1}34%{transform:translate(-12px,8px) scale(.94);opacity:.95}100%{transform:translate(-92px,34px) scale(.72);opacity:0}}
+    @media(max-width:650px){.spirit-beast-figure{left:7%;top:190px;width:72px;height:92px}.spirit-beast-figure img{height:72px}.spirit-beast-figure small{max-width:70px;font-size:8px}@keyframes spiritBeastLunge{0%{transform:translate(0,0) scale(1)}28%{transform:translate(3px,2px) scale(1.02)}62%{transform:translate(34px,-3px) scale(1.06)}100%{transform:translate(0,0) scale(1)}}}
+  `;document.head.appendChild(style);
+}
+async function playSpiritBeastRunAnimation(){
+  let figure=$('#battleSpiritBeastFigure'),pet=battleState?.player?.spiritBeast||g.spiritBeast;
+  if(!figure||!pet)return;
+  figure.classList.remove('spirit-beast-running');void figure.offsetWidth;figure.classList.add('spirit-beast-running');
+  await waitBattle(820);figure.classList.remove('spirit-beast-running');
+}
+const renderBattleBeforeSpiritBeast=renderBattle;
+renderBattle=function(){
+  renderBattleBeforeSpiritBeast.apply(this,arguments);
+  ensureSpiritBeastBattleStyles();
+  let figure=$('#battleSpiritBeastFigure'),pet=battleState?.player?.spiritBeast||g.spiritBeast;
+  if(!figure)return;
+  figure.classList.toggle('is-active',!!pet);
+  let image=figure.querySelector('img'),name=figure.querySelector('small'),portrait=pet?optimizedBattleAsset(pet.portrait):'';
+  if(image){image.hidden=!portrait;if(portrait&&image.getAttribute('src')!==portrait)image.src=portrait;image.alt=pet?`${pet.name}特写`:''}
+  if(name)name.textContent=pet?`${pet.name} · ${pet.permanent?'永久':`${pet.uses||0}场`}`:'';
+  if(pet)figure.title=pet.permanent?`永久灵兽：${pet.name}`:`临时灵兽：${pet.name}，剩余${pet.uses||0}场`;
+};
+
+// ===== 天下奇毒：毒莲、毒藤壶与跛脚医生 =====
+const toxinNames=['毒莲','毒藤壶'];
+function hasActiveToxin(){return toxinNames.some(name=>!!g.poisonStates?.[name])}
+function activeToxinNames(){return toxinNames.filter(name=>!!g.poisonStates?.[name])}
+function poisonStatusText(){let names=activeToxinNames();return names.length?`当前中毒：${names.join('、')}。每次移动扣除生命上限的1%。`:'当前未中奇毒。'}
+function applyToxin(name){
+  g.poisonStates=g.poisonStates||{};
+  if(g.poisonStates[name])return toast(`你已经中了${name}的毒`);
+  g.poisonStates[name]=true;
+  pushLocalLog(`触碰${name}后毒性入体：每次移动将损失生命上限的1%。`);
+  toast(`已中${name}之毒，移动时会持续损失生命`);
+  renderSceneMap();render();save();
+}
+function talkToxinPlant(name){
+  let already=!!g.poisonStates?.[name],other=activeToxinNames().filter(item=>item!==name);
+  let text=name==='毒莲'?'幽潭水雾里，一朵墨色莲花无风摇曳，花心泛着危险的青紫光。靠近时，冷香顺着呼吸钻入经脉。':'沉月水府的暗礁缝隙间，一只毒藤壶缓缓张合，细藤上凝着不散的黑色水珠。';
+  text+=`\n\n${already?'毒性已经在体内游走，不能重复叠加。':'你是否要伸手触碰它？一旦沾染，之后每走一步都会损失生命上限的1%。'}${other.length?`\n\n你身上另有${other.join('、')}的毒。`:''}`;
+  openNpcDialog(name,text,[
+    {text:already?'查看毒性':'触碰它',alt:true,onClick(){if(already)showNpcResult(`${name} · 中毒状态`,poisonStatusText(),'danger');else applyToxin(name)}},
+    {text:'保持距离',ghost:true}
+  ]);
+}
+function toxinDefeat(){
+  let st=statTotal();
+  g.selectedScene=10;g.map=10;g.localSpot=31;g.hp=st.hp;g.mana=st.mana;
+  pushLocalLog('奇毒耗尽气血，你被送回太玄宗·宗门广场调养。');
+  log('小地图：中毒伤重，已送回太玄宗·宗门广场。','danger');
+  toast('中毒伤重，已回到太玄宗宗门广场');
+}
+function applyToxinStepDamage(i){
+  if(i===10||!hasActiveToxin())return;
+  let maxHp=Math.max(1,Number(totalHp())||1),damage=Math.max(1,Math.floor(maxHp*.01));
+  g.hp=Math.max(0,(Number(g.hp)||maxHp)-damage);
+  pushLocalLog(`奇毒发作：生命 -${fmt(damage)}（当前${activeToxinNames().join('、')}）。`);
+  if(g.hp<=0)toxinDefeat();
+  renderSceneMap();render();save();
+}
+function cureToxinsAtDoctor(){
+  let active=activeToxinNames();
+  if(!active.length)return showNpcResult('跛脚医生','跛脚医生翻遍药匣，遗憾地摇头：\n\n“你身上没有我能研究的奇毒。若日后中了毒莲或毒藤壶的毒，再来找我吧。”','good');
+  let first=active.filter(name=>!g.poisonCures?.[name]);
+  if(first.length&&bagFree()<first.length)return toast(`需要${first.length}个空背包格领取永久契约书`);
+  g.poisonCures=g.poisonCures||{};
+  active.forEach(name=>{g.poisonStates[name]=false});
+  first.forEach(name=>{g.poisonCures[name]=true;addBagItem(permanentContractBookItem())});
+  let cultivation=first.length*5000;
+  if(cultivation){g.cult+=cultivation;processRealmProgress()}
+  let rewards=first.length?`\n首次研究奖励：永久契约书 ×${first.length}\n修为 +${fmt(cultivation)}`:'\n本次仅解除毒性，不再重复发放研究奖励。';
+  pushLocalLog(`跛脚医生研究并解除了${active.join('、')}，${first.length?`首次研究奖励永久契约书×${first.length}、修为+${cultivation}。`:'未产生重复奖励。'}`);
+  showNpcResult('奇毒研究完成',`已解除：${active.join('、')}${rewards}\n\n小师妹与驿站掌柜只能疗伤补给，无法清除这两种奇毒。`,'good');
+  renderSceneMap();renderBag();render();save();
+}
+function talkLimpingDoctor(){
+  let active=activeToxinNames(),first=active.filter(name=>!g.poisonCures?.[name]);
+  openNpcDialog('跛脚医生',`赤砂坡边，一名跛脚医生守着一排封蜡药瓶。他盯着你的经脉，语气忽然认真起来：\n\n“天下奇毒各有脉象，我苦寻多年，始终没有机会亲手研究。若你中了毒莲或毒藤壶的毒，就来让我看看。每一种毒我第一次成功解开时，都会以一张永久契约书和5000点修为作为谢礼。”\n\n${active.length?`你目前身中：${active.join('、')}。可以立即研究解毒。`:'你目前没有中毒，暂时无法开始研究。'}${first.length?`\n本次首次研究奖励：永久契约书×${first.length}、修为+${fmt(first.length*5000)}。`:''}`,[
+    {text:active.length?'研究并解毒':'了解奇毒',alt:true,onClick(){if(active.length)cureToxinsAtDoctor();else showNpcResult('跛脚医生','“记住，毒莲在幽潭，毒藤壶在沉月水府。若真中了毒，别找小师妹和驿站掌柜，他们只能治伤，不能拔毒。”','good')}},
+    {text:'暂不研究',ghost:true}
+  ]);
+}
+const localNpcsBeforeToxinResearch=localNpcs;
+localNpcs=(i,spot)=>{
+  let npcs=localNpcsBeforeToxinResearch(i,spot);
+  if(i===1&&spot===32&&!npcs.some(npc=>(npc?.name||npc?.[0])==='毒莲'))npcs=[...npcs,['毒莲','幽潭深处的奇毒灵物']];
+  if(i===3&&spot===45&&!npcs.some(npc=>(npc?.name||npc?.[0])==='毒藤壶'))npcs=[...npcs,['毒藤壶','沉月水府暗礁中的奇毒灵物']];
+  if(i===2&&spot===6&&!npcs.some(npc=>(npc?.name||npc?.[0])==='跛脚医生'))npcs=[...npcs,['跛脚医生','研究奇毒并可解除毒莲、毒藤壶之毒']];
+  return npcs;
+};
+const localMeetBeforeToxinResearch=localMeet;
+localMeet=(idx=0)=>{
+  let i=g.selectedScene??g.map,spot=activeSpot(),npc=localNpcs(i,spot)[idx],name=npc?.name||npc?.[0];
+  if(name==='毒莲'||name==='毒藤壶')return talkToxinPlant(name);
+  if(name==='跛脚医生')return talkLimpingDoctor();
+  return localMeetBeforeToxinResearch(idx);
+};
+const finishLocalMoveBeforeToxin=finishLocalMove;
+finishLocalMove=function(i,nextSpot){
+  let before=activeSpot(),result=finishLocalMoveBeforeToxin.apply(this,arguments);
+  if(activeSpot()!==before)applyToxinStepDamage(i);
+  return result;
 };
 
 function bindUi(){
