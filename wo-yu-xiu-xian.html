@@ -9768,7 +9768,7 @@ function maskedHeroineTarget(stage){
     customStats:{
       hp:first?200:4000,mp:first?200:800,attack:first?40:350,defense:first?190:300,
       realm:first?'练气大圆满':'金丹大圆满',icon:'⚔️',
-      portrait:first?'assets/npc-portraits/masked-heroine.png':'assets/npc-portraits/masked-heroine-cracked.png'
+      portrait:first?'assets/npc-portraits/masked-heroine-dialog.png':'assets/npc-portraits/masked-heroine-cracked-dialog.png'
     }
   };
 }
@@ -9780,7 +9780,7 @@ function talkMaskedHeroine(stage){
   openNpcDialog('蒙面黑袍人',text,[
     {text:first?'拦下她':'迎战黑袍人',alt:true,onClick(){openBattle(maskedHeroineTarget(stage),0)}},
     {text:'暂不追问',ghost:true}
-  ],'assets/npc-portraits/masked-heroine.png');
+  ],'assets/npc-portraits/masked-heroine-dialog.png');
 }
 function syncMaskedHeroineQuest(){
   renderSceneMap();render();save();
@@ -9816,7 +9816,7 @@ async function resolveMaskedHeroineEscape(battle){
   closeBattle(false);
   pushLocalLog('蒙面黑袍人留下一句狠话，借矿道阴影遁走。');
   syncMaskedHeroineQuest();
-  openNpcDialog('蒙面黑袍人','她借着剑势翻入矿道深处，黑袍很快隐没在雾气里。\n\n“今日之辱，我会让你付出代价。下次见面，你不会再有这样的运气。”',[{text:'追查她的来历',alt:true}],'assets/npc-portraits/masked-heroine.png');
+  openNpcDialog('蒙面黑袍人','她借着剑势翻入矿道深处，黑袍很快隐没在雾气里。\n\n“今日之辱，我会让你付出代价。下次见面，你不会再有这样的运气。”',[{text:'追查她的来历',alt:true}],'assets/npc-portraits/masked-heroine-dialog.png');
 }
 function resolveMaskedHeroineUnmask(battle){
   if(!battle||battleState!==battle||battle._maskedHeroineResolved)return;
@@ -9825,7 +9825,7 @@ function resolveMaskedHeroineUnmask(battle){
   closeBattle(true);
   pushLocalLog('玄铁矿脉一战后，蒙面黑袍人的面具碎裂，黑袍援军将她带离。');
   syncMaskedHeroineQuest();
-  openNpcDialog('面具碎裂的黑袍人','你斩碎她的面具，露出一张苍白却倔强的脸。她半跪在矿脉火光中，低声道：\n\n“技不如人。要杀便杀。”\n\n你正要开口，数道黑影已自矿洞上方落下，将她护在中央。为首者留下一句“此事未完”，众人便裹挟着她遁入地火深处。',[{text:'记住这张脸',alt:true}],'assets/npc-portraits/masked-heroine-cracked.png');
+  openNpcDialog('面具碎裂的黑袍人','你斩碎她的面具，露出一张苍白却倔强的脸。她半跪在矿脉火光中，低声道：\n\n“技不如人。要杀便杀。”\n\n你正要开口，数道黑影已自矿洞上方落下，将她护在中央。为首者留下一句“此事未完”，众人便裹挟着她遁入地火深处。',[{text:'记住这张脸',alt:true}],'assets/npc-portraits/masked-heroine-cracked-dialog.png');
 }
 const localNpcsBeforeMaskedHeroine=localNpcs;
 localNpcs=function(i,spot){
