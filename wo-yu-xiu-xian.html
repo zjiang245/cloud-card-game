@@ -7658,7 +7658,7 @@ const tianmoRanks=[
   {from:32,to:34,title:'宗门长老',realm:6,realmLabel:'合体初期',hp:4200000,mp:52000,attack:125000,defense:62000,reputation:700,contribution:1900,names:['玄老','刑渊','慕容烬'],stories:['他守着天魔宗的戒律石，见过太多弟子从誓言开始，最后在血泊里结束。','他曾替宗门封印过一条失控的地脉，如今每逢夜深，仍能听见封印下的低吼。','他不急着拔剑，只问你是否知道自己一路杀来的代价。']},
   {from:35,to:36,title:'护法',realm:7,realmLabel:'大乘初期',hp:15000000,mp:150000,attack:420000,defense:210000,reputation:1000,contribution:3000,names:['赤冥','封岳'],stories:['他负责替宗主巡视禁地，身上的黑甲没有一处不是从旧战场上拾来的。','他曾在天门裂隙前独守七日，后来再也不相信所谓的援军。']},
   {from:37,to:37,title:'副宗主',realm:8,realmLabel:'渡劫初期',hp:52000000,mp:360000,attack:980000,defense:480000,reputation:1600,contribution:5000,names:['天孤'],stories:['他替宗主统领诸殿，所有人都称他为副宗主，却没有人见过他真正低头。']},
-  {from:38,to:38,title:'宗主',realm:9,realmLabel:'天仙初期',hp:500000000,mp:900000,attack:2800000,defense:1400000,reputation:2600,contribution:8500,names:['无极天尊'],stories:['他在天魔宗最高处俯视这场闯入，像是在等一个终于能让自己拔剑的人。']}
+  {from:38,to:38,title:'宗主',realm:9,realmLabel:'天仙大圆满',hp:500000000,mp:900000,attack:2800000,defense:1400000,reputation:2600,contribution:8500,names:['无极天尊'],stories:['他在天魔宗最高处俯视这场闯入，像是在等一个终于能让自己拔剑的人。']}
 ];
 const tianmoGuardNames=['墨关','韩戍','玄门'];
 function tianmoNpcCount(spot){g.tianmoNpcCounts??={};let index=Math.max(0,Math.min(38,Math.floor(spot||0))),rank=tianmoRanks.find(x=>index>=x.from&&index<=x.to)||tianmoRanks[0],count;if(rank.realm===0)count=3;else if(rank.realm===1)count=2;else if(rank.realm===2)count=1+Math.floor(stableRand(`tianmo:npcs:${index}`)*2);else count=1;if(g.tianmoNpcCounts[index]!==count)g.tianmoNpcCounts[index]=count;return count}
@@ -7666,7 +7666,12 @@ function tianmoCultivatorInfo(spot,variant=0){let index=Math.max(0,Math.min(38,M
 function tianmoGuardInfo(variant){let info=tianmoCultivatorInfo(0,variant);return{...info,title:'守门弟子',displayName:tianmoGuardNames[variant%tianmoGuardNames.length],story:['他立在魔门石阶前，手指按着警钟：没有宗主手令，谁也不能再往里走。','他曾因放走一名凡人受罚百杖，如今宁肯先拔剑，也不肯再赌一次人心。','他负责看守宗门广场，见到外来修士便沉声喝问：来天魔宗，是寻人还是寻死？'][variant%3],tianmoKey:`guard:0:${variant}`}}
 function tianmoNpcEntry(info){return{name:info.displayName,desc:`${info.title}，${info.story}`,tianmoInfo:info}}
 function tianmoCorpseEntry(info){return{name:`${info.displayName}的尸体`,desc:`${info.title}已败亡，尸身留在${spotLabel(11,info.spot)}。`,tianmoInfo:info,tianmoCorpse:true}}
-function tianmoDefeatState(){g.tianmoDefeated??={};return g.tianmoDefeated}
+function tianmoDefeatState(){
+  g.tianmoDefeated??={};
+  // 兼容旧存档：早期版本只记录了宗主败亡标记，未留下对应尸体键。
+  if(g.tianmoMainBossDefeated)g.tianmoDefeated['38:0']=true;
+  return g.tianmoDefeated;
+}
 const tianmoElderInfo={displayName:'太上长老',title:'太上长老',realmText:'真仙初期',hp:2000000000,mp:1800000,attack:6000000,defense:3000000,reputation:0,contribution:0,spot:38,stage:0,tianmoKey:'elder:38',story:'无极天尊败亡后，他自天魔殿深处现身，在宗主遗骸前守住最后一道魔门禁制。'};
 function tianmoAllVisibleDefeated(){let state=tianmoDefeatState();for(let spot=0;spot<routeCoords(11).length;spot++){let count=tianmoNpcCount(spot);for(let variant=0;variant<count;variant++){let info=spot===0?tianmoGuardInfo(variant):tianmoCultivatorInfo(spot,variant);if(!state[info.tianmoKey])return false}}return true}
 function tianmoElderEntry(){return g.tianmoElderDefeated?{name:'太上长老的尸体',desc:'太上长老已败亡，尸身留在天魔宗38号路点。',tianmoInfo:tianmoElderInfo,tianmoCorpse:true}:{name:tianmoElderInfo.displayName,desc:`真仙初期，${tianmoElderInfo.story}`,tianmoInfo:tianmoElderInfo,tianmoElder:true}}
@@ -7674,7 +7679,7 @@ function tianmoPortraitFor(info){let title=String(info?.title||'');if(title==='�
 function tianmoElderTarget(){return{name:tianmoElderInfo.displayName,type:'战斗',boss:true,tianmoElder:true,tianmoInfo:tianmoElderInfo,customStats:{hp:tianmoElderInfo.hp,mp:tianmoElderInfo.mp,attack:tianmoElderInfo.attack,defense:tianmoElderInfo.defense,realm:tianmoElderInfo.realmText,icon:'🕷️',portrait:tianmoPortraitFor(tianmoElderInfo),passives:['识破'],stage:0,multiplier:1},loot:{materials:[],equipment:{rolls:0,chance:0},skillBookChance:0}}}
 function tianmoSpotNpcList(spot){let state=tianmoDefeatState(),count=tianmoNpcCount(spot),infos=Array.from({length:count},(_,variant)=>spot===0?tianmoGuardInfo(variant):tianmoCultivatorInfo(spot,variant));return infos.map(info=>state[info.tianmoKey]?tianmoCorpseEntry(info):tianmoNpcEntry(info))}
 function tianmoSpotHasEnemies(spot){if(spot===38&&g.tianmoMainBossDefeated&&!g.tianmoElderDefeated)return true;return tianmoSpotNpcList(spot).some(npc=>npc.tianmoInfo&&!npc.tianmoCorpse)}
-function tianmoBattleTarget(info){return{name:info.displayName,type:'战斗',tianmoCultivator:true,tianmoKey:info.tianmoKey,tianmoInfo:info,customStats:{hp:info.hp,mp:info.mp,attack:info.attack,defense:info.defense,realm:info.realmText,icon:'🕷️',portrait:tianmoPortraitFor(info),stage:info.stage,multiplier:1},loot:{materials:[],equipment:{rolls:0,chance:0},skillBookChance:0}}}
+function tianmoBattleTarget(info){return{name:info.displayName,type:'战斗',tianmoCultivator:true,battleMusic:info.title==='宗主'?'boss':'battle',tianmoKey:info.tianmoKey,tianmoInfo:info,customStats:{hp:info.hp,mp:info.mp,attack:info.attack,defense:info.defense,realm:info.realmText,icon:'🕷️',portrait:tianmoPortraitFor(info),stage:info.stage,multiplier:1},loot:{materials:[],equipment:{rolls:0,chance:0},skillBookChance:0}}}
 function talkTianmoCultivator(info){openNpcDialog(info.displayName,`你在${spotLabel(11,info.spot)}遇见${info.displayName}。\n\n“${info.story}”\n\n${info.title} · 境界：${info.realmText}\n\n他没有立刻出手，只把目光落在你身后的退路上。天魔宗的规矩很简单：想继续深入，就要让眼前的人相信你有资格活着走过去。\n\n击败后可获得：宗门声望 +${fmt(info.reputation)}、宗门贡献 +${fmt(info.contribution)}`,[{text:'出手击杀',alt:true,onClick(){openBattle(tianmoBattleTarget(info),0)}},{text:'暂且离开',ghost:true}],tianmoPortraitFor(info))}
 function talkTianmoCorpse(info){showNpcResult(`${info.displayName}的尸体`,`${info.title}已经倒在${spotLabel(11,info.spot)}，魔气散尽，只剩一具无人收殓的尸身。`,'good')}
 function talkTianmoElder(){openNpcDialog('太上长老','无极天尊倒下后，天魔殿的石阶裂开一道深痕。白发老者自殿中缓步而出，横剑立于宗主遗骸之前。\n\n太上长老抬眼道：“阵核虽毁，天魔宗尚有传承。你若想踏过此地，先过老夫这一关。”\n\n境界：真仙初期\n若在他手下败亡，护阵会将你送回太玄宗。',[{text:'迎战太上长老',alt:true,onClick(){openBattle(tianmoElderTarget(),0)}},{text:'暂不应战',ghost:true}],tianmoPortraitFor(tianmoElderInfo))}
@@ -9233,6 +9238,7 @@ function mapBgmKey(area=g.selectedScene??g.map){
   if(mapTracks[area])return mapTracks[area];
   return area===0||area===1||area===10?'forest':'overworld';
 }
+function battleBgmKey(target){return target?.boss||target?.battleMusic==='boss'?'boss':'battle'}
 function playGameBgm(key){
   if(!gameAudioUnlocked||audioIsMuted()||!GAME_AUDIO.bgm[key]||gameBgmKey===key)return;
   if(gameBgm){gameBgm.pause();gameBgm.currentTime=0}
@@ -9243,7 +9249,7 @@ function playGameBgm(key){
 }
 function playCurrentBgm(){
   if(!gameAudioUnlocked||audioIsMuted())return;
-  if($('#battleModal')?.classList.contains('show')&&battleState)return playGameBgm(battleState.target?.boss?'boss':'battle');
+  if($('#battleModal')?.classList.contains('show')&&battleState)return playGameBgm(battleBgmKey(battleState.target));
   if(!$('#sceneMapModal')?.classList.contains('show'))return playGameBgm('overworld');
   playGameBgm(mapBgmKey());
 }
@@ -9329,7 +9335,7 @@ renderSceneMap=function(){let result=renderSceneMapWithAudio();playCurrentBgm();
 const finishLocalMoveWithAudio=finishLocalMove;
 finishLocalMove=function(i,nextSpot){let before=activeSpot(),result=finishLocalMoveWithAudio(i,nextSpot);if(activeSpot()!==before){playGameSfx('move',.32);playCurrentBgm()}return result};
 const openBattleWithAudio=openBattle;
-openBattle=function(target,idx){let result=openBattleWithAudio(target,idx);deferMediaWork(()=>prepareAudioSource(GAME_AUDIO.bgm[target?.boss?'boss':'battle']));playCurrentBgm();return result};
+openBattle=function(target,idx){let result=openBattleWithAudio(target,idx);deferMediaWork(()=>prepareAudioSource(GAME_AUDIO.bgm[battleBgmKey(target)]));playCurrentBgm();return result};
 const closeBattleWithAudio=closeBattle;
 closeBattle=function(keep=false){let result=closeBattleWithAudio(keep);playCurrentBgm();return result};
 document.addEventListener('click',e=>{if(e.target.closest('#closeSceneMap'))setTimeout(playCurrentBgm,0)});
@@ -10164,6 +10170,7 @@ function resolveTianmoFinaleHeroineSacrifice(){
 }
 function talkTianmoSectMasterFinale(info){
   let quest=maskedHeroineQuest(),saved=(quest.fourthOutcome||'save')==='save';
+  if(tianmoDefeatState()[info.tianmoKey])return showNpcResult('无极天尊的尸体','无极天尊已败亡，血月阵核也随之离开了天魔殿。殿中只余逐渐散去的魔雾。','good',tianmoPortraitFor(info));
   if(quest.tianmoFinaleResolved)return openNpcDialog('无极天尊','无极天尊俯视着殿前的残局，神色没有半分动摇。\n\n“血月阵核仍在我手。你若要替父报仇、替宗门断根，就用你的剑来取。”',[{text:'迎战无极天尊',alt:true,onClick(){openBattle(tianmoBattleTarget(info),11)}},{text:'暂不交锋',ghost:true}],tianmoPortraitFor(info));
   openNpcDialog('无极天尊','无极天尊端坐高台，终于承认：\n\n“不错，血月大阵由我与玄月使共同布下。玄月使需要祭钥，我需要借巡天令打开天门。你父亲看穿了我们的布置，毁去祭钥根基，也死在大阵反噬之中。”\n\n“可笑的是，玄月使先死，太玄宗的宗主却还被阵眼拖住。如今你带着剑印闯进来，正好替我补上最后一环。”',[{text:'我要为父亲报仇',alt:true,onClick(){
     quest.tianmoMasterConfessed=true;syncMaskedHeroineQuest();
@@ -10183,8 +10190,11 @@ const localMeetBeforeTianmoFinale=localMeet;
 localMeet=function(idx=0){
   let i=g.selectedScene??g.map,spot=activeSpot(),npc=localNpcs(i,spot)[idx];
   if(tianmoFinaleSpot(i,spot)&&npc?.tianmoFinaleHeroine)return talkTianmoFinaleHeroine();
-  if(tianmoFinaleSpot(i,spot)&&npc?.tianmoFinaleHeroineCorpse)return showNpcResult('江枕雪的尸体','粉衣已经被殿前的夜风吹凉。她留下的最后一句话，仍像一根刺留在你心里。','good','assets/npc-portraits/jiang-zhenxue-true-dialog.png');
-  if(tianmoFinaleSpot(i,spot)&&npc?.tianmoInfo?.title==='宗主')return talkTianmoSectMasterFinale(npc.tianmoInfo);
+  if(tianmoFinaleSpot(i,spot)&&npc?.tianmoFinaleHeroineCorpse)return showNpcResult('江枕雪的尸体','粉衣已经被殿前的夜风吹凉。她留下的最后一句话，仍像一根刺留在你心里。','good','assets/npc-portraits/jiang-zhenxue-fallen-dialog.png');
+  if(tianmoFinaleSpot(i,spot)&&npc?.tianmoInfo?.title==='宗主'){
+    if(npc.tianmoCorpse)return talkTianmoCorpse(npc.tianmoInfo);
+    return talkTianmoSectMasterFinale(npc.tianmoInfo);
+  }
   return localMeetBeforeTianmoFinale(idx);
 };
 
