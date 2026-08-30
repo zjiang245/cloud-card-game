@@ -188,6 +188,10 @@
   background-position:center;
   background-repeat:no-repeat;
   background-size:cover;
+  background-image:var(--map-background-desktop,none)!important;
+}
+@media(max-width:760px){
+  .local-map.has-art{background-image:var(--map-background-mobile,none)!important}
 }
 .local-map.has-art:before{
   background:linear-gradient(180deg,#10201824,transparent 28%,transparent 72%,#10201830);
@@ -971,16 +975,24 @@ const mapScenePortraits=[
 function fresh(){let root=roots[Math.floor(Math.random()*roots.length)];return{v:1,last:Date.now(),created:Date.now(),realm:0,stage:0,cult:0,stones:100,materials:0,herbs:0,fragments:0,scrolls:0,petEggs:0,jades:0,tribPills:0,cultPills:0,boostPills:0,root:root[0],rootMul:root[1],aptitude:40+Math.floor(Math.random()*61),hp:100,maxHp:100,mana:80,baseMana:80,attack:12,defense:7,agility:5,crit:0,map:0,gear:{weapon:null,armor:null,treasure:null,helmet:null,boots:null,bracer:null},enhance:0,temper:0,jadeSlots:0,skillLevel:1,skillTier:0,insight:0,pet:null,spiritBeast:null,spiritBeastCandidate:null,spiritBeastCandidates:[],poisonStates:{},poisonCures:{},sect:'太玄宗',sectContribution:0,autoAlchemy:true,tribBonus:0,tribFails:0,kills:0,deaths:0,encounters:0,logs:[],offline:null,newbieGuideDone:false,prologueDone:false,mainQuest:'血月之仇',mapUiSettings:{randomEvents:true,expanded:true,statusSwitch:true,freeMapView:true,audioEnabled:true,layoutDefaultsV2:true}}};
 localMapBackgrounds.push('assets/map-backgrounds/taixuan-zong.webp');
 localMapBackgrounds.push('assets/map-backgrounds/tianmo-zong.webp');
-// 天魔宗在击败仙界天门守门仙将后才会显现在大地图右上角。
+function localMapMobileBackground(area){
+  const source=localMapBackgrounds[area]||'';
+  return source?source.replace('assets/map-backgrounds/','assets/map-backgrounds/mobile/'):'';
+}
+function localMapBackgroundForDisplay(area){
+  const source=localMapBackgrounds[area]||'';
+  return window.matchMedia&&window.matchMedia('(max-width: 760px)').matches?localMapMobileBackground(area):source;
+}
+// 天魔宗需带着镇门剑印向掌教复命后，才会从魔雾中显现。
 maps.push(['天魔宗',0,2000]);
-mapScenes.push(['🕷️','天魔宗','击败守门仙将后显现的隐秘魔宗。只能从太玄宗22号天魔传送阵进入。','宗门声望、宗门贡献、魔道试炼',88,10]);
+mapScenes.push(['🕷️','天魔宗','镇门剑印映出的隐秘魔宗。只能从太玄宗22号破碎传送阵进入。','宗门声望、宗门贡献、魔道试炼',88,10]);
 subMapClasses.push('dark');
 subMapSpots.push(['天魔宗宗门广场']);
-function tianmoUnlocked(){return !!(g?.bossKills?.[9]>0)}
+function tianmoUnlocked(){return !!g?.tianmoInvestigationUnlocked||(g?.mainQuestStage||0)>=25}
 const sceneUnlockedBeforeTianmo=sceneUnlocked;
 sceneUnlocked=function(i){return i===11?tianmoUnlocked():sceneUnlockedBeforeTianmo(i)};
 const sceneReqTextBeforeTianmo=sceneReqText;
-sceneReqText=function(i){if(i===11)return tianmoUnlocked()?'已开启 · 请从太玄宗22号天魔传送阵进入':'需先击败仙界天门Boss守门仙将；开启后从太玄宗22号天魔传送阵进入';return sceneReqTextBeforeTianmo(i)};
+sceneReqText=function(i){if(i===11)return tianmoUnlocked()?'已开启 · 请从太玄宗22号破碎传送阵进入':'需取得镇门剑印后返回掌教内殿复命，由掌教开启太玄宗22号破碎传送阵';return sceneReqTextBeforeTianmo(i)};
 const renderHomeMapBeforeTianmo=renderHomeMap;
 renderHomeMap=function(){if(!tianmoUnlocked()&&g?.selectedScene===11)g.selectedScene=10;renderHomeMapBeforeTianmo();if(!tianmoUnlocked())document.querySelector('#homeMap [data-scene="11"]')?.remove()};
 const goSceneBeforeTianmo=goScene;
@@ -1929,7 +1941,18 @@ function moveLocalSpot(i,nextSpot){
 }
 function renderSceneMap(){let modal=$('#sceneMapModal');if(!modal||!modal.classList.contains('show'))return;renderSkillHud();let i=g.selectedScene??g.map,s=mapScenes[i],m=maps[i],coords=routeCoords(i),spot=activeSpot(),canvas=$('#localMapCanvas'),world=$('#localMapWorld');$('#localMapName').textContent=s[1];$('#localMapDesc').textContent=mapHeaderDescs[i]||s[2];let background=localMapBackgrounds[i];canvas.className='local-map '+(subMapClasses[i]||'forest')+(background?' has-art':'');canvas.style.backgroundImage=background?`url("${background}")`:'';world.querySelectorAll('.local-spot,.path-line,.map-deco').forEach(x=>x.remove());let decos=mapDecos(i,s).filter(d=>d[3]!=='sign');decos.forEach(d=>{let el=document.createElement('div');el.className='map-deco '+d[3];el.style.left=d[1]+'%';el.style.top=d[2]+'%';el.textContent=d[3]==='sign'?s[1]:d[0];world.appendChild(el)});let prev=null,currentSegment=Math.min(spot+1,coords.length-1),worldAspect=world.clientWidth?world.clientHeight/world.clientWidth:1;coords.forEach((c,idx)=>{if(prev){let dx=c[0]-prev[0],dy=(c[1]-prev[1])*worldAspect,len=Math.hypot(dx,dy),ang=Math.atan2(dy,dx)*180/Math.PI,line=document.createElement('div');line.className='path-line'+(idx===currentSegment?' path-current':'');line.style.left=prev[0]+'%';line.style.top=prev[1]+'%';line.style.width=len+'%';line.style.transform=`rotate(${ang}deg)`;world.appendChild(line)}prev=c});coords.forEach((c,idx)=>{let named=spotIsNamed(i,idx),transfer=!!sceneTransferAt(i,idx),b=document.createElement('button');let dir=named?labelDir(idx):'';b.className=`local-spot numbered ${named?'named '+dir+' ':''}${transfer?'transfer ':''}${idx===spot?'active':''}`;b.style.setProperty('--x',c[0]+'%');b.style.setProperty('--y',c[1]+'%');b.dataset.spot=idx;b.innerHTML=`<i>${spotIcon(i,idx)}</i><b>${spotLabel(i,idx)}</b>`;world.appendChild(b)});let hc=coords[spot],hero=$('#localHero');world.appendChild(hero);hero.style.setProperty('--x',hc[0]+'%');hero.style.setProperty('--y',hc[1]+'%');panWorld(world,hc);let localInfo=$('#localMapInfo');if(localInfo)localInfo.innerHTML=rows({'位置信息':`${s[1]} · ${spotLabel(i,spot)}`,'推荐境界':i===10?'宗门弟子皆可入内':sceneReqText(i)});let npcs=localNpcs(i,spot),mobs=localMobs(i,spot);$('#localNpcList').innerHTML=npcs.length?npcs.map((x,idx)=>{let npcName=x.name||x[0];return`<button data-local-npc="${idx}"><span>${npcName}</span><b>${npcQuestIcon(npcName,i,spot)}</b></button>`}).join(''):'<div class="scene-tip">此编号路点暂无NPC，请前往带汉字的关键地点。</div>';$('#localMobList').innerHTML=mobs.length?mobs.map((x,idx)=>{let info=x.permanentCorpse?'永不复活':x.dead?`复活${Math.ceil(x.reviveLeft/60000)}分`:x.type==='采集'?'':localMonsterRealm(i,spot,x,idx);return`<button data-local-mob="${idx}" class="${x.dead?'dead':''}" ${x.dead?'disabled':''}><span>${x.name||x[0]}${info?' '+info:''}</span><b>${x.dead?'☠️':x.dead?'☠️':x.boss?'👑':x.type==='采集'?'🌿':'🗡️'}</b></button>`}).join(''):'<div class="scene-tip">此编号路点暂无NPC，请前往带汉字的关键地点。</div>';document.querySelectorAll('[data-local-npc]').forEach(b=>b.onclick=()=>localMeet(+b.dataset.localNpc));document.querySelectorAll('[data-local-mob]').forEach(b=>b.onclick=()=>localHunt(+b.dataset.localMob));document.querySelectorAll('[data-spot]').forEach(b=>b.onclick=()=>moveLocalSpot(i,+b.dataset.spot))}
 const baseRenderSceneMap=renderSceneMap;
+function applyResponsiveLocalMapBackground(){
+  const canvas=$('#localMapCanvas'),area=g.selectedScene??g.map;
+  if(!canvas)return;
+  const desktop=localMapBackgrounds[area]||'',mobile=localMapMobileBackground(area);
+  const key=`${desktop}|${mobile}`;
+  if(canvas.dataset.responsiveBackground===key)return;
+  canvas.dataset.responsiveBackground=key;
+  canvas.style.setProperty('--map-background-desktop',desktop?`url("${desktop}")`:'none');
+  canvas.style.setProperty('--map-background-mobile',mobile?`url("${mobile}")`:'none');
+}
 renderSceneMap=()=>{
+  applyResponsiveLocalMapBackground();
   baseRenderSceneMap();
   renderTribulationEntry();
   let i=g.selectedScene??g.map,spot=activeSpot(),mobs=localMobs(i,spot);
@@ -3053,14 +3076,15 @@ async function playEnemyPortraitNormalAttack(){
 const playEnemyPortraitSkillWithPreload=playEnemyPortraitSkill;
 playEnemyPortraitSkill=async function(self=false,powerWave=false){
   let frames=bossPortraitFrames[battleState?.target?.originalName||battleState?.target?.name]||[battleState?.enemy?.portrait];
-  await warmImageAssets(frames);
+  // Do not hold the turn hostage while a remote/mobile browser decodes animation frames.
+  void warmImageAssets(frames);
   playGameSfx('arcane',.26);
   return playEnemyPortraitSkillWithPreload(self,powerWave);
 };
 const playEnemyPortraitNormalAttackWithPreload=playEnemyPortraitNormalAttack;
 playEnemyPortraitNormalAttack=async function(){
   let frames=bossPortraitFrames[battleState?.target?.originalName||battleState?.target?.name]||[battleState?.enemy?.portrait];
-  await warmImageAssets(frames);
+  void warmImageAssets(frames);
   return playEnemyPortraitNormalAttackWithPreload();
 };
 const heroActionFrames={attack:['assets/hero-animation/attack-1.png','assets/hero-animation/attack-2.png','assets/hero-animation/attack-3.png','assets/hero-animation/attack-1.png'],fireball:['assets/hero-animation/fireball-1.png','assets/hero-animation/fireball-2.png','assets/hero-animation/fireball-3.png','assets/hero-animation/attack-1.png'],bandage:['assets/hero-animation/bandage-1.png','assets/hero-animation/bandage-2.png','assets/hero-animation/bandage-3.png','assets/hero-animation/bandage-4.png'],run:['assets/hero-animation/run-1.png','assets/hero-animation/run-2.png','assets/hero-animation/run-3.png','assets/hero-animation/run-4.png'],flowerSeeking:['assets/hero-animation/flower-seeking-1.png','assets/hero-animation/flower-seeking-2.png','assets/hero-animation/flower-seeking-3.png','assets/hero-animation/flower-seeking-4.png'],manaDrain:['assets/hero-animation/mana-drain-1.png','assets/hero-animation/mana-drain-2.png','assets/hero-animation/mana-drain-3.png','assets/hero-animation/mana-drain-4.png'],palmStrike:['assets/hero-animation/palm-strike-1.png','assets/hero-animation/palm-strike-2.png','assets/hero-animation/palm-strike-3.png','assets/hero-animation/palm-strike-4.png'],rage:['assets/hero-animation/rage-1.png','assets/hero-animation/rage-2.png','assets/hero-animation/rage-3.png','assets/hero-animation/rage-4.png'],purpleCloud:['assets/hero-animation/purple-cloud-1.png','assets/hero-animation/purple-cloud-2.png','assets/hero-animation/purple-cloud-3.png','assets/hero-animation/purple-cloud-4.png'],witheringWood:['assets/hero-animation/withering-wood-1.png','assets/hero-animation/withering-wood-2.png','assets/hero-animation/withering-wood-3.png','assets/hero-animation/withering-wood-4.png']};const heroActionScales={flowerSeeking:[1.34,1.42,1.32,1.28],manaDrain:[1.08,1.12,1.08,1.05],palmStrike:[1.06,1.14,1.08,1.06],rage:[1.13,1.15,1.1,1.12],purpleCloud:[1.08,1.1,1.06,1.08]},heroActionOffsets={flowerSeeking:[0,0,0,0],manaDrain:[0,0,0,0],palmStrike:[0,0,0,0],rage:[0,0,0,0],purpleCloud:[0,0,0,0]};let heroFrameToken=0;function playSkillHitLunge(figure){if(!figure)return;figure.classList.remove('skill-hit-lunge');void figure.offsetWidth;figure.classList.add('skill-hit-lunge');setTimeout(()=>figure.classList.remove('skill-hit-lunge'),380)}function resetBattleHeroFrame(){heroFrameToken++;let hero=$('#battlePlayerFigure'),figure=document.querySelector('.fighter-figure.player');figure?.classList.remove('skill-lunge','skill-hit-lunge');if(hero){hero.classList.remove('skill-frame');hero.style.removeProperty('--hero-frame-scale');hero.style.removeProperty('--hero-frame-offset');hero.src=heroActionFrames.attack[0]}}async function playHeroFrames(action,durations=[100,140,180,180],options={}){let hero=$('#battlePlayerFigure'),frames=heroActionFrames[action],figure=document.querySelector('.fighter-figure.player'),scales=heroActionScales[action],offsets=heroActionOffsets[action];if(!hero||!frames)return;let token=++heroFrameToken;if(options.lunge&&figure){figure.classList.remove('skill-lunge');void figure.offsetWidth;figure.classList.add('skill-lunge')}if(scales)hero.classList.add('skill-frame');try{for(let i=0;i<frames.length;i++){if(token!==heroFrameToken)return;if(scales){hero.style.setProperty('--hero-frame-scale',scales[i]||scales[0]);hero.style.setProperty('--hero-frame-offset',`${offsets?.[i]||0}px`)}hero.src=frames[i];await options.onFrameStart?.(i);await waitBattle(durations[i]||140);if(token!==heroFrameToken)return;await options.onFrameEnd?.(i)}if(token===heroFrameToken){hero.src=heroActionFrames.attack[0];hero.classList.remove('skill-frame');hero.style.removeProperty('--hero-frame-scale');hero.style.removeProperty('--hero-frame-offset')}}finally{if(token===heroFrameToken&&options.lunge)figure?.classList.remove('skill-lunge')}}
@@ -3101,16 +3125,17 @@ function warmBattleMedia(state=battleState){
   let skillFrames=(g.activeSkills||[]).flatMap(skill=>heroActionFrames[battleSkillAction(skill)]||[]);
   // Show battle immediately once the two visible first frames are ready.
   // The remaining frames decode on idle instead of holding up the first turn.
-  let primary=[optimizedBattleAsset(state.enemy?.portrait),bossFrames[0],heroActionFrames.attack[0]];
+  let backdrop=typeof battleBackdropAssetFor==='function'?battleBackdropAssetFor(state):'';
+  let primary=[backdrop,optimizedBattleAsset(state.enemy?.portrait),bossFrames[0],heroActionFrames.attack[0]];
   let deferred=[...bossFrames.slice(1),...heroActionFrames.attack.slice(1),...heroActionFrames.run,...skillFrames];
   deferMediaWork(()=>warmImageAssets(deferred));
   return warmImageAssets(primary);
 }
 function warmSceneMedia(area=g.selectedScene??g.map){return warmImageAssets([localMapBackgrounds[area],'assets/figure1/figure1.webp']);}
 const playHeroFramesWithPreload=playHeroFrames;
-playHeroFrames=async function(action,durations,options){await warmImageAssets(heroActionFrames[action]||[]);return playHeroFramesWithPreload(action,durations,options);};
-async function playFireballAnimation(){let ball=$('#fireballProjectile'),impact=$('#fireballImpact'),caster=document.querySelector('.fighter-figure.player'),target=document.querySelector('.fighter-figure.enemy');if(!ball||!impact)return;await warmImageAssets(heroActionFrames.fireball);void playHeroFrames('fireball',[160,230,260,230]);ball.classList.remove('cast');impact.classList.remove('burst');caster?.classList.remove('fire-cast');target?.classList.remove('fire-hit');void ball.offsetWidth;caster?.classList.add('fire-cast');ball.classList.add('cast');await waitBattle(500);impact.classList.add('burst');target?.classList.add('fire-hit');setTimeout(()=>{ball.classList.remove('cast');impact.classList.remove('burst');caster?.classList.remove('fire-cast');target?.classList.remove('fire-hit')},360)}
-async function playHaoFireballAnimation(){let arena=document.querySelector('.battle-arena'),impact=$('#fireballImpact'),caster=document.querySelector('.fighter-figure.player'),target=document.querySelector('.fighter-figure.enemy');if(!arena)return;await warmImageAssets(heroActionFrames.fireball);arena.querySelector('.haofireball-barrage')?.remove();let barrage=document.createElement('div');barrage.className='haofireball-barrage';[[39,0,.82],[51,70,.98],[64,135,.9],[45,205,1.12],[58,275,.94],[35,345,.8],[69,415,1.06]].forEach(([lane,delay,size])=>{let ball=document.createElement('span');ball.style.setProperty('--lane',lane+'%');ball.style.setProperty('--delay',delay+'ms');ball.style.setProperty('--size',size);ball.style.setProperty('--end-size',size*1.42);barrage.appendChild(ball)});arena.appendChild(barrage);void playHeroFrames('fireball',[120,180,240,300]);impact?.classList.remove('burst');caster?.classList.remove('fire-cast');target?.classList.remove('haofireball-hit');void barrage.offsetWidth;caster?.classList.add('fire-cast');await waitBattle(720);impact?.classList.add('burst');target?.classList.add('haofireball-hit');await waitBattle(520);barrage.remove();impact?.classList.remove('burst');caster?.classList.remove('fire-cast');target?.classList.remove('haofireball-hit')}
+playHeroFrames=async function(action,durations,options){void warmImageAssets(heroActionFrames[action]||[]);return playHeroFramesWithPreload(action,durations,options);};
+async function playFireballAnimation(){let ball=$('#fireballProjectile'),impact=$('#fireballImpact'),caster=document.querySelector('.fighter-figure.player'),target=document.querySelector('.fighter-figure.enemy');if(!ball||!impact)return;void warmImageAssets(heroActionFrames.fireball);void playHeroFrames('fireball',[160,230,260,230]);ball.classList.remove('cast');impact.classList.remove('burst');caster?.classList.remove('fire-cast');target?.classList.remove('fire-hit');void ball.offsetWidth;caster?.classList.add('fire-cast');ball.classList.add('cast');await waitBattle(500);impact.classList.add('burst');target?.classList.add('fire-hit');setTimeout(()=>{ball.classList.remove('cast');impact.classList.remove('burst');caster?.classList.remove('fire-cast');target?.classList.remove('fire-hit')},360)}
+async function playHaoFireballAnimation(){let arena=document.querySelector('.battle-arena'),impact=$('#fireballImpact'),caster=document.querySelector('.fighter-figure.player'),target=document.querySelector('.fighter-figure.enemy');if(!arena)return;void warmImageAssets(heroActionFrames.fireball);arena.querySelector('.haofireball-barrage')?.remove();let barrage=document.createElement('div');barrage.className='haofireball-barrage';[[39,0,.82],[51,70,.98],[64,135,.9],[45,205,1.12],[58,275,.94],[35,345,.8],[69,415,1.06]].forEach(([lane,delay,size])=>{let ball=document.createElement('span');ball.style.setProperty('--lane',lane+'%');ball.style.setProperty('--delay',delay+'ms');ball.style.setProperty('--size',size);ball.style.setProperty('--end-size',size*1.42);barrage.appendChild(ball)});arena.appendChild(barrage);void playHeroFrames('fireball',[120,180,240,300]);impact?.classList.remove('burst');caster?.classList.remove('fire-cast');target?.classList.remove('haofireball-hit');void barrage.offsetWidth;caster?.classList.add('fire-cast');await waitBattle(720);impact?.classList.add('burst');target?.classList.add('haofireball-hit');await waitBattle(520);barrage.remove();impact?.classList.remove('burst');caster?.classList.remove('fire-cast');target?.classList.remove('haofireball-hit')}
 function battleRealmIndex(label){
   let text=String(label||'');
   if(text.startsWith('真仙'))return realms.length;
@@ -3140,7 +3165,7 @@ function tickBattleCooldowns(b){
   let cooldowns=b?.player?.cooldowns||{};
   Object.keys(cooldowns).forEach(key=>{cooldowns[key]=Math.max(0,(cooldowns[key]||0)-1);if(!cooldowns[key])delete cooldowns[key]});
 }
-function renderBattle(){let b=battleState;if(!b)return;let t=b.target;$('#battleTitle').textContent=(t.boss?'Boss战：':'战斗：')+t.name;$('#battleRoundText').textContent='第'+b.round+'回合';$('#battlePlayerName').textContent='你';setBattleRealmBadge('#battlePlayerLevel',realmText(),g.realm);$('#battleEnemyName').textContent=t.name;setBattleRealmBadge('#battleEnemyLevel',b.enemy.realm,battleRealmIndex(b.enemy.realm));$('#battleEnemyFigure').textContent=b.enemy.icon;$('#battlePlayerHp').style.width=battlePct(b.player.hp,b.player.maxHp);$('#battlePlayerMp').style.width=battlePct(b.player.mp,b.player.maxMp);let shield=Math.max(0,b.player.shield||0),shieldPeak=Math.max(1,b.player.shieldPeak||b.player.maxHp||1);$('#battlePlayerShield').style.width=battlePct(shield,shieldPeak);$('#battlePlayerHpText').textContent=`生命 ${fmt(b.player.hp)}/${fmt(b.player.maxHp)}`;$('#battlePlayerMpText').textContent=`法力 ${fmt(b.player.mp)}/${fmt(b.player.maxMp)}`;$('#battlePlayerShieldText').textContent=`护盾 ${fmt(shield)}`;$('#battleEnemyHp').style.width=battlePct(b.enemy.hp,b.enemy.maxHp);$('#battleEnemyMp').style.width=battlePct(b.enemy.mp,b.enemy.maxMp);$('#battleEnemyHpText').textContent=`生命 ${fmt(b.enemy.hp)}/${fmt(b.enemy.maxHp)}`;$('#battleEnemyMpText').textContent=`法力 ${fmt(b.enemy.mp)}/${fmt(b.enemy.maxMp)}`;ensureSkillLayout();let skills=g.activeSkills||[];$('#battleSkillBar').innerHTML=Array.from({length:5},(_,i)=>{let sk=skills[i],cost=sk?battleSkillCost(sk,i):0,reason=sk?battleSkillBlockReason(sk,i,b):'技能未激活',disabled=!sk||!!reason;return`<button class="battle-skill" data-battle-skill="${i}" ${disabled?'disabled':''}><b>${sk?(sk.icon||'✨')+' '+sk.name:'空'}</b><small>${sk?`耗蓝${cost}${reason?' · '+reason:''} · ${sk.desc||'主动技'}`:'技能书激活'}</small></button>`}).join('');document.querySelectorAll('[data-battle-skill]').forEach(btn=>btn.onclick=()=>battlePlayerTurn(+btn.dataset.battleSkill));$('#battleLog').innerHTML=b.log.map(x=>`<div>${x}</div>`).join('')}
+function renderBattle(){let b=battleState;if(!b)return;let t=b.target;$('#battleTitle').textContent=(t.boss?'Boss战：':'战斗：')+t.name;$('#battleRoundText').textContent='第'+b.round+'回合';$('#battlePlayerName').textContent='你';setBattleRealmBadge('#battlePlayerLevel',realmText(),g.realm);$('#battleEnemyName').textContent=t.name;setBattleRealmBadge('#battleEnemyLevel',b.enemy.realm,battleRealmIndex(b.enemy.realm));$('#battleEnemyFigure').textContent=b.enemy.icon;$('#battlePlayerHp').style.width=battlePct(b.player.hp,b.player.maxHp);$('#battlePlayerMp').style.width=battlePct(b.player.mp,b.player.maxMp);let shield=Math.max(0,b.player.shield||0),shieldPeak=Math.max(1,b.player.shieldPeak||b.player.maxHp||1);$('#battlePlayerShield').style.width=battlePct(shield,shieldPeak);$('#battlePlayerHpText').textContent=`生命 ${fmt(b.player.hp)}/${fmt(b.player.maxHp)}`;$('#battlePlayerMpText').textContent=`法力 ${fmt(b.player.mp)}/${fmt(b.player.maxMp)}`;$('#battlePlayerShieldText').textContent=`护盾 ${fmt(shield)}`;$('#battleEnemyHp').style.width=battlePct(b.enemy.hp,b.enemy.maxHp);$('#battleEnemyMp').style.width=battlePct(b.enemy.mp,b.enemy.maxMp);$('#battleEnemyHpText').textContent=`生命 ${fmt(b.enemy.hp)}/${fmt(b.enemy.maxHp)}`;$('#battleEnemyMpText').textContent=`法力 ${fmt(b.enemy.mp)}/${fmt(b.enemy.maxMp)}`;ensureSkillLayout();let skills=g.activeSkills||[],bar=$('#battleSkillBar'),skillKey=Array.from({length:5},(_,i)=>{let sk=skills[i],cost=sk?battleSkillCost(sk,i):0,reason=sk?battleSkillBlockReason(sk,i,b):'技能未激活';return`${sk?.name||''}:${cost}:${reason}`}).join('|');if(bar.dataset.skillKey!==skillKey){bar.innerHTML=Array.from({length:5},(_,i)=>{let sk=skills[i],cost=sk?battleSkillCost(sk,i):0,reason=sk?battleSkillBlockReason(sk,i,b):'技能未激活',disabled=!sk||!!reason;return`<button class="battle-skill" data-battle-skill="${i}" ${disabled?'disabled':''}><b>${sk?(sk.icon||'✨')+' '+sk.name:'空'}</b><small>${sk?`耗蓝${cost}${reason?' · '+reason:''} · ${sk.desc||'主动技'}`:'技能书激活'}</small></button>`}).join('');document.querySelectorAll('[data-battle-skill]').forEach(btn=>btn.onclick=()=>battlePlayerTurn(+btn.dataset.battleSkill));bar.dataset.skillKey=skillKey}let log=$('#battleLog'),logKey=b.log.join('\n');if(log.dataset.logKey!==logKey){log.innerHTML=b.log.map(x=>`<div>${x}</div>`).join('');log.dataset.logKey=logKey}}
 const ENEMY_PORTRAITS_TO_MIRROR=new Set(['迷雾蝶','月狐','山魈','山魈王','青竹妖','暗蛟龙','虾兵','战魂','煞灵','断剑鬼','遗迹守卫','裂隙怪','虚空影','残碑灵','魔修残魂','云兽','雷灵','雷劫真君','天兵残影','守门仙将']);
 function enemyPortraitFacesPlayer(target){return ENEMY_PORTRAITS_TO_MIRROR.has(String(target?.wanderingMonster?.sourceName||target?.originalName||target?.name||'').replace(/^BOSS\s+/,''))}
 function renderBattleEnemyPortrait(){let b=battleState,figure=$('#battleEnemyFigure'),portrait=optimizedBattleAsset(b?.enemy?.portrait),facePlayer=enemyPortraitFacesPlayer(b?.target);if(!figure)return;if(!portrait){figure.className=`monster${facePlayer?' enemy-face-player':''}`;figure.style.removeProperty('transform');return}figure.className=`boss-portrait${facePlayer?' enemy-face-player':''}`;figure.style.removeProperty('transform');let image=figure.querySelector('img');if(!image||image.getAttribute('src')!==portrait){image=document.createElement('img');image.src=portrait;image.decoding='async';figure.replaceChildren(image)}image.alt=b.target.name}
@@ -4148,7 +4173,13 @@ if((g.mainQuestStage||0)===20){
 return;
 }
 if((g.mainQuestStage||0)===24){
-	openNpcDialog('掌教 林玄一',`镇门剑印落在案上，掌教起身，第一次向你郑重行了一礼。\n\n“守门仙将并未真正败给你，它是在确认巡天令没有被祭法污染。剑印既已认主，天门本该开启归途；可它认主的一瞬，反而映出一座藏在门后的阵纹。”\n\n阵盘上浮现太玄宗22号路点的残缺传送阵，黑雾正从裂缝里向外渗出。苏青雪面色微白：“这是天魔宗的界印。玄月使虽覆灭，血月阵核却被人转移到天魔宗；阵核仍在，宗主便会继续被阵眼拖住，归门只能开一线、随时再度闭合。”\n\n掌教合上剑印：“所以不能立刻迎宗主归山。先去太玄宗22号破碎传送阵，进入天魔宗，确认是谁接过了玄月使的献祭之术，毁掉阵核。只有断了根，带他回来才不是把他带进下一场封锁。”`,[{text:'接下天魔调查',alt:true,onClick(){finishLateMainDialogue(25,'chapter10HeadmasterReport','镇门剑印指向天魔宗残阵。前往太玄宗22号破碎传送阵，潜入天魔宗追查血月阵核。','终章·魔雾溯源',`守门仙将留下的剑印揭开了最后一层暗幕：血月大阵的阵核仍藏在天魔宗。\n\n主线分步奖励：当前升级所需修为的 8%\n\n下一步：前往太玄宗路点22，与破碎的传送阵对话，切断宗主归山路上的最后封锁。`)}},{text:'收好剑印',ghost:true}]);
+	openNpcDialog('掌教 林玄一',`镇门剑印落在案上，掌教起身，第一次向你郑重行了一礼。\n\n“守门仙将并非真正败给你，而是在确认巡天令没有被祭法污染。剑印既已认主，本该打开归途；可它映出的却是一道藏在门后的魔纹。”\n\n阵盘上，太玄宗22号路点的破碎传送阵随之亮起，黑雾正从裂缝里渗出。`,[{text:'继续听掌教说明',alt:true,onClick(){
+		openNpcDialog('掌教 林玄一',`“有一件事，我不能再瞒你。”掌教按住镇门剑印，声音沉了下来。\n\n“当年天魔宗宗主无极天尊与玄月使暗中合作，以血月大阵侵入临河镇，想借巡天令与血脉铸成祭钥。你父亲察觉后毁去了祭钥根基，也因此被大阵反噬而死。”\n\n“玄月使已伏诛，可无极天尊仍把血月阵核藏在天魔宗。阵核不灭，宗主便会继续被阵眼拖住，归门随时还会闭合。”`,[{text:'开启破碎传送阵',alt:true,onClick(){
+			g.tianmoInvestigationUnlocked=true;
+			finishLateMainDialogue(25,'chapter10HeadmasterReport','镇门剑印映出天魔宗的血月阵核。掌教已开启太玄宗22号破碎传送阵，命你潜入调查无极天尊与玄月使的旧案。','终章·魔雾溯源',`镇门剑印揭开了令尊殒命的最后真相：无极天尊与玄月使联手布下血月大阵。\n\n主线分步奖励：当前升级所需修为的 8%\n\n下一步：前往太玄宗路点22，与破碎的传送阵对话，潜入天魔宗查明阵核与旧案。`);
+			renderHomeMap();renderSceneMap();render();save();
+		}},{text:'收好剑印',ghost:true}]);
+		}},{text:'稍后复命',ghost:true}]);
 return;
 }
 if((g.mainQuestStage||0)===27){
@@ -4669,12 +4700,15 @@ function renderBattleSkillCards(){
   if(!b)return;
   document.querySelectorAll('#battleSkillBar [data-battle-skill]').forEach(btn=>{
     let index=+btn.dataset.battleSkill,sk=skills[index],cost=sk?battleSkillCost(sk,index):0,reason=sk?battleSkillBlockReason(sk,index,b):'技能未激活';
+    let cardKey=`${sk?.name||''}:${cost}:${reason}`;
+    if(btn.dataset.cardKey===cardKey)return;
     btn.classList.toggle('active-skill-card',!!sk);
     btn.classList.toggle('empty-skill-card',!sk);
     btn.classList.remove('theme-fire','theme-wood','theme-water','theme-lightning','theme-neutral');
     btn.classList.add(sk?skillThemeClass(sk):'theme-neutral');
-    if(!sk){btn.innerHTML='<div class="battle-skill-top"><b>未领悟</b><span class="battle-skill-cost">空位</span></div><small>技能书激活</small>';return;}
+    if(!sk){btn.innerHTML='<div class="battle-skill-top"><b>未领悟</b><span class="battle-skill-cost">空位</span></div><small>技能书激活</small>';btn.dataset.cardKey=cardKey;return;}
     btn.innerHTML=`<div class="battle-skill-top"><b>${sk.name}</b><span class="battle-skill-cost">${cost?cost+' MP':'无消耗'}</span></div><small>${reason||sk.desc||'主动技'}</small>`;
+    btn.dataset.cardKey=cardKey;
   });
 }
 function renderBattleStatusEffects(){
@@ -7650,7 +7684,7 @@ npcQuestIcon=function(name,mapIndex,spot){if(mapIndex===11){if(name==='天魔传
 function finishTianmoCultivatorVictory(target){let info=target.tianmoInfo||tianmoCultivatorInfo(activeSpot()),state=tianmoDefeatState();state[target.tianmoKey||info.tianmoKey]=true;closeBattle(true);g.sectReputation=(g.sectReputation||0)+info.reputation;g.sectContribution=(g.sectContribution||0)+info.contribution;g.kills=(g.kills||0)+1;let blocked=tianmoSpotHasEnemies(info.spot),mainBoss=info.title==='宗主'&&(g.mainQuestStage||0)===26;if(mainBoss){let advanced=advanceMainQuest(27,'天魔宗宗主败亡，血月阵核脱离魔门。返回太玄宗掌教内殿，完成最后的封阵与迎宗主归山。');if(advanced)rewardLateMainDialogue('tianmoSectMaster');g.tianmoMainBossDefeated=true;}pushLocalLog(`天魔宗战斗：${info.displayName}败退，宗门声望+${info.reputation}，宗门贡献+${info.contribution}。${blocked?'当前路点仍有魔修挡路。':'当前路点已清空，前路暂时畅通。'}`);showNpcResult(mainBoss?'终章·阵核归位':'天魔宗战果',mainBoss?`血月阵核已从无极天尊体内剥离，天魔宗上空的魔雾开始崩散。\n\n宗门声望 +${fmt(info.reputation)}\n宗门贡献 +${fmt(info.contribution)}\n主线分步奖励：当前升级所需修为的 8%\n\n下一步：返回太玄宗路点34·掌教内殿，完成封阵并迎回失踪宗主。`:`宗门声望 +${fmt(info.reputation)}\n宗门贡献 +${fmt(info.contribution)}\n\n${blocked?'仍有魔教中人守在此处，不能贸然离开。':'此处的魔门暂时安静下来，前路已被你打开。'}`,'good');renderSceneMap();render();save()}
 function finishTianmoElderVictory(){g.tianmoElderDefeated=true;closeBattle(true);pushLocalLog('太上长老败于传送阵前，天魔宗出口重新开放。');showNpcResult('传送阵解封','太上长老倒下后，传送阵上的黑色封印逐层剥落。你现在可以返回太玄宗。','good');renderSceneMap();render();save()}
 const finishBattleBeforeTianmo=finishBattleWin;
-finishBattleWin=function(){let target=battleState?.target;if(target?.tianmoElder)return finishTianmoElderVictory();if(target?.tianmoCultivator)return finishTianmoCultivatorVictory(target);let result=finishBattleBeforeTianmo();if(target?.boss&&target.name==='BOSS 守门仙将'&&tianmoUnlocked()&&!g.tianmoGuideSeen){g.tianmoGuideSeen=true;g.tianmoGuidePending=true;pushLocalLog('【天魔宗解锁】守门仙将败退，天门之外浮现一座被魔雾遮蔽的宗门。请返回大地图查看右上角入口，并从太玄宗22号天魔传送阵进入。');renderHomeMap();toast('天魔宗已开启：请从太玄宗22号天魔传送阵进入',5200)}return result};
+finishBattleWin=function(){let target=battleState?.target;if(target?.tianmoElder)return finishTianmoElderVictory();if(target?.tianmoCultivator)return finishTianmoCultivatorVictory(target);return finishBattleBeforeTianmo()};
 const handleBattleDeathBeforeTianmo=handleBattleDeath;
 handleBattleDeath=function(enemyName){let target=battleState?.target;if(!target?.tianmoElder)return handleBattleDeathBeforeTianmo(enemyName);let result=handleBattleDeathBeforeTianmo(enemyName);pushLocalLog('你不敌太上长老，传送阵护阵将你送回太玄宗；太上长老仍守在天魔宗入口。');save();return result};
 const goSceneBeforeTianmoExit=goScene;
@@ -7660,7 +7694,7 @@ renderHomeMap=function(){renderHomeMapBeforeTianmoExit()};
 const moveLocalSpotBeforeTianmo=moveLocalSpot;
 moveLocalSpot=function(i,nextSpot){if(i===11){let current=activeSpot(),distance=Math.abs(nextSpot-current);if(distance!==1)return toast('天魔宗的魔门步步设防，每次只能移动一格');if(tianmoSpotHasEnemies(current))return toast(`${spotLabel(11,current)}的魔教中人已封住退路，先解决当前路点的敌人`)}return moveLocalSpotBeforeTianmo(i,nextSpot)};
 function enterTianmoFromBrokenGate(){
-  if(!tianmoUnlocked())return toast('天魔宗尚未显现，请先击败守门仙将');
+  if(!tianmoUnlocked())return toast('破碎传送阵尚未开启，请先取得镇门剑印并返回掌教内殿复命');
   if((g.realm||0)<7)return toast('破碎的传送阵尚未承认你的境界，需要达到大乘初期');
   g.selectedScene=11;g.map=11;g.localSpot=0;g.tianmoGuidePending=false;
   pushLocalLog('你以大乘修为激活破碎的传送阵，踏入天魔宗宗门广场。');
@@ -7669,7 +7703,7 @@ function enterTianmoFromBrokenGate(){
 function talkBrokenTianmoGate(){
   let unlocked=tianmoUnlocked(),qualified=(g.realm||0)>=7;
   let gatePortrait=unlocked?'assets/npc-portraits/repaired-tianmo-gate-dialog.png':'assets/npc-portraits/broken-tianmo-gate-dialog.png';
-  if(!unlocked)return openNpcDialog('破碎的传送阵','这座传送阵只剩半边阵纹，另一半被守门仙将镇压的天门气息遮住了。先击败守门仙将，天魔宗才会从魔雾中显形。',[{text:'知道了'}],gatePortrait);
+  if(!unlocked)return openNpcDialog('破碎的传送阵','这座传送阵仍被掌教封在残阵之中。镇门剑印已经指向天魔宗，但须先回掌教内殿复命，由掌教辨明旧案并亲自解开阵锁。',[{text:'知道了'}],gatePortrait);
   if(!qualified)return openNpcDialog('破碎的传送阵',`残缺阵纹在你脚下亮起一线黑光，随即又归于沉寂。
 
  “你的境界还不足以承受天魔宗的界压。至少达到大乘初期，才有资格踏入那座魔门。”`,[{text:'暂不传送'}],gatePortrait);
@@ -9291,7 +9325,8 @@ document.addEventListener('click',e=>{if(e.target.closest('#closeSceneMap'))setT
 const battleSkillEffectWithAudio=battleSkillEffect;
 battleSkillEffect=async function(skill,idx=0){
   if(skill&&!battleSkillBlockReason(skill,idx,battleState)){
-    await battleState?.mediaReady;
+    // The first cast should feel immediate even if background/portrait decoding is still in flight.
+    void battleState?.mediaReady;
     if(/火球术/.test(String(skill.name||'')))playFireballSfx();
     else playGameSfx(skillSfxKind(skill),.5);
   }
@@ -9299,7 +9334,7 @@ battleSkillEffect=async function(skill,idx=0){
 };
 const playNormalAttackAnimationWithAudio=playNormalAttackAnimation;
 playNormalAttackAnimation=async function(side){
-  await battleState?.mediaReady;
+  void battleState?.mediaReady;
   playGameSfx('attack',side==='player'?.34:.27);
   return playNormalAttackAnimationWithAudio(side);
 };
@@ -9309,7 +9344,7 @@ battleFx=function(side,text,heal=false,kind='main'){
   return battleFxWithAudio(side,text,heal,kind);
 };
 const playRunAnimationWithAudio=playRunAnimation;
-playRunAnimation=async function(){await warmImageAssets(heroActionFrames.run);playGameSfx('escape',.34);return playRunAnimationWithAudio()};
+playRunAnimation=async function(){void warmImageAssets(heroActionFrames.run);playGameSfx('escape',.34);return playRunAnimationWithAudio()};
 const renderEquipModalWithFastPortrait=renderEquipModal;
 renderEquipModal=function(){let result=renderEquipModalWithFastPortrait();let portrait=$('#equipModalContent .figure-avatar');if(portrait){portrait.src='assets/figure1/figure1.webp';portrait.decoding='async'}return result};
 let localHeroPortrait=$('#localHero img');
@@ -9625,34 +9660,38 @@ function battleBackdropKey(b){
   if(b?.target?.smallWorldGod||b?.target?.smallWorldEnforcer)return'void';
   return battleBackdropByArea[b?.area]||'qingyun';
 }
+function battleBackdropAssetFor(b){return `assets/battle-backgrounds/${battleBackdropKey(b)}.webp`}
 function ensureBattleBackdropStyles(){
   if($('#battleBackdropStyles'))return;
   let style=document.createElement('style');
   style.id='battleBackdropStyles';
   style.textContent=`
-    .battle-arena.battle-location-art{background-color:#152a2b;background-size:cover;background-position:center center;background-repeat:no-repeat}
+    .battle-arena.battle-location-art{background-color:#152a2b;background-size:cover;background-position:center center;background-repeat:no-repeat;padding-bottom:118px}
     .battle-arena.battle-location-art:before{background:linear-gradient(90deg,#07171d9c 0%,#07171d20 35%,#07171d14 65%,#07171d99 100%),linear-gradient(180deg,#07171d18 0%,#07171d00 52%,#07171d99 100%);opacity:1}
-    .battle-arena.battle-bg-qingyun{background-image:url('assets/battle-backgrounds/qingyun.png')}
-    .battle-arena.battle-bg-youyue{background-image:url('assets/battle-backgrounds/youyue.png')}
-    .battle-arena.battle-bg-chiyan{background-image:url('assets/battle-backgrounds/chiyan.png')}
-    .battle-arena.battle-bg-donghai{background-image:url('assets/battle-backgrounds/donghai.png')}
-    .battle-arena.battle-bg-wanyao{background-image:url('assets/battle-backgrounds/wanyao.png')}
-    .battle-arena.battle-bg-battlefield{background-image:url('assets/battle-backgrounds/battlefield.png')}
-    .battle-arena.battle-bg-void{background-image:url('assets/battle-backgrounds/void.png')}
-    .battle-arena.battle-bg-thunder{background-image:url('assets/battle-backgrounds/thunder.png')}
-    .battle-arena.battle-bg-heaven{background-image:url('assets/battle-backgrounds/heaven.png')}
-    .battle-arena.battle-bg-tianmo{background-image:url('assets/battle-backgrounds/tianmo.png')}
+    .battle-arena.battle-bg-qingyun{background-image:url('assets/battle-backgrounds/qingyun.webp')}
+    .battle-arena.battle-bg-youyue{background-image:url('assets/battle-backgrounds/youyue.webp')}
+    .battle-arena.battle-bg-chiyan{background-image:url('assets/battle-backgrounds/chiyan.webp')}
+    .battle-arena.battle-bg-donghai{background-image:url('assets/battle-backgrounds/donghai.webp')}
+    .battle-arena.battle-bg-wanyao{background-image:url('assets/battle-backgrounds/wanyao.webp')}
+    .battle-arena.battle-bg-battlefield{background-image:url('assets/battle-backgrounds/battlefield.webp')}
+    .battle-arena.battle-bg-void{background-image:url('assets/battle-backgrounds/void.webp')}
+    .battle-arena.battle-bg-thunder{background-image:url('assets/battle-backgrounds/thunder.webp')}
+    .battle-arena.battle-bg-heaven{background-image:url('assets/battle-backgrounds/heaven.webp')}
+    .battle-arena.battle-bg-tianmo{background-image:url('assets/battle-backgrounds/tianmo.webp')}
+    .battle-arena.battle-location-art .battle-skills{z-index:6;padding:7px;border:1px solid #74a6ad88;border-radius:10px;background:linear-gradient(180deg,#0d2028fa,#071119fa);box-shadow:0 -8px 22px #02080ccc,inset 0 1px #ffffff14}
     .battle-arena.battle-has-spirit-beast .fighter-figure.player{left:16%;width:28%}
     .battle-arena.battle-has-spirit-beast .fighter-figure.enemy{right:5%;width:38%}
     .battle-arena.battle-has-spirit-beast .spirit-beast-figure{left:2.5%;top:124px;width:126px;height:166px;align-content:end}
     .battle-arena.battle-has-spirit-beast .spirit-beast-figure img{height:136px;max-width:126px}
     @media(max-width:650px){
-      .battle-arena.battle-has-spirit-beast{min-height:405px}
+      .battle-arena.battle-location-art,.battle-arena.battle-has-spirit-beast{min-height:470px;padding-bottom:164px}
       .battle-arena.battle-has-spirit-beast .fighter-figure.player{left:19%;top:128px;width:30%;height:158px}
       .battle-arena.battle-has-spirit-beast .fighter-figure.enemy{right:3%;top:128px;width:39%;height:158px}
       .battle-arena.battle-has-spirit-beast .spirit-beast-figure{left:1.5%;top:138px;width:82px;height:112px}
       .battle-arena.battle-has-spirit-beast .spirit-beast-figure img{height:84px;max-width:82px}
       .battle-arena.battle-has-spirit-beast .spirit-beast-figure small{max-width:82px}
+      .battle-arena.battle-location-art .fighter-figure{top:104px;height:154px}
+      .battle-arena.battle-location-art .battle-skills{left:8px;right:8px;bottom:8px;padding:5px}
     }
   `;
   document.head.appendChild(style);
@@ -9750,29 +9789,37 @@ finishLocalMove=function(i,nextSpot){
   return result;
 };
 
-// ===== 女主支线：两次矿脉遭遇 =====
+// ===== 女主支线：六次遭遇 =====
 function maskedHeroineQuest(){
-  g.maskedHeroineQuest=g.maskedHeroineQuest||{firstEscaped:false,secondDefeated:false};
+  g.maskedHeroineQuest=g.maskedHeroineQuest||{firstEscaped:false,secondDefeated:false,thirdEscaped:false,fourthResolved:false,fourthOutcome:'',fifthResolved:false,sixthResolved:false};
   return g.maskedHeroineQuest;
 }
 function maskedHeroineNpc(mapIndex,spot){
   let quest=maskedHeroineQuest();
   if(mapIndex===0&&spot===32&&!quest.firstEscaped)return {name:'蒙面黑袍人',maskedHeroineStage:1,desc:'鬼祟窥探青云石阶矿脉的神秘来客'};
   if(mapIndex===2&&spot===32&&quest.firstEscaped&&!quest.secondDefeated)return {name:'蒙面黑袍人',maskedHeroineStage:2,desc:'再度潜入玄铁矿脉的黑袍女子'};
+  if(mapIndex===4&&spot===6&&quest.secondDefeated&&!quest.thirdEscaped)return {name:'蒙面黑袍人',maskedHeroineStage:3,desc:'正在妖王旗台附近捕捉妖狐的黑袍女子'};
+  if(mapIndex===6&&spot===23&&quest.thirdEscaped&&!quest.fourthResolved)return {name:'受伤黑袍人',maskedHeroineStage:4,desc:'在虚空裂隙边缘负伤的陌生修士'};
+  if(mapIndex===7&&spot===23&&quest.fourthResolved&&!quest.fifthResolved)return {name:'江枕雪',maskedHeroineStage:5,desc:'以真面目出现在仙魔裂谷的天魔宗少主'};
+  if(mapIndex===9&&spot===32&&quest.fifthResolved&&!quest.sixthResolved)return {name:'江枕雪',maskedHeroineStage:6,desc:'在飞升台前等候镇门剑印下落的天魔宗少主'};
   return null;
 }
 function maskedHeroineTarget(stage){
-  let first=stage===1;
+  let first=stage===1,third=stage===3,fifth=stage===5,sixth=stage===6,seventh=stage===7;
   return {
-    name:'蒙面黑袍人',type:'战斗',maskedHeroineStage:stage,icon:'⚔️',
+    name:fifth||sixth||seventh?'江枕雪':'蒙面黑袍人',type:'战斗',maskedHeroineStage:stage,icon:'⚔️',
     customStats:{
-      hp:first?200:4000,mp:first?200:800,attack:first?40:350,defense:first?190:300,
-      realm:first?'练气大圆满':'金丹大圆满',icon:'⚔️',
-      portrait:first?'assets/npc-portraits/masked-heroine-dialog.png':'assets/npc-portraits/masked-heroine-cracked-dialog.png'
+      hp:first?200:third?50000:fifth?5000000:sixth?50000000:seventh?80000000:4000,mp:first?200:third?12000:fifth?62000:sixth?362000:seventh?362000:800,attack:first?40:third?4000:fifth?94000:sixth?994000:seventh?994000:350,defense:first?190:third?3500:fifth?55000:sixth?550000:seventh?550000:300,
+      realm:first?'练气大圆满':third?'化神后期':fifth?'渡劫初期':sixth||seventh?'天仙初期':'金丹大圆满',icon:'⚔️',
+      portrait:fifth||sixth||seventh?'assets/npc-portraits/jiang-zhenxue-true-dialog.png':first||third?'assets/npc-portraits/masked-heroine-dialog.png':'assets/npc-portraits/masked-heroine-cracked-dialog.png'
     }
   };
 }
 function talkMaskedHeroine(stage){
+  if(stage===3)return talkMaskedHeroineThird();
+  if(stage===4)return talkMaskedHeroineFourth();
+  if(stage===5)return talkMaskedHeroineFifth();
+  if(stage===6)return talkMaskedHeroineSixth();
   let first=stage===1;
   let text=first
     ?'青云石阶的矿道旁，一道黑影正以秘术窥探太玄宗矿脉。你出声喝止，她回首时，半面银纹面具在昏光中一闪。\n\n“区区外门弟子，也敢管我的事？”她恼羞成怒，抬手便要封住你的去路。'
@@ -9781,6 +9828,101 @@ function talkMaskedHeroine(stage){
     {text:first?'拦下她':'迎战黑袍人',alt:true,onClick(){openBattle(maskedHeroineTarget(stage),0)}},
     {text:'暂不追问',ghost:true}
   ],'assets/npc-portraits/masked-heroine-dialog.png');
+}
+function talkMaskedHeroineThird(){
+  openNpcDialog('蒙面黑袍人','妖王旗台上，一只幼狐被困在她掌心的缚妖符里。她见你靠近，立刻收紧了符链。',[{text:'质问她在做什么',alt:true,onClick(){
+    openNpcDialog('蒙面黑袍人','“一只妖狐而已，也值得你多管？”她眼底浮起怒意，抬手将缚妖符化作利刃。',[{text:'迎战黑袍人',alt:true,onClick(){openBattle(maskedHeroineTarget(3),4)}},{text:'暂不动手',ghost:true}], 'assets/npc-portraits/masked-heroine-dialog.png');
+  }},{text:'暂不靠近',ghost:true}],'assets/npc-portraits/masked-heroine-dialog.png');
+}
+function startMaskedHeroineThirdArrival(){
+  openNpcDialog('蒙面黑袍人','妖王旗台边传来妖狐的低鸣。那名黑袍女子正在施展捕捉秘术，似乎还未察觉你已靠近。',[{text:'先与她交谈',alt:true,onClick(){talkMaskedHeroineThird()}}],'assets/npc-portraits/masked-heroine-dialog.png');
+}
+function talkMaskedHeroineFourth(){
+  openNpcDialog('受伤黑袍人','虚空裂隙前，补天守护者的星光锁链刚刚散去。黑袍女子靠在碎石旁，破碎的面具已无法遮住面容。',[{text:'询问缘由',alt:true,onClick(){
+    openNpcDialog('补天守护者','“她试图夺取补天石，裂隙反噬了她。念在你出身太玄宗，我把处置之权交给你。”',[{text:'作出选择',alt:true,onClick(){
+      openNpcDialog('受伤黑袍人','她抬眼看向你，气息紊乱，却仍不肯低头。',[{text:'救下黑袍人',alt:true,onClick(){resolveMaskedHeroineFourth('save')}},{text:'合力击杀黑袍人',alt:true,onClick(){resolveMaskedHeroineFourth('kill')}},{text:'暂且旁观',ghost:true}], 'assets/npc-portraits/masked-heroine-injured-dialog.png');
+    }}],'assets/npc-portraits/masked-heroine-injured-dialog.png');
+  }}],'assets/npc-portraits/masked-heroine-injured-dialog.png');
+}
+function startMaskedHeroineFourthArrival(){
+  openNpcDialog('受伤黑袍人','你踏入虚空裂隙，先看见补天守护者持戟而立；不远处，一名黑袍修士捂着伤口，面具已经碎裂。',[{text:'上前查看',alt:true,onClick(){talkMaskedHeroineFourth()}}],'assets/npc-portraits/masked-heroine-injured-dialog.png');
+}
+function resolveMaskedHeroineFourth(choice){
+  let quest=maskedHeroineQuest();quest.fourthResolved=true;quest.fourthOutcome=choice;syncMaskedHeroineQuest();
+  if(choice==='save')return openNpcDialog('补天守护者','守护者收起星光锁链：“太玄宗既愿担保，此次便留她一命。”',[{text:'继续听她说',alt:true,onClick(){
+    openNpcDialog('江枕雪','她沉默许久，终于摘下残破面具：“我是天魔宗少主江枕雪。今日承你一份情，来日自会偿还。”\n\n她向你一礼，踏着裂隙余光离去。',[{text:'目送她离开',alt:true}],'assets/npc-portraits/masked-heroine-injured-dialog.png');
+  }}],'assets/npc-portraits/masked-heroine-injured-dialog.png');
+  return openNpcDialog('受伤黑袍人','你与守护者正要出手，数道黑袍身影自裂隙阴影中掠出，结阵护住了她。',[{text:'继续',alt:true,onClick(){
+    openNpcDialog('受伤黑袍人','黑袍人以秘法震开星光锁链，裹挟着她消失在虚空乱流中。这里只留下微弱的妖异气息。',[{text:'继续追查',alt:true}],'assets/npc-portraits/masked-heroine-injured-dialog.png');
+  }}],'assets/npc-portraits/masked-heroine-injured-dialog.png');
+}
+function maskedHeroineIceHeartJade(){return{type:'quest',key:'iceHeartJade',name:'冰心玉',qty:1,max:1,sell:0,icon:'🧊',desc:'江枕雪交予你的冰心玉。玉中封存着她的一缕心意与抵御寒煞的灵息。'}}
+function talkMaskedHeroineFifth(){
+  let quest=maskedHeroineQuest(),saved=(quest.fourthOutcome||'save')==='save';
+  if(saved)return openNpcDialog('江枕雪','仙魔裂谷寒风如刃。江枕雪换下黑袍，以一袭粉衣立在残碑前，望见你时，眸中戒备终于松开半分。',[{text:'与她交谈',alt:true,onClick(){
+    openNpcDialog('江枕雪','“虚空裂隙那次，你本可置身事外，却替我拦下了守护者。”她轻轻攥住掌中的寒玉。\n\n“我仍是天魔宗少主，也仍有自己的路要走。但对你……我不愿再以谎言相待。”',[{text:'收下冰心玉',alt:true,onClick(){giveMaskedHeroineIceHeartJade()}},{text:'暂不收下',ghost:true}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+  }}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+  return openNpcDialog('江枕雪','仙魔裂谷雾气翻滚，江枕雪一身粉衣自残碑后走出。她认得你，眼中的温度却比寒煞更冷。',[{text:'听她说明来意',alt:true,onClick(){
+    openNpcDialog('江枕雪','“你们太玄宗满口仁义，却在虚空裂隙前与守护者合围于我。所谓正道，不过是把旁人的性命当作筹码。”\n\n她抬手引来漫天霜华：“今日，我要让你替他们偿还。”',[{text:'迎战江枕雪',alt:true,onClick(){openBattle(maskedHeroineTarget(5),7)}},{text:'暂不交锋',ghost:true}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+  }}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+}
+function startMaskedHeroineFifthArrival(){
+  openNpcDialog('江枕雪','你踏入仙魔裂谷，便看见粉衣女子独立在断崖边。她没有再戴面具，像是专程在此等你。',[{text:'先与江枕雪交谈',alt:true,onClick(){talkMaskedHeroineFifth()}}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+}
+function giveMaskedHeroineIceHeartJade(){
+  let quest=maskedHeroineQuest();
+  if(quest.fifthResolved)return showNpcResult('江枕雪','她留下的冰心玉仍在你身侧微微发亮，仿佛替她守着一句未尽的话。','good');
+  if(!addBagItem(maskedHeroineIceHeartJade()))return toast('背包已满，无法收下冰心玉');
+  quest.fifthResolved=true;pushLocalLog('江枕雪在仙魔裂谷交付任务道具「冰心玉」。');syncMaskedHeroineQuest();
+  openNpcDialog('江枕雪','她将冰心玉放入你掌中，玉心透出一缕温柔寒意。\n\n“它能护你心神，也算我欠你的那一份情。等仙魔两道的旧债清了，我再亲自向你说明白。”\n\n她转身踏入裂谷薄雾，粉色衣袂很快消失在风里。',[{text:'收好冰心玉',alt:true}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+}
+function divineMarrowPill(count=1){return{type:'pill',key:'divineMarrowPill',name:'神髓丹',qty:count,max:99,sell:0,icon:'✦',cultGain:60000000000,desc:'飞升台所得的神髓丹。使用后修为 +600亿。'}}
+function talkMaskedHeroineSixth(){
+  let quest=maskedHeroineQuest(),saved=(quest.fourthOutcome||'save')==='save';
+  if(saved)return openNpcDialog('江枕雪','飞升台云海翻涌，江枕雪一身粉衣立在天门石阶前。她没有回避你的目光，只是望向镇守台前的天将。',[{text:'询问她的来意',alt:true,onClick(){
+    openNpcDialog('江枕雪','“我奉天魔宗之命而来，要击败守门仙将，取走镇门剑印。”她顿了顿，又看向你。\n\n“原来你也是为剑印而来。若依旧相争，只会让守门仙将坐收渔利。”',[{text:'说明来意',alt:true,onClick(){
+      openNpcDialog('江枕雪','她沉默片刻，想起虚空裂隙中你曾伸出的手，终于轻轻点头。\n\n“这次，我助你先破天将。剑印归属，等它倒下后再说。”',[{text:'收下神髓丹',alt:true,onClick(){giveMaskedHeroineDivineMarrow()}}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+    }}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+  }}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+  return openNpcDialog('江枕雪','飞升台前，江枕雪披着粉衣踏云而来，眼底却没有半分旧日温度。她的目光越过你，落在守门仙将与镇门剑印上。',[{text:'听她说明来意',alt:true,onClick(){
+    openNpcDialog('江枕雪','“我来此奉命击败守门仙将，夺取镇门剑印。可你们太玄宗当初在裂隙前合围于我，如今又想阻我？”\n\n她抬手，霜云自飞升台尽头压来：“旧账未清，剑印也不会让给你。”',[{text:'迎战江枕雪',alt:true,onClick(){openBattle(maskedHeroineTarget(6),9)}},{text:'暂不交锋',ghost:true}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+  }}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+}
+function startMaskedHeroineSixthArrival(){
+  openNpcDialog('江枕雪','飞升台的云阶尽头，一抹粉衣正与天门剑印遥遥相望。江枕雪似乎已在此等候多时。',[{text:'先与江枕雪交谈',alt:true,onClick(){talkMaskedHeroineSixth()}}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+}
+function giveMaskedHeroineDivineMarrow(){
+  let quest=maskedHeroineQuest();
+  if(quest.sixthResolved)return showNpcResult('江枕雪','她留下的神髓丹已经融入你的修行，飞升台上的约定仍未到尽头。','good');
+  if(!addBagItem(divineMarrowPill(2)))return toast('背包已满，无法收下神髓丹');
+  quest.sixthResolved=true;quest.gateGeneralAlly=true;pushLocalLog('江枕雪在飞升台交付神髓丹×2，并约定联手对付守门仙将。');syncMaskedHeroineQuest();
+  openNpcDialog('江枕雪','她将两枚神髓丹交到你手中。\n\n“守门仙将的剑势交给我牵制。你调息后去取剑印，别让我等太久。”\n\n获得：神髓丹 ×2\n使用效果：每枚修为 +600亿。',[{text:'收好丹药',alt:true}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+}
+async function resolveMaskedHeroineSixthLoss(battle){
+  if(!battle||battleState!==battle||battle._maskedHeroineSixthResolved)return;
+  battle._maskedHeroineSixthResolved=true;let quest=maskedHeroineQuest();quest.sixthResolved=true;
+  battle.player.hp=Math.max(1,Math.floor(battle.player.maxHp*.08));g.hp=battle.player.hp;g.mana=battle.player.mp;
+  closeBattle(false);pushLocalLog('飞升台一战不敌江枕雪。她留你一命后离开了飞升台。');syncMaskedHeroineQuest();
+  openNpcDialog('江枕雪','冰封千里的寒潮在你身前止住。江枕雪收回掌势，眸中仍有未散的怒意。\n\n“我不取你性命，不代表旧账已经揭过。镇门剑印，凭本事再争。”\n\n她踏入云海深处，离开了飞升台。',[{text:'目送她离开',alt:true}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+}
+function resolveMaskedHeroineSixthMercy(battle){
+  if(!battle||battleState!==battle||battle._maskedHeroineSixthResolved)return;
+  battle._maskedHeroineSixthResolved=true;let quest=maskedHeroineQuest();quest.sixthResolved=true;
+  closeBattle(false);pushLocalLog('飞升台一战胜过江枕雪。你没有追击，她带伤离开。');syncMaskedHeroineQuest();
+  openNpcDialog('江枕雪','霜云散去，江枕雪半跪在飞升台上，静候你的最后一击。\n\n你却收起了兵刃。她怔了怔，低声道：“这次是我输了……也记下你这一份留情。”\n\n她转身离开飞升台。',[{text:'让她离开',alt:true}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+}
+async function resolveMaskedHeroineSeventhLoss(battle){
+  if(!battle||battleState!==battle||battle._maskedHeroineSeventhResolved)return;
+  battle._maskedHeroineSeventhResolved=true;let quest=maskedHeroineQuest();quest.tianmoFinaleResolved=true;quest.tianmoFinaleOutcome='departed';
+  battle.player.hp=Math.max(1,Math.floor(battle.player.maxHp*.08));g.hp=battle.player.hp;g.mana=battle.player.mp;
+  closeBattle(false);pushLocalLog('天魔宗深处不敌江枕雪。她留你一命后离开了宗门深处。');syncMaskedHeroineQuest();
+  openNpcDialog('江枕雪','冰封千里的霜浪停在你身前。江枕雪望了一眼仍端坐高台的无极天尊，终究没有取你性命。\n\n“我恨太玄宗，却不愿替他再添一笔血债。今日到此为止。”\n\n她转身没入天魔殿后的黑雾。',[{text:'看着她离开',alt:true}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+}
+function resolveMaskedHeroineSeventhMercy(battle){
+  if(!battle||battleState!==battle||battle._maskedHeroineSeventhResolved)return;
+  battle._maskedHeroineSeventhResolved=true;let quest=maskedHeroineQuest();quest.tianmoFinaleResolved=true;quest.tianmoFinaleOutcome='departed';
+  closeBattle(false);pushLocalLog('天魔宗深处击败江枕雪。你没有追击，她带伤离开。');syncMaskedHeroineQuest();
+  openNpcDialog('江枕雪','霜雾散尽，江枕雪以剑支地。你没有补上最后一击，她沉默许久，才低声道：\n\n“也许我恨错了人，也许只是恨得太久。”\n\n她带着伤势离开天魔宗深处。',[{text:'让她离开',alt:true}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
 }
 function syncMaskedHeroineQuest(){
   renderSceneMap();render();save();
@@ -9798,6 +9940,41 @@ function ensureMaskedHeroineStyles(){
     @keyframes maskedHeroineFlee{0%{transform:translate3d(0,0,0) scale(1);opacity:1}35%{transform:translate3d(18px,-12px,0) scale(.97);opacity:.96}100%{transform:translate3d(160px,-62px,0) scale(.7);opacity:0}}
     @media(max-width:650px){@keyframes maskedHeroineFlee{0%{transform:translate3d(0,0,0) scale(1);opacity:1}35%{transform:translate3d(10px,-8px,0) scale(.97);opacity:.96}100%{transform:translate3d(92px,-42px,0) scale(.72);opacity:0}}}
   `;document.head.appendChild(style);
+}
+function ensureMaskedHeroineIceStyles(){
+  if($('#maskedHeroineIceStyles'))return;
+  let style=document.createElement('style');style.id='maskedHeroineIceStyles';style.textContent=`
+    .fighter-figure.enemy.heroine-ice-cast{animation:heroineIceCast .72s cubic-bezier(.22,.82,.25,1) both!important;z-index:8}
+    .fighter-figure.player.heroine-ice-hit{filter:brightness(1.22) saturate(.62) drop-shadow(0 0 13px #c6f4ff)!important}
+    .heroine-ice-wave{position:absolute;inset:31% 9% 10%;overflow:hidden;pointer-events:none;z-index:7}
+    .heroine-ice-wave:before{content:'';position:absolute;right:-8%;top:35%;width:78%;height:30%;border-radius:50%;background:radial-gradient(ellipse at 80% 50%,#efffff 0 4%,#9feaffcc 13%,#3a9fd66b 35%,transparent 70%);filter:blur(2px);transform:scaleX(.15);transform-origin:right;animation:heroineIceWave .68s cubic-bezier(.16,.75,.22,1) both}
+    .heroine-ice-shard{position:absolute;right:13%;top:var(--y);width:var(--w);height:10px;border-radius:100% 0 100% 0;background:linear-gradient(90deg,transparent,#dffcff 42%,#77cdf6);box-shadow:0 0 11px #8be1ff;transform:rotate(var(--r)) scaleX(.1);transform-origin:right;animation:heroineIceShard .64s cubic-bezier(.15,.78,.2,1) var(--d) both}
+    @keyframes heroineIceCast{0%{transform:translate3d(0,0,0) scale(1)}28%{transform:translate3d(-10px,8px) scale(.96);filter:brightness(1.5) drop-shadow(0 0 7px #9deaff)}68%{transform:translate3d(-58px,-4px) scale(1.08);filter:brightness(1.18) drop-shadow(0 0 16px #bdf6ff)}100%{transform:translate3d(0,0,0) scale(1)}}
+    @keyframes heroineIceWave{0%{opacity:0;transform:scaleX(.12)}24%{opacity:1}100%{opacity:0;transform:scaleX(1.8)}}
+    @keyframes heroineIceShard{0%{opacity:0;transform:rotate(var(--r)) scaleX(.08)}16%{opacity:1}76%{opacity:1}100%{opacity:0;transform:translateX(-130%) rotate(var(--r)) scaleX(1.2)}}
+    @media(max-width:650px){.heroine-ice-wave{inset:37% 5% 9%}.fighter-figure.enemy.heroine-ice-cast{animation-name:heroineIceCastMobile}@keyframes heroineIceCastMobile{0%{transform:translate3d(0,0,0) scale(1)}28%{transform:translate3d(-5px,5px) scale(.97);filter:brightness(1.45) drop-shadow(0 0 6px #9deaff)}68%{transform:translate3d(-27px,-2px) scale(1.04);filter:brightness(1.16) drop-shadow(0 0 12px #bdf6ff)}100%{transform:translate3d(0,0,0) scale(1)}}}
+  `;document.head.appendChild(style);
+}
+async function playMaskedHeroineIceAnimation(){
+  let arena=document.querySelector('.battle-arena'),enemy=battleFigure('enemy'),player=battleFigure('player');
+  if(!arena)return;
+  ensureMaskedHeroineIceStyles();arena.querySelector('.heroine-ice-wave')?.remove();
+  let wave=document.createElement('div');wave.className='heroine-ice-wave';
+  [[22,56,-14,0],[35,72,11,45],[48,52,-7,95],[61,78,16,125],[70,58,-18,155],[28,46,13,185],[55,66,-10,220]].forEach(([y,w,r,d])=>{let shard=document.createElement('i');shard.className='heroine-ice-shard';shard.style.setProperty('--y',y+'%');shard.style.setProperty('--w',w+'px');shard.style.setProperty('--r',r+'deg');shard.style.setProperty('--d',d+'ms');wave.appendChild(shard)});
+  arena.appendChild(wave);enemy?.classList.remove('heroine-ice-cast');player?.classList.remove('heroine-ice-hit');void wave.offsetWidth;enemy?.classList.add('heroine-ice-cast');player?.classList.add('heroine-ice-hit');await waitBattle(720);wave.remove();enemy?.classList.remove('heroine-ice-cast');player?.classList.remove('heroine-ice-hit');
+}
+async function resolveMaskedHeroineFifthLoss(battle){
+  if(!battle||battleState!==battle||battle._maskedHeroineFifthResolved)return;
+  battle._maskedHeroineFifthResolved=true;let quest=maskedHeroineQuest();quest.fifthResolved=true;
+  battle.player.hp=Math.max(1,Math.floor(battle.player.maxHp*.08));g.hp=battle.player.hp;g.mana=battle.player.mp;
+  closeBattle(false);pushLocalLog('仙魔裂谷一战不敌江枕雪。她没有取你性命，独自离开了裂谷。');syncMaskedHeroineQuest();
+  openNpcDialog('江枕雪','霜华在你身前停住。她沉默片刻，终究收回了杀意。\n\n“这一击，算还你我之间的旧账。下次再见，我未必还会手下留情。”\n\n她转身离开仙魔裂谷，只留下渐散的寒意。',[{text:'目送她离开',alt:true}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+}
+function resolveMaskedHeroineFifthMercy(battle){
+  if(!battle||battleState!==battle||battle._maskedHeroineFifthResolved)return;
+  battle._maskedHeroineFifthResolved=true;let quest=maskedHeroineQuest();quest.fifthResolved=true;
+  closeBattle(false);pushLocalLog('仙魔裂谷一战胜过江枕雪。你没有追击，她带伤离开。');syncMaskedHeroineQuest();
+  openNpcDialog('江枕雪','冰晶碎落在裂谷石阶上。江枕雪半跪在地，等来的却不是最后一击。\n\n你收回了兵刃。她望着你，神色复杂：“你和他们……终究不一样。”\n\n她撑起身子，带着伤势离开了仙魔裂谷。',[{text:'让她离开',alt:true}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
 }
 async function resolveMaskedHeroineEscape(battle){
   if(!battle||battleState!==battle||battle._maskedHeroineResolving)return;
@@ -9827,6 +10004,26 @@ function resolveMaskedHeroineUnmask(battle){
   syncMaskedHeroineQuest();
   openNpcDialog('面具碎裂的黑袍人','你斩碎她的面具，露出一张苍白却倔强的脸。她半跪在矿脉火光中，低声道：\n\n“技不如人。要杀便杀。”\n\n你正要开口，数道黑影已自矿洞上方落下，将她护在中央。为首者留下一句“此事未完”，众人便裹挟着她遁入地火深处。',[{text:'记住这张脸',alt:true}],'assets/npc-portraits/masked-heroine-cracked-dialog.png');
 }
+async function resolveMaskedHeroineThirdEscape(battle){
+  if(!battle||battleState!==battle||battle._maskedHeroineThirdResolving)return;
+  battle._maskedHeroineThirdResolving=true;battleBusy=true;setBattleControlsDisabled(true);ensureMaskedHeroineStyles();
+  battle.enemy.hp=Math.max(1,battle.enemy.hp||1);
+  let attacks=Math.max(0,2-(battle._maskedHeroineAttacks||0));
+  battleLog('蒙面黑袍人捏碎缚妖符，想以强攻逼退你后遁走。');renderBattle();
+  for(let n=0;n<attacks;n++){
+    await waitBattle(180);await playNormalAttackAnimation('enemy');
+    if(battleState!==battle)return;
+    let st=statTotal(),damage=Math.max(1,Math.floor(battle.enemy.attack+Math.random()*battle.enemy.attack*.35-st.defense*.65)),result=absorbBattleDamage(battle,damage);
+    g.hp=battle.player.hp;battleFx('player',result.hpDamage?`-${result.hpDamage}`:'盾挡',result.hpDamage===0);
+    battleLog(`蒙面黑袍人强行突围，造成${result.hpDamage||0}点生命伤害${result.blocked?`，护盾抵消${result.blocked}点`:''}。`);renderBattle();
+    if(battle.player.hp<=0){battleBusy=false;setBattleControlsDisabled(false);return}
+  }
+  await heroineEscapeAnimation();
+  if(battleState!==battle)return;
+  let quest=maskedHeroineQuest();quest.thirdEscaped=true;
+  closeBattle(false);pushLocalLog('妖王旗台一战后，蒙面黑袍人带着缚妖符遁走。');syncMaskedHeroineQuest();
+  openNpcDialog('蒙面黑袍人','她借妖旗余焰震开尘土，身影飞快没入荒原。\n\n“你总会为今日的多管闲事付出代价。”',[{text:'继续追查',alt:true}],'assets/npc-portraits/masked-heroine-dialog.png');
+}
 const localNpcsBeforeMaskedHeroine=localNpcs;
 localNpcs=function(i,spot){
   let npcs=localNpcsBeforeMaskedHeroine(i,spot),heroine=maskedHeroineNpc(i,spot);
@@ -9842,7 +10039,7 @@ localMeet=function(idx=0){
 const npcQuestIconBeforeMaskedHeroine=npcQuestIcon;
 npcQuestIcon=function(name,mapIndex,spot){
   let heroine=maskedHeroineNpc(mapIndex,spot);
-  if(heroine&&name==='蒙面黑袍人')return '⚔️';
+  if(heroine&&['蒙面黑袍人','受伤黑袍人','江枕雪'].includes(name))return heroine.maskedHeroineStage===4?'❗':'⚔️';
   return npcQuestIconBeforeMaskedHeroine(name,mapIndex,spot);
 };
 const finishBattleWinBeforeMaskedHeroine=finishBattleWin;
@@ -9862,6 +10059,122 @@ const battlePlayerTurnBeforeMaskedHeroine=battlePlayerTurn;
 battlePlayerTurn=async function(skillIdx=null){
   if(battleState?._maskedHeroineResolving)return;
   return battlePlayerTurnBeforeMaskedHeroine.apply(this,arguments);
+};
+
+const finishBattleWinBeforeMaskedHeroineLater=finishBattleWin;
+finishBattleWin=function(){
+  let battle=battleState,target=battle?.target;
+  if(target?.maskedHeroineStage===3)return resolveMaskedHeroineThirdEscape(battle);
+  return finishBattleWinBeforeMaskedHeroineLater.apply(this,arguments);
+};
+const battleEnemyTurnBeforeMaskedHeroineLater=battleEnemyTurn;
+battleEnemyTurn=async function(){
+  let battle=battleState,result=await battleEnemyTurnBeforeMaskedHeroineLater.apply(this,arguments);
+  if(battle&&battleState===battle&&battle.target?.maskedHeroineStage===3){
+    battle._maskedHeroineAttacks=(battle._maskedHeroineAttacks||0)+1;
+    if(battle._maskedHeroineAttacks>=2)await resolveMaskedHeroineThirdEscape(battle);
+  }
+  return result;
+};
+const battlePlayerTurnBeforeMaskedHeroineLater=battlePlayerTurn;
+battlePlayerTurn=async function(skillIdx=null){
+  if(battleState?._maskedHeroineThirdResolving)return;
+  return battlePlayerTurnBeforeMaskedHeroineLater.apply(this,arguments);
+};
+const finishBattleWinBeforeMaskedHeroineFifth=finishBattleWin;
+finishBattleWin=function(){
+  let battle=battleState,target=battle?.target;
+  if(target?.maskedHeroineStage===5)return resolveMaskedHeroineFifthMercy(battle);
+  if(target?.maskedHeroineStage===6)return resolveMaskedHeroineSixthMercy(battle);
+  if(target?.maskedHeroineStage===7)return resolveMaskedHeroineSeventhMercy(battle);
+  return finishBattleWinBeforeMaskedHeroineFifth.apply(this,arguments);
+};
+const battleEnemyTurnBeforeMaskedHeroineFifth=battleEnemyTurn;
+battleEnemyTurn=async function(){
+  let battle=battleState;
+  let stage=battle?.target?.maskedHeroineStage;
+  if(stage!==5&&stage!==6&&stage!==7)return battleEnemyTurnBeforeMaskedHeroineFifth.apply(this,arguments);
+  if((battle.enemy.skipTurns||0)>0){battle.enemy.skipTurns--;battleLog('江枕雪被封住灵息，本回合无法行动。');return}
+  let useIce=(battle.enemy.mp||0)>=20000;
+  if(useIce){
+    battle.enemy.mp-=20000;battleLog('江枕雪施展「冰封千里」，消耗20000点法力。');await playMaskedHeroineIceAnimation();
+  }else await playNormalAttackAnimation('enemy');
+  if(battleState!==battle)return;
+  let st=statTotal(),raw=useIce?battle.enemy.attack*3:battle.enemy.attack,dmg=Math.max(1,Math.floor(raw+Math.random()*battle.enemy.attack*.2-st.defense*.65)),result=absorbBattleDamage(battle,dmg);
+  g.hp=battle.player.hp;g.mana=battle.player.mp;battleFx('player',result.hpDamage?`-${fmt(result.hpDamage)}`:'盾挡',result.hpDamage===0);
+  battleLog(useIce?`冰封千里降下寒潮，造成${fmt(result.hpDamage||0)}点生命伤害${result.blocked?`，护盾吸收${fmt(result.blocked)}点`:''}。`:`江枕雪以冰刃反击，造成${fmt(result.hpDamage||0)}点生命伤害${result.blocked?`，护盾吸收${fmt(result.blocked)}点`:''}。`);
+  renderBattle();if(battle.player.hp<=0)await(stage===7?resolveMaskedHeroineSeventhLoss:stage===6?resolveMaskedHeroineSixthLoss:resolveMaskedHeroineFifthLoss)(battle);
+};
+function maybeTriggerMaskedHeroineArrival(){
+  if(!$('#sceneMapModal')?.classList.contains('show'))return;
+  let i=g.selectedScene??g.map,spot=activeSpot(),quest=maskedHeroineQuest(),stage=0;
+  if(i===4&&spot===6&&quest.secondDefeated&&!quest.thirdEscaped&&!quest.thirdArrivalShown)stage=3;
+  if(i===6&&spot===23&&quest.thirdEscaped&&!quest.fourthResolved&&!quest.fourthArrivalShown)stage=4;
+  if(i===7&&spot===23&&quest.fourthResolved&&!quest.fifthResolved&&!quest.fifthArrivalShown)stage=5;
+  if(i===9&&spot===32&&quest.fifthResolved&&!quest.sixthResolved&&!quest.sixthArrivalShown)stage=6;
+  if(!stage)return;
+  quest[stage===3?'thirdArrivalShown':stage===4?'fourthArrivalShown':stage===5?'fifthArrivalShown':'sixthArrivalShown']=true;save();
+  setTimeout(()=>{
+    if(!$('#sceneMapModal')?.classList.contains('show'))return;
+    let nowMap=g.selectedScene??g.map;
+    if(nowMap===i&&activeSpot()===spot)(stage===3?startMaskedHeroineThirdArrival:stage===4?startMaskedHeroineFourthArrival:stage===5?startMaskedHeroineFifthArrival:startMaskedHeroineSixthArrival)();
+  },120);
+}
+const renderSceneMapBeforeMaskedHeroineArrival=renderSceneMap;
+renderSceneMap=function(){let out=renderSceneMapBeforeMaskedHeroineArrival.apply(this,arguments);maybeTriggerMaskedHeroineArrival();return out};
+
+const useBagItemWithDivineMarrowPill=useBagItem;
+useBagItem=function(){
+  let idx=g.bagSelected,item=g.bag?.[idx];
+  if(item?.name!=='神髓丹')return useBagItemWithDivineMarrowPill.apply(this,arguments);
+  let gain=item.cultGain||60000000000;
+  g.cult+=gain;removeBagQty(idx,1);processRealmProgress();
+  pushLocalLog(`服用神髓丹，修为 +${fmt(gain)}。`);
+  toast(`服用神髓丹，修为 +${fmt(gain)}`);
+  render();renderBag();renderSceneMap();save();
+};
+
+function tianmoFinaleSpot(i,spot){return i===11&&spot===routeCoords(11).length-1&&(g.mainQuestStage||0)>=26}
+function tianmoFinaleHeroineEntry(){
+  let quest=maskedHeroineQuest();
+  if(quest.tianmoFinaleOutcome==='selfSacrifice')return{name:'江枕雪的尸体',desc:'粉衣染血，江枕雪的尸身静静留在天魔殿前。',tianmoFinaleHeroineCorpse:true};
+  if(quest.tianmoFinaleResolved)return null;
+  return{name:'江枕雪',desc:'天魔宗少主江枕雪立于宗主高台之前，神色复杂。',tianmoFinaleHeroine:true};
+}
+function talkTianmoFinaleHeroine(){
+  let quest=maskedHeroineQuest(),saved=(quest.fourthOutcome||'save')==='save';
+  if(saved)return openNpcDialog('江枕雪','无极天尊尚未开口，江枕雪已先一步拦在高台前。她望着你，声音很轻：\n\n“我知道你为何而来。可有些真相，未必能让人好受。”',[{text:'请宗主说明真相',alt:true,onClick(){talkTianmoSectMasterFinale(tianmoCultivatorInfo(routeCoords(11).length-1))}},{text:'暂不追问',ghost:true}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+  return openNpcDialog('江枕雪','江枕雪立在高台阴影下，目光比殿外的魔雾更冷。\n\n“太玄宗当年在虚空裂隙前围杀我，如今你又为他们走到这里。父亲会告诉你，什么才是他们不愿承认的真相。”',[{text:'请宗主说明真相',alt:true,onClick(){talkTianmoSectMasterFinale(tianmoCultivatorInfo(routeCoords(11).length-1))}},{text:'暂不交谈',ghost:true}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+}
+function resolveTianmoFinaleHeroineSacrifice(){
+  let quest=maskedHeroineQuest();quest.tianmoFinaleResolved=true;quest.tianmoFinaleOutcome='selfSacrifice';
+  pushLocalLog('江枕雪在天魔殿前留下遗言，自刎而亡。');syncMaskedHeroineQuest();
+  openNpcDialog('江枕雪','江枕雪望向高台上的无极天尊，又低头看了看自己手中的剑。\n\n“父亲的债，原不该由你来替我清算；可我也再没有资格替他辩解。若有来世，我想站在没有血月的地方。”\n\n她留下这句遗言，横剑自刎。粉衣缓缓倒在天魔殿前，只余一片寂静。',[{text:'面对无极天尊',alt:true,onClick(){talkTianmoSectMasterFinale(tianmoCultivatorInfo(routeCoords(11).length-1))}}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+}
+function talkTianmoSectMasterFinale(info){
+  let quest=maskedHeroineQuest(),saved=(quest.fourthOutcome||'save')==='save';
+  if(quest.tianmoFinaleResolved)return openNpcDialog('无极天尊','无极天尊俯视着殿前的残局，神色没有半分动摇。\n\n“血月阵核仍在我手。你若要替父报仇、替宗门断根，就用你的剑来取。”',[{text:'迎战无极天尊',alt:true,onClick(){openBattle(tianmoBattleTarget(info),11)}},{text:'暂不交锋',ghost:true}],tianmoPortraitFor(info));
+  openNpcDialog('无极天尊','无极天尊端坐高台，终于承认：\n\n“不错，血月大阵由我与玄月使共同布下。玄月使需要祭钥，我需要借巡天令打开天门。你父亲看穿了我们的布置，毁去祭钥根基，也死在大阵反噬之中。”\n\n“可笑的是，玄月使先死，太玄宗的宗主却还被阵眼拖住。如今你带着剑印闯进来，正好替我补上最后一环。”',[{text:'我要为父亲报仇',alt:true,onClick(){
+    quest.tianmoMasterConfessed=true;syncMaskedHeroineQuest();
+    if(saved)return openNpcDialog('江枕雪','听见“报仇”二字，江枕雪的指尖微微发白。她看向父亲，又看向你，许久没有开口。',[{text:'等她回答',alt:true,onClick(){resolveTianmoFinaleHeroineSacrifice()}}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+    openNpcDialog('江枕雪','江枕雪冷冷望着你：\n\n“你们太玄宗总把自己说成受害者，却从不承认自己曾怎样围杀、怎样裁决旁人的命。今日这份恨，我会亲手还给你。”',[{text:'迎战江枕雪',alt:true,onClick(){openBattle(maskedHeroineTarget(7),11)}},{text:'暂不交锋',ghost:true}],'assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+  }},{text:'暂且离开',ghost:true}],tianmoPortraitFor(info));
+}
+const localNpcsBeforeTianmoFinale=localNpcs;
+localNpcs=function(i,spot){
+  let list=localNpcsBeforeTianmoFinale(i,spot);
+  if(!tianmoFinaleSpot(i,spot))return list;
+  let heroine=tianmoFinaleHeroineEntry(),masterIndex=list.findIndex(npc=>npc?.tianmoInfo?.title==='宗主');
+  if(heroine)list.splice(masterIndex<0?0:masterIndex,0,heroine);
+  return list;
+};
+const localMeetBeforeTianmoFinale=localMeet;
+localMeet=function(idx=0){
+  let i=g.selectedScene??g.map,spot=activeSpot(),npc=localNpcs(i,spot)[idx];
+  if(tianmoFinaleSpot(i,spot)&&npc?.tianmoFinaleHeroine)return talkTianmoFinaleHeroine();
+  if(tianmoFinaleSpot(i,spot)&&npc?.tianmoFinaleHeroineCorpse)return showNpcResult('江枕雪的尸体','粉衣已经被殿前的夜风吹凉。她留下的最后一句话，仍像一根刺留在你心里。','good','assets/npc-portraits/jiang-zhenxue-true-dialog.png');
+  if(tianmoFinaleSpot(i,spot)&&npc?.tianmoInfo?.title==='宗主')return talkTianmoSectMasterFinale(npc.tianmoInfo);
+  return localMeetBeforeTianmoFinale(idx);
 };
 
 function bindUi(){
