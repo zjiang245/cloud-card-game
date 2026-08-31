@@ -188,10 +188,7 @@
   background-position:center;
   background-repeat:no-repeat;
   background-size:cover;
-  background-image:var(--map-background-desktop,none)!important;
-}
-@media(max-width:760px){
-  .local-map.has-art{background-image:var(--map-background-mobile,none)!important}
+  background-image:var(--map-background-active,none)!important;
 }
 .local-map.has-art:before{
   background:linear-gradient(180deg,#10201824,transparent 28%,transparent 72%,#10201830);
@@ -1762,6 +1759,7 @@ renderLocalMapOverview=(i,spot)=>{
 function renderSectRingConnection(i){
   let links=localMapRingLinks(i);
   let world=$('#localMapWorld'),coords=routeCoords(i);if(!world)return;
+  world.querySelectorAll('.sect-ring-line').forEach(line=>line.remove());
   links.forEach(([from,to])=>{let a=coords[from],b=coords[to];if(!a||!b)return;let aspect=world.clientWidth?world.clientHeight/world.clientWidth:1,dx=b[0]-a[0],dy=(b[1]-a[1])*aspect,line=document.createElement('div');line.className='path-line sect-ring-line';line.style.left=a[0]+'%';line.style.top=a[1]+'%';line.style.width=Math.hypot(dx,dy)+'%';line.style.transform=`rotate(${Math.atan2(dy,dx)*180/Math.PI}deg)`;world.insertBefore(line,world.firstChild);});
 }
 function mapViewState(){return g.mapView||(g.mapView={})}
@@ -1949,17 +1947,52 @@ function moveLocalSpot(i,nextSpot){
   }
   finishLocalMove(i,nextSpot);
 }
-function renderSceneMap(){let modal=$('#sceneMapModal');if(!modal||!modal.classList.contains('show'))return;renderSkillHud();let i=g.selectedScene??g.map,s=mapScenes[i],m=maps[i],coords=routeCoords(i),spot=activeSpot(),canvas=$('#localMapCanvas'),world=$('#localMapWorld');$('#localMapName').textContent=s[1];$('#localMapDesc').textContent=mapHeaderDescs[i]||s[2];let background=localMapBackgrounds[i];canvas.className='local-map '+(subMapClasses[i]||'forest')+(background?' has-art':'');canvas.style.backgroundImage=background?`url("${background}")`:'';world.querySelectorAll('.local-spot,.path-line,.map-deco').forEach(x=>x.remove());let decos=mapDecos(i,s).filter(d=>d[3]!=='sign');decos.forEach(d=>{let el=document.createElement('div');el.className='map-deco '+d[3];el.style.left=d[1]+'%';el.style.top=d[2]+'%';el.textContent=d[3]==='sign'?s[1]:d[0];world.appendChild(el)});let prev=null,currentSegment=Math.min(spot+1,coords.length-1),worldAspect=world.clientWidth?world.clientHeight/world.clientWidth:1;coords.forEach((c,idx)=>{if(prev){let dx=c[0]-prev[0],dy=(c[1]-prev[1])*worldAspect,len=Math.hypot(dx,dy),ang=Math.atan2(dy,dx)*180/Math.PI,line=document.createElement('div');line.className='path-line'+(idx===currentSegment?' path-current':'');line.style.left=prev[0]+'%';line.style.top=prev[1]+'%';line.style.width=len+'%';line.style.transform=`rotate(${ang}deg)`;world.appendChild(line)}prev=c});coords.forEach((c,idx)=>{let named=spotIsNamed(i,idx),transfer=!!sceneTransferAt(i,idx),b=document.createElement('button');let dir=named?labelDir(idx):'';b.className=`local-spot numbered ${named?'named '+dir+' ':''}${transfer?'transfer ':''}${idx===spot?'active':''}`;b.style.setProperty('--x',c[0]+'%');b.style.setProperty('--y',c[1]+'%');b.dataset.spot=idx;b.innerHTML=`<i>${spotIcon(i,idx)}</i><b>${spotLabel(i,idx)}</b>`;world.appendChild(b)});let hc=coords[spot],hero=$('#localHero');world.appendChild(hero);hero.style.setProperty('--x',hc[0]+'%');hero.style.setProperty('--y',hc[1]+'%');panWorld(world,hc);let localInfo=$('#localMapInfo');if(localInfo)localInfo.innerHTML=rows({'位置信息':`${s[1]} · ${spotLabel(i,spot)}`,'推荐境界':i===10?'宗门弟子皆可入内':sceneReqText(i)});let npcs=localNpcs(i,spot),mobs=localMobs(i,spot);$('#localNpcList').innerHTML=npcs.length?npcs.map((x,idx)=>{let npcName=x.name||x[0];return`<button data-local-npc="${idx}"><span>${npcName}</span><b>${npcQuestIcon(npcName,i,spot)}</b></button>`}).join(''):'<div class="scene-tip">此编号路点暂无NPC，请前往带汉字的关键地点。</div>';$('#localMobList').innerHTML=mobs.length?mobs.map((x,idx)=>{let info=x.permanentCorpse?'永不复活':x.dead?`复活${Math.ceil(x.reviveLeft/60000)}分`:x.type==='采集'?'':localMonsterRealm(i,spot,x,idx);return`<button data-local-mob="${idx}" class="${x.dead?'dead':''}" ${x.dead?'disabled':''}><span>${x.name||x[0]}${info?' '+info:''}</span><b>${x.dead?'☠️':x.dead?'☠️':x.boss?'👑':x.type==='采集'?'🌿':'🗡️'}</b></button>`}).join(''):'<div class="scene-tip">此编号路点暂无NPC，请前往带汉字的关键地点。</div>';document.querySelectorAll('[data-local-npc]').forEach(b=>b.onclick=()=>localMeet(+b.dataset.localNpc));document.querySelectorAll('[data-local-mob]').forEach(b=>b.onclick=()=>localHunt(+b.dataset.localMob));document.querySelectorAll('[data-spot]').forEach(b=>b.onclick=()=>moveLocalSpot(i,+b.dataset.spot))}
+function localMapRenderMode(){
+  if(typeof deepSeaActive==='function'&&deepSeaActive())return'deep-sea';
+  if(typeof smallWorldActive==='function'&&smallWorldActive())return'small-world';
+  if(typeof cabinWorldActive==='function'&&cabinWorldActive())return'cabin-world';
+  return'normal';
+}
+function renderSceneMap(){
+  let modal=$('#sceneMapModal');if(!modal||!modal.classList.contains('show'))return;
+  renderSkillHud();
+  let i=g.selectedScene??g.map,s=mapScenes[i],coords=routeCoords(i),spot=activeSpot(),canvas=$('#localMapCanvas'),world=$('#localMapWorld');
+  $('#localMapName').textContent=s[1];$('#localMapDesc').textContent=mapHeaderDescs[i]||s[2];
+  let background=localMapBackgrounds[i];canvas.className='local-map '+(subMapClasses[i]||'forest')+(background?' has-art':'');
+  let mode=localMapRenderMode(),worldAspect=world.clientWidth?world.clientHeight/world.clientWidth:1;
+  let staticKey=`${i}:${coords.length}:${mode}:${Math.round(worldAspect*1000)}`;
+  let canReuseStatic=mode==='normal',rebuild=!canReuseStatic||world.dataset.staticMapKey!==staticKey;
+  let currentSegment=Math.min(spot+1,coords.length-1),hero=$('#localHero');
+  if(rebuild){
+    if(canReuseStatic)world.dataset.staticMapKey=staticKey;else delete world.dataset.staticMapKey;
+    world.querySelectorAll('.local-spot,.path-line,.map-deco').forEach(x=>x.remove());
+    let fragment=document.createDocumentFragment(),decos=mapDecos(i,s).filter(d=>d[3]!=='sign');
+    decos.forEach(d=>{let el=document.createElement('div');el.className='map-deco '+d[3];el.style.left=d[1]+'%';el.style.top=d[2]+'%';el.textContent=d[3]==='sign'?s[1]:d[0];fragment.appendChild(el)});
+    let prev=null;
+    coords.forEach((c,idx)=>{if(prev){let dx=c[0]-prev[0],dy=(c[1]-prev[1])*worldAspect,len=Math.hypot(dx,dy),ang=Math.atan2(dy,dx)*180/Math.PI,line=document.createElement('div');line.className='path-line'+(idx===currentSegment?' path-current':'');line.dataset.pathIndex=idx;line.style.left=prev[0]+'%';line.style.top=prev[1]+'%';line.style.width=len+'%';line.style.transform=`rotate(${ang}deg)`;fragment.appendChild(line)}prev=c});
+    coords.forEach((c,idx)=>{let named=spotIsNamed(i,idx),transfer=!!sceneTransferAt(i,idx),b=document.createElement('button');let dir=named?labelDir(idx):'';b.className=`local-spot numbered ${named?'named '+dir+' ':''}${transfer?'transfer ':''}${idx===spot?'active':''}`;b.style.setProperty('--x',c[0]+'%');b.style.setProperty('--y',c[1]+'%');b.dataset.spot=idx;b.innerHTML=`<i>${spotIcon(i,idx)}</i><b>${spotLabel(i,idx)}</b>`;b.onclick=()=>moveLocalSpot(i,+b.dataset.spot);fragment.appendChild(b)});
+    world.insertBefore(fragment,hero||null);
+  }else{
+    world.querySelectorAll('.path-line[data-path-index]').forEach(line=>line.classList.toggle('path-current',+line.dataset.pathIndex===currentSegment));
+    world.querySelectorAll('.local-spot[data-spot]').forEach(button=>button.classList.toggle('active',+button.dataset.spot===spot));
+  }
+  let hc=coords[spot];world.appendChild(hero);hero.style.setProperty('--x',hc[0]+'%');hero.style.setProperty('--y',hc[1]+'%');panWorld(world,hc);
+  let localInfo=$('#localMapInfo');if(localInfo)localInfo.innerHTML=rows({'位置信息':`${s[1]} · ${spotLabel(i,spot)}`,'推荐境界':i===10?'宗门弟子皆可入内':sceneReqText(i)});
+  let npcs=localNpcs(i,spot),mobs=localMobs(i,spot);
+  $('#localNpcList').innerHTML=npcs.length?npcs.map((x,idx)=>{let npcName=x.name||x[0];return`<button data-local-npc="${idx}"><span>${npcName}</span><b>${npcQuestIcon(npcName,i,spot)}</b></button>`}).join(''):'<div class="scene-tip">此编号路点暂无NPC，请前往带汉字的关键地点。</div>';
+  $('#localMobList').innerHTML=mobs.length?mobs.map((x,idx)=>{let info=x.permanentCorpse?'永不复活':x.dead?`复活${Math.ceil(x.reviveLeft/60000)}分`:x.type==='采集'?'':localMonsterRealm(i,spot,x,idx);return`<button data-local-mob="${idx}" class="${x.dead?'dead':''}" ${x.dead?'disabled':''}><span>${x.name||x[0]}${info?' '+info:''}</span><b>${x.dead?'☠️':x.boss?'👑':x.type==='采集'?'🌿':'🗡️'}</b></button>`}).join(''):'<div class="scene-tip">此编号路点暂无NPC，请前往带汉字的关键地点。</div>';
+  document.querySelectorAll('[data-local-npc]').forEach(b=>b.onclick=()=>localMeet(+b.dataset.localNpc));
+  document.querySelectorAll('[data-local-mob]').forEach(b=>b.onclick=()=>localHunt(+b.dataset.localMob));
+}
 const baseRenderSceneMap=renderSceneMap;
 function applyResponsiveLocalMapBackground(){
   const canvas=$('#localMapCanvas'),area=g.selectedScene??g.map;
   if(!canvas)return;
-  const desktop=localMapBackgrounds[area]||'',mobile=localMapMobileBackground(area);
-  const key=`${desktop}|${mobile}`;
+  const source=localMapBackgroundForDisplay(area);
+  const key=source;
   if(canvas.dataset.responsiveBackground===key)return;
   canvas.dataset.responsiveBackground=key;
-  canvas.style.setProperty('--map-background-desktop',desktop?`url("${desktop}")`:'none');
-  canvas.style.setProperty('--map-background-mobile',mobile?`url("${mobile}")`:'none');
+  canvas.style.setProperty('--map-background-active',source?`url("${source}")`:'none');
 }
 renderSceneMap=()=>{
   applyResponsiveLocalMapBackground();
@@ -1989,6 +2022,17 @@ renderSceneMap=()=>{
   renderFoundationFireballTutorial(i,spot);
   renderTribulationTutorial();
 };
+let localMapResizeTimer=0;
+window.addEventListener('resize',()=>{
+  clearTimeout(localMapResizeTimer);
+  localMapResizeTimer=setTimeout(()=>{
+    let modal=$('#sceneMapModal'),canvas=$('#localMapCanvas'),world=$('#localMapWorld');
+    if(!modal?.classList.contains('show'))return;
+    delete canvas?.dataset.responsiveBackground;
+    delete world?.dataset.staticMapKey;
+    renderSceneMap();
+  },140);
+});
 function openSceneMap(){let i=g.selectedScene??g.map;if(!sceneUnlocked(i))return toast(sceneReqText(i)+'后解锁');closeNpcDialog();g.map=i;g.localSpot=g.localSpot??0;$('#sceneMapModal').classList.add('show');pushLocalLog(`进入${mapScenes[i][1]}，区域小地图已展开。`);renderSceneMap();render();save()}
 const openSceneMapWithMapView=openSceneMap;
 openSceneMap=function(){let i=g.selectedScene??g.map;if(!$('#sceneMapModal').classList.contains('show'))resetLocalMapView(i,routeCoords(i)[activeSpot()]||[50,50]);return openSceneMapWithMapView.apply(this,arguments)};
@@ -3142,7 +3186,10 @@ function warmBattleMedia(state=battleState){
   deferMediaWork(()=>warmImageAssets(deferred));
   return warmImageAssets(primary);
 }
-function warmSceneMedia(area=g.selectedScene??g.map){return warmImageAssets([localMapBackgrounds[area],'assets/figure1/figure1.webp']);}
+function warmSceneMedia(area=g.selectedScene??g.map){
+  // Mobile uses the smaller, dedicated map background. Avoid decoding the desktop art as well.
+  return warmImageAssets([localMapBackgroundForDisplay(area),'assets/figure1/figure1.webp']);
+}
 const playHeroFramesWithPreload=playHeroFrames;
 playHeroFrames=async function(action,durations,options){void warmImageAssets(heroActionFrames[action]||[]);return playHeroFramesWithPreload(action,durations,options);};
 async function playFireballAnimation(){let ball=$('#fireballProjectile'),impact=$('#fireballImpact'),caster=document.querySelector('.fighter-figure.player'),target=document.querySelector('.fighter-figure.enemy');if(!ball||!impact)return;void warmImageAssets(heroActionFrames.fireball);void playHeroFrames('fireball',[160,230,260,230]);ball.classList.remove('cast');impact.classList.remove('burst');caster?.classList.remove('fire-cast');target?.classList.remove('fire-hit');void ball.offsetWidth;caster?.classList.add('fire-cast');ball.classList.add('cast');await waitBattle(500);impact.classList.add('burst');target?.classList.add('fire-hit');setTimeout(()=>{ball.classList.remove('cast');impact.classList.remove('burst');caster?.classList.remove('fire-cast');target?.classList.remove('fire-hit')},360)}
@@ -9329,7 +9376,7 @@ function skillSfxKind(skill){
 }
 window.addEventListener('pointerdown',()=>{if(!gameAudioUnlocked){gameAudioUnlocked=true;playCurrentBgm();deferMediaWork(primeGameAudio)}},{once:true,passive:true});
 const openSceneMapWithAudio=openSceneMap;
-openSceneMap=function(){let result=openSceneMapWithAudio();deferMediaWork(()=>warmSceneMedia());playCurrentBgm();return result};
+openSceneMap=function(){void warmSceneMedia(g.selectedScene??g.map);let result=openSceneMapWithAudio();deferMediaWork(()=>warmSceneMedia());playCurrentBgm();return result};
 const renderSceneMapWithAudio=renderSceneMap;
 renderSceneMap=function(){let result=renderSceneMapWithAudio();playCurrentBgm();return result};
 const finishLocalMoveWithAudio=finishLocalMove;
