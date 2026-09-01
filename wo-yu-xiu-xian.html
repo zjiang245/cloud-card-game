@@ -990,6 +990,10 @@ function localMapBackgroundForDisplay(area){
   const source=localMapBackgrounds[area]||'';
   return window.matchMedia&&window.matchMedia('(max-width: 760px)').matches?localMapMobileBackground(area):source;
 }
+function localMapPreviewBackground(area){
+  const source=localMapBackgroundForDisplay(area);
+  return source.includes('assets/map-backgrounds/mobile/')?source.replace('assets/map-backgrounds/mobile/','assets/map-backgrounds/preview/').replace(/\.webp$/,'.jpg'):'';
+}
 // 天魔宗需带着镇门剑印向掌教复命后，才会从魔雾中显现。
 maps.push(['天魔宗',0,2000]);
 mapScenes.push(['🕷️','天魔宗','镇门剑印映出的隐秘魔宗。只能从太玄宗22号破碎传送阵进入。','宗门声望、宗门贡献、魔道试炼',88,10]);
@@ -1084,9 +1088,9 @@ function attemptTribulation(){let info=tribulationInfo();if(!info.ready)return t
 function renderTribulationEntry(){let tabs=$('#sceneMapModal .scene-tabs');if(!tabs)return;let info=tribulationInfo(),btn=$('#openTribulationBtn');if(!btn){btn=document.createElement('button');btn.id='openTribulationBtn';btn.className='scene-tab-btn';tabs.prepend(btn)}btn.hidden=!info.eligible;btn.disabled=false;btn.textContent='渡劫';btn.title=info.ready?`当前成功率 ${info.base}%；每颗渡劫丹 +5%`:'点击查看渡劫条件与当前修为进度';btn.onclick=openTribulationModal}
 function offlineSettle(){pendingOffline=0;g.offline=null;g.last=Date.now()}
 const MEDITATION_INTERVAL_MS=5000,MEDITATION_CULT_PER_TICK=8;
-function stopMeditation(show=true){if(!meditationSession)return 0;let elapsed=Date.now()-meditationSession.started,total=Math.floor(elapsed/MEDITATION_INTERVAL_MS)*MEDITATION_CULT_PER_TICK,gain=Math.max(0,total-meditationSession.awarded);if(gain>0)g.cult+=gain;let discarded=elapsed%MEDITATION_INTERVAL_MS;meditationSession=null;g.meditating=false;if(show){pushLocalLog(`结束打坐：共获得固定修为 ${total} 点，未满5秒的 ${Math.floor(discarded/1000)} 秒已舍弃。`);toast(`打坐结束：修为 +${total}`)}render();save();return total}
+function stopMeditation(show=true){if(!meditationSession)return 0;let elapsed=Date.now()-meditationSession.started,total=Math.floor(elapsed/MEDITATION_INTERVAL_MS)*MEDITATION_CULT_PER_TICK,gain=Math.max(0,total-meditationSession.awarded);if(gain>0){g.cult+=gain;processRealmProgress()}let discarded=elapsed%MEDITATION_INTERVAL_MS;meditationSession=null;g.meditating=false;if(show){pushLocalLog(`结束打坐：共获得固定修为 ${total} 点，未满5秒的 ${Math.floor(discarded/1000)} 秒已舍弃。`);toast(`打坐结束：修为 +${total}`)}if($('#sceneMapModal')?.classList.contains('show'))renderSceneMap();render();save();return total}
 function startMeditation(){if(meditationSession)return toast('你已经在打坐');meditationSession={started:Date.now(),awarded:0};g.meditating=true;pushLocalLog('在打坐台开始吐纳：每满5秒固定增加8点修为。');toast('开始打坐：每5秒修为+8');save()}
-function meditationTick(){if(!meditationSession)return;let total=Math.floor((Date.now()-meditationSession.started)/MEDITATION_INTERVAL_MS)*MEDITATION_CULT_PER_TICK;if(total>meditationSession.awarded){let gain=total-meditationSession.awarded;meditationSession.awarded=total;g.cult+=gain;pushLocalLog(`打坐吐纳：固定修为 +${gain}（累计${total}）`);render();save()}}
+function meditationTick(){if(!meditationSession)return;let total=Math.floor((Date.now()-meditationSession.started)/MEDITATION_INTERVAL_MS)*MEDITATION_CULT_PER_TICK;if(total>meditationSession.awarded){let gain=total-meditationSession.awarded;meditationSession.awarded=total;g.cult+=gain;processRealmProgress();pushLocalLog(`打坐吐纳：固定修为 +${gain}（累计${total}）`);if($('#sceneMapModal')?.classList.contains('show'))renderSceneMap();render();save()}}
 function ensureLiquidMeditationModal(){let modal=$('#liquidMeditationModal');if(modal)return modal;modal=document.createElement('div');modal.id='liquidMeditationModal';modal.className='event-modal liquid-meditation-modal';modal.innerHTML='<div><h2>灵液池 · 自动打坐</h2><div class="event-result">灵液自经脉流转，下一次吐纳正在凝聚。</div><div class="progress"><i id="liquidMeditationProgressFill"></i></div><div class="progress-text"><span id="liquidMeditationProgressText">准备吐纳</span><b id="liquidMeditationYieldText">本次累计：修为×0</b></div><div class="actions"><button class="btn ghost" id="stopLiquidMeditationBtn">退出打坐</button></div></div>';document.body.appendChild(modal);$('#stopLiquidMeditationBtn').onclick=()=>stopLiquidMeditation();return modal}
 function renderLiquidMeditationProgress(){if(!liquidMeditationSession)return;let now=Date.now();while(now>=liquidMeditationSession.nextAt){let gain=Math.max(1,Math.floor(realmNeed()*.005));g.cult+=gain;liquidMeditationSession.yield+=gain;liquidMeditationSession.nextAt+=2000;pushLocalLog(`灵液池打坐：修为 +${fmt(gain)}（当前所需修为的0.5%，累计${fmt(liquidMeditationSession.yield)}）`);processRealmProgress();renderSceneMap();render();save()}let left=Math.max(0,liquidMeditationSession.nextAt-now),fill=$('#liquidMeditationProgressFill'),text=$('#liquidMeditationProgressText'),yieldText=$('#liquidMeditationYieldText');if(fill)fill.style.width=Math.max(0,Math.min(100,(1-left/2000)*100))+'%';if(text)text.textContent=`下一次吐纳：${(left/1000).toFixed(1)} 秒`;if(yieldText)yieldText.textContent=`本次累计：修为×${fmt(liquidMeditationSession.yield)}`}
 function startLiquidMeditation(){if(g.sectRank<2)return toast('灵液池仅对执事及以上职位开放');if(liquidMeditationSession)return true;if(meditationSession)stopMeditation(false);liquidMeditationSession={yield:0,nextAt:Date.now()+2000,timer:null};let modal=ensureLiquidMeditationModal();modal.classList.add('show');liquidMeditationSession.timer=setInterval(renderLiquidMeditationProgress,100);renderLiquidMeditationProgress();pushLocalLog('在灵液池开始自动打坐：每2秒获得当下所需修为的0.5%。');save();return true}
@@ -1988,11 +1992,16 @@ const baseRenderSceneMap=renderSceneMap;
 function applyResponsiveLocalMapBackground(){
   const canvas=$('#localMapCanvas'),area=g.selectedScene??g.map;
   if(!canvas)return;
-  const source=localMapBackgroundForDisplay(area);
-  const key=source;
+  const source=localMapBackgroundForDisplay(area),preview=localMapPreviewBackground(area);
+  const key=`${source}|${preview}`;
   if(canvas.dataset.responsiveBackground===key)return;
   canvas.dataset.responsiveBackground=key;
-  canvas.style.setProperty('--map-background-active',source?`url("${source}")`:'none');
+  canvas.style.setProperty('--map-background-active',(preview||source)?`url("${preview||source}")`:'none');
+  if(preview&&source){
+    warmImageAsset(source).then(()=>{
+      if(canvas.dataset.responsiveBackground===key)canvas.style.setProperty('--map-background-active',`url("${source}")`);
+    });
+  }
 }
 renderSceneMap=()=>{
   applyResponsiveLocalMapBackground();
@@ -2418,7 +2427,7 @@ function takePillByName(name,key,qty){
   return true;
 }
 const disciplineQuestDefs={
-  shiyan:{name:'惩戒石砚',target:'器童 石砚',reward:150,reputation:50,contribution:200,icon:'⚒️',stats:{realm:'练气初期',hp:200,mp:20,attack:75,defense:2,icon:'⚒️',portrait:'assets/npc-portraits/battle-shiyan.png'}},
+  shiyan:{name:'惩戒石砚',target:'器童 石砚',reward:150,reputation:50,contribution:200,icon:'⚒️',stats:{realm:'练气大圆满',hp:200,mp:20,attack:75,defense:2,icon:'⚒️',portrait:'assets/npc-portraits/battle-shiyan.png'}},
   niuwu:{name:'惩戒牛五',target:'泼皮 牛五',reward:400,reputation:100,contribution:400,icon:'👊',stats:{realm:'筑基中期',hp:1000,mp:20,attack:150,defense:2,icon:'👊',portrait:'assets/npc-portraits/battle-niuwu.png'}}
 };
 function disciplineQuest(id){
