@@ -623,9 +623,10 @@
 /* Boss portraits replace the emoji only in boss battles. */
 .fighter-figure .boss-portrait{display:grid;height:100%;place-items:end center;width:100%}
 .fighter-figure .boss-portrait img{display:block;height:286px;max-width:290px;object-fit:contain;object-position:center bottom;filter:drop-shadow(0 18px 14px #0009)}
+.fighter-figure .boss-portrait.heroine-battle-portrait img{height:250px;max-width:245px}
 .fighter-figure .boss-portrait.enemy-face-player img{transform:scaleX(-1)}
 .fighter-figure .monster.enemy-face-player{transform:scaleX(-1)}
-@media(max-width:650px){.fighter-figure .boss-portrait img{height:175px;max-width:165px}}
+@media(max-width:650px){.fighter-figure .boss-portrait img{height:175px;max-width:165px}.fighter-figure .boss-portrait.heroine-battle-portrait img{height:170px;max-width:150px}}
 .npc-dialog-portrait.tianmo-facing-left{transform:scaleX(-1)}
 .npc-list button.tianmo-elder-npc span{color:#b22b33;font-weight:800}
 .fighter-name em.realm-badge.tianmo-elder-realm{color:#fff!important;background:#111!important;border-color:#111!important;box-shadow:0 2px 9px #000b}
@@ -667,10 +668,11 @@
 @media(max-width:650px){.ink-map{min-height:560px;width:100%;margin-inline:auto;background-size:100% 100%;background-position:center}.map-node i{width:46px;height:46px;font-size:22px}.map-node span{font-size:10px;padding:3px 6px}.map-enter-pop.map-enter-pop-above{transform:translate(-50%,-100px)}}
 
 /* Battle realm badges and unavailable skill states. */
-.fighter-name em.realm-badge{display:inline-flex;align-items:center;justify-content:center;min-width:72px;padding:5px 10px;border:2px solid currentColor;border-radius:6px;font-style:normal;font-size:12px;font-weight:900;line-height:1;letter-spacing:0;-webkit-text-stroke:.35px #07170f99;paint-order:stroke fill;text-shadow:0 1px 0 #000b,0 -1px 0 #ffffff2e;box-shadow:0 2px 9px #0009}
+.fighter-name em.realm-badge{display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;min-width:72px;padding:5px 10px;border:2px solid currentColor;border-radius:6px;font-style:normal;font-size:12px;font-weight:900;line-height:1;letter-spacing:0;white-space:nowrap;-webkit-text-stroke:.35px #07170f99;paint-order:stroke fill;text-shadow:0 1px 0 #000b,0 -1px 0 #ffffff2e;box-shadow:0 2px 9px #0009}
 .fighter-name em.realm-badge.realm-tier-0{color:#efffe5;background:#326e49;border-color:#9ee58f}.fighter-name em.realm-badge.realm-tier-1{color:#dcffff;background:#097d8d;border-color:#68e3e6}.fighter-name em.realm-badge.realm-tier-2{color:#edf6ff;background:#245fa7;border-color:#8cc9ff}.fighter-name em.realm-badge.realm-tier-3{color:#f5eaff;background:#7143aa;border-color:#d5a4ff}.fighter-name em.realm-badge.realm-tier-4{color:#fff0e8;background:#ad3e3c;border-color:#ff9a85}.fighter-name em.realm-badge.realm-tier-5{color:#fff3ca;background:#a45c19;border-color:#ffd66a}.fighter-name em.realm-badge.realm-tier-6{color:#e5f7ff;background:#2e718f;border-color:#8ed7f5}.fighter-name em.realm-badge.realm-tier-7{color:#efffd9;background:#55783a;border-color:#b9e575}.fighter-name em.realm-badge.realm-tier-8{color:#fff0bf;background:#8b6220;border-color:#ffd261}.fighter-name em.realm-badge.realm-tier-9{color:#ffe4f2;background:#a13970;border-color:#ff9ecd}.fighter-name em.realm-badge.realm-true-immortal{color:#fff!important;background:#080a0d!important;border-color:#fff!important;box-shadow:0 2px 9px #000c,inset 0 0 0 1px #ffffff22;-webkit-text-stroke:.35px #000!important;text-shadow:0 1px 1px #000!important}
 #localRealmLabel,.cultivation-hud>span,.map-player-status-card .map-floating-title>span{font-weight:800;-webkit-text-stroke:.3px #07170f88;paint-order:stroke fill;text-shadow:0 1px 0 #07170faa,0 -1px 0 #ffffff80}
 .battle-skill:disabled{background:#2e3940!important;border-color:#566169!important;color:#9aa3a8!important;filter:grayscale(1);opacity:.55;box-shadow:none;cursor:not-allowed}.battle-skill:disabled small{color:#838e94!important}
+@media(max-width:650px){.fighter-name{gap:4px;min-width:0;white-space:nowrap}.fighter-name>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.fighter-name em.realm-badge{min-width:0;padding:3px 5px;border-width:1px;font-size:8px;line-height:1.05;-webkit-text-stroke:.2px #07170f99;box-shadow:0 1px 5px #0009}}
 
 /* Apprenticeship shields are battle-only protection and absorb damage before HP. */
 .battle-bar.shield{border-color:#49545d;background:#182126}.battle-bar.shield:before{content:"盾";color:#eef2f4}.battle-bar.shield i{background:linear-gradient(90deg,#65727a,#c0c9ce)}.battle-bar.shield>b{color:#f1f4f5;text-shadow:0 1px 2px #000}
@@ -1007,7 +1009,7 @@ sceneReqText=function(i){if(i===11)return tianmoUnlocked()?'已开启 · 请从�
 const renderHomeMapBeforeTianmo=renderHomeMap;
 renderHomeMap=function(){if(!tianmoUnlocked()&&g?.selectedScene===11)g.selectedScene=10;renderHomeMapBeforeTianmo();if(!tianmoUnlocked())document.querySelector('#homeMap [data-scene="11"]')?.remove()};
 const goSceneBeforeTianmo=goScene;
-goScene=function(){return goSceneBeforeTianmo()};
+goScene=function(...args){return goSceneBeforeTianmo(...args)};
 let g;try{g=Object.assign(fresh(),JSON.parse(localStorage.getItem(KEY)||'null')||{})}catch(e){g=fresh()}let pendingOffline=0,tickCount=0,battleState=null,meditationSession=null,miningSession=null,liquidMeditationSession=null,simpleMode=localStorage.getItem('xiuSimpleMode')!=='0';const openingPrologueTitle=$('#prologueModal .prologue-title').textContent,openingPrologueScroll=$('#prologueModal .prologue-scroll').innerHTML;g.selectedScene=g.selectedScene??g.map??0;
 g.sect='太玄宗';
 // 路点 02 现为灵液池；不具执事职位的旧存档回到宗门广场。
@@ -3252,7 +3254,7 @@ function tickBattleCooldowns(b){
 function renderBattle(){let b=battleState;if(!b)return;let t=b.target;$('#battleTitle').textContent=(t.boss?'Boss战：':'战斗：')+t.name;$('#battleRoundText').textContent='第'+b.round+'回合';$('#battlePlayerName').textContent='你';setBattleRealmBadge('#battlePlayerLevel',realmText(),g.realm);$('#battleEnemyName').textContent=t.name;setBattleRealmBadge('#battleEnemyLevel',b.enemy.realm,battleRealmIndex(b.enemy.realm));$('#battleEnemyFigure').textContent=b.enemy.icon;$('#battlePlayerHp').style.width=battlePct(b.player.hp,b.player.maxHp);$('#battlePlayerMp').style.width=battlePct(b.player.mp,b.player.maxMp);let shield=Math.max(0,b.player.shield||0),shieldPeak=Math.max(1,b.player.shieldPeak||b.player.maxHp||1);$('#battlePlayerShield').style.width=battlePct(shield,shieldPeak);$('#battlePlayerHpText').textContent=`生命 ${fmt(b.player.hp)}/${fmt(b.player.maxHp)}`;$('#battlePlayerMpText').textContent=`法力 ${fmt(b.player.mp)}/${fmt(b.player.maxMp)}`;$('#battlePlayerShieldText').textContent=`护盾 ${fmt(shield)}`;$('#battleEnemyHp').style.width=battlePct(b.enemy.hp,b.enemy.maxHp);$('#battleEnemyMp').style.width=battlePct(b.enemy.mp,b.enemy.maxMp);$('#battleEnemyHpText').textContent=`生命 ${fmt(b.enemy.hp)}/${fmt(b.enemy.maxHp)}`;$('#battleEnemyMpText').textContent=`法力 ${fmt(b.enemy.mp)}/${fmt(b.enemy.maxMp)}`;ensureSkillLayout();let skills=g.activeSkills||[],bar=$('#battleSkillBar'),skillKey=`${b.uiToken}|`+Array.from({length:5},(_,i)=>{let sk=skills[i],cost=sk?battleSkillCost(sk,i):0,reason=sk?battleSkillBlockReason(sk,i,b):'技能未激活';return`${sk?.name||''}:${cost}:${reason}`}).join('|');if(bar.dataset.skillKey!==skillKey){bar.innerHTML=Array.from({length:5},(_,i)=>{let sk=skills[i],cost=sk?battleSkillCost(sk,i):0,reason=sk?battleSkillBlockReason(sk,i,b):'技能未激活',disabled=!sk||!!reason;return`<button class="battle-skill" data-battle-skill="${i}" ${disabled?'disabled':''}><b>${sk?(sk.icon||'✨')+' '+sk.name:'空'}</b><small>${sk?`耗蓝${cost}${reason?' · '+reason:''} · ${sk.desc||'主动技'}`:'技能书激活'}</small></button>`}).join('');document.querySelectorAll('[data-battle-skill]').forEach(btn=>btn.onclick=()=>battlePlayerTurn(+btn.dataset.battleSkill));bar.dataset.skillKey=skillKey}let log=$('#battleLog'),logKey=b.log.join('\n');if(log.dataset.logKey!==logKey){log.innerHTML=b.log.map(x=>`<div>${x}</div>`).join('');log.dataset.logKey=logKey}}
 const ENEMY_PORTRAITS_TO_MIRROR=new Set(['迷雾蝶','月狐','山魈','山魈王','青竹妖','暗蛟龙','虾兵','战魂','煞灵','断剑鬼','遗迹守卫','裂隙怪','虚空影','残碑灵','魔修残魂','云兽','雷灵','雷劫真君','天兵残影','守门仙将','江枕雪','太上长老']);
 function enemyPortraitFacesPlayer(target){return ENEMY_PORTRAITS_TO_MIRROR.has(String(target?.wanderingMonster?.sourceName||target?.originalName||target?.name||'').replace(/^BOSS\s+/,''))}
-function renderBattleEnemyPortrait(){let b=battleState,figure=$('#battleEnemyFigure'),portrait=optimizedBattleAsset(b?.enemy?.portrait),facePlayer=enemyPortraitFacesPlayer(b?.target);if(!figure)return;if(!portrait){figure.className=`monster${facePlayer?' enemy-face-player':''}`;figure.style.removeProperty('transform');return}figure.className=`boss-portrait${facePlayer?' enemy-face-player':''}`;figure.style.removeProperty('transform');let image=figure.querySelector('img');if(!image||image.getAttribute('src')!==portrait){image=document.createElement('img');image.src=portrait;image.decoding='async';figure.replaceChildren(image)}image.alt=b.target.name}
+function renderBattleEnemyPortrait(){let b=battleState,figure=$('#battleEnemyFigure'),portrait=optimizedBattleAsset(b?.enemy?.portrait),facePlayer=enemyPortraitFacesPlayer(b?.target),name=String(b?.target?.name||''),isHeroine=/江枕雪|黑袍人/.test(name)||/jiang-zhenxue|masked-heroine/.test(String(portrait||''));if(!figure)return;if(!portrait){figure.className=`monster${facePlayer?' enemy-face-player':''}`;figure.style.removeProperty('transform');return}figure.className=`boss-portrait${facePlayer?' enemy-face-player':''}${isHeroine?' heroine-battle-portrait':''}`;figure.style.removeProperty('transform');let image=figure.querySelector('img');if(!image||image.getAttribute('src')!==portrait){image=document.createElement('img');image.src=portrait;image.decoding='async';figure.replaceChildren(image)}image.alt=b.target.name}
 const baseRenderBattle=renderBattle;
 renderBattle=function(){baseRenderBattle();renderBattleEnemyPortrait()};
 function isHaoFireballSkill(skill){let name=String(skill?.name||'');return !!skill&&(skill.haoFireball===true||/豪火球/.test(name)||Number(skill.bigFireballLevel)>=10)}
@@ -4499,8 +4501,15 @@ function renderHomeMap(){
     enter.className='map-enter-pop'+(s[5]>=80?' map-enter-pop-above':'');
     enter.style.setProperty('--x',s[4]+'%');
     enter.style.setProperty('--y',s[5]+'%');
+    // Keep the destination on the button itself. This prevents a stale selectedScene
+    // value from sending the player back to a previously selected area.
     enter.textContent='进入';
-    enter.onclick=goScene;
+    enter.dataset.sceneEntry=String(g.selectedScene);
+    enter.onclick=()=>{
+      let scene=Number(enter.dataset.sceneEntry);
+      if(Number.isInteger(scene))g.selectedScene=scene;
+      goScene(scene);
+    };
     mapEl.appendChild(enter);
   }
   document.querySelectorAll('[data-scene]').forEach(b=>b.onclick=()=>{
@@ -4510,7 +4519,7 @@ function renderHomeMap(){
     renderHomeMap();
   });
 }
-function goScene(){let i=g.selectedScene??0;if(!sceneUnlocked(i))return toast(sceneReqText(i)+'后解锁');g.map=i;log('御风前往：'+maps[i][0]+'，展开区域小地图','good');toast('进入：'+maps[i][0]);openSceneMap()}
+function goScene(sceneIndex){let requested=Number(sceneIndex),i=Number.isInteger(requested)?requested:(g.selectedScene??0);g.selectedScene=i;if(!sceneUnlocked(i))return toast(sceneReqText(i)+'后解锁');g.map=i;log('御风前往：'+maps[i][0]+'，展开区域小地图','good');toast('进入：'+maps[i][0]);openSceneMap()}
 function gearRows(){
 let st=statTotal(),b=st.bonus;
 return rows({
@@ -5155,10 +5164,10 @@ moveLocalSpot=function(i,nextSpot){
   if(xiaoYanHuntActive()&&!battleState&&(g.selectedScene??g.map)!==10)resumeXiaoYanHunt();
 };
 const goSceneWithXiaoYan=goScene;
-goScene=function(){
+goScene=function(...args){
   if(xiaoYanBlocksMovement()&&(g.selectedScene??g.map)!==g.map){toast('萧焱已拦住去路，无法更换区域。');return;}
   if(xiaoYanHuntActive()&&(g.selectedScene??g.map)===10){toast('萧焱仍在追杀，太玄宗山门暂不接纳避战之人。');return;}
-  goSceneWithXiaoYan();
+  goSceneWithXiaoYan(...args);
   if(xiaoYanHuntActive())resumeXiaoYanHunt(360);
 };
 const openSceneMapWithXiaoYan=openSceneMap;
@@ -5243,7 +5252,7 @@ finishBattleWin=function(){let target=battleState?.target;if(!target?.deepSeaBos
 const handleBattleDeathWithDeepSea=handleBattleDeath;
 handleBattleDeath=function(name){if(battleState?.target?.deepSeaBoss||battleState?.target?.deepSeaPuppet){clearDeepSeaPursuit();g.deepSea={...deepSeaState(),active:false,phase:'roaming'};pushLocalLog('深海秘境中不敌强敌，裂隙将你抛回太玄宗。')}return handleBattleDeathWithDeepSea(name)};
 const goSceneWithDeepSea=goScene;
-goScene=function(){if(deepSeaActive()&&(g.selectedScene??g.map)!==3)return toast('深海秘境中无法更换区域，请回到1号位通过传送门离开');return goSceneWithDeepSea()};
+goScene=function(...args){if(deepSeaActive()&&(g.selectedScene??g.map)!==3)return toast('深海秘境中无法更换区域，请回到1号位通过传送门离开');return goSceneWithDeepSea(...args)};
 function syncDeepSeaPuppetRunLock(){let button=$('#battleRunBtn'),locked=!!battleState?.target?.deepSeaPuppet;if(!button)return;button.disabled=locked||battleBusy;button.title=locked?'秘境傀儡战中无法逃跑':'逃跑'}
 const setBattleControlsDisabledWithDeepSeaPuppet=setBattleControlsDisabled;
 setBattleControlsDisabled=function(disabled){setBattleControlsDisabledWithDeepSeaPuppet(disabled);if(!disabled)syncDeepSeaPuppetRunLock()};
@@ -5616,7 +5625,7 @@ moveLocalSpot=function(i,nextSpot){if(smallWorldActive()&&i===6)return smallWorl
 const localExploreHereWithSmallWorld=localExploreHere;
 localExploreHere=function(){if(smallWorldActive())return toast('小世界试炼中无法开启原地探索');return localExploreHereWithSmallWorld()};
 const goSceneWithSmallWorld=goScene;
-goScene=function(){if(smallWorldActive())return toast('小世界中无法更换区域，请回到1号位通过传送门离开');return goSceneWithSmallWorld()};
+goScene=function(...args){if(smallWorldActive())return toast('小世界中无法更换区域，请回到1号位通过传送门离开');return goSceneWithSmallWorld(...args)};
 const renderLocalMapOverviewWithSmallWorld=renderLocalMapOverview;
 renderLocalMapOverview=function(i,spot){
   if(!smallWorldActive()||i!==6)return renderLocalMapOverviewWithSmallWorld(i,spot);
@@ -5699,7 +5708,7 @@ forgeSelectedEquip=function(){if(isHuangtianHelmet(g.gear?.[g.selectedEquipSlot|
 const talkTieWufengWithAllRedGrowth=talkTieWufeng;
 talkTieWufeng=function(){let bracer=normalizeEquip(g.gear?.bracer),boots=normalizeEquip(g.gear?.boots),helmet=normalizeEquip(g.gear?.helmet),options=[];if(isTianjingBracer(bracer))options.push({text:'淬炼天晶腕甲',alt:true,onClick(){openTianjingAbsorbMenu()}});if(isQuetianBoots(boots))options.push({text:'淬炼阙天靴',alt:true,onClick(){openQuetianAbsorbMenu()}});if(isHuangtianHelmet(helmet))options.push({text:'淬炼荒天盔',alt:true,onClick(){openHuangtianAbsorbMenu()}});if(!options.length)return talkTieWufengWithAllRedGrowth();options.push({text:'照常炼器',onClick(){talkTieWufengWithTianjingBracer()}},{text:'暂不处理',ghost:true});openNpcDialog('炼器长老 铁无锋','铁无锋望向你身上的赤色器纹：“这些红色装备皆非寻常矿火可强行锻炼，唯有吞纳同部位器纹，才能继续成长。”',options)};
 const goSceneWithResidualMonument=goScene;
-goScene=function(){if(residualMonumentSession)stopResidualMonumentMeditation();return goSceneWithResidualMonument()};
+goScene=function(...args){if(residualMonumentSession)stopResidualMonumentMeditation();return goSceneWithResidualMonument(...args)};
 
 // ===== 仙魔战场 · 天命台：决明子与破碎星寰 =====
 function juemingziQuest(){return g.juemingziQuest||(g.juemingziQuest={learned:false})}
@@ -5935,7 +5944,7 @@ renderBattleStatusEffects=function(){renderBattleStatusEffectsWithFireWound();le
 const finishLocalMoveWithBodyTempering=finishLocalMove;
 finishLocalMove=function(i,nextSpot){if(bodyTemperingSession&&(i!==8||nextSpot!==6))stopBodyTempering();return finishLocalMoveWithBodyTempering(i,nextSpot)};
 const goSceneWithBodyTempering=goScene;
-goScene=function(){if(bodyTemperingSession)stopBodyTempering();return goSceneWithBodyTempering()};
+goScene=function(...args){if(bodyTemperingSession)stopBodyTempering();return goSceneWithBodyTempering(...args)};
 
 // ===== 九天雷域 · 云霄栈道：木君与云霄 =====
 function cloudPathQuest(){return g.cloudPathQuest||(g.cloudPathQuest={woodLearned:false,riverLearned:false})}
@@ -6376,7 +6385,7 @@ openNpcDialog=function(title,text,buttons=[{text:'知道了'}],portraitOverride=
 // ===== 太玄宗 · 凉亭：悬赏榜 =====
 const bountyBoardDefs={
   dali:{title:'缉拿蟊贼·牛大力',target:'蟊贼 牛大力',place:'赤炎秘境·炎魔洞',reward:{cult:18000,reputation:300,contribution:500},customStats:{hp:4000,mp:1200,attack:500,defense:300,realm:'金丹后期',icon:'🗡️',portrait:'assets/monster-portraits/yanmo.png'}},
-  carp:{title:'缉拿蟊贼·鲤鱼精',target:'蟊贼 鲤鱼精',place:'东海龙宫·龙宫偏殿',reward:{cult:45000,reputation:400,contribution:1000},customStats:{hp:11000,mp:1200,attack:1500,defense:900,realm:'元婴后期',icon:'🗡️',portrait:'assets/monster-portraits/laohai-gui.png'}},
+  carp:{title:'缉拿蟊贼·鲤鱼精',target:'蟊贼 鲤鱼精',place:'东海龙宫·龙宫偏殿',reward:{cult:45000,reputation:400,contribution:1000},customStats:{hp:11000,mp:1200,attack:1500,defense:900,realm:'元婴后期',icon:'🗡️',portrait:'assets/monster-portraits/liyujing.png'}},
   wolf:{title:'清剿荒骨狼',target:'荒骨狼',place:'万妖古域',reward:{cult:300000,reputation:300,contribution:500},realm:'化神大圆满'},
   ghost:{title:'讨伐断剑鬼',target:'断剑鬼',place:'天渊战场',reward:{cult:2500000,reputation:800,contribution:1500},realm:'炼虚大圆满'}
 };
@@ -7047,13 +7056,13 @@ moveLocalSpot=function(i,nextSpot){
 const localExploreHereWithCabinWorld=localExploreHere;
 localExploreHere=function(){if(cabinWorldActive())return toast('小世界内只能手动移动与对话');return localExploreHereWithCabinWorld()};
 const goSceneWithCabinWorld=goScene;
-goScene=function(){
+goScene=function(...args){
   if(cabinWorldActive()){
     // 收起地图后再次选择幽月森林，应回到保留进度的小世界，而非阻止进入。
     g.map=1;$('#sceneMapModal')?.classList.add('show');renderSceneMap();render();save();
     return;
   }
-  return goSceneWithCabinWorld();
+  return goSceneWithCabinWorld(...args);
 };
 const renderSceneMapWithCabinWorld=renderSceneMap;
 renderSceneMap=function(){
@@ -7780,7 +7789,7 @@ finishBattleWin=function(){let target=battleState?.target;if(target?.tianmoElder
 const handleBattleDeathBeforeTianmo=handleBattleDeath;
 handleBattleDeath=function(enemyName){let target=battleState?.target;if(!target?.tianmoElder)return handleBattleDeathBeforeTianmo(enemyName);let result=handleBattleDeathBeforeTianmo(enemyName);pushLocalLog('你不敌太上长老，护阵将你送回太玄宗；太上长老仍镇守天魔宗38号路点。');save();return result};
 const goSceneBeforeTianmoExit=goScene;
-goScene=function(){return goSceneBeforeTianmoExit()};
+goScene=function(...args){return goSceneBeforeTianmoExit(...args)};
 const renderHomeMapBeforeTianmoExit=renderHomeMap;
 renderHomeMap=function(){renderHomeMapBeforeTianmoExit()};
 const moveLocalSpotBeforeTianmo=moveLocalSpot;
