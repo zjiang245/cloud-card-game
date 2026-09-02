@@ -1112,8 +1112,8 @@ function tick(){
 function rows(obj){return Object.entries(obj).map(([k,v])=>`<div class="row"><span>${k}</span><b>${v}</b></div>`).join('')}
 const equipQuality={白色装备:1,绿色装备:2,蓝色装备:3,紫色装备:4,橙色装备:5,红色装备:6},qualityClass=['','quality-white','quality-green','quality-blue','quality-purple','quality-orange','quality-red'],qualityText=['','白','绿','蓝','紫','橙','红'];
 const pillEffects={回春丹:'使用效果：恢复20点生命；木灵根额外恢复4点。',小还丹:'使用效果：下次战斗中，每回合恢复10点生命。',大还丹:'使用效果：下次战斗中，每回合恢复30点生命。',修为丹:'使用效果：分等级固定增加修为。',渡劫丹:'使用效果：在小地图“渡劫”面板中服用，每颗使本次渡劫成功率+5%。'};
-const skillBookPool=[['御剑术','⚔️','被动：攻击+8'],['灵盾诀','🛡️','被动：防御+8'],['疾风步','👟','被动：身法+5'],['回春术','❤️','被动：生命上限+30'],['聚灵诀','🔵','被动：法力上限+30'],['雷火咒','⚡','被动：暴击+3%'],['玄冰诀','❄️','被动：防御+5、法力+10'],['万木诀','🌿','被动：生命+20、炼丹更稳']];
-const lateMapPassiveSkillBookPool=[['焚天战诀','🔥','被动：攻击+36、暴击+4%'],['玄武镇体','🛡️','被动：生命上限+260、防御+26'],['踏虚身法','🌪️','被动：身法+28'],['沧海灵诀','🌊','被动：法力上限+220、防御+12'],['雷霆神识','⚡','被动：攻击+18、暴击+7%、法力上限+120']];
+const skillBookPool=[['御剑术','⚔️','被动：攻击+8'],['灵盾诀','🛡️','被动：防御+8'],['疾风步','👟','被动：身法+25'],['回春术','❤️','被动：生命上限+30'],['聚灵诀','🔵','被动：法力上限+30'],['雷火咒','⚡','被动：暴击+3%'],['玄冰诀','❄️','被动：防御+5、法力+10'],['万木诀','🌿','被动：生命+20、防御+5']];
+const lateMapPassiveSkillBookPool=[['焚天战诀','🔥','被动：攻击+36、暴击+2%'],['玄武镇体','🛡️','被动：生命上限+260、防御+26'],['踏虚身法','🌪️','被动：身法+128'],['沧海灵诀','🌊','被动：法力上限+320、防御+18'],['雷霆神识','⚡','被动：攻击+20、暴击+4%、法力上限+120']];
 const defaultActiveSkills=[{name:'火球术',icon:'🔥',kind:'active',starterFireball:true,mpCost:20,damageMultiplier:1.6,desc:'主动技：消耗20MP，本次伤害计算的基础攻击×1.6',placeholder:true}];
 const equipSlots=['weapon','armor','treasure','helmet','boots','bracer'],equipSlotNames={weapon:'法器',armor:'防具',treasure:'法宝',helmet:'头部',boots:'鞋子',bracer:'腕部'},equipSlotIcons={weapon:'⚔️',armor:'🛡️',treasure:'🔮',helmet:'🎩',boots:'👢',bracer:'🧤'};
 const equipNamePool={
@@ -4148,12 +4148,12 @@ if(name==='太上长老 苏青雪'){
   if(dragonDefeated){
     openNpcDialog('太上长老 苏青雪',`你将暗蛟逆鳞与海眼中浮起的冰魄残焰交给苏青雪。原本黯淡的命灯在她掌心亮起一线幽蓝。\n\n“是他的气息……命灯未灭，宗主果然还活着。暗蛟看守的正是沉月水府外层水脉，灯焰已指向阵眼最深处。”\n\n苏青雪郑重取出一卷冰纹玉册：“此法本是我为寻他所创。今日赠你，愿它护你走到水府尽头。”`,[
       {text:'领取《千里冰封》技能书',alt:true,onClick(){
-        let book={type:'skillbook',name:'千里冰封技能书',qty:1,max:1,sell:0,skill:{name:'千里冰封',icon:'❄️',desc:'被动：生命+1000、防御+80',kind:'passive'},desc:'太上长老苏青雪所授。学习后激活被动技能：生命+1000、防御+80。'};
+        let book={type:'skillbook',name:'千里冰封技能书',qty:1,max:1,sell:0,skill:{name:'千里冰封',icon:'❄️',desc:'被动：生命+2000、防御+150',kind:'passive'},desc:'太上长老苏青雪所授。学习后激活被动技能：生命+2000、防御+150。'};
         if(!addBagItem(book))return showNpcResult('背包已满','请先清理至少一个背包格，再来领取《千里冰封》技能书。','danger');
         g.suQingxueQuestDone=true;g.suQingxueQuest.done=true;
         log('完成太上长老任务“寒灯寻主”，获得千里冰封技能书。','good');
         pushLocalLog('【太上长老任务】冰魄命灯重新燃起，确认失踪宗主仍在人世。');
-        showNpcResult('寒灯寻主·完成',`冰魄命灯重新燃起，确认失踪宗主仍被困在沉月水府深处。\n\n获得：被动技能书《千里冰封》\n学习效果：生命 +1000，防御 +80\n\n技能书已放入背包，请在“道具”中使用。`,'good');
+        showNpcResult('寒灯寻主·完成',`冰魄命灯重新燃起，确认失踪宗主仍被困在沉月水府深处。\n\n获得：被动技能书《千里冰封》\n学习效果：生命 +2000，防御 +150\n\n技能书已放入背包，请在“道具”中使用。`,'good');
         renderTaskPanel();renderSceneMap();render();save();
       }},
       {text:'稍后领取',ghost:true}
@@ -4177,7 +4177,7 @@ if(name==='太上长老 苏青雪'){
       g.suQingxueQuest={active:true,done:false,stage:'turtle',jadeGiven:false,dragonSummoned:false,dragonDefeated:false};
       log('接取太上长老任务：寒灯寻主。','good');
       pushLocalLog('【太上长老任务】前往东海龙宫·龟丞相府，向双面龟丞相查探海眼中的暗蛟龙。');
-      showNpcResult('寒灯寻主',`任务目标：前往东海龙宫·龟丞相府，与双面龟丞相交谈。\n任务线索：海眼暗蛟龙遮蔽了冰魄命灯的去向。\n完成海眼之战后，返回掌教内殿向苏青雪复命。\n\n奖励：被动技能书《千里冰封》\n效果：生命+1000，防御+80。`,'good');
+      showNpcResult('寒灯寻主',`任务目标：前往东海龙宫·龟丞相府，与双面龟丞相交谈。\n任务线索：海眼暗蛟龙遮蔽了冰魄命灯的去向。\n完成海眼之战后，返回掌教内殿向苏青雪复命。\n\n奖励：被动技能书《千里冰封》\n效果：生命+2000，防御+150。`,'good');
       renderTaskPanel();renderSceneMap();render();save();
     }},
     {text:'容我准备',ghost:true}
@@ -5324,7 +5324,7 @@ function talkAncientBattleSoul(){let artifacts=artifactState(),blue=equipmentQua
   {text:'献祭材料，唤醒东皇钟',alt:true,onClick(){if(equipmentQualityCount(3)<10)return toast('蓝色品质装备不足10件');if(equipmentQualityCount(4)<2)return toast('紫色品质装备不足2件');if(Math.max(g.herbs||0,bagItemCountByName('药材'))<500)return toast('药材不足500份');if((g.materials||0)<500)return toast('锻造材料不足500份');if(!takeEquipmentByQuality(3,10)||!takeEquipmentByQuality(4,2)||!takeHerbResource(500)||!takeForgeMaterials(500))return toast('祭品扣除失败，请重新检查背包');artifacts.donghuangBell={...donghuangBellArtifact(),obtainedAt:Date.now()};pushLocalLog('远古战魂收下祭品，东皇钟在战魂台上苏醒。');showNpcResult('东皇钟','残魂散入钟纹，苍茫钟声在天渊战场上回荡。\n\n获得特殊神器：东皇钟\n效果：技能法力消耗减少30%，生命上限 +3000。\n\n可在“装备”功能的四大神器栏查看。','good');renderSceneMap();render();save()}},
   {text:'暂不献祭',ghost:true}
 ])}
-function talkWoundedFox(){let artifacts=artifactState(),have=bagItemCountByName('妖花粉');if(artifacts.fuxiQin)return showNpcResult('受伤的妖狐','妖狐伏在旗台阴影里，伤口已然愈合。它轻拨伏羲琴弦，向你低低一揖。\n\n伏羲琴已收录于“装备”中的四大神器栏。','good');openNpcDialog('受伤的妖狐',`妖王旗台下，一只白狐被蒙面妖女刺穿了前爪。它望着你背包中的妖花粉，轻声请求：\n\n“十五份妖花粉可解我体内的妖毒。若你愿意相赠，我以祖传的伏羲琴相报。”\n\n当前持有妖花粉：${have} / 15`,[
+function talkWoundedFox(){let artifacts=artifactState(),have=bagItemCountByName('妖花粉');if(artifacts.fuxiQin)return showNpcResult('受伤的妖狐','妖狐伏在旗台阴影里，伤口已然愈合。它轻拨伏羲琴弦，向你低低一揖。\n\n伏羲琴已收录于“装备”中的四大神器栏。','good');openNpcDialog('受伤的妖狐',`妖王旗台下，一只白狐被妖女刺穿了前爪。它望着你背包中的妖花粉，轻声请求：\n\n“十五份妖花粉可解我体内的妖毒。若你愿意相赠，我以祖传的伏羲琴相报。”\n\n当前持有妖花粉：${have} / 15`,[
   {text:'交付妖花粉×15',alt:true,onClick(){if(bagItemCountByName('妖花粉')<15)return toast('妖花粉不足15份');if(!takeBagItemsByName('妖花粉',15))return toast('妖花粉扣除失败');artifacts.fuxiQin={...fuxiQinArtifact(),obtainedAt:Date.now()};pushLocalLog('你以妖花粉救下受伤的妖狐，获得特殊神器「伏羲琴」。');showNpcResult('伏羲琴','白狐衔来一张古琴，琴弦微颤，心神随之澄明。\n\n获得特殊神器：伏羲琴\n效果：每次战斗胜利后，回复自身生命与法力上限的20%。\n\n可在“装备”功能的四大神器栏查看。','good');renderSceneMap();render();save()}},
   {text:'暂不相助',ghost:true}
 ])}
@@ -7827,7 +7827,7 @@ useBagItem=function(){let item=normalizeEquip(g.bag?.[g.bagSelected]);if(item?.q
 const equipBagItemByIndexWithRedRealmGate=equipBagItemByIndex;
 equipBagItemByIndex=function(index){let item=normalizeEquip(g.bag?.[index]);if(item?.quality===6&&realmIndex()<realmNameIndex('合体初期'))return toast('红色品质装备需达到合体初期后才能佩戴');return equipBagItemByIndexWithRedRealmGate(index)};
 const talkWoundedFoxWithPoisonSacs=talkWoundedFox;
-talkWoundedFox=function(){let artifacts=artifactState(),havePowder=bagItemCountByName('妖花粉'),haveSacs=bagItemCountByName('毒囊');if(artifacts.fuxiQin)return showNpcResult('受伤的妖狐','妖狐伏在旗台阴影里，伤口已然愈合。它轻拨伏羲琴弦，向你低低一揖。\n\n伏羲琴已收录于“装备”中的四大神器栏。','good');openNpcDialog('受伤的妖狐',`妖王旗台下，一只白狐被妖藤刺穿了前爪。它望着你背包中的妖花粉与毒囊，轻声请求：\n\n“十五份妖花粉，再加十五枚毒囊，便可解我体内的妖毒。若你愿意相赠，我以祖传的伏羲琴相报。”\n\n当前持有：妖花粉 ${havePowder} / 15 · 毒囊 ${haveSacs} / 15`,[{text:'交付妖花粉×15、毒囊×15',alt:true,onClick(){if(bagItemCountByName('妖花粉')<15)return toast('妖花粉不足15份');if(bagItemCountByName('毒囊')<15)return toast('毒囊不足15枚');if(!takeBagItemsByName('妖花粉',15)||!takeBagItemsByName('毒囊',15))return toast('任务材料扣除失败');artifacts.fuxiQin={...fuxiQinArtifact(),obtainedAt:Date.now()};pushLocalLog('你以妖花粉与毒囊救下受伤的妖狐，获得特殊神器「伏羲琴」。');showNpcResult('伏羲琴','白狐衔来一张古琴，琴弦微颤，心神随之澄明。\n\n获得特殊神器：伏羲琴\n效果：每次战斗胜利后，回复自身生命与法力上限的20%。\n\n可在“装备”功能的四大神器栏查看。','good');renderSceneMap();render();save()}},{text:'暂不相助',ghost:true}])};
+talkWoundedFox=function(){let artifacts=artifactState(),havePowder=bagItemCountByName('妖花粉'),haveSacs=bagItemCountByName('毒囊');if(artifacts.fuxiQin)return showNpcResult('受伤的妖狐','妖狐伏在旗台阴影里，伤口已然愈合。它轻拨伏羲琴弦，向你低低一揖。\n\n伏羲琴已收录于“装备”中的四大神器栏。','good');openNpcDialog('受伤的妖狐',`妖王旗台下，一只白狐被妖女刺穿了前爪。它望着你背包中的妖花粉与毒囊，轻声请求：\n\n“十五份妖花粉，再加十五枚毒囊，便可解我体内的妖毒。若你愿意相赠，我以祖传的伏羲琴相报。”\n\n当前持有：妖花粉 ${havePowder} / 15 · 毒囊 ${haveSacs} / 15`,[{text:'交付妖花粉×15、毒囊×15',alt:true,onClick(){if(bagItemCountByName('妖花粉')<15)return toast('妖花粉不足15份');if(bagItemCountByName('毒囊')<15)return toast('毒囊不足15枚');if(!takeBagItemsByName('妖花粉',15)||!takeBagItemsByName('毒囊',15))return toast('任务材料扣除失败');artifacts.fuxiQin={...fuxiQinArtifact(),obtainedAt:Date.now()};pushLocalLog('你以妖花粉与毒囊救下受伤的妖狐，获得特殊神器「伏羲琴」。');showNpcResult('伏羲琴','白狐衔来一张古琴，琴弦微颤，心神随之澄明。\n\n获得特殊神器：伏羲琴\n效果：每次战斗胜利后，回复自身生命与法力上限的20%。\n\n可在“装备”功能的四大神器栏查看。','good');renderSceneMap();render();save()}},{text:'暂不相助',ghost:true}])};
 const openNpcDialogWithRedRealmText=openNpcDialog;
 openNpcDialog=function(title,text,buttons,portraitOverride){if(typeof text==='string'&&/红色品质|佩戴门槛/.test(text))text=text.replaceAll('合体中期','合体初期');return openNpcDialogWithRedRealmText(title,text,buttons,portraitOverride)};
 // ===== 原地探索自动处置与红色装备一键淬炼 =====
