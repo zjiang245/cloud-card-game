@@ -559,7 +559,7 @@
 .battle-bar i{border-radius:999px;box-shadow:inset 0 1px 0 #fff7,0 0 12px currentColor;transition:width .38s cubic-bezier(.2,.8,.2,1)}
 .battle-bar.hp i{background:linear-gradient(90deg,#b92e35,#ff665c 60%,#ff9b78)}.battle-bar.mp i{background:linear-gradient(90deg,#1663b8,#31a7eb 60%,#76dbff)}
 .fighter-figure{top:132px;height:245px;z-index:2}.fighter-figure.player{left:35px}.fighter-figure.enemy{right:35px}
-.fighter-figure img{max-height:250px;max-width:245px;filter:drop-shadow(0 18px 14px #0009);transition:transform .2s}.fighter-figure .monster{font-size:142px;filter:drop-shadow(0 18px 12px #0009);text-shadow:0 0 22px #e04e4533}
+.fighter-figure img{max-height:250px;max-width:245px;filter:drop-shadow(0 18px 14px #0009);transition:transform .2s}#battlePlayerFigure{transform:scale(1.17);transform-origin:center bottom}.fighter-figure .monster{font-size:142px;filter:drop-shadow(0 18px 12px #0009);text-shadow:0 0 22px #e04e4533}
 .battle-fx{top:126px;font-size:42px;color:#ff594d;text-shadow:0 3px #360b08,0 0 18px #ffcc65,0 0 4px #fff}
 .battle-skills{left:22px;right:22px;bottom:18px;gap:10px}
 .battle-skill{position:relative;min-height:72px;padding:9px 10px;border:1px solid #8ec6d666;border-radius:12px;background:linear-gradient(180deg,#294755,#172a34);color:#effbff;box-shadow:0 7px 16px #0005,0 1px 0 #ffffff18 inset;cursor:pointer;transition:transform .15s,border-color .15s,filter .15s;overflow:hidden}
@@ -1324,7 +1324,28 @@ function refreshMasterSkillDescriptions(){
 }
 // Master skills are stored in localStorage, so rebuild their text from the current source on every load.
 refreshMasterSkillDescriptions();
-function learnSkillBook(it){ensureSkillLayout();let sk=normalizeSkill(it.skill||{name:(it.name||'无名神通').replace('技能书',''),icon:'✨',desc:'被动技'},'passive');if(g.passiveSkills.some(x=>x.name===sk.name))return toast('你已经学会此被动技能');if(g.passiveSkills.length<5){g.passiveSkills.push(sk);toast(`学会被动技：${sk.name}`);log(`学习技能书，激活被动技能框：${sk.name}`,'good');return true}let list=g.passiveSkills.map((x,i)=>`${i+1}.${x.name}`).join('\n'),pick=prompt(`被动技能框已满，请输入要舍弃的技能序号：\n${list}`);let idx=Math.floor(+pick)-1;if(idx<0||idx>=5)return toast('已取消学习'),false;let old=g.passiveSkills[idx];g.skillReserve=g.skillReserve||[];g.skillReserve.push(old);g.passiveSkills[idx]=sk;toast(`卸下${old.name}，学会${sk.name}`);log(`被动技能替换：${old.name} → ${sk.name}`,'good');return true}
+function learnSkillBook(it){
+  ensureSkillLayout();
+  let source=it?.skill||{name:(it?.name||'无名神通').replace('技能书',''),icon:'✨',desc:'被动技'};
+  let kind=source.kind||skillKind(source),sk=normalizeSkill(source,kind),active=kind==='active';
+  let equipped=active?g.activeSkills:g.passiveSkills,label=active?'主动技':'被动技';
+  if(equipped.some(x=>x.name===sk.name))return toast(`你已经学会此${label}`);
+  if(equipped.length<5){
+    equipped.push(sk);
+    toast(`学会${label}：${sk.name}`);
+    log(`学习技能书，激活${active?'主动':'被动'}技能框：${sk.name}`,'good');
+    return true;
+  }
+  let list=equipped.map((x,i)=>`${i+1}.${x.name}`).join('\n'),pick=prompt(`${active?'主动':'被动'}技能框已满，请输入要舍弃的技能序号：\n${list}`),idx=Math.floor(+pick)-1;
+  if(idx<0||idx>=5)return toast('已取消学习'),false;
+  let old=equipped[idx];
+  g.skillReserve=g.skillReserve||[];
+  g.skillReserve.push(old);
+  equipped[idx]=sk;
+  toast(`卸下${old.name}，学会${sk.name}`);
+  log(`${active?'主动':'被动'}技能替换：${old.name} → ${sk.name}`,'good');
+  return true;
+}
 function removeBagQty(idx,qty=1){let it=g.bag[idx];if(!it)return;if((it.qty||1)>qty)it.qty-=qty;else g.bag.splice(idx,1);g.bagSelected=Math.min(g.bagSelected,g.bag.length-1);syncBagPage()}
 function bagPages(){return Math.max(1,Math.ceil((g.bagCap||20)/16))}
 function syncBagPage(){let pages=bagPages();g.bagPage=Math.max(0,Math.min(g.bagPage||0,pages-1));if(g.bagSelected>=0){g.bagPage=Math.floor(g.bagSelected/16);if(g.bagPage>=pages)g.bagPage=pages-1}}
@@ -9184,6 +9205,56 @@ resolveLocalTarget=function(target,batch=false){
 // ===== 太玄宗宝库 · 大微天龙 =====
 function makeGreatDragonSkill(){return{name:'大微天龙',icon:'🐉',kind:'active',greatDragon:true,desc:'主动技：消耗当前生命50%，获得消耗值50%的护盾；无视防御，对敌造成等同护盾值的伤害。'}}
 function greatDragonBook(){return{type:'skillbook',name:'大微天龙',qty:1,max:1,icon:'🐉',sell:0,skill:makeGreatDragonSkill(),desc:'宝库书籍：使用后学会主动技「大微天龙」。施放时生命减半，获得减半数值一半的护盾，并无视防御造成同等伤害。'}}
+const GREAT_DRAGON_VFX_ASSET='assets/skill-effects/great-dragon.webp';
+function ensureGreatDragonAnimationStyles(){
+  if($('#greatDragonAnimationStyle'))return;
+  let style=document.createElement('style');
+  style.id='greatDragonAnimationStyle';
+  style.textContent=`
+    .great-dragon-vfx{position:absolute;inset:0;z-index:12;overflow:hidden;pointer-events:none}
+    .great-dragon-vfx .great-dragon-trail{position:absolute;left:7%;top:var(--lane);width:180px;height:128px;opacity:0;transform:translate3d(-130px,-50%,0) scale(var(--scale));transform-origin:center;animation:greatDragonRush 900ms cubic-bezier(.19,.78,.22,1) var(--delay) forwards}
+    .great-dragon-vfx .great-dragon-trail img{display:block;width:100%;height:100%;object-fit:contain;mix-blend-mode:screen;filter:drop-shadow(0 0 7px #7eeaff) drop-shadow(0 0 18px #3678ff);transform:scaleX(-1) rotate(var(--tilt))}
+    .great-dragon-vfx .great-dragon-impact{position:absolute;left:76%;top:50%;width:24px;height:24px;border-radius:50%;opacity:0;transform:translate(-50%,-50%) scale(.2);background:radial-gradient(circle,#fff 0 7%,#beffff 17%,#4aaeff 38%,#3944d9aa 56%,transparent 74%);box-shadow:0 0 24px #77e9ff,0 0 58px #3a58ff;animation:greatDragonImpact 620ms ease-out 650ms forwards}
+    .fighter-figure.player.great-dragon-cast{animation:greatDragonCaster 620ms cubic-bezier(.2,.7,.2,1) forwards}
+    @keyframes greatDragonRush{0%{opacity:0;transform:translate3d(-130px,-50%,0) scale(var(--scale)) rotate(-4deg)}16%{opacity:.98}72%{opacity:1;transform:translate3d(54vw,-50%,0) scale(calc(var(--scale)*.95)) rotate(3deg)}100%{opacity:0;transform:translate3d(65vw,-50%,0) scale(calc(var(--scale)*.64))}}
+    @keyframes greatDragonImpact{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}40%{opacity:1;transform:translate(-50%,-50%) scale(5.2)}100%{opacity:0;transform:translate(-50%,-50%) scale(8.8)}}
+    @keyframes greatDragonCaster{0%,100%{transform:translateX(0) scale(1)}40%{transform:translateX(14px) scale(1.04)}}
+    @media(max-width:650px){.great-dragon-vfx .great-dragon-trail{left:1%;width:118px;height:86px}.great-dragon-vfx .great-dragon-impact{left:75%}}
+  `;
+  document.head.appendChild(style);
+}
+async function playGreatDragonAnimation(){
+  let arena=$('.battle-arena'),caster=$('.fighter-figure.player');
+  if(!arena)return;
+  ensureGreatDragonAnimationStyles();
+  void warmImageAsset(GREAT_DRAGON_VFX_ASSET);
+  arena.querySelector('.great-dragon-vfx')?.remove();
+  let effect=document.createElement('div');
+  effect.className='great-dragon-vfx';
+  [[35,0,.78,-18],[50,105,.98,0],[65,210,.82,18]].forEach(([lane,delay,scale,tilt])=>{
+    let trail=document.createElement('div'),image=new Image();
+    trail.className='great-dragon-trail';
+    trail.style.setProperty('--lane',lane+'%');
+    trail.style.setProperty('--delay',delay+'ms');
+    trail.style.setProperty('--scale',scale);
+    trail.style.setProperty('--tilt',tilt+'deg');
+    image.src=GREAT_DRAGON_VFX_ASSET;
+    image.alt='';
+    image.decoding='async';
+    trail.appendChild(image);
+    effect.appendChild(trail);
+  });
+  let impact=document.createElement('div');
+  impact.className='great-dragon-impact';
+  effect.appendChild(impact);
+  arena.appendChild(effect);
+  caster?.classList.remove('great-dragon-cast');
+  void effect.offsetWidth;
+  caster?.classList.add('great-dragon-cast');
+  await waitBattle(1120);
+  effect.remove();
+  caster?.classList.remove('great-dragon-cast');
+}
 if(!sectGoods.some(item=>item[2]==='greatDragonBook'))sectGoods.push(['🐉 大微天龙',20000,'greatDragonBook',1,30,'greatDragonBook',1]);
 if(g.equipmentSourcePowerRevision!==1){g.equipmentSourcePowerRevision=1;g.marketStock=[];g.marketHour=-1;}
 const sectGoodCategoryWithGreatDragon=sectGoodCategory;
@@ -9257,7 +9328,7 @@ battleSkillEffect=async function(skill,index=0){
   let sacrificed=Math.max(1,Math.floor(b.player.hp*.5)),value=Math.max(1,Math.floor(sacrificed*.5));
   b.player.hp=Math.max(1,b.player.hp-sacrificed);
   addBattleShield(b,value);
-  await playHeroFrames('palmStrike',[150,200,260,220],{lunge:true});
+  await playGreatDragonAnimation();
   b.enemy.hp=Math.max(0,b.enemy.hp-value);
   battleFx('player',`盾+${fmt(value)}`,true);battleFx('enemy','-'+fmt(value));
   battleLog(`你施展大微天龙，生命减少${fmt(sacrificed)}，获得${fmt(value)}点护盾；无视防御造成${fmt(value)}点伤害。`);
