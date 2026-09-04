@@ -10409,5 +10409,110 @@ on('#battleAutoBtn',battleAuto);
 on('#battleRunBtn',async()=>{if(!battleState||battleBusy)return;if(battleState.target?.deepSeaPuppet)return toast('秘境傀儡战中无法逃跑');battleBusy=true;setBattleControlsDisabled(true);let name=battleState.target.name,xiaoYan=!!battleState.target.xiaoYan;battleLog(`你转身撤离，试图摆脱${name}。`);renderBattle();await playRunAnimation();closeBattle(false);battleBusy=false;if(xiaoYan){g.xiaoYanHunt={...(g.xiaoYanHunt||{}),active:true,resolved:false,phase:'pursuit',escaped:true};pushLocalLog('【萧焱追杀】你暂时脱身，萧焱的神识却仍锁定着你。你有两秒时间决定下一步。');toast('萧焱正在追来');resumeXiaoYanHunt();save();return}pushLocalLog(`避开${name}，暂退一步。`);toast('已逃离战斗')});
 let redeem=$('#redeemInput');if(redeem)redeem.onkeydown=e=>{if(e.key==='Enter')redeemCode()};
 }
+// ===== 任务图标统一状态与即时刷新 =====
+// 语义固定：❗️ 可接/可推进，❓ 进行中，⭕️ 条件满足待提交，💬 普通对话。
+function mainQuestNpcIcon(name,mapIndex,spot){
+  if(mapIndex!==10)return null;
+  let stage=g.mainQuestStage||0,master=masterQuest?.(),atOuterHall=spot===33,atHeadmasterHall=spot===34;
+  if(atOuterHall&&['巡峰弟子','护峰道童'].includes(name)){
+    if(stage===0)return '❗️';
+    if(stage===2)return '❓';
+    if(stage===3)return '⭕️';
+    return null;
+  }
+  if(name==='外务执事 白景川'&&spot===19){
+    if(stage===1)return '❗️';
+    if(stage===2)return '❓';
+    return null;
+  }
+  if(name==='掌教 林玄一'&&atHeadmasterHall){
+    if(stage===4||stage===12)return '❗️';
+    if(stage===5)return master?.active&&!master.apprenticed&&!master.choice?'❗️':'❓';
+    if([6,8,14,16,20,24,27].includes(stage))return '⭕️';
+    if([7,13,15,17,19,21,23].includes(stage))return '❓';
+    return null;
+  }
+  if(name==='太上长老 苏青雪'&&atHeadmasterHall){
+    if(stage===9)return '❗️';
+    if(stage===10)return '❓';
+    if([11,18,22].includes(stage))return '⭕️';
+    return null;
+  }
+  if(name==='破碎的传送阵'&&spot===22){
+    if(stage===25)return '❗️';
+    if(stage===26)return '❓';
+  }
+  return null;
+}
+const localNpcsBeforeMainQuestIconFix=localNpcs;
+localNpcs=function(i,spot){
+  let list=localNpcsBeforeMainQuestIconFix(i,spot);
+  // 即使玩家已晋升，主线外殿任务仍保留可交互的巡峰弟子身份。
+  if(i===10&&spot===33&&[0,3].includes(g.mainQuestStage||0)){
+    list=list.map(npc=>{
+      let name=npc?.name||npc?.[0];
+      return name==='护峰道童'?['巡峰弟子',npc?.desc||npc?.[1]||'外殿传令']:npc;
+    });
+  }
+  return list;
+};
+const npcQuestIconBeforeUnifiedQuestStates=npcQuestIcon;
+npcQuestIcon=function(name,mapIndex,spot){
+  let mainIcon=mainQuestNpcIcon(name,mapIndex,spot);
+  if(mainIcon)return mainIcon;
+  // 已接取的材料委托统一标记为进行中，满足条件后改为待提交。
+  if(name==='火焰独角兽'){
+    let quest=flameUnicornQuest();
+    return quest.completed||!quest.active?'💬':flameUnicornReady()?'⭕️':'❓';
+  }
+  if(name==='灵剑残体'&&mapIndex===5&&spot===6){
+    let quest=spiritSwordRemnantQuest();
+    if(quest.stage===5)return '💬';
+    if(quest.stage===1)return spiritSwordOfferingReady()?'⭕️':'❓';
+    if(quest.stage===3)return '⭕️';
+    if(quest.stage===4)return (g.materials||0)>=800?'⭕️':'❓';
+    return '❗️';
+  }
+  if(name==='破碎的人工智能'&&mapIndex===6&&spot===32){
+    let quest=brokenAiQuestState();
+    if(quest.stage>=3)return '💬';
+    if(quest.stage===1)return brokenAiMaterialsReady()?'⭕️':'❓';
+    if(quest.stage===2)return brokenAiBookCandidates().length?'⭕️':'❓';
+    return '❗️';
+  }
+  return npcQuestIconBeforeUnifiedQuestStates(name,mapIndex,spot);
+};
+let questVisualRefreshPending=false,questVisualRefreshRunning=false;
+function refreshQuestVisuals(){
+  if(questVisualRefreshPending)return;
+  questVisualRefreshPending=true;
+  requestAnimationFrame(()=>{
+    questVisualRefreshPending=false;
+    if(questVisualRefreshRunning)return;
+    questVisualRefreshRunning=true;
+    try{
+      syncMainQuestProgress();
+      renderTaskPanel();
+      if($('#sceneMapModal')?.classList.contains('show'))renderSceneMap();
+    }finally{questVisualRefreshRunning=false}
+  });
+}
+const advanceMainQuestBeforeQuestVisualRefresh=advanceMainQuest;
+advanceMainQuest=function(...args){
+  let advanced=advanceMainQuestBeforeQuestVisualRefresh.apply(this,args);
+  if(advanced)refreshQuestVisuals();
+  return advanced;
+};
+const syncMainQuestProgressBeforeQuestVisualRefresh=syncMainQuestProgress;
+syncMainQuestProgress=function(){
+  let before=g.mainQuestStage||0,stage=syncMainQuestProgressBeforeQuestVisualRefresh.apply(this,arguments);
+  if(stage!==before)refreshQuestVisuals();
+  return stage;
+};
+const renderSceneMapBeforeQuestVisualSync=renderSceneMap;
+renderSceneMap=function(){
+  syncMainQuestProgress();
+  return renderSceneMapBeforeQuestVisualSync.apply(this,arguments);
+};
 offlineSettle();bindUi();installDeepSeaBattleRun();render();renderLogs();updateRecommendation();$('#redeemBtn').textContent='兑换码';startOpeningFlow();log('智能体接管洞府：挂机收益已关闭，收益主要来自手动战斗、采集与宗门事务');setInterval(tick,1000);setInterval(updateRecommendation,1000);window.addEventListener('pagehide',()=>save());window.addEventListener('beforeunload',()=>save());
 </script></body></html>
