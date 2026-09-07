@@ -959,7 +959,7 @@ body.game-theme-night #sceneMapModal .people-card .npc-list button span,body.gam
 <script>
 const KEY='woYuXiuXianSaveV1',MAX=9e15,realms=['练气','筑基','金丹','元婴','化神','炼虚','合体','大乘','渡劫','天仙'],stages=['初期','中期','后期','大圆满'],maps=[['青云山麓',0,1],['幽月森林',4,2.1],['赤炎秘境',8,4.6],['东海龙宫',12,9],['万妖古域',16,18],['天渊战场',20,38],['虚空遗迹',24,80],['仙魔战场',28,170],['九天雷域',32,360],['仙界天门',36,800],['太玄宗',0,.25]],roots=[['金灵根',1.08],['木灵根',1.1],['水灵根',1.12],['火灵根',1.15],['土灵根',1.06],['变异天灵根',1.55]],skillNames=['引气诀','青元剑诀','五行真解','太虚仙经','混沌道典'];
 const $=s=>document.querySelector(s),on=(s,fn)=>{let el=$(s);if(el)el.onclick=fn},fmt=n=>n>=1e12?(n/1e12).toFixed(2)+'万亿':n>=1e8?(n/1e8).toFixed(2)+'亿':n>=1e4?(n/1e4).toFixed(2)+'万':Math.floor(n).toLocaleString(),clamp=n=>Math.max(0,Math.min(MAX,Number.isFinite(n)?n:0));
-const sectRanks=[['外门弟子',0],['内门弟子',2000],['宗门执事',8000],['宗门长老',25000],['副宗主',60000],['宗主',120000]],sectGoods=[['🌿 药材×30',60,'herbs',30,1],['⛏️ 锻造材料×50',100,'materials',50,2],['💊 渡劫丹',260,'tribPills',1,3],['🧠 悟道天书·根骨+2',2200,'insightBook',1,4,'insightBook',1],['📕 经商秘术',4000,'commerceSecret',1,5,'commerceSecret',1],['📜 功法残卷×3',4500,'scrolls',3,6],['💎 灵玉（售价8万灵石）',10000,'jades',1,7,'jades',10],['💊 根骨丹',3500,'rootBonePill',1,8],['💊 洗髓丹',10000,'marrowPill',1,9]];
+const sectRanks=[['外门弟子',0],['内门弟子',2000],['宗门执事',8000],['宗门长老',25000],['副宗主',60000],['宗主',120000]],sectGoods=[['🌿 药材×30',60,'herbs',30,1],['⛏️ 锻造材料×50',100,'materials',50,2],['💊 渡劫丹',260,'tribPills',1,3],['🧠 悟道天书·根骨+2',2200,'insightBook',1,4,'insightBook',1],['📕 经商秘术',4000,'commerceSecret',1,5,'commerceSecret',1],['📜 功法残卷×3',4500,'scrolls',3,6],['💎 灵玉（售价8万灵石）',10000,'jades',1,7,'jades',10],['💊 根骨丹',3500,'rootBonePill',1,8,'rootBonePill',20],['💊 洗髓丹',10000,'marrowPill',1,9,'marrowPill',15]];
 const sectIcons=['🌿','⛏️','📜','💊','💎','🥚','📕'],shopIcons=['💊','🥚','💎','📜','🌿'];
 // 精简后保留的丹药定义：药材、回春丹、分级修为丹、渡劫丹。
 const pillCatalog={
@@ -7825,6 +7825,9 @@ function tianmoBattleTarget(info){return{name:info.displayName,type:'战斗',tia
 function talkTianmoCultivator(info){openNpcDialog(info.displayName,`你在${spotLabel(11,info.spot)}遇见${info.displayName}。\n\n“${info.story}”\n\n${info.title} · 境界：${info.realmText}\n\n他没有立刻出手，只把目光落在你身后的退路上。天魔宗的规矩很简单：想继续深入，就要让眼前的人相信你有资格活着走过去。\n\n击败后可获得：宗门声望 +${fmt(info.reputation)}、宗门贡献 +${fmt(info.contribution)}`,[{text:'出手击杀',alt:true,onClick(){openBattle(tianmoBattleTarget(info),0)}},{text:'暂且离开',ghost:true}],tianmoPortraitFor(info))}
 function talkTianmoCorpse(info){showNpcResult(`${info.displayName}的尸体`,`${info.title}已经倒在${spotLabel(11,info.spot)}，魔气散尽，只剩一具无人收殓的尸身。`,'good')}
 function talkTianmoElder(){openNpcDialog('太上长老','无极天尊倒下后，天魔殿的石阶裂开一道深痕。白发老者自殿中缓步而出，横剑立于宗主遗骸之前。\n\n太上长老抬眼道：“阵核虽毁，天魔宗尚有传承。你若想踏过此地，先过老夫这一关。”\n\n境界：真仙初期\n若在他手下败亡，护阵会将你送回太玄宗。',[{text:'迎战太上长老',alt:true,onClick(){openBattle(tianmoElderTarget(),0)}},{text:'暂不应战',ghost:true}],tianmoPortraitFor(tianmoElderInfo))}
+function showTianmoElderEntrance(){
+  openNpcDialog('太上长老现身','无极天尊倒下的刹那，血月阵核自高台上剥落，整座天魔殿都为之一震。\n\n殿后的石阶随即裂开，一名白发老者踏着散去的魔雾而来。他将长剑横在胸前，目光越过宗主遗骸，落在你身上。\n\n“无极天尊可以败，天魔宗的最后一道门，却不能无人镇守。”\n\n真仙初期的威压自38号路点席卷而来。太上长老已封住前路，若想彻底查明血月大阵的余祸，必须先面对他。',[{text:'继续探索',alt:true},{text:'暂缓应对',ghost:true}],tianmoPortraitFor(tianmoElderInfo));
+}
 const localNpcsBeforeTianmo=localNpcs;
 localNpcs=function(i,spot){if(i!==11)return localNpcsBeforeTianmo(i,spot);let list=tianmoSpotNpcList(spot);if(spot===0)list.unshift(['天魔传送门','返回太玄宗22号天魔传送阵']);if(spot===38&&g.tianmoMainBossDefeated)list.unshift(tianmoElderEntry());return list};
 const renderSceneMapWithTianmoElderStyle=renderSceneMap;
@@ -7839,7 +7842,7 @@ const localMeetBeforeTianmo=localMeet;
 localMeet=function(idx=0){let i=g.selectedScene??g.map,spot=activeSpot(),npc=localNpcs(i,spot)[idx],name=npc?.name||npc?.[0];if(i===11&&name==='天魔传送门')return useSceneTransfer(11,0);if(i===11&&npc?.tianmoElder)return talkTianmoElder();if(i===11&&npc?.tianmoCorpse)return talkTianmoCorpse(npc.tianmoInfo);if(i===11&&npc?.tianmoInfo)return talkTianmoCultivator(npc.tianmoInfo);return localMeetBeforeTianmo(idx)};
 const npcQuestIconBeforeTianmo=npcQuestIcon;
 npcQuestIcon=function(name,mapIndex,spot){if(mapIndex===11){if(name==='天魔传送门')return'💬';if(String(name).endsWith('的尸体'))return'☠️';return'⚔️'}return npcQuestIconBeforeTianmo(name,mapIndex,spot)};
-function finishTianmoCultivatorVictory(target){let info=target.tianmoInfo||tianmoCultivatorInfo(activeSpot()),state=tianmoDefeatState();state[target.tianmoKey||info.tianmoKey]=true;closeBattle(true);g.sectReputation=(g.sectReputation||0)+info.reputation;g.sectContribution=(g.sectContribution||0)+info.contribution;g.kills=(g.kills||0)+1;let sectMaster=info.title==='宗主',mainBoss=sectMaster&&(g.mainQuestStage||0)===26;if(sectMaster)g.tianmoMainBossDefeated=true;if(mainBoss){let advanced=advanceMainQuest(27,'天魔宗宗主败亡，血月阵核脱离魔门。返回太玄宗掌教内殿，完成最后的封阵与迎宗主归山。');if(advanced)rewardLateMainDialogue('tianmoSectMaster')}let blocked=tianmoSpotHasEnemies(info.spot);pushLocalLog(`天魔宗战斗：${info.displayName}败退，宗门声望+${info.reputation}，宗门贡献+${info.contribution}。${blocked?'当前路点仍有魔修挡路。':'当前路点已清空，前路暂时畅通。'}`);showNpcResult(mainBoss?'终章·阵核归位':'天魔宗战果',mainBoss?`血月阵核已从无极天尊体内剥离，天魔宗上空的魔雾开始崩散。\n\n宗门声望 +${fmt(info.reputation)}\n宗门贡献 +${fmt(info.contribution)}\n主线分步奖励：当前升级所需修为的 8%\n\n天魔殿深处仍有真仙气息未散，太上长老已在38号路点现身。\n下一步：返回太玄宗路点34·掌教内殿，完成封阵并迎回失踪宗主。`:`宗门声望 +${fmt(info.reputation)}\n宗门贡献 +${fmt(info.contribution)}\n\n${blocked?'仍有魔教中人守在此处，不能贸然离开。':'此处的魔门暂时安静下来，前路已被你打开。'}`,'good');renderSceneMap();render();save()}
+function finishTianmoCultivatorVictory(target){let info=target.tianmoInfo||tianmoCultivatorInfo(activeSpot()),state=tianmoDefeatState();state[target.tianmoKey||info.tianmoKey]=true;closeBattle(true);g.sectReputation=(g.sectReputation||0)+info.reputation;g.sectContribution=(g.sectContribution||0)+info.contribution;g.kills=(g.kills||0)+1;let sectMaster=info.title==='宗主',mainBoss=sectMaster&&(g.mainQuestStage||0)===26;if(sectMaster)g.tianmoMainBossDefeated=true;if(mainBoss){let advanced=advanceMainQuest(27,'天魔宗宗主败亡，血月阵核脱离魔门。返回太玄宗掌教内殿，完成最后的封阵与迎宗主归山。');if(advanced)rewardLateMainDialogue('tianmoSectMaster')}let blocked=tianmoSpotHasEnemies(info.spot);pushLocalLog(`天魔宗战斗：${info.displayName}败退，宗门声望+${info.reputation}，宗门贡献+${info.contribution}。${blocked?'当前路点仍有魔修挡路。':'当前路点已清空，前路暂时畅通。'}`);if(mainBoss){toast(`宗门声望 +${fmt(info.reputation)} · 宗门贡献 +${fmt(info.contribution)} · 主线分步奖励已结算`,4200)}else showNpcResult('天魔宗战果',`宗门声望 +${fmt(info.reputation)}\n宗门贡献 +${fmt(info.contribution)}\n\n${blocked?'仍有魔教中人守在此处，不能贸然离开。':'此处的魔门暂时安静下来，前路已被你打开。'}`,'good');renderSceneMap();render();save();if(mainBoss)showTianmoElderEntrance()}
 function finishTianmoElderVictory(){
   g.tianmoElderDefeated=true;
   closeBattle(true);
@@ -10690,15 +10693,17 @@ async function playCinematicSkillEffect(kind,{offense=false,heroAction='palmStri
   image.alt='';image.decoding='async';image.src=frames[0];effect.appendChild(image);arena.appendChild(effect);
   caster?.classList.remove('cinematic-caster');target?.classList.remove('cinematic-victim');void effect.offsetWidth;
   caster?.classList.add('cinematic-caster');
-  void playHeroFrames(heroAction,[130,170,200,150]);
+  // 四帧以 500ms 同步推进，总时长固定为 2 秒；调用方 await 此函数后才会结算伤害与回合。
+  let heroFrames=playHeroFrames(heroAction,[500,500,500,500]);
   for(let index=1;index<frames.length;index++){
-    await waitBattle(index===2?230:170);
+    await waitBattle(500);
     if(!effect.isConnected||!battleState)return;
     effect.className=`cinematic-skill-effect is-${kind} ${offense?'offense':'blessing'} frame-${index+1}`;
     image.src=frames[index];
-    if(offense&&index===2){target?.classList.add('cinematic-victim');battleFx('enemy','震荡');}
+    if(offense&&index===2){target?.classList.add('cinematic-victim');if(kind==='lightning')battleFx('enemy','震荡');}
   }
-  await waitBattle(190);
+  await waitBattle(500);
+  await heroFrames;
   effect.remove();caster?.classList.remove('cinematic-caster');target?.classList.remove('cinematic-victim');
 }
 async function playLightningFlashAnimation(){return playCinematicSkillEffect('lightning',{offense:true,heroAction:'palmStrike'})}
