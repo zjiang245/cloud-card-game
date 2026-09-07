@@ -4812,6 +4812,7 @@ const renderSceneMapWithGoal=renderSceneMap;
 renderSceneMap=()=>{renderSceneMapWithGoal();renderSceneGoalCard()};
 
 function bossMechanicProfile(target,area){
+  if(target?.tianmoElder)return{name:'万魔归墟',multiplier:2.05,minorName:'魔渊剑雨',minorMultiplier:1.2};
   let profiles=[
     ['崩山践踏',1.55,'裂岩横扫',1.08],['月影噬魂',1.58,'幽月扑杀号',1.089],['熔核爆燃',1.60,'灼焰喷吐',1.098],['龙潮重压',1.62,'潮汐冲击',1.107],['血契裂爪',1.65,'妖血撕裂',1.116],
     ['战旗断魂',1.68,'战魂突刺',1.124],['虚空坍缩',1.70,'裂隙弹射',1.133],['魔印降临',1.72,'魔印侵蚀',1.142],['九霄落雷',1.75,'雷光击',1.151],['镇门剑潮',1.78,'剑罡横斩',1.16]
@@ -7839,7 +7840,13 @@ localMeet=function(idx=0){let i=g.selectedScene??g.map,spot=activeSpot(),npc=loc
 const npcQuestIconBeforeTianmo=npcQuestIcon;
 npcQuestIcon=function(name,mapIndex,spot){if(mapIndex===11){if(name==='天魔传送门')return'💬';if(String(name).endsWith('的尸体'))return'☠️';return'⚔️'}return npcQuestIconBeforeTianmo(name,mapIndex,spot)};
 function finishTianmoCultivatorVictory(target){let info=target.tianmoInfo||tianmoCultivatorInfo(activeSpot()),state=tianmoDefeatState();state[target.tianmoKey||info.tianmoKey]=true;closeBattle(true);g.sectReputation=(g.sectReputation||0)+info.reputation;g.sectContribution=(g.sectContribution||0)+info.contribution;g.kills=(g.kills||0)+1;let sectMaster=info.title==='宗主',mainBoss=sectMaster&&(g.mainQuestStage||0)===26;if(sectMaster)g.tianmoMainBossDefeated=true;if(mainBoss){let advanced=advanceMainQuest(27,'天魔宗宗主败亡，血月阵核脱离魔门。返回太玄宗掌教内殿，完成最后的封阵与迎宗主归山。');if(advanced)rewardLateMainDialogue('tianmoSectMaster')}let blocked=tianmoSpotHasEnemies(info.spot);pushLocalLog(`天魔宗战斗：${info.displayName}败退，宗门声望+${info.reputation}，宗门贡献+${info.contribution}。${blocked?'当前路点仍有魔修挡路。':'当前路点已清空，前路暂时畅通。'}`);showNpcResult(mainBoss?'终章·阵核归位':'天魔宗战果',mainBoss?`血月阵核已从无极天尊体内剥离，天魔宗上空的魔雾开始崩散。\n\n宗门声望 +${fmt(info.reputation)}\n宗门贡献 +${fmt(info.contribution)}\n主线分步奖励：当前升级所需修为的 8%\n\n天魔殿深处仍有真仙气息未散，太上长老已在38号路点现身。\n下一步：返回太玄宗路点34·掌教内殿，完成封阵并迎回失踪宗主。`:`宗门声望 +${fmt(info.reputation)}\n宗门贡献 +${fmt(info.contribution)}\n\n${blocked?'仍有魔教中人守在此处，不能贸然离开。':'此处的魔门暂时安静下来，前路已被你打开。'}`,'good');renderSceneMap();render();save()}
-function finishTianmoElderVictory(){g.tianmoElderDefeated=true;closeBattle(true);pushLocalLog('太上长老败于天魔殿前，最后一道真仙威压终于消散。');showNpcResult('天魔殿肃清','太上长老倒下后，天魔殿内残存的真仙威压随之消散。38号路点已无阻拦。','good');renderSceneMap();render();save()}
+function finishTianmoElderVictory(){
+  g.tianmoElderDefeated=true;
+  closeBattle(true);
+  pushLocalLog('太上长老败于天魔殿前，最后一道真仙威压终于消散。');
+  showNpcResult('太上长老败语','太上长老踉跄着退到破碎石阶，掌中长剑坠地。\n\n“我穷尽数千年，竟仍守不住这一座魔门……不甘，实在不甘。”\n\n他望着你，眼中的杀意一点点散去。\n\n“但你能跨过血月、天门与此间因果，自今日起，你便是当世第一。愿你握剑时，莫让这天下再走回旧路。”\n\n真仙威压随之消散。38号路点已无阻拦，太上长老的尸体留在原地。','good');
+  renderSceneMap();render();save();
+}
 const finishBattleBeforeTianmo=finishBattleWin;
 finishBattleWin=function(){let target=battleState?.target;if(target?.tianmoElder)return finishTianmoElderVictory();if(target?.tianmoCultivator)return finishTianmoCultivatorVictory(target);return finishBattleBeforeTianmo()};
 const handleBattleDeathBeforeTianmo=handleBattleDeath;
@@ -10548,6 +10555,93 @@ const renderSceneMapBeforeQuestVisualSync=renderSceneMap;
 renderSceneMap=function(){
   syncMainQuestProgress();
   return renderSceneMapBeforeQuestVisualSync.apply(this,arguments);
+};
+// 天魔宗最终太上长老：独立的终局施法演出，普通攻击仍沿用立绘位移。
+function ensureTianmoElderSkillEffectStyles(){
+  if(document.getElementById('tianmoElderSkillEffectStyles'))return;
+  let style=document.createElement('style');style.id='tianmoElderSkillEffectStyles';style.textContent=`
+    .tianmo-elder-ultimate{position:absolute;inset:0;z-index:8;pointer-events:none;overflow:hidden;isolation:isolate}
+    .tianmo-elder-ultimate .elder-void{position:absolute;right:8%;top:44%;width:92px;height:92px;border-radius:50%;transform:translate(50%,-50%) scale(.25);opacity:0;background:radial-gradient(circle,#f9e3a2 0 5%,#80233b 17%,#1d0e22 46%,#050509 70%);box-shadow:0 0 0 2px #d3a64c,0 0 20px #aa254a,0 0 64px #0b0514;animation:elderVoidCharge .42s ease forwards}
+    .tianmo-elder-ultimate .elder-ring{position:absolute;right:8%;top:44%;width:150px;height:150px;border:2px solid #c5a24f;border-radius:50%;transform:translate(50%,-50%) scale(.28);opacity:0;box-shadow:inset 0 0 18px #7c1839,0 0 18px #b84b4f;background:repeating-conic-gradient(from 10deg,#d6b75e 0 5deg,transparent 5deg 24deg);animation:elderRingCharge .5s .05s ease forwards}
+    .tianmo-elder-ultimate .elder-ring:after{content:'';position:absolute;inset:18px;border:1px dashed #f5d889;border-radius:50%;animation:elderSpin 1.1s linear infinite}
+    .tianmo-elder-ultimate .elder-blade{position:absolute;right:9%;top:44%;width:14px;height:100px;border-radius:100% 100% 45% 45%;transform:translate(50%,-50%) rotate(var(--angle)) scaleY(.1);transform-origin:50% 92%;opacity:0;background:linear-gradient(90deg,#170912,#a32442 36%,#ffe6a1 52%,#8f1c3b 64%,#160810);box-shadow:0 0 10px #ffbf73,0 0 18px #9b173d;animation:elderBladeCharge .46s var(--delay) cubic-bezier(.2,.9,.2,1) forwards}
+    .tianmo-elder-ultimate .elder-rift{position:absolute;left:75%;top:47%;width:18px;height:4px;border-radius:50%;opacity:0;background:linear-gradient(90deg,transparent,#f9df9c,#d62b52,#090510);box-shadow:0 0 15px #ffda93;transform:rotate(var(--tilt));transform-origin:right center}
+    .tianmo-elder-ultimate.release .elder-rift{animation:elderRiftRush .48s var(--delay) cubic-bezier(.15,.75,.18,1) forwards}
+    .tianmo-elder-ultimate.release .elder-void{animation:elderVoidBurst .64s ease forwards}
+    .tianmo-elder-ultimate.release .elder-ring{animation:elderRingBurst .62s ease forwards}
+    .tianmo-elder-ultimate.release .elder-blade{animation:elderBladeRelease .52s var(--delay) cubic-bezier(.1,.75,.12,1) forwards}
+    .tianmo-elder-cast{animation:elderCaster .78s cubic-bezier(.22,.7,.2,1)}
+    .tianmo-elder-hit{animation:elderVictim .54s cubic-bezier(.2,.72,.2,1)}
+    @keyframes elderVoidCharge{0%{opacity:0;transform:translate(50%,-50%) scale(.2)}100%{opacity:1;transform:translate(50%,-50%) scale(1)}}
+    @keyframes elderRingCharge{0%{opacity:0;transform:translate(50%,-50%) rotate(-90deg) scale(.2)}100%{opacity:.94;transform:translate(50%,-50%) rotate(0) scale(1)}}
+    @keyframes elderBladeCharge{to{opacity:.95;transform:translate(50%,-50%) rotate(var(--angle)) scaleY(1)}}
+    @keyframes elderSpin{to{transform:rotate(360deg)}}
+    @keyframes elderVoidBurst{0%{opacity:1;transform:translate(50%,-50%) scale(1)}100%{opacity:0;transform:translate(-310%,-50%) scale(1.85)}}
+    @keyframes elderRingBurst{0%{opacity:.9;transform:translate(50%,-50%) scale(1)}100%{opacity:0;transform:translate(-250%,-50%) scale(2.4)}}
+    @keyframes elderBladeRelease{0%{opacity:1;transform:translate(50%,-50%) rotate(var(--angle)) scaleY(1)}100%{opacity:0;transform:translate(-295%,-50%) rotate(var(--angle)) scaleY(1.24)}}
+    @keyframes elderRiftRush{0%{opacity:0;transform:rotate(var(--tilt)) scaleX(.2)}18%{opacity:1}100%{opacity:0;transform:translateX(-410px) rotate(var(--tilt)) scaleX(1)}}
+    @keyframes elderCaster{0%,100%{transform:translateX(0) scale(1)}35%{transform:translateX(-17px) scale(1.08);filter:drop-shadow(0 0 14px #d13b55)}}
+    @keyframes elderVictim{0%,100%{transform:translateX(0)}38%{transform:translateX(-16px);filter:brightness(1.55) drop-shadow(0 0 13px #f4ce76)}}
+    @media(max-width:650px){.tianmo-elder-ultimate .elder-void{width:68px;height:68px}.tianmo-elder-ultimate .elder-ring{width:108px;height:108px}.tianmo-elder-ultimate .elder-blade{height:72px}.tianmo-elder-ultimate .elder-rift{left:71%;top:50%}}
+  `;document.head.appendChild(style);
+}
+async function playTianmoElderSkillAnimation(powerWave=false){
+  if(!battleState?.target?.tianmoElder)return;
+  let arena=$('#battleModal .battle-arena');if(!arena)return;
+  ensureTianmoElderSkillEffectStyles();
+  arena.querySelector('.tianmo-elder-ultimate')?.remove();
+  let effect=document.createElement('div');effect.className='tianmo-elder-ultimate';
+  let blades=Array.from({length:powerWave?8:5},(_,index)=>`<i class="elder-blade" style="--angle:${index*(360/(powerWave?8:5))}deg;--delay:${index*34}ms"></i>`).join('');
+  let rifts=Array.from({length:powerWave?6:3},(_,index)=>`<i class="elder-rift" style="--tilt:${-18+index*9}deg;--delay:${110+index*58}ms"></i>`).join('');
+  effect.innerHTML='<i class="elder-void"></i><i class="elder-ring"></i>'+blades+rifts;
+  arena.appendChild(effect);
+  let enemy=battleFigure('enemy'),player=battleFigure('player');
+  enemy?.classList.remove('tianmo-elder-cast');player?.classList.remove('tianmo-elder-hit');void effect.offsetWidth;
+  enemy?.classList.add('tianmo-elder-cast');
+  await waitBattle(powerWave?360:250);
+  if(!effect.isConnected||!battleState?.target?.tianmoElder)return;
+  effect.classList.add('release');player?.classList.add('tianmo-elder-hit');
+  await waitBattle(powerWave?620:470);
+  effect.remove();enemy?.classList.remove('tianmo-elder-cast');player?.classList.remove('tianmo-elder-hit');
+}
+const playEnemyPortraitSkillBeforeTianmoElderEffect=playEnemyPortraitSkill;
+playEnemyPortraitSkill=async function(self=false,powerWave=false){
+  if(battleState?.target?.tianmoElder)await playTianmoElderSkillAnimation(powerWave);
+  return playEnemyPortraitSkillBeforeTianmoElderEffect(self,powerWave);
+};
+// 开发者模式专用：仅重置天魔宗副本和终章对话，不影响玩家养成与其他地图。
+function resetTianmoStory(){
+  if(!g.devMode)return;
+  if(!confirm('确定要重置天魔宗剧情吗？天魔宗所有已击败 NPC、无极天尊与太上长老都会复活；天魔宗仍保持解锁，玩家属性、背包与其他地图进度不会受影响。'))return;
+  g.tianmoDefeated={};
+  g.tianmoMainBossDefeated=false;
+  g.tianmoElderDefeated=false;
+  g.tianmoNpcCounts={};
+  g.tianmoGuidePending=true;
+  let heroine=maskedHeroineQuest();
+  heroine.tianmoFinaleResolved=false;
+  heroine.tianmoFinaleOutcome='';
+  heroine.tianmoMasterConfessed=false;
+  if((g.selectedScene??g.map)===11)g.localSpot=0;
+  closeNpcDialog();
+  renderHomeMap();renderSceneMap();render();save();
+  log('开发者模式：已重置天魔宗剧情，所有天魔宗 NPC 已复活。','good');
+  toast('天魔宗剧情已重置，所有 NPC 已复活');
+}
+function ensureTianmoStoryResetButton(){
+  let actions=$('#devModal .actions');
+  if(!actions||$('#resetTianmoDev'))return;
+  let button=document.createElement('button');
+  button.id='resetTianmoDev';
+  button.className='btn alt';
+  button.textContent='重置天魔宗剧情';
+  button.onclick=resetTianmoStory;
+  actions.insertBefore(button,$('#closeDev'));
+}
+const openDevModeBeforeTianmoStoryReset=openDevMode;
+openDevMode=function(){
+  openDevModeBeforeTianmoStoryReset();
+  ensureTianmoStoryResetButton();
 };
 offlineSettle();bindUi();installDeepSeaBattleRun();render();renderLogs();updateRecommendation();$('#redeemBtn').textContent='兑换码';startOpeningFlow();log('智能体接管洞府：挂机收益已关闭，收益主要来自手动战斗、采集与宗门事务');setInterval(tick,1000);setInterval(updateRecommendation,1000);window.addEventListener('pagehide',()=>save());window.addEventListener('beforeunload',()=>save());
 </script></body></html>
