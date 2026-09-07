@@ -9546,7 +9546,8 @@ battleSkillEffect=async function(skill,idx=0){
     // The first cast should feel immediate even if background/portrait decoding is still in flight.
     void battleState?.mediaReady;
     if(/火球术/.test(String(skill.name||'')))playFireballSfx();
-    else playGameSfx(skillSfxKind(skill),.5);
+    // 四个长帧元素技能由逐帧动画函数同步播放专属配乐，避免通用音效抢拍。
+    else if(!cinematicElementSkillKind(skill))playGameSfx(skillSfxKind(skill),.5);
   }
   return battleSkillEffectWithAudio(skill,idx);
 };
@@ -10693,6 +10694,7 @@ async function playCinematicSkillEffect(kind,{offense=false,heroAction='palmStri
   image.alt='';image.decoding='async';image.src=frames[0];effect.appendChild(image);arena.appendChild(effect);
   caster?.classList.remove('cinematic-caster');target?.classList.remove('cinematic-victim');void effect.offsetWidth;
   caster?.classList.add('cinematic-caster');
+  playCinematicSpellScore(kind);
   // 四帧以 500ms 同步推进，总时长固定为 2 秒；调用方 await 此函数后才会结算伤害与回合。
   let heroFrames=playHeroFrames(heroAction,[500,500,500,500]);
   for(let index=1;index<frames.length;index++){
@@ -10704,6 +10706,55 @@ async function playCinematicSkillEffect(kind,{offense=false,heroAction='palmStri
   }
   await waitBattle(500);
   await heroFrames;
+  effect.remove();caster?.classList.remove('cinematic-caster');target?.classList.remove('cinematic-victim');
+}
+function cinematicElementSkillKind(skill){
+  let name=String(skill?.name||'');
+  if(skill?.lightningFlash||name==='电闪雷鸣')return'lightning';
+  if(skill?.wildfire||name==='烈火燎原')return'wildfire';
+  if(skill?.verdantGrowth||name==='百草丰茂')return'verdant';
+  if(skill?.yellowRiverArray||name==='九曲黄河阵')return'yellowRiver';
+  return'';
+}
+function playCinematicSpellScore(kind){
+  if(!gameAudioUnlocked||audioIsMuted())return;
+  let texture={lightning:'thunder',wildfire:'fire',verdant:'heal',yellowRiver:'water'}[kind];
+  if(texture)playGameSfx(texture,.24);
+  let ctx=gameAudioContext();if(!ctx)return;
+  let start=ctx.currentTime+.015,master=ctx.createGain();
+  master.gain.setValueAtTime(.0001,start);master.gain.exponentialRampToValueAtTime(.13,start+.06);master.gain.exponentialRampToValueAtTime(.0001,start+1.98);master.connect(ctx.destination);
+  let notes={
+    lightning:[[0,.24,147,'sawtooth',.22],[.13,.18,880,'square',.11],[.42,.16,1175,'square',.10],[.74,.3,196,'sawtooth',.2],[1.02,.15,1318,'square',.11],[1.34,.42,294,'triangle',.22],[1.56,.22,1760,'sine',.10]],
+    wildfire:[[0,.34,110,'sawtooth',.23],[.18,.32,165,'sawtooth',.2],[.55,.25,220,'triangle',.16],[.88,.52,147,'sawtooth',.24],[1.18,.18,698,'sine',.09],[1.52,.32,196,'triangle',.18]],
+    verdant:[[0,.46,261.63,'sine',.16],[.25,.45,329.63,'triangle',.13],[.55,.48,392,'sine',.14],[.94,.5,523.25,'triangle',.13],[1.28,.46,659.25,'sine',.11],[1.58,.3,392,'triangle',.12]],
+    yellowRiver:[[0,.55,146.83,'sine',.18],[.22,.52,196,'triangle',.15],[.58,.48,220,'sine',.14],[.95,.55,164.81,'triangle',.16],[1.33,.44,246.94,'sine',.12],[1.62,.3,196,'triangle',.13]]
+  }[kind]||[];
+  notes.forEach(([offset,duration,freq,type,gain])=>{let osc=ctx.createOscillator(),env=ctx.createGain(),at=start+offset;osc.type=type;osc.frequency.setValueAtTime(freq,at);if(kind==='lightning')osc.frequency.exponentialRampToValueAtTime(freq*1.32,at+Math.min(duration,.22));env.gain.setValueAtTime(.0001,at);env.gain.exponentialRampToValueAtTime(gain,at+.025);env.gain.exponentialRampToValueAtTime(.0001,at+duration);osc.connect(env);env.connect(master);osc.start(at);osc.stop(at+duration+.035)});
+}
+function ensureShatterStarCataclysmStyles(){
+  if($('#shatterStarCataclysmStyle'))return;
+  let style=document.createElement('style');style.id='shatterStarCataclysmStyle';style.textContent=`
+    .shatter-star-cataclysm{position:absolute;inset:0;z-index:15;overflow:hidden;pointer-events:none}
+    .shatter-star-cataclysm .star-well{position:absolute;left:50%;top:51%;width:44px;height:44px;border-radius:50%;transform:translate(-50%,-50%) scale(.12);background:radial-gradient(circle,#fff 0 8%,#c7ecff 17%,#7666ff 39%,#251456 62%,transparent 70%);box-shadow:0 0 22px #e4f7ff,0 0 58px #7469ff;animation:starWellBurst 1.34s cubic-bezier(.12,.74,.18,1) both}
+    .shatter-star-cataclysm .star-ring{position:absolute;left:50%;top:51%;border:2px solid #b9edff;border-radius:50%;transform:translate(-50%,-50%) scale(.08);opacity:0;box-shadow:0 0 20px #8381ff,inset 0 0 18px #83daff;animation:starRingBlast 1.18s cubic-bezier(.12,.66,.22,1) var(--delay) both}
+    .shatter-star-cataclysm .star-ring.one{width:96px;height:96px}.shatter-star-cataclysm .star-ring.two{width:156px;height:156px;border-color:#9b82ff}.shatter-star-cataclysm .star-ring.three{width:226px;height:226px;border-color:#d7f6ff}
+    .shatter-star-cataclysm .star-shard{position:absolute;left:50%;top:51%;width:120px;height:4px;border-radius:999px;opacity:0;transform:translate(-50%,-50%) rotate(var(--angle)) scaleX(.06);transform-origin:left center;background:linear-gradient(90deg,#fff 0%,#b7efff 24%,#735cff 62%,transparent 100%);box-shadow:0 0 9px #d7f5ff;animation:starShardBlast 1.08s cubic-bezier(.12,.7,.25,1) var(--delay) both}
+    .shatter-star-cataclysm .star-sky{position:absolute;inset:0;background:radial-gradient(circle at 50% 51%,#c9f4ff35 0 2%,#5d3ab322 16%,transparent 39%);opacity:0;animation:starSkyPulse 1.2s ease-out .16s both}
+    @keyframes starWellBurst{0%{opacity:0;transform:translate(-50%,-50%) scale(.12)}20%{opacity:1;transform:translate(-50%,-50%) scale(1.35)}54%{opacity:1;transform:translate(-50%,-50%) scale(.82)}100%{opacity:0;transform:translate(-50%,-50%) scale(5.4)}}
+    @keyframes starRingBlast{0%{opacity:0;transform:translate(-50%,-50%) scale(.08)}18%{opacity:.92}100%{opacity:0;transform:translate(-50%,-50%) scale(3.2)}}
+    @keyframes starShardBlast{0%{opacity:0;transform:translate(-50%,-50%) rotate(var(--angle)) scaleX(.06)}16%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) rotate(var(--angle)) scaleX(3.6)}}
+    @keyframes starSkyPulse{0%{opacity:0}24%{opacity:1}100%{opacity:0}}
+    @media(max-width:650px){.shatter-star-cataclysm .star-ring.three{width:168px;height:168px}.shatter-star-cataclysm .star-shard{width:88px}}
+  `;document.head.appendChild(style);
+}
+async function playShatterStarRealmAnimation(){
+  let arena=document.querySelector('.battle-arena'),caster=document.querySelector('.fighter-figure.player'),target=document.querySelector('.fighter-figure.enemy');if(!arena)return;
+  ensureShatterStarCataclysmStyles();arena.querySelectorAll('.shatter-star-cataclysm').forEach(node=>node.remove());
+  let rays=Array.from({length:14},(_,index)=>`<i class="star-shard" style="--angle:${index*(360/14)}deg;--delay:${100+(index%4)*55}ms"></i>`).join('');
+  let effect=document.createElement('div');effect.className='shatter-star-cataclysm';effect.innerHTML=`<i class="star-sky"></i><i class="star-well"></i><i class="star-ring one" style="--delay:70ms"></i><i class="star-ring two" style="--delay:150ms"></i><i class="star-ring three" style="--delay:240ms"></i>${rays}`;arena.appendChild(effect);
+  caster?.classList.remove('cinematic-caster');void effect.offsetWidth;caster?.classList.add('cinematic-caster');
+  let heroFrames=playHeroFrames('palmStrike',[300,300,360,340]);
+  await waitBattle(760);target?.classList.add('cinematic-victim');await waitBattle(610);await heroFrames;
   effect.remove();caster?.classList.remove('cinematic-caster');target?.classList.remove('cinematic-victim');
 }
 async function playLightningFlashAnimation(){return playCinematicSkillEffect('lightning',{offense:true,heroAction:'palmStrike'})}
