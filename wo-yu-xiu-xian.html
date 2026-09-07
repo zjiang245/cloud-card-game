@@ -5981,7 +5981,7 @@ battleSkillEffect=async function(sk,idx=0){
   if(reason){toast(reason);return false}
   let cost=battleSkillCost(sk,idx),st=statTotal();
   b.player.mp=Math.max(0,b.player.mp-cost);
-  if(isWildfire)await playFireballAnimation();else await playLightningFlashAnimation();
+  if(isWildfire)await playWildfireAnimation();else await playLightningFlashAnimation();
   if(isLightningFlash){
     let thunderWound=(b.enemy.thunderWound?.turns||0)>0,damage=normalBattleHit(b,st,3.5)*(thunderWound?2:1);
     b.enemy.hp=Math.max(0,b.enemy.hp-damage);b.player.cooldowns.lightningFlash=2;
@@ -6046,7 +6046,7 @@ battleSkillEffect=async function(sk,idx=0){
   let b=battleState,reason=battleSkillBlockReason(sk,idx,b);
   if(reason){toast(reason);return false}
   let cost=battleSkillCost(sk,idx);b.player.mp=Math.max(0,b.player.mp-cost);
-  if(isVerdant){await playHeroFrames('witheringWood',[150,220,300,260]);b.player.woodBlessing={turns:4,fresh:true};battleFx('player','木灵加成',true);battleLog(`你施展百草丰茂，消耗${fmt(cost)}点法力，获得木系加成4回合。`);return true}
+  if(isVerdant){await playVerdantGrowthAnimation();b.player.woodBlessing={turns:4,fresh:true};battleFx('player','木灵加成',true);battleLog(`你施展百草丰茂，消耗${fmt(cost)}点法力，获得木系加成4回合。`);return true}
   await playYellowRiverArrayAnimation();b.player.yellowRiver={turns:3,fresh:true};battleFx('player','黄河标记',true);battleLog(`你施展九曲黄河阵，消耗${fmt(cost)}点法力，获得黄河标记3回合。`);return true;
 };
 const applyWitheringWoodTurnWithVerdantGrowth=applyWitheringWoodTurn;
@@ -10643,5 +10643,67 @@ openDevMode=function(){
   openDevModeBeforeTianmoStoryReset();
   ensureTianmoStoryResetButton();
 };
+// Four high-detail, frame-by-frame cultivation effects. Art is intentionally kept
+// separate from the battlefield so the characters remain readable on small screens.
+const cinematicSkillFrames={
+  yellowRiver:['assets/skill-effects/yellow-river-1.webp','assets/skill-effects/yellow-river-2.webp','assets/skill-effects/yellow-river-3.webp','assets/skill-effects/yellow-river-4.webp'],
+  lightning:['assets/skill-effects/lightning-flash-1.webp','assets/skill-effects/lightning-flash-2.webp','assets/skill-effects/lightning-flash-3.webp','assets/skill-effects/lightning-flash-4.webp'],
+  wildfire:['assets/skill-effects/wildfire-1.webp','assets/skill-effects/wildfire-2.webp','assets/skill-effects/wildfire-3.webp','assets/skill-effects/wildfire-4.webp'],
+  verdant:['assets/skill-effects/verdant-growth-1.webp','assets/skill-effects/verdant-growth-2.webp','assets/skill-effects/verdant-growth-3.webp','assets/skill-effects/verdant-growth-4.webp']
+};
+function ensureCinematicSkillEffectStyles(){
+  if($('#cinematicSkillEffectStyles'))return;
+  let style=document.createElement('style');style.id='cinematicSkillEffectStyles';style.textContent=`
+    .cinematic-skill-effect{position:absolute;inset:0;z-index:14;overflow:hidden;pointer-events:none;isolation:isolate}
+    .cinematic-skill-effect:before{content:'';position:absolute;inset:8% 12%;opacity:0;border-radius:50%;filter:blur(18px);animation:cinematicAura .72s ease-out both}
+    .cinematic-skill-effect.is-lightning:before{background:radial-gradient(circle at 74% 46%,#c8ecff99,transparent 43%)}
+    .cinematic-skill-effect.is-wildfire:before{background:radial-gradient(circle at 74% 55%,#ff7a2f9c,transparent 48%)}
+    .cinematic-skill-effect.is-yellowRiver:before{background:radial-gradient(circle at 28% 55%,#a1e6ff88,transparent 48%)}
+    .cinematic-skill-effect.is-verdant:before{background:radial-gradient(circle at 27% 53%,#b9f2a07c,transparent 46%)}
+    .cinematic-skill-effect img{position:absolute;top:50%;height:min(94%,700px);width:auto;max-width:58%;object-fit:contain;opacity:0;filter:drop-shadow(0 8px 18px #02091080);will-change:transform,opacity;transform:translate(-50%,-50%) scale(.66)}
+    .cinematic-skill-effect.offense img{left:70%;animation:cinematicStrike .22s ease-out both}
+    .cinematic-skill-effect.blessing img{left:28%;animation:cinematicBlessing .22s ease-out both}
+    .cinematic-skill-effect.offense.frame-2 img{transform:translate(-50%,-50%) scale(.89)}
+    .cinematic-skill-effect.offense.frame-3 img{transform:translate(-50%,-50%) scale(1.08)}
+    .cinematic-skill-effect.blessing.frame-2 img{transform:translate(-50%,-50%) scale(.92)}
+    .cinematic-skill-effect.blessing.frame-3 img{transform:translate(-50%,-50%) scale(1.06)}
+    .cinematic-skill-effect.frame-4 img{filter:drop-shadow(0 5px 12px #02091065);animation:cinematicFade .25s ease-out both}
+    .cinematic-caster{animation:cinematicCaster .72s cubic-bezier(.18,.75,.2,1)}
+    .cinematic-victim{animation:cinematicVictim .44s cubic-bezier(.16,.7,.2,1)}
+    @keyframes cinematicAura{0%{opacity:0;transform:scale(.58)}42%{opacity:1}100%{opacity:0;transform:scale(1.16)}}
+    @keyframes cinematicStrike{0%{opacity:0;transform:translate(-70%,-50%) scale(.5)}32%{opacity:1}100%{opacity:1;transform:translate(-50%,-50%) scale(.82)}}
+    @keyframes cinematicBlessing{0%{opacity:0;transform:translate(-50%,-46%) scale(.48)}32%{opacity:1}100%{opacity:1;transform:translate(-50%,-50%) scale(.8)}}
+    @keyframes cinematicFade{0%{opacity:.92}100%{opacity:0;transform:translate(-50%,-54%) scale(1.04)}}
+    @keyframes cinematicCaster{0%,100%{transform:translateX(0) scale(1)}36%{transform:translateX(3%) translateY(-3px) scale(1.035)}}
+    @keyframes cinematicVictim{0%,100%{transform:translateX(0)}33%{transform:translateX(-4%) skewY(-1deg)}62%{transform:translateX(2%)}}
+    @media(max-width:650px){.cinematic-skill-effect img{height:min(81%,500px);max-width:68%}.cinematic-skill-effect.offense img{left:71%}.cinematic-skill-effect.blessing img{left:27%}}
+  `;document.head.appendChild(style);
+}
+async function playCinematicSkillEffect(kind,{offense=false,heroAction='palmStrike'}={}){
+  let arena=document.querySelector('.battle-arena'),frames=cinematicSkillFrames[kind];
+  if(!arena||!frames)return;
+  ensureCinematicSkillEffectStyles();
+  void warmImageAssets(frames);
+  arena.querySelectorAll('.cinematic-skill-effect').forEach(node=>node.remove());
+  let effect=document.createElement('div'),image=document.createElement('img'),caster=document.querySelector('.fighter-figure.player'),target=document.querySelector('.fighter-figure.enemy');
+  effect.className=`cinematic-skill-effect is-${kind} ${offense?'offense':'blessing'} frame-1`;
+  image.alt='';image.decoding='async';image.src=frames[0];effect.appendChild(image);arena.appendChild(effect);
+  caster?.classList.remove('cinematic-caster');target?.classList.remove('cinematic-victim');void effect.offsetWidth;
+  caster?.classList.add('cinematic-caster');
+  void playHeroFrames(heroAction,[130,170,200,150]);
+  for(let index=1;index<frames.length;index++){
+    await waitBattle(index===2?230:170);
+    if(!effect.isConnected||!battleState)return;
+    effect.className=`cinematic-skill-effect is-${kind} ${offense?'offense':'blessing'} frame-${index+1}`;
+    image.src=frames[index];
+    if(offense&&index===2){target?.classList.add('cinematic-victim');battleFx('enemy','震荡');}
+  }
+  await waitBattle(190);
+  effect.remove();caster?.classList.remove('cinematic-caster');target?.classList.remove('cinematic-victim');
+}
+async function playLightningFlashAnimation(){return playCinematicSkillEffect('lightning',{offense:true,heroAction:'palmStrike'})}
+async function playWildfireAnimation(){return playCinematicSkillEffect('wildfire',{offense:true,heroAction:'fireball'})}
+async function playYellowRiverArrayAnimation(){return playCinematicSkillEffect('yellowRiver',{heroAction:'purpleCloud'})}
+async function playVerdantGrowthAnimation(){return playCinematicSkillEffect('verdant',{heroAction:'witheringWood'})}
 offlineSettle();bindUi();installDeepSeaBattleRun();render();renderLogs();updateRecommendation();$('#redeemBtn').textContent='兑换码';startOpeningFlow();log('智能体接管洞府：挂机收益已关闭，收益主要来自手动战斗、采集与宗门事务');setInterval(tick,1000);setInterval(updateRecommendation,1000);window.addEventListener('pagehide',()=>save());window.addEventListener('beforeunload',()=>save());
 </script></body></html>
