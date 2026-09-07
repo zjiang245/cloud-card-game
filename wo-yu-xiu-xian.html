@@ -3242,7 +3242,42 @@ function warmSceneMedia(area=g.selectedScene??g.map){
 const playHeroFramesWithPreload=playHeroFrames;
 playHeroFrames=async function(action,durations,options){void warmImageAssets(heroActionFrames[action]||[]);return playHeroFramesWithPreload(action,durations,options);};
 async function playFireballAnimation(){let ball=$('#fireballProjectile'),impact=$('#fireballImpact'),caster=document.querySelector('.fighter-figure.player'),target=document.querySelector('.fighter-figure.enemy');if(!ball||!impact)return;void warmImageAssets(heroActionFrames.fireball);void playHeroFrames('fireball',[160,230,260,230]);ball.classList.remove('cast');impact.classList.remove('burst');caster?.classList.remove('fire-cast');target?.classList.remove('fire-hit');void ball.offsetWidth;caster?.classList.add('fire-cast');ball.classList.add('cast');await waitBattle(500);impact.classList.add('burst');target?.classList.add('fire-hit');setTimeout(()=>{ball.classList.remove('cast');impact.classList.remove('burst');caster?.classList.remove('fire-cast');target?.classList.remove('fire-hit')},360)}
-async function playHaoFireballAnimation(){let arena=document.querySelector('.battle-arena'),impact=$('#fireballImpact'),caster=document.querySelector('.fighter-figure.player'),target=document.querySelector('.fighter-figure.enemy');if(!arena)return;void warmImageAssets(heroActionFrames.fireball);arena.querySelector('.haofireball-barrage')?.remove();let barrage=document.createElement('div');barrage.className='haofireball-barrage';[[39,0,.82],[51,70,.98],[64,135,.9],[45,205,1.12],[58,275,.94],[35,345,.8],[69,415,1.06]].forEach(([lane,delay,size])=>{let ball=document.createElement('span');ball.style.setProperty('--lane',lane+'%');ball.style.setProperty('--delay',delay+'ms');ball.style.setProperty('--size',size);ball.style.setProperty('--end-size',size*1.42);barrage.appendChild(ball)});arena.appendChild(barrage);void playHeroFrames('fireball',[120,180,240,300]);impact?.classList.remove('burst');caster?.classList.remove('fire-cast');target?.classList.remove('haofireball-hit');void barrage.offsetWidth;caster?.classList.add('fire-cast');await waitBattle(720);impact?.classList.add('burst');target?.classList.add('haofireball-hit');await waitBattle(520);barrage.remove();impact?.classList.remove('burst');caster?.classList.remove('fire-cast');target?.classList.remove('haofireball-hit')}
+function ensureAdvancedSkillEffectStyles(){
+  if($('#advancedSkillEffectStyles'))return;
+  let style=document.createElement('style');style.id='advancedSkillEffectStyles';style.textContent=`
+    .advanced-skill-effect{position:absolute;inset:0;z-index:13;pointer-events:none;overflow:hidden;contain:layout paint;isolation:isolate}
+    .hao-fireball-lite span{position:absolute;left:23%;top:var(--lane);width:clamp(28px,4.7vw,48px);aspect-ratio:1;opacity:0;transform:translate(-50%,-50%) scale(.25);will-change:left,transform,opacity;animation:haoFireballLite .64s cubic-bezier(.12,.72,.2,1) var(--delay) both}
+    .hao-fireball-lite span:before{content:"";position:absolute;inset:0;border-radius:50%;background:radial-gradient(circle at 32% 28%,#fffce5 0 9%,#ffe979 19%,#ff9d28 42%,#d93c15 66%,#671107 85%,transparent 87%);box-shadow:0 0 9px #ffcf51,0 0 19px #f24a22}
+    .hao-fireball-lite span:after{content:"";position:absolute;right:54%;top:38%;width:150%;height:27%;border-radius:50%;background:linear-gradient(90deg,transparent,#ff5a25d1 48%,#ffd273);filter:blur(3px);transform:translateX(-15%) skewX(-22deg)}
+    @keyframes haoFireballLite{0%{left:23%;opacity:0;transform:translate(-50%,-50%) scale(.25)}12%{opacity:1;transform:translate(-50%,-50%) scale(var(--size))}76%{opacity:1}100%{left:76%;opacity:0;transform:translate(-50%,-50%) scale(calc(var(--size) * 1.25))}}
+    .lightning-flash-fx:before{content:"";position:absolute;inset:12% 7%;background:radial-gradient(ellipse at 75% 52%,#dffcff88 0 4%,#6ecfff42 14%,transparent 38%);opacity:0;animation:lightningSky .62s ease-out both}
+    .lightning-flash-fx i{position:absolute;left:23%;top:24%;width:53%;height:54%;opacity:0;transform-origin:left center;clip-path:polygon(0 47%,26% 47%,20% 11%,52% 48%,35% 48%,80% 88%,61% 54%,100% 54%,67% 100%,75% 59%,37% 59%);background:linear-gradient(90deg,#9df5ff,#f7ffff 52%,#7abaff);filter:drop-shadow(0 0 5px #7ce9ff) drop-shadow(0 0 18px #328fff);will-change:transform,opacity;animation:lightningArc .58s cubic-bezier(.18,.66,.2,1) var(--delay) both}
+    .lightning-flash-fx i:nth-child(2){top:33%;height:37%;transform:rotate(-12deg) scale(.76);opacity:.82}.lightning-flash-fx i:nth-child(3){top:16%;height:62%;transform:rotate(8deg) scale(.58);opacity:.7}
+    .lightning-flash-fx b{position:absolute;left:74%;top:51%;width:70px;height:70px;border:2px solid #b8f7ff;border-radius:50%;opacity:0;box-shadow:0 0 12px #71d6ff,0 0 28px #3374ff inset;transform:translate(-50%,-50%) scale(.25);animation:lightningImpact .52s ease-out .24s both}
+    @keyframes lightningSky{0%{opacity:0}18%{opacity:1}100%{opacity:0}}@keyframes lightningArc{0%{opacity:0;transform:translateX(-8%) scale(.55)}24%{opacity:1}65%{opacity:.92}100%{opacity:0;transform:translateX(18%) scale(1.08)}}@keyframes lightningImpact{0%{opacity:0;transform:translate(-50%,-50%) scale(.22)}30%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.55)}}
+    .shatter-star-fx:before{content:"";position:absolute;left:49%;top:48%;width:18px;height:18px;border-radius:50%;background:#fff9df;box-shadow:0 0 10px #fff,0 0 28px #b778ff;transform:translate(-50%,-50%) scale(.1);animation:starCore .66s cubic-bezier(.18,.7,.2,1) both}.shatter-star-fx i{position:absolute;left:49%;top:48%;width:26px;height:3px;border-radius:999px;background:linear-gradient(90deg,transparent,#f4d6ff,#69ceff,transparent);opacity:0;transform:translate(-50%,-50%) rotate(var(--turn));will-change:transform,opacity;animation:starShard .66s cubic-bezier(.14,.7,.2,1) .12s both}.shatter-star-fx b{position:absolute;left:76%;top:50%;width:102px;height:102px;border:1px solid #d8a7ff;border-radius:50%;opacity:0;transform:translate(-50%,-50%) scale(.2);box-shadow:0 0 15px #be79ff,0 0 44px #538bff inset;animation:starRift .62s ease-out .28s both}@keyframes starCore{0%{opacity:0;transform:translate(-50%,-50%) scale(.1)}30%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(125%,-50%) scale(.4)}}@keyframes starShard{0%{opacity:0}20%{opacity:1}100%{opacity:0;transform:translate(calc(-50% + 190px),-50%) rotate(var(--turn)) scaleX(3.9)}}@keyframes starRift{0%{opacity:0;transform:translate(-50%,-50%) scale(.2)}28%{opacity:1}100%{opacity:0;transform:translate(-50%,-50%) scale(1.5)}}
+    .yellow-river-fx{left:5%;right:auto;bottom:3%;top:auto;width:44%;height:53%;overflow:visible}.yellow-river-fx:before{content:"";position:absolute;inset:14% 2%;border-radius:50%;background:radial-gradient(ellipse at 50% 50%,transparent 0 24%,#bdf7ff22 25% 30%,transparent 31% 44%,#4ac9e444 45% 49%,transparent 50% 65%,#87e9ff33 66% 69%,transparent 70%);filter:drop-shadow(0 0 10px #5ed8ee);opacity:0;animation:riverArrayBloom .78s ease-out both}.yellow-river-fx i{position:absolute;inset:20% 10%;border:2px solid #a6f4ff;border-left-color:transparent;border-radius:50%;opacity:0;transform:rotate(var(--turn)) scale(.45);animation:riverArrayRing .74s cubic-bezier(.18,.72,.2,1) var(--delay) both}.yellow-river-fx b{position:absolute;left:49%;top:49%;width:13px;height:13px;border-radius:50%;background:#e9fdff;box-shadow:0 0 13px #dcfdff,0 0 34px #41b7e8;transform:translate(-50%,-50%);animation:riverArrayCore .72s ease-out both}@keyframes riverArrayBloom{0%{opacity:0;transform:scale(.58)}35%{opacity:1}100%{opacity:0;transform:scale(1.18)}}@keyframes riverArrayRing{0%{opacity:0;transform:rotate(var(--turn)) scale(.3)}35%{opacity:.95}100%{opacity:0;transform:rotate(var(--turn-end)) scale(1.24)}}@keyframes riverArrayCore{0%,100%{opacity:0;transform:translate(-50%,-50%) scale(.3)}38%{opacity:1;transform:translate(-50%,-50%) scale(1.25)}}
+    @media(max-width:650px){.lightning-flash-fx b{width:54px;height:54px}.shatter-star-fx b{width:74px;height:74px}.yellow-river-fx{width:49%;height:48%}}
+  `;document.head.appendChild(style);
+}
+function mountAdvancedSkillEffect(kind,parts=''){
+  let arena=document.querySelector('.battle-arena');if(!arena)return null;ensureAdvancedSkillEffectStyles();arena.querySelectorAll('.advanced-skill-effect').forEach(el=>el.remove());let effect=document.createElement('div');effect.className=`advanced-skill-effect ${kind}`;effect.innerHTML=parts;arena.appendChild(effect);return effect;
+}
+async function playLightningFlashAnimation(){
+  let caster=document.querySelector('.fighter-figure.player'),target=document.querySelector('.fighter-figure.enemy'),effect=mountAdvancedSkillEffect('lightning-flash-fx','<i></i><i></i><i></i><b></b>');
+  caster?.classList.remove('skill-lunge');void caster?.offsetWidth;caster?.classList.add('skill-lunge');await waitBattle(300);target?.classList.add('hit-shake');await waitBattle(280);effect?.remove();caster?.classList.remove('skill-lunge');target?.classList.remove('hit-shake');
+}
+async function playShatterStarRealmAnimation(){
+  let caster=document.querySelector('.fighter-figure.player'),target=document.querySelector('.fighter-figure.enemy'),parts=Array.from({length:8},(_,index)=>`<i style="--turn:${index*45}deg"></i>`).join('')+'<b></b>',effect=mountAdvancedSkillEffect('shatter-star-fx',parts);
+  caster?.classList.remove('skill-lunge');void caster?.offsetWidth;caster?.classList.add('skill-lunge');await waitBattle(340);target?.classList.add('hit-shake');await waitBattle(330);effect?.remove();caster?.classList.remove('skill-lunge');target?.classList.remove('hit-shake');
+}
+async function playYellowRiverArrayAnimation(){
+  let caster=document.querySelector('.fighter-figure.player'),parts=Array.from({length:5},(_,index)=>`<i style="--turn:${index*60}deg;--turn-end:${index*60+72}deg;--delay:${index*.07}s"></i>`).join('')+'<b></b>',effect=mountAdvancedSkillEffect('yellow-river-fx',parts);
+  caster?.classList.remove('skill-lunge');void caster?.offsetWidth;caster?.classList.add('skill-lunge');await waitBattle(640);effect?.remove();caster?.classList.remove('skill-lunge');
+}
+async function playHaoFireballAnimation(){
+  let arena=document.querySelector('.battle-arena'),impact=$('#fireballImpact'),caster=document.querySelector('.fighter-figure.player'),target=document.querySelector('.fighter-figure.enemy');if(!arena)return;ensureAdvancedSkillEffectStyles();arena.querySelectorAll('.haofireball-barrage').forEach(el=>el.remove());let barrage=document.createElement('div');barrage.className='advanced-skill-effect hao-fireball-lite haofireball-barrage';[[39,0,.84],[53,70,1.02],[65,145,.92],[48,215,1.12]].forEach(([lane,delay,size])=>{let ball=document.createElement('span');ball.style.setProperty('--lane',lane+'%');ball.style.setProperty('--delay',delay+'ms');ball.style.setProperty('--size',size);barrage.appendChild(ball)});arena.appendChild(barrage);impact?.classList.remove('burst');caster?.classList.remove('fire-cast');target?.classList.remove('haofireball-hit');void barrage.offsetWidth;caster?.classList.add('fire-cast');await waitBattle(530);impact?.classList.add('burst');target?.classList.add('haofireball-hit');await waitBattle(280);barrage.remove();impact?.classList.remove('burst');caster?.classList.remove('fire-cast');target?.classList.remove('haofireball-hit');
+}
 function battleRealmIndex(label){
   let text=String(label||'');
   if(text.startsWith('真仙'))return realms.length;
@@ -5792,7 +5827,7 @@ battleSkillEffect=async function(sk,idx=0){
   if(reason){toast(reason);return false}
   let cost=battleSkillCost(sk,idx),st=statTotal();
   b.player.mp=Math.max(0,b.player.mp-cost);
-  await playHeroFrames('palmStrike',[130,150,220,230],{lunge:true});
+  await playShatterStarRealmAnimation();
   let baseAttack=Number(g.attack)||0,extraAttack=Math.max(0,Number(st.attack||0)-baseAttack),effectiveAttack=baseAttack*(b.player.attackMultiplier||1)+extraAttack;
   let normalHit=Math.max(1,Math.floor(effectiveAttack+Math.random()*effectiveAttack*.45-b.enemy.defense*.45));
   let woundActive=(b.enemy.thunderWound?.turns||0)>0,damage=normalHit*3*(woundActive?2:1);
@@ -5945,7 +5980,7 @@ battleSkillEffect=async function(sk,idx=0){
   if(reason){toast(reason);return false}
   let cost=battleSkillCost(sk,idx),st=statTotal();
   b.player.mp=Math.max(0,b.player.mp-cost);
-  if(isWildfire)await playFireballAnimation();else await playHeroFrames('palmStrike',[130,150,220,230],{lunge:true});
+  if(isWildfire)await playFireballAnimation();else await playLightningFlashAnimation();
   if(isLightningFlash){
     let thunderWound=(b.enemy.thunderWound?.turns||0)>0,damage=normalBattleHit(b,st,3.5)*(thunderWound?2:1);
     b.enemy.hp=Math.max(0,b.enemy.hp-damage);b.player.cooldowns.lightningFlash=2;
@@ -6011,7 +6046,7 @@ battleSkillEffect=async function(sk,idx=0){
   if(reason){toast(reason);return false}
   let cost=battleSkillCost(sk,idx);b.player.mp=Math.max(0,b.player.mp-cost);
   if(isVerdant){await playHeroFrames('witheringWood',[150,220,300,260]);b.player.woodBlessing={turns:4,fresh:true};battleFx('player','木灵加成',true);battleLog(`你施展百草丰茂，消耗${fmt(cost)}点法力，获得木系加成4回合。`);return true}
-  await playHeroFrames('palmStrike',[130,150,220,230],{lunge:true});b.player.yellowRiver={turns:3,fresh:true};battleFx('player','黄河标记',true);battleLog(`你施展九曲黄河阵，消耗${fmt(cost)}点法力，获得黄河标记3回合。`);return true;
+  await playYellowRiverArrayAnimation();b.player.yellowRiver={turns:3,fresh:true};battleFx('player','黄河标记',true);battleLog(`你施展九曲黄河阵，消耗${fmt(cost)}点法力，获得黄河标记3回合。`);return true;
 };
 const applyWitheringWoodTurnWithVerdantGrowth=applyWitheringWoodTurn;
 applyWitheringWoodTurn=function(b){let before=b?.player?.hp||0,result=applyWitheringWoodTurnWithVerdantGrowth(b);if(result||!b||battleState!==b||(b.player.woodBlessing?.turns||0)<=0||b.player.hp<=before)return result;let recovery=b.player.hp-before,extra=Math.min(b.player.maxHp-b.player.hp,recovery);if(extra>0){b.player.hp+=extra;battleFx('player','+'+fmt(extra),true);battleLog(`木系加成催生灵息，额外恢复${fmt(extra)}点生命。`)}return result};
@@ -9204,7 +9239,7 @@ resolveLocalTarget=function(target,batch=false){
 
 // ===== 太玄宗宝库 · 大微天龙 =====
 function makeGreatDragonSkill(){return{name:'大微天龙',icon:'🐉',kind:'active',greatDragon:true,desc:'主动技：消耗当前生命50%，获得消耗值50%的护盾；无视防御，对敌造成等同护盾值的伤害。'}}
-function greatDragonBook(){return{type:'skillbook',name:'大微天龙',qty:1,max:1,icon:'🐉',sell:0,skill:makeGreatDragonSkill(),desc:'宝库书籍：使用后学会主动技「大微天龙」。施放时生命减半，获得减半数值一半的护盾，并无视防御造成同等伤害。'}}
+function greatDragonBook(){return{type:'skillbook',name:'大微天龙',qty:1,max:1,icon:'🐉',sell:0,skill:makeGreatDragonSkill(),desc:'宝库书籍：使用后学会主动技「大微天龙」。施放时生命减半，获得减半数值一半的护盾，并无视防御造成扣除生命值5倍的伤害。'}}
 const GREAT_DRAGON_VFX_ASSET='assets/skill-effects/great-dragon.webp';
 function ensureGreatDragonAnimationStyles(){
   if($('#greatDragonAnimationStyle'))return;
@@ -9325,13 +9360,13 @@ battleSkillEffect=async function(skill,index=0){
   if(!(skill?.greatDragon||skill?.name==='大微天龙'))return battleSkillEffectWithGreatDragon(skill,index);
   let b=battleState,reason=battleSkillBlockReason(skill,index,b);
   if(reason){toast(reason);return false}
-  let sacrificed=Math.max(1,Math.floor(b.player.hp*.5)),value=Math.max(1,Math.floor(sacrificed*.5));
+  let sacrificed=Math.max(1,Math.floor(b.player.hp*.5)),value=Math.max(1,Math.floor(sacrificed*.5)),damage=Math.max(1,sacrificed*5);
   b.player.hp=Math.max(1,b.player.hp-sacrificed);
   addBattleShield(b,value);
   await playGreatDragonAnimation();
-  b.enemy.hp=Math.max(0,b.enemy.hp-value);
-  battleFx('player',`盾+${fmt(value)}`,true);battleFx('enemy','-'+fmt(value));
-  battleLog(`你施展大微天龙，生命减少${fmt(sacrificed)}，获得${fmt(value)}点护盾；无视防御造成${fmt(value)}点伤害。`);
+  b.enemy.hp=Math.max(0,b.enemy.hp-damage);
+  battleFx('player',`盾+${fmt(value)}`,true);battleFx('enemy','-'+fmt(damage));
+  battleLog(`你施展大微天龙，生命减少${fmt(sacrificed)}，获得${fmt(value)}点护盾；无视防御造成${fmt(damage)}点伤害。`);
   return true;
 };
 
@@ -9566,7 +9601,7 @@ const battleEnemyStatsWithTreasureMonster=battleEnemyStats;
 battleEnemyStats=function(target,area=g.selectedScene??g.map,spot=activeSpot(),idx=0){
   if(target?.treasureMonster){
     let player=statTotal();
-    return{realm:'秘宝',hp:Math.max(1,Math.round(player.hp*100)),mp:0,attack:1,defense:Math.max(0,Math.floor(player.defense)),icon:'🪎',portrait:'',stage:0,multiplier:1};
+    return{realm:'秘宝',hp:111,mp:0,attack:1,defense:999999999,icon:'🪎',portrait:'',stage:0,multiplier:1};
   }
   return battleEnemyStatsWithTreasureMonster(target,area,spot,idx);
 };
@@ -9575,15 +9610,15 @@ function treasureAttributeReward(){
   if(Number(g.crit||0)>=40)choices=choices.filter(x=>x[0]!=='crit');
   let [key,label]=choices[Math.floor(Math.random()*choices.length)],before=Math.max(0,finiteStat(g[key],0)),gain;
   if(key==='crit'){
-    gain=.1;g.crit=Math.min(40,Math.round((before+gain)*100)/100);gain=Math.round((g.crit-before)*100)/100;
+    gain=.5;g.crit=Math.min(40,Math.round((before+gain)*100)/100);gain=Math.round((g.crit-before)*100)/100;
   }else{
-    gain=Math.max(.01,Math.round(before*.001*100)/100);g[key]=Math.round((before+gain)*100)/100;
+    gain=Math.max(.01,Math.round(before*.005*100)/100);g[key]=Math.round((before+gain)*100)/100;
     if(key==='maxHp'&&finiteStat(g.hp,0)>=before)g.hp=Math.round((g.hp+gain)*100)/100;
     if(key==='baseMana'&&finiteStat(g.mana,0)>=before)g.mana=Math.round((g.mana+gain)*100)/100;
   }
   let amount=key==='crit'?`+${gain.toFixed(1)}%`:`+${gain.toFixed(2)}`;
   refreshPlayerStatus();
-  return{key,label,gain,text:`${label} ${amount}（提升0.1%）`};
+  return{key,label,gain,text:`${label} ${amount}（提升0.5%）`};
 }
 const resolveLocalTargetWithTreasureMonster=resolveLocalTarget;
 resolveLocalTarget=function(target,batch=false){
