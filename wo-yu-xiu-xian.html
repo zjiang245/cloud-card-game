@@ -7842,7 +7842,7 @@ const localMeetBeforeTianmo=localMeet;
 localMeet=function(idx=0){let i=g.selectedScene??g.map,spot=activeSpot(),npc=localNpcs(i,spot)[idx],name=npc?.name||npc?.[0];if(i===11&&name==='天魔传送门')return useSceneTransfer(11,0);if(i===11&&npc?.tianmoElder)return talkTianmoElder();if(i===11&&npc?.tianmoCorpse)return talkTianmoCorpse(npc.tianmoInfo);if(i===11&&npc?.tianmoInfo)return talkTianmoCultivator(npc.tianmoInfo);return localMeetBeforeTianmo(idx)};
 const npcQuestIconBeforeTianmo=npcQuestIcon;
 npcQuestIcon=function(name,mapIndex,spot){if(mapIndex===11){if(name==='天魔传送门')return'💬';if(String(name).endsWith('的尸体'))return'☠️';return'⚔️'}return npcQuestIconBeforeTianmo(name,mapIndex,spot)};
-function finishTianmoCultivatorVictory(target){let info=target.tianmoInfo||tianmoCultivatorInfo(activeSpot()),state=tianmoDefeatState();state[target.tianmoKey||info.tianmoKey]=true;closeBattle(true);g.sectReputation=(g.sectReputation||0)+info.reputation;g.sectContribution=(g.sectContribution||0)+info.contribution;g.kills=(g.kills||0)+1;let sectMaster=info.title==='宗主',mainBoss=sectMaster&&(g.mainQuestStage||0)===26;if(sectMaster)g.tianmoMainBossDefeated=true;if(mainBoss){let advanced=advanceMainQuest(27,'天魔宗宗主败亡，血月阵核脱离魔门。返回太玄宗掌教内殿，完成最后的封阵与迎宗主归山。');if(advanced)rewardLateMainDialogue('tianmoSectMaster')}let blocked=tianmoSpotHasEnemies(info.spot);pushLocalLog(`天魔宗战斗：${info.displayName}败退，宗门声望+${info.reputation}，宗门贡献+${info.contribution}。${blocked?'当前路点仍有魔修挡路。':'当前路点已清空，前路暂时畅通。'}`);if(mainBoss){toast(`宗门声望 +${fmt(info.reputation)} · 宗门贡献 +${fmt(info.contribution)} · 主线分步奖励已结算`,4200)}else showNpcResult('天魔宗战果',`宗门声望 +${fmt(info.reputation)}\n宗门贡献 +${fmt(info.contribution)}\n\n${blocked?'仍有魔教中人守在此处，不能贸然离开。':'此处的魔门暂时安静下来，前路已被你打开。'}`,'good');renderSceneMap();render();save();if(mainBoss)showTianmoElderEntrance()}
+function finishTianmoCultivatorVictory(target){let info=target.tianmoInfo||tianmoCultivatorInfo(activeSpot()),state=tianmoDefeatState();state[target.tianmoKey||info.tianmoKey]=true;closeBattle(true);g.sectReputation=(g.sectReputation||0)+info.reputation;g.sectContribution=(g.sectContribution||0)+info.contribution;g.kills=(g.kills||0)+1;let sectMaster=info.title==='宗主',mainBoss=sectMaster&&(g.mainQuestStage||0)===26,elderEntrance=sectMaster&&!g.tianmoElderDefeated&&!g.tianmoElderEntranceShown;if(sectMaster)g.tianmoMainBossDefeated=true;if(elderEntrance)g.tianmoElderEntranceShown=true;if(mainBoss){let advanced=advanceMainQuest(27,'天魔宗宗主败亡，血月阵核脱离魔门。返回太玄宗掌教内殿，完成最后的封阵与迎宗主归山。');if(advanced)rewardLateMainDialogue('tianmoSectMaster')}let blocked=tianmoSpotHasEnemies(info.spot);pushLocalLog(`天魔宗战斗：${info.displayName}败退，宗门声望+${info.reputation}，宗门贡献+${info.contribution}。${blocked?'当前路点仍有魔修挡路。':'当前路点已清空，前路暂时畅通。'}`);if(mainBoss){toast(`宗门声望 +${fmt(info.reputation)} · 宗门贡献 +${fmt(info.contribution)} · 主线分步奖励已结算`,4200)}else showNpcResult('天魔宗战果',`宗门声望 +${fmt(info.reputation)}\n宗门贡献 +${fmt(info.contribution)}\n\n${blocked?'仍有魔教中人守在此处，不能贸然离开。':'此处的魔门暂时安静下来，前路已被你打开。'}`,'good');renderSceneMap();render();save();if(elderEntrance)setTimeout(showTianmoElderEntrance,80)}
 function finishTianmoElderVictory(){
   g.tianmoElderDefeated=true;
   closeBattle(true);
@@ -10620,6 +10620,7 @@ function resetTianmoStory(){
   g.tianmoDefeated={};
   g.tianmoMainBossDefeated=false;
   g.tianmoElderDefeated=false;
+  delete g.tianmoElderEntranceShown;
   g.tianmoNpcCounts={};
   g.tianmoGuidePending=true;
   let heroine=maskedHeroineQuest();
@@ -10659,12 +10660,18 @@ function ensureCinematicSkillEffectStyles(){
   if($('#cinematicSkillEffectStyles'))return;
   let style=document.createElement('style');style.id='cinematicSkillEffectStyles';style.textContent=`
     .cinematic-skill-effect{position:absolute;inset:0;z-index:14;overflow:hidden;pointer-events:none;isolation:isolate}
-    .cinematic-skill-effect:before{content:'';position:absolute;inset:8% 12%;opacity:0;border-radius:50%;filter:blur(18px);animation:cinematicAura .72s ease-out both}
+    /* 帧图本身是竖幅立绘；以全场氛围层铺满战斗台，再完整呈现立绘，避免手机上被裁掉一半。 */
+    .cinematic-skill-effect:before{content:'';position:absolute;inset:-12%;opacity:0;border-radius:50%;filter:blur(18px);animation:cinematicAura 2s ease-out both}
+    .cinematic-skill-effect:after{content:'';position:absolute;inset:0;opacity:0;mix-blend-mode:screen;animation:cinematicField 2s ease-out both}
     .cinematic-skill-effect.is-lightning:before{background:radial-gradient(circle at 74% 46%,#c8ecff99,transparent 43%)}
     .cinematic-skill-effect.is-wildfire:before{background:radial-gradient(circle at 74% 55%,#ff7a2f9c,transparent 48%)}
     .cinematic-skill-effect.is-yellowRiver:before{background:radial-gradient(circle at 28% 55%,#a1e6ff88,transparent 48%)}
     .cinematic-skill-effect.is-verdant:before{background:radial-gradient(circle at 27% 53%,#b9f2a07c,transparent 46%)}
-    .cinematic-skill-effect img{position:absolute;top:50%;height:min(94%,700px);width:auto;max-width:58%;object-fit:contain;opacity:0;filter:drop-shadow(0 8px 18px #02091080);will-change:transform,opacity;transform:translate(-50%,-50%) scale(.66)}
+    .cinematic-skill-effect.is-lightning:after{background:radial-gradient(ellipse at 70% 50%,#b6ecff72 0 9%,#4fa8ff42 24%,transparent 58%),repeating-linear-gradient(108deg,transparent 0 14%,#b7f5ff22 15% 16%,transparent 17% 31%)}
+    .cinematic-skill-effect.is-wildfire:after{background:radial-gradient(ellipse at 70% 62%,#ffdd8650 0 10%,#ff512b38 30%,transparent 66%),linear-gradient(90deg,transparent 2%,#ef3b1b1d 52%,transparent 100%)}
+    .cinematic-skill-effect.is-yellowRiver:after{background:radial-gradient(ellipse at 35% 56%,#c5f5ff54 0 12%,#398ecf30 35%,transparent 67%),repeating-linear-gradient(0deg,transparent 0 15%,#9ceaff1d 16% 17%,transparent 18% 34%)}
+    .cinematic-skill-effect.is-verdant:after{background:radial-gradient(ellipse at 31% 55%,#d8ffb86a 0 11%,#79cc6a3b 34%,transparent 67%),linear-gradient(112deg,transparent 12%,#b7f98d20 50%,transparent 88%)}
+    .cinematic-skill-effect img{position:absolute;top:50%;height:min(84%,660px);width:min(92%,520px);max-width:none;object-fit:contain;object-position:center;opacity:0;filter:drop-shadow(0 8px 18px #02091080);will-change:transform,opacity;transform:translate(-50%,-50%) scale(.66)}
     .cinematic-skill-effect.offense img{left:70%;animation:cinematicStrike .22s ease-out both}
     .cinematic-skill-effect.blessing img{left:28%;animation:cinematicBlessing .22s ease-out both}
     .cinematic-skill-effect.offense.frame-2 img{transform:translate(-50%,-50%) scale(.89)}
@@ -10674,13 +10681,14 @@ function ensureCinematicSkillEffectStyles(){
     .cinematic-skill-effect.frame-4 img{filter:drop-shadow(0 5px 12px #02091065);animation:cinematicFade .25s ease-out both}
     .cinematic-caster{animation:cinematicCaster .72s cubic-bezier(.18,.75,.2,1)}
     .cinematic-victim{animation:cinematicVictim .44s cubic-bezier(.16,.7,.2,1)}
-    @keyframes cinematicAura{0%{opacity:0;transform:scale(.58)}42%{opacity:1}100%{opacity:0;transform:scale(1.16)}}
+    @keyframes cinematicAura{0%{opacity:0;transform:scale(.58)}20%{opacity:1}74%{opacity:.72}100%{opacity:0;transform:scale(1.16)}}
+    @keyframes cinematicField{0%{opacity:0;transform:scale(.82)}22%{opacity:.78}74%{opacity:.62}100%{opacity:0;transform:scale(1.12)}}
     @keyframes cinematicStrike{0%{opacity:0;transform:translate(-70%,-50%) scale(.5)}32%{opacity:1}100%{opacity:1;transform:translate(-50%,-50%) scale(.82)}}
     @keyframes cinematicBlessing{0%{opacity:0;transform:translate(-50%,-46%) scale(.48)}32%{opacity:1}100%{opacity:1;transform:translate(-50%,-50%) scale(.8)}}
     @keyframes cinematicFade{0%{opacity:.92}100%{opacity:0;transform:translate(-50%,-54%) scale(1.04)}}
     @keyframes cinematicCaster{0%,100%{transform:translateX(0) scale(1)}36%{transform:translateX(3%) translateY(-3px) scale(1.035)}}
     @keyframes cinematicVictim{0%,100%{transform:translateX(0)}33%{transform:translateX(-4%) skewY(-1deg)}62%{transform:translateX(2%)}}
-    @media(max-width:650px){.cinematic-skill-effect img{height:min(81%,500px);max-width:68%}.cinematic-skill-effect.offense img{left:71%}.cinematic-skill-effect.blessing img{left:27%}}
+    @media(max-width:650px){.cinematic-skill-effect:before{inset:-18%;filter:blur(13px)}.cinematic-skill-effect img{height:82%;width:88%;max-width:none}.cinematic-skill-effect.offense img{left:70%}.cinematic-skill-effect.blessing img{left:30%}}
   `;document.head.appendChild(style);
 }
 async function playCinematicSkillEffect(kind,{offense=false,heroAction='palmStrike'}={}){
@@ -10761,5 +10769,14 @@ async function playLightningFlashAnimation(){return playCinematicSkillEffect('li
 async function playWildfireAnimation(){return playCinematicSkillEffect('wildfire',{offense:true,heroAction:'fireball'})}
 async function playYellowRiverArrayAnimation(){return playCinematicSkillEffect('yellowRiver',{heroAction:'purpleCloud'})}
 async function playVerdantGrowthAnimation(){return playCinematicSkillEffect('verdant',{heroAction:'witheringWood'})}
+let tianmoElderEntranceTimer=0;
+function queueTianmoElderEntrance(){
+  let scene=g.selectedScene??g.map;
+  if(scene!==11||activeSpot()!==38||!g.tianmoMainBossDefeated||g.tianmoElderDefeated||g.tianmoElderEntranceShown||battleState)return;
+  g.tianmoElderEntranceShown=true;save();clearTimeout(tianmoElderEntranceTimer);
+  tianmoElderEntranceTimer=setTimeout(()=>{if((g.selectedScene??g.map)===11&&activeSpot()===38&&!g.tianmoElderDefeated&&!battleState)showTianmoElderEntrance()},100);
+}
+const renderSceneMapWithTianmoElderEntrancePrompt=renderSceneMap;
+renderSceneMap=function(...args){let result=renderSceneMapWithTianmoElderEntrancePrompt(...args);queueTianmoElderEntrance();return result};
 offlineSettle();bindUi();installDeepSeaBattleRun();render();renderLogs();updateRecommendation();$('#redeemBtn').textContent='兑换码';startOpeningFlow();log('智能体接管洞府：挂机收益已关闭，收益主要来自手动战斗、采集与宗门事务');setInterval(tick,1000);setInterval(updateRecommendation,1000);window.addEventListener('pagehide',()=>save());window.addEventListener('beforeunload',()=>save());
 </script></body></html>
