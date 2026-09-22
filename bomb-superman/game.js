@@ -5,6 +5,16 @@
   const DIRS = [[0,-1],[1,0],[0,1],[-1,0]];
   const W = 15, H = 13;
   const key = (x,y) => y*W+x;
+  const spiral = () => {
+    const cells=[];let left=1,right=W-2,top=1,bottom=H-2;
+    while(left<=right&&top<=bottom){
+      for(let x=left;x<=right;x++)cells.push([x,top]);top++;
+      for(let y=top;y<=bottom;y++)cells.push([right,y]);right--;
+      if(top<=bottom){for(let x=right;x>=left;x--)cells.push([x,bottom]);bottom--;}
+      if(left<=right){for(let y=bottom;y>=top;y--)cells.push([left,y]);left++;}
+    }
+    return cells;
+  };
   const ITEM_NAMES = {fire:'火焰',bomb:'炸弹',speed:'加速',kick:'脚踢',super:'超级火焰',remote:'遥控',glove:'手持手套',punch:'拳击手套',line:'串弹',skull:'骷髅',curse:'超级骷髅'};
   class ArenaGame {
     constructor(options = {}) {
@@ -12,6 +22,7 @@
       this.rng = ROT.RNG.clone().setSeed(this.options.seed);
       this.time = 0; this.state = 'ready'; this.bombs = []; this.flames = []; this.items = new Map();
       this.pending = []; this.events = []; this.serial = 0; this.ring = 0; this.winner = null;
+      this.stonePath=spiral();this.stoneIndex=0;this.nextStoneAt=this.options.duration;
       this.map=MAPS[this.options.map]||MAPS.garden;this.features=features(this.options.map);this.terrainVersion=0;this.bloomCycle=0;
       this.grid = Array.from({length:H},(_,y)=>Array.from({length:W},(_,x)=>x===0||y===0||x===W-1||y===H-1||(!(x%2)&&!(y%2))?1:0));
       const starts = [[1,1],[13,11],[13,1],[1,11],[7,1],[7,11],[1,5],[13,5]];
@@ -168,6 +179,20 @@
       if(this.state!=='playing')return;const alive=this.players.filter(p=>p.alive),teams=new Set(alive.map(p=>p.team));
       if(teams.size<=1){this.state='over';this.winner=alive[0]?.team??null;this.emit('end',alive.length?this.options.mode==='team'?`${this.winner===0?'玩家队':'电脑队'}获胜`:`${alive[0].id+1}P 获胜`:'平局');}
     }
+    petrifyNext(){
+      let cell;
+      while(this.stoneIndex<this.stonePath.length){
+        const candidate=this.stonePath[this.stoneIndex++];
+        if(this.tile(candidate[0],candidate[1])!==1){cell=candidate;break;}
+      }
+      if(!cell)return false;
+      const [x,y]=cell;this.grid[y][x]=1;this.items.delete(key(x,y));
+      this.pending=this.pending.filter(item=>item.x!==x||item.y!==y);
+      this.bombs=this.bombs.filter(b=>b.x!==x||b.y!==y);
+      for(const p of this.players){const at=this.occupied(p);if(p.alive&&(p.x===x&&p.y===y||at.x===x&&at.y===y))this.eliminate(p);}
+      this.ring=Math.min(x,y,W-1-x,H-1-y);this.terrainVersion++;
+      this.emit('stone','石化逼近，向中央移动',{x,y});return true;
+    }
     update(dt){
       if(this.state!=='playing')return;this.time+=dt;
       this.flames=this.flames.filter(f=>f.until>this.time);
@@ -192,8 +217,10 @@
         if(p.ai)this.ai(p);else if(p.intent!==null)this.move(p,p.intent);
       }
       this.damage();
-      const nextRing=this.time>=this.options.duration?Math.floor((this.time-this.options.duration)/5)+1:0;
-      if(nextRing>this.ring){this.ring=nextRing;this.terrainVersion++;for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++)if(Math.min(x,y,W-1-x,H-1-y)<=this.ring){this.grid[y][x]=1;this.items.delete(key(x,y));for(const p of this.players)if(p.alive&&(p.x===x&&p.y===y||this.occupied(p).x===x&&this.occupied(p).y===y))this.eliminate(p);this.bombs=this.bombs.filter(b=>b.x!==x||b.y!==y);}this.emit('stone','石化逼近，向中央移动');}
+      while(this.time>=this.nextStoneAt&&this.state==='playing'){
+        if(!this.petrifyNext())break;
+        this.nextStoneAt+=.25;
+      }
       this.checkEnd();
     }
     updateTerrain(){

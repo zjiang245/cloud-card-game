@@ -63,8 +63,9 @@
   function draw(){
     const renderTime=game.time+(game.state==='playing'?accumulator:0);
     ctx.imageSmoothingEnabled=true;drawTerrain();ctx.drawImage(terrain,0,0);drawFeatures();
-    if(game.time>game.options.duration-5)for(let y=0;y<H;y++)for(let x=0;x<W;x++){
-      if(game.time>game.options.duration-5&&game.state==='playing'&&Math.min(x,y,W-x-1,H-y-1)===game.ring+1){ctx.fillStyle=`rgba(239,78,48,${.15+Math.sin(game.time*6)*.08})`;ctx.fillRect(x*S,y*S,S,S);}
+    if(game.time>game.options.duration-5&&game.state==='playing'){
+      const next=game.stonePath.slice(game.stoneIndex).find(([x,y])=>game.tile(x,y)!==1);
+      if(next){ctx.fillStyle=`rgba(239,78,48,${.22+Math.sin(game.time*8)*.12})`;ctx.fillRect(next[0]*S,next[1]*S,S,S);}
     }
     for(const [k,type] of game.items){const x=k%W,y=Math.floor(k/W),offset=Math.sin(game.time*4+k)*2;
       if(itemArt[type]){const art=itemArt[type];if(art.complete&&art.naturalWidth)ctx.drawImage(art,x*S+8,y*S+6+offset,44,46);}
