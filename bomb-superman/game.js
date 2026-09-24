@@ -120,9 +120,9 @@
     }
     damage(){for(const p of this.players){if(!p.alive)continue;const at=this.occupied(p),f=this.flames.find(f=>f.x===at.x&&f.y===at.y&&f.until>this.time);if(f)this.eliminate(p,f.owner);}}
     eliminate(p,owner=-1){
-      if(!p.alive)return;p.alive=false;
+      if(!p.alive)return;const at=this.position(p);p.alive=false;p.eliminatedAt=this.time;
       if(owner>=0&&owner!==p.id)this.players[owner].kills++;
-      this.emit('eliminate',`${p.id+1}P 已淘汰`,{player:p.id});
+      this.emit('eliminate',`${p.id+1}P 已淘汰`,{player:p.id,x:at.x,y:at.y,dir:p.dir});
       const drops=[...Array(Math.min(3,p.capacity-1)).fill('bomb'),...Array(Math.min(3,p.power-2)).fill('fire')];
       const spaces=[];for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++)if(this.open(x,y)&&!this.items.has(key(x,y)))spaces.push([x,y]);
       for(const type of drops){if(!spaces.length)break;const index=this.rng.getUniformInt(0,spaces.length-1),[x,y]=spaces.splice(index,1)[0];this.pending.push({x,y,type,at:this.time+.7});}
