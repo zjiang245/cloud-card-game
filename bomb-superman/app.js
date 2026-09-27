@@ -36,6 +36,47 @@
     const sw=characters.naturalWidth/4,sh=characters.naturalHeight/8;
     ctx.drawImage(characters,p.dir*sw,p.id*sh,sw,sh,x,y,58,62);
   }
+  function drawDeath(fx,now){
+    const elapsed=now-fx.started,x=fx.x*S,y=fx.y*S,gray=Math.min(1,elapsed/360),crumble=Math.max(0,Math.min(1,(elapsed-300)/720));
+    const fade=elapsed>1900?Math.max(0,1-(elapsed-1900)/300):1;
+    ctx.save();ctx.globalAlpha=fade;
+    // Keep the character at full size while horizontal bands turn grey and crumble away.
+    ctx.filter=`grayscale(${gray}) brightness(${1-gray*.35})`;
+    for(let band=0;band<7;band++){
+      const gone=crumble*8-band>1;if(gone)continue;
+      ctx.save();ctx.beginPath();ctx.rect(x,y-6+band*9,60,9);ctx.clip();ctx.globalAlpha=Math.min(1,1-Math.max(0,crumble*8-band));character({id:fx.id,dir:fx.dir},x+1,y-6);ctx.restore();
+    }
+    ctx.filter='none';
+    // Deterministic fragments fall from the dissolving body toward the forming ash pile.
+    for(const dust of fx.dust){
+      const t=Math.max(0,Math.min(1,(elapsed-dust.delay)/620));if(!t||t>=1)continue;
+      const px=x+30+dust.fromX*(1-t)+dust.toX*t,py=y+8+dust.fromY*(1-t)+48*t-18*Math.sin(t*Math.PI);
+      ctx.fillStyle=dust.shade;ctx.globalAlpha=fade*(1-t*.35);ctx.fillRect(px,py,dust.size,dust.size);
+    }
+    // The pile grows upward as four compact rows, giving it a clear pyramid silhouette.
+    const pile=Math.max(0,Math.min(1,(elapsed-520)/600));
+    if(pile>0){
+      ctx.globalAlpha=fade;ctx.fillStyle='#42494455';ctx.beginPath();ctx.ellipse(x+30,y+56,25*pile,5,0,0,Math.PI*2);ctx.fill();
+      ctx.save();ctx.beginPath();ctx.rect(x+3,y+57-31*pile,54,32*pile);ctx.clip();ctx.fillStyle='#626965';ctx.beginPath();ctx.moveTo(x+5,y+56);ctx.quadraticCurveTo(x+17,y+49,x+28,y+29);ctx.quadraticCurveTo(x+31,y+25,x+34,y+31);ctx.quadraticCurveTo(x+43,y+48,x+55,y+56);ctx.closePath();ctx.fill();ctx.strokeStyle='#454b48';ctx.lineWidth=1.5;ctx.stroke();ctx.restore();
+      const rows=[[7,52],[5,45],[3,38],[1,31]];
+      for(let row=0;row<rows.length;row++){
+        const rowProgress=Math.max(0,Math.min(1,pile*4-row));if(!rowProgress)continue;
+        const [count,cy]=rows[row];for(let i=0;i<count;i++){
+          const cx=x+30+(i-(count-1)/2)*6;ctx.fillStyle=['#777d78','#929792','#555c58'][(i+row)%3];ctx.beginPath();ctx.arc(cx,y+cy+(1-rowProgress)*8,3.2,0,Math.PI*2);ctx.fill();
+        }
+      }
+    }
+    // Eyes appear at the summit, then roll down opposite slopes and settle beside the pile.
+    const eyeT=Math.max(0,Math.min(1,(elapsed-1050)/600));
+    if(elapsed>=980){
+      for(const side of [-1,1]){
+        const roll=eyeT*eyeT*(3-2*eyeT),ex=x+30+side*(4+15*roll),ey=y+27+24*roll-Math.sin(roll*Math.PI)*2;
+        ctx.fillStyle='#f7f7ef';ctx.strokeStyle='#343b38';ctx.lineWidth=1.4;ctx.beginPath();ctx.arc(ex,ey,4.8,0,Math.PI*2);ctx.fill();ctx.stroke();
+        ctx.fillStyle='#202523';ctx.beginPath();ctx.arc(ex+side*(1.1+roll),ey+1.2,2,0,Math.PI*2);ctx.fill();
+      }
+    }
+    ctx.restore();
+  }
   function drawTerrain(){
     const stamp=`${game.options.map}:${game.options.seed}:${game.terrainVersion}:${atlas.complete}`;
     if(stamp===terrainStamp)return;terrainStamp=stamp;
@@ -89,11 +130,7 @@
       if(p.portalFlash&&game.time-p.portalFlash<.4){ctx.strokeStyle='#adf2ff';ctx.lineWidth=3;ctx.beginPath();ctx.arc(x+30,y+30,20+(game.time-p.portalFlash)*45,0,Math.PI*2);ctx.stroke();}
       ctx.fillStyle=colors[p.id];ctx.strokeStyle='#fff';ctx.lineWidth=2;ctx.beginPath();ctx.roundRect(x+17,y-8,27,16,4);ctx.fill();ctx.stroke();ctx.fillStyle='white';ctx.font='bold 11px sans-serif';ctx.textAlign='center';ctx.fillText(`${p.id+1}P`,x+30,y+4);ctx.textAlign='left';
     }
-    const now=performance.now();deathFx=deathFx.filter(fx=>now-fx.started<900);
-    for(const fx of deathFx){const elapsed=now-fx.started,frame=Math.min(5,Math.floor(elapsed/140)),progress=frame/5,x=fx.x*S,y=fx.y*S;
-      ctx.save();ctx.globalAlpha=1-progress*.72;ctx.filter=`grayscale(${progress}) brightness(${1-progress*.42})`;ctx.translate(x+30,y+50);ctx.scale(1-progress*.18,1-progress*.55);character({id:fx.id,dir:fx.dir},-29,-56);ctx.restore();
-      if(frame>=3){ctx.fillStyle=`rgba(100,108,104,${.22+progress*.35})`;for(let i=0;i<5;i++)ctx.fillRect(x+9+i*9,y+51-(i%2)*3,5,3);}
-    }
+    const now=performance.now();deathFx=deathFx.filter(fx=>now-fx.started<2200);for(const fx of deathFx)drawDeath(fx,now);
   }
   function updateUI(){
     const remaining=Math.max(0,Math.ceil(game.options.duration-game.time));$('timer').textContent=remaining?`${String(Math.floor(remaining/60)).padStart(2,'0')}:${String(remaining%60).padStart(2,'0')}`:'石化中';
@@ -118,7 +155,7 @@
     game.players.filter(p=>!p.ai&&p.alive).forEach(p=>{const recent=[...keys].reverse().find(k=>controls[p.id].includes(k));p.intent=recent===undefined?null:controls[p.id].indexOf(recent);});
   }
   function frame(now){const dt=previous?Math.min(.10,Math.max(0,(now-previous)/1000)):0;previous=now;if(game.state==='playing'){input();accumulator+=dt;while(accumulator>=1/120&&game.state==='playing'){game.update(1/120);accumulator-=1/120;}}else accumulator=0;draw();
-    while(eventIndex<game.events.length){const e=game.events[eventIndex++];if(e.type==='explode')playSound('explode',.72);if(e.type==='bomb')tone(200,.05,'sine',.02);if(e.type==='pickup'){playSound('pickup',.62);$('notice').textContent=e.text;}if(e.type==='eliminate'){playSound('eliminate',.72);deathFx.push({id:e.player,x:e.x,y:e.y,dir:e.dir,started:performance.now()});}if(['eliminate','stone','start'].includes(e.type))$('notice').textContent=e.text;}
+    while(eventIndex<game.events.length){const e=game.events[eventIndex++];if(e.type==='explode')playSound('explode',.72);if(e.type==='bomb')tone(200,.05,'sine',.02);if(e.type==='pickup'){playSound('pickup',.62);$('notice').textContent=e.text;}if(e.type==='eliminate'){playSound('eliminate',.72);const dust=Array.from({length:28},(_,i)=>({fromX:((i*17)%39)-19,fromY:((i*23)%49)-18,toX:((i*13)%43)-21,delay:260+(i%7)*65,size:2+i%3,shade:['#686e69','#858a85','#a0a49f'][i%3]}));deathFx.push({id:e.player,x:e.x,y:e.y,dir:e.dir,started:performance.now(),dust});}if(['eliminate','stone','start'].includes(e.type))$('notice').textContent=e.text;}
     // Events are consumed every frame; prevent an ever-growing event queue.
     game.events.length=0;eventIndex=0;
     if(now-paintUI>180){updateUI();paintUI=now;}requestAnimationFrame(frame);
