@@ -1,7 +1,7 @@
 (function (root) {
   'use strict';
   const ROT = root.ROT || (typeof require === 'function' ? require('./vendor/rot.js') : null);
-  const {MAPS,features}=root.BomberMaps || require('./maps.js');
+  const {MAPS,features,obstacles}=root.BomberMaps || require('./maps.js');
   const DIRS = [[0,-1],[1,0],[0,1],[-1,0]];
   const W = 15, H = 13;
   const key = (x,y) => y*W+x;
@@ -25,12 +25,15 @@
       this.stonePath=spiral();this.stoneIndex=0;this.nextStoneAt=this.options.duration;
       this.map=MAPS[this.options.map]||MAPS.garden;this.features=features(this.options.map);this.terrainVersion=0;this.bloomCycle=0;
       this.grid = Array.from({length:H},(_,y)=>Array.from({length:W},(_,x)=>x===0||y===0||x===W-1||y===H-1||(!(x%2)&&!(y%2))?1:0));
+      const layout=obstacles(this.options.map);this.mapWalls=layout.walls;this.mapLanes=layout.lanes;
+      for(const k of layout.walls)this.grid[Math.floor(k/W)][k%W]=1;
+      for(const k of layout.lanes)this.grid[Math.floor(k/W)][k%W]=0;
       const starts = [[1,1],[13,11],[13,1],[1,11],[7,1],[7,11],[1,5],[13,5]];
       this.players = starts.slice(0,this.options.count).map(([x,y],id)=>({id,x,y,fromX:x,fromY:y,moved:-1,nextMove:0,dir:2,alive:true,ai:id>=(this.options.mode==='solo'?1:2),team:this.options.mode==='team'?(id<2?0:1):id,capacity:1,power:2,speed:0,kick:false,super:false,remote:0,glove:false,punch:false,line:false,curses:[],cursedUntil:0,lastBomb:-10,kills:0,nextThink:0}));
       for(let y=1;y<H-1;y++)for(let x=1;x<W-1;x++){
         const clear=this.players.some(p=>Math.abs(p.x-x)+Math.abs(p.y-y)<=2);
         const avenue=this.options.map==='cross'&&(x===7||y===5||y===7);
-        if(!this.grid[y][x]&&!clear&&!avenue&&!this.features.has(key(x,y))&&this.rng.getUniform()<this.map.density)this.grid[y][x]=2;
+        if(!this.grid[y][x]&&!clear&&!avenue&&!this.mapLanes.has(key(x,y))&&!this.features.has(key(x,y))&&this.rng.getUniform()<this.map.density)this.grid[y][x]=2;
       }
       this.players.forEach(p=>Object.assign(p,{moveDuration:0,intent:null,slide:null,portalUntil:0,arrived:true}));
       this.emit('ready','等待开局');

@@ -114,7 +114,11 @@
       const t=game.tile(x,y),a=x*S,b=y*S;
       sprite(['ice','factory','portal','cross'].includes(game.options.map)?11:8,a,b,S,S,terrainCtx);
       terrainCtx.fillStyle=game.map.tint;terrainCtx.fillRect(a,b,S,S);
-      if(t===1)sprite(9,a+1,b+1,S-2,S-2,terrainCtx);
+      if(t===0&&game.mapLanes.has(y*W+x)){terrainCtx.fillStyle=game.map.laneTint;terrainCtx.fillRect(a+1,b+1,S-2,S-2);}
+      if(t===1){
+        sprite(9,a+1,b+1,S-2,S-2,terrainCtx);
+        if(game.mapWalls.has(y*W+x)){terrainCtx.strokeStyle=game.map.wallAccent;terrainCtx.lineWidth=3;terrainCtx.strokeRect(a+5,b+5,S-10,S-10);}
+      }
       else if(t===2)sprite(10,a+2,b+2,S-4,S-4,terrainCtx);
     }
   }
