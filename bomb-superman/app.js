@@ -19,7 +19,7 @@
   const names=['玩家一','玩家二','青叶','小金','紫电','冰蓝','流火','粉星'];
   const {W,H,DIRS,ITEM_NAMES}=BomberData;const S=60;
   $('map').innerHTML=Object.entries(BomberMaps.MAPS).map(([id,map])=>`<option value="${id}">${map.name}</option>`).join('');
-  let game,keys=new Set(),soundOn=false,audio,previous=0,eventIndex=0,paintUI=0,recorded=false,deathFx=[],victoryFx=null;
+  let game,keys=new Set(),soundOn=false,audio,previous=0,eventIndex=0,paintUI=0,recorded=false,deathFx=[],victoryFx=null,inventoryResume=false;
   const sounds={explode:new Audio('assets/audio/explosion.ogg'),pickup:new Audio('assets/audio/pickup.ogg'),eliminate:new Audio('assets/audio/player-down.ogg')};
   const soundPlayedAt={};
   Object.values(sounds).forEach(sound=>{sound.preload='auto';});
@@ -162,6 +162,19 @@
     deathFx=deathFx.filter(fx=>now-fx.started<2200);for(const fx of deathFx)drawDeath(fx,now);
     if(victoryFx&&now-victoryFx.started<3200)drawVictory(victoryFx,now);else if(victoryFx)victoryFx=null;
   }
+  function renderPlayerInventory(){
+    $('playerInventoryList').innerHTML=game.players.map(p=>{
+      const playerName=p.ai&&p.id===1?'赤焰':names[p.id];
+      const stats=[['fire','火力',game.curse(p,'weak')?1:p.super?'MAX':p.power],['bomb','炸弹',p.capacity],['boot','速度',game.curse(p,'slow')?'↓':p.speed+1]];
+      const upgrades=stats.map(([icon,name,value])=>`<span class="loadout-stat" aria-label="${name} ${value}" title="${name}"><i class="item-sprite ${icon}" aria-hidden="true"></i><span>${name}<b>${value}</b></span></span>`).join('');
+      const skills=[];
+      if(p.kick)skills.push('<span class="loadout-skill" aria-label="脚踢" title="脚踢"><i class="item-sprite kick" aria-hidden="true"></i></span>');
+      for(const type of ['super','glove','punch','line'])if(p[type])skills.push(`<span class="loadout-skill" aria-label="${ITEM_NAMES[type]}" title="${ITEM_NAMES[type]}"><img src="assets/${type==='super'?'super-fire':type}.svg" alt=""></span>`);
+      if(p.remote)skills.push(`<span class="loadout-skill" aria-label="遥控 ${p.remote} 个" title="遥控"><img src="assets/remote.svg" alt=""><b>×${p.remote}</b></span>`);
+      if(p.cursedUntil>game.time){const type=p.curses.length===3?'curse':'skull';skills.push(`<span class="loadout-skill" aria-label="${ITEM_NAMES[type]}" title="${ITEM_NAMES[type]}"><img src="assets/${type}.svg" alt=""></span>`);}
+      return `<div class="loadout-row" role="listitem"><div class="loadout-player"><span class="portrait" style="background-image:url(assets/characters-directions.png);background-size:400% 800%;background-position:66.6667% ${p.id/7*100}%" aria-hidden="true"></span><strong>${p.id+1}P ${playerName}</strong><small>${p.alive?'存活':'淘汰'}</small></div><div class="loadout-stats">${upgrades}</div><div class="loadout-skills">${skills.join('')||'<span class="loadout-empty">无技能</span>'}</div></div>`;
+    }).join('');
+  }
   function updateUI(){
     const remaining=Math.max(0,Math.ceil(game.options.duration-game.time));$('timer').textContent=remaining?`${String(Math.floor(remaining/60)).padStart(2,'0')}:${String(remaining%60).padStart(2,'0')}`:'石化中';
     const alive=game.players.filter(p=>p.alive);$('alive').textContent=`存活 ${alive.length}/${game.players.length}`;
@@ -193,7 +206,7 @@
   function togglePause(){game.pause();keys.clear();updateUI();}
   const controlCodes=new Set(['ArrowUp','ArrowRight','ArrowDown','ArrowLeft','Space','KeyZ','KeyA','KeyW','KeyD','KeyS','KeyF','KeyG','ShiftRight','KeyP','Escape']);
   window.addEventListener('keydown',e=>{
-    if($('guide').open||['SELECT','INPUT','TEXTAREA'].includes(document.activeElement.tagName))return;
+    if($('guide').open||$('playerInventory').open||['SELECT','INPUT','TEXTAREA'].includes(document.activeElement.tagName))return;
     if(!controlCodes.has(e.code))return;e.preventDefault();
     if(e.code==='KeyP'||e.code==='Escape'){if(!e.repeat)togglePause();return;}
     keys.add(e.code);if(e.repeat)return;
@@ -212,6 +225,9 @@
   $('settings').onchange=()=>{if($('mode').value==='team'&&$('count').value==='2')$('count').value='4';newGame();};
   $('sound').onclick=()=>{soundOn=!soundOn;$('sound').setAttribute('aria-label',soundOn?'关闭音效':'开启音效');$('sound').textContent=soundOn?'♫':'♪';$('sound').style.background=soundOn?'#d3e7d8':'';wakeAudio();tone(660);};
   $('help').onclick=()=>{if(game.state==='playing')togglePause();$('guide').showModal();};$('closeHelp').onclick=()=>$('guide').close();
+  $('showInventory').onclick=()=>{inventoryResume=game.state==='playing';if(inventoryResume)togglePause();renderPlayerInventory();$('playerInventory').showModal();};
+  $('closeInventory').onclick=()=>$('playerInventory').close();
+  $('playerInventory').onclose=()=>{if(inventoryResume&&game.state==='paused')togglePause();inventoryResume=false;canvas.focus({preventScroll:true});};
   const joystick=$('joystick'),joystickKnob=$('joystickKnob'),moveCodes=['ArrowUp','ArrowRight','ArrowDown','ArrowLeft'];
   let joystickPointer=null;
   function releaseJoystick(){moveCodes.forEach(code=>keys.delete(code));joystickPointer=null;joystickKnob.style.transform='translate(0,0)';}
