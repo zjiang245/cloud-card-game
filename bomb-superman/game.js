@@ -99,7 +99,7 @@
       // Resolve each ray against intact walls; chained bombs then share this blast instant.
       const cells=this.blast(b);b.exploded=true;this.bombs=this.bombs.filter(v=>v!==b);
       for(const [x,y] of cells){
-        this.flames.push({x,y,until:this.time+.55,owner:b.owner});this.items.delete(key(x,y));
+        this.flames.push({x,y,until:this.time+.4,owner:b.owner});this.items.delete(key(x,y));
         if(this.tile(x,y)===2){this.grid[y][x]=0;this.terrainVersion++;if(this.rng.getUniform()<.48)this.pending.push({x,y,at:this.time+.6,type:this.rollItem()});}
         const chained=this.bombAt(x,y);if(chained)this.explode(chained);
       }this.emit('explode','炸弹引爆',{x:b.x,y:b.y});
