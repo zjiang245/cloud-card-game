@@ -232,18 +232,18 @@
   $('showInventory').onclick=()=>{inventoryResume=game.state==='playing';if(inventoryResume)togglePause();renderPlayerInventory();$('playerInventory').showModal();};
   $('closeInventory').onclick=()=>$('playerInventory').close();
   $('playerInventory').onclose=()=>{if(inventoryResume&&game.state==='paused')togglePause();inventoryResume=false;canvas.focus({preventScroll:true});};
-  const joystick=$('joystick'),joystickKnob=$('joystickKnob'),moveCodes=['ArrowUp','ArrowRight','ArrowDown','ArrowLeft'];
+  const touchControls=$('touch-controls'),joystick=$('joystick'),joystickKnob=$('joystickKnob'),moveCodes=['ArrowUp','ArrowRight','ArrowDown','ArrowLeft'];
   let joystickPointer=null;
-  function releaseJoystick(){moveCodes.forEach(code=>keys.delete(code));joystickPointer=null;joystickKnob.style.transform='translate(0,0)';}
+  function releaseJoystick(e){if(e.pointerId!==joystickPointer)return;moveCodes.forEach(code=>keys.delete(code));joystickPointer=null;joystickKnob.style.transform='translate(0,0)';}
   function steerJoystick(e){
-    const rect=joystick.getBoundingClientRect(),dx=e.clientX-(rect.left+rect.width/2),dy=e.clientY-(rect.top+rect.height/2),distance=Math.hypot(dx,dy),limit=30,scale=distance>limit?limit/distance:1;
+    const rect=joystick.getBoundingClientRect(),dx=e.clientX-(rect.left+rect.width/2),dy=e.clientY-(rect.top+rect.height/2),distance=Math.hypot(dx,dy),limit=Math.max(24,(rect.width-joystickKnob.offsetWidth)/2-3),scale=distance>limit?limit/distance:1;
     joystickKnob.style.transform=`translate(${dx*scale}px,${dy*scale}px)`;moveCodes.forEach(code=>keys.delete(code));
-    if(distance<12)return;const dir=Math.abs(dx)>Math.abs(dy)?(dx>0?1:3):(dy>0?2:0);keys.add(moveCodes[dir]);game.move(game.players[0],dir);
+    if(distance<7)return;const dir=Math.abs(dx)>Math.abs(dy)?(dx>0?1:3):(dy>0?2:0);keys.add(moveCodes[dir]);game.move(game.players[0],dir);
   }
-  joystick.onpointerdown=e=>{e.preventDefault();joystickPointer=e.pointerId;joystick.setPointerCapture(e.pointerId);steerJoystick(e);};
-  joystick.onpointermove=e=>{if(e.pointerId===joystickPointer){e.preventDefault();steerJoystick(e);}};
-  for(const event of ['pointerup','pointercancel','lostpointercapture'])joystick.addEventListener(event,releaseJoystick);
-  for(const event of ['contextmenu','selectstart','dragstart'])$('touch-controls')?.addEventListener(event,e=>e.preventDefault());
+  touchControls.onpointerdown=e=>{if(e.button!==0||joystickPointer!==null||e.target.closest('.touch-actions'))return;e.preventDefault();joystickPointer=e.pointerId;touchControls.setPointerCapture(e.pointerId);steerJoystick(e);};
+  touchControls.onpointermove=e=>{if(e.pointerId===joystickPointer){e.preventDefault();steerJoystick(e);}};
+  for(const event of ['pointerup','pointercancel','lostpointercapture'])touchControls.addEventListener(event,releaseJoystick);
+  for(const event of ['contextmenu','selectstart','dragstart'])touchControls.addEventListener(event,e=>e.preventDefault());
   $('touchBomb').onpointerdown=e=>{e.preventDefault();game.place(game.players[0]);};$('touchAction').onpointerdown=e=>{e.preventDefault();game.action(game.players[0]);};
   atlas.onerror=()=>{$('notice').textContent='素材加载失败，请保持 assets 文件夹与游戏文件在一起。';};
   characters.onerror=()=>{$('notice').textContent='角色朝向图加载失败，请检查 assets/characters-directions.png。';};

@@ -7,6 +7,12 @@
 /* Mobile joystick and larger in-guide item art. */
 .touch-controls{user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}.joystick{position:relative;width:112px;height:112px;flex:0 0 112px;border:2px solid #54776b;border-radius:50%;background:radial-gradient(circle,#dce7dd 0 23%,#edf1e8 24% 47%,#c8d5cc 48% 50%,#edf1e8 51%);box-shadow:inset 0 2px 8px #4e6e6255;touch-action:none}.joystick:before,.joystick:after{content:"";position:absolute;background:#78928755;pointer-events:none}.joystick:before{width:2px;height:72%;left:calc(50% - 1px);top:14%}.joystick:after{height:2px;width:72%;top:calc(50% - 1px);left:14%}.joystick span{position:absolute;z-index:1;width:50px;height:50px;left:29px;top:29px;border-radius:50%;background:#194d3e;border:3px solid #f7f7ef;box-shadow:0 3px 7px #17382d66;transform:translate(0,0);pointer-events:none}.touch-actions{gap:12px}.touch-actions button{width:62px;height:62px;-webkit-touch-callout:none}.glove-guide .item-sprite,.glove-guide img{width:42px!important;height:42px!important;object-fit:contain}@media(max-width:680px){.touch-controls{align-items:center}.glove-guide .item-sprite,.glove-guide img{width:38px!important;height:38px!important}}@media(pointer:coarse) and (min-width:681px){.touch-controls{align-items:center}}
 
+html,body{touch-action:manipulation}
+.touch-controls{touch-action:none}
+.joystick{width:clamp(112px,38vw,156px);height:clamp(112px,38vw,156px);flex-basis:clamp(112px,38vw,156px)}
+.joystick span{left:calc(50% - 25px);top:calc(50% - 25px)}
+@media(max-width:680px){.touch-controls{padding-inline:10px;gap:10px}}
+
 /* Compact player item window. */
 .hud-inventory{min-height:30px;padding:0 10px;font-size:12px;white-space:nowrap;border-color:#a6bbaa;background:#e8f0e5}
 #playerInventory{max-width:660px;padding:24px 26px}
