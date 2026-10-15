@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>灵墟遗梦 · 原创仙侠冒险</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <a class="lobby-link" href="../index.html">← 返回大厅</a>
+      <div class="brand"><span class="brand-mark">◇</span><div><strong>灵墟遗梦</strong><small>一段山间旧事</small></div></div>
+      <div class="vitals"><span>陆遥 · <b id="level">壹</b> 级</span><div class="meter hp"><i id="hpBar"></i><em id="hpText"></em></div><div class="meter mp"><i id="mpBar"></i><em id="mpText"></em></div></div>
+      <div class="top-actions"><button id="questBtn" type="button">任务</button><button id="bagBtn" type="button">行囊 <span id="bagCount">2</span></button><button id="saveBtn" type="button">存档</button><button id="loadBtn" type="button">读档</button><button id="soundBtn" type="button" aria-label="切换声音">♫</button></div>
+    </header>
+    <section class="game" id="game" aria-label="游戏场景">
+      <div class="world" id="world">
+        <div class="scene-shade"></div>
+        <button class="hotspot elder" data-spot="elder" aria-label="与村长交谈"><span class="hot-icon">人</span><span class="hot-label">村长</span></button>
+        <button class="hotspot chest" data-spot="chest" aria-label="查看遗落的木箱"><span class="hot-icon">箱</span><span class="hot-label">木箱</span></button>
+        <button class="hotspot altar" data-spot="altar" aria-label="调查灵泉祭坛"><span class="hot-icon">✧</span><span class="hot-label">灵泉祭坛</span></button>
+        <button class="hotspot gate" data-spot="gate" aria-label="进入山门"><span class="hot-icon">门</span><span class="hot-label">山门</span></button>
+        <div class="player" id="player" aria-label="主角陆遥"><div class="player-shadow"></div><div class="sprite"><img src="assets/hero.png" alt="" /></div><span>陆遥</span></div>
+      </div>
+      <aside class="quest-card" id="questCard"><div class="quest-heading"><span>卷宗 · 壹</span><button type="button" id="questClose" aria-label="关闭任务">×</button></div><h2 id="questTitle">山村异光</h2><p id="questText"></p><div class="quest-step" id="questStep"></div></aside>
+      <div class="dialogue" id="dialogue" hidden><div class="speaker" id="speaker"></div><p id="dialogueText"></p><div class="dialogue-actions" id="dialogueActions"></div></div>
+      <div class="toast" id="toast" role="status"></div>
+      <div class="battle" id="battle" hidden><div class="battle-scene"><div class="battle-hero"><div class="battle-sprite"><img src="assets/hero.png" alt="陆遥" /></div><div class="battle-name">陆遥</div></div><div class="battle-flare"></div><div class="battle-enemy"><img src="assets/wolf.png" alt="玄雾灵狼" /><div class="battle-name">玄雾灵狼</div><div class="enemy-meter"><i id="enemyBar"></i></div></div></div><div class="battle-panel"><div class="battle-copy"><small>山门 · 守卫之战</small><p id="battleLog">玄雾灵狼挡住了去路！</p></div><div class="battle-actions"><button type="button" data-action="attack">斩击 <kbd>1</kbd></button><button type="button" data-action="spell">流光术 <small>耗灵 8</small><kbd>2</kbd></button><button type="button" data-action="heal">回春丹 <span id="potions">×2</span><kbd>3</kbd></button><button type="button" data-action="guard">防御 <kbd>4</kbd></button></div></div></div>
+      <div class="menu" id="menu" hidden><div class="menu-head"><h2 id="menuTitle">行囊</h2><button id="menuClose" type="button">×</button></div><div id="menuContent"></div></div>
+      <div class="intro" id="intro"><div class="intro-panel"><div class="intro-ornament">✦</div><h1>灵墟遗梦</h1><p>远山钟声再起，旧日祭坛浮出异光。<br>沿着石径，寻回山中失落的记忆。</p><div class="difficulty"><span>选择难度</span><button type="button" data-difficulty="easy">闲云</button><button type="button" data-difficulty="normal" class="selected">寻常</button><button type="button" data-difficulty="hard">问剑</button></div><button class="start" id="startBtn" type="button">踏入灵墟</button><button class="continue" id="continueBtn" type="button" hidden>继续旅程</button><small>方向键 / WASD 移动 · 点击场景目标 · E 互动 · 空格打开行囊</small></div></div>
+    </section>
+    <footer class="footbar"><span id="hint">先与村长交谈，了解山中的异光。</span><span>方向键移动 · E 互动 · 空格行囊</span></footer>
+    <div class="touch-controls" aria-label="触屏操作"><button data-move="up">↑</button><div><button data-move="left">←</button><button id="touchInteract">互动</button><button data-move="right">→</button></div><button data-move="down">↓</button></div>
+  </main>
+  <script src="script.js"></script>
+</body>
+</html>
