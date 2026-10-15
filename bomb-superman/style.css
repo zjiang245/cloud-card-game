@@ -24,6 +24,6 @@
 .loadout-stat b{font-size:15px;font-variant-numeric:tabular-nums}
 .loadout-skills{min-height:23px;flex-wrap:wrap}
 .loadout-skill{display:inline-flex;align-items:center;gap:3px;min-height:22px;font-size:11px}
-.loadout-skill img,.loadout-skill .item-sprite{width:20px;height:20px;object-fit:contain}
+.loadout-skill img,.loadout-skill .item-sprite{width:22px;height:22px;object-fit:contain}
 .loadout-empty{font-size:11px;color:var(--muted)}
 @media(max-width:680px){main{grid-template-columns:minmax(0,1fr)}.arena,aside{min-width:0}fieldset{grid-template-columns:repeat(2,minmax(0,1fr))}fieldset label{flex-direction:column;align-items:stretch;gap:4px}fieldset select{width:100%;max-width:100%}.hud-inventory{min-height:27px;padding:0 5px;font-size:11px}.hud #phase{font-size:10px}#playerInventory{width:calc(100% - 22px);padding:20px 16px}.loadout-row{grid-template-columns:minmax(0,1fr);gap:7px}.loadout-player{grid-row:auto}.loadout-stats{gap:4px}.loadout-stat{font-size:10px}.loadout-stat .item-sprite{flex-basis:22px;width:22px;height:22px}.loadout-stat b{font-size:14px}}
