@@ -46,6 +46,8 @@
 
 移动动画覆盖整个步长，逻辑采用 120 Hz 固定步进，移除每格停顿；碰撞、拾取和放弹依据人物当前显示位置。静态地形缓存，仅在木箱破坏或石化时重绘；玩家列表只在内容变化时更新。
 
+玩家初始移动间隔为普通地面 `0.44 秒/格`；冰面、加速路和泥地继续保留各自倍率，整体速度均为此前版本的一半。
+
 ## 音效素材
 
 爆炸、拾取和玩家淘汰音效来自 Kenney 的 [Impact Sounds](https://kenney.nl/assets/impact-sounds) 与 [Interface Sounds](https://kenney.nl/assets/interface-sounds)，均为 Creative Commons CC0。原始许可证保存在 `assets/audio/`。

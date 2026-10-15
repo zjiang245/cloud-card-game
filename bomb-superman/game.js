@@ -45,7 +45,7 @@
     surface(x,y){return this.tile(x,y)===0?this.features.get(key(x,y)):undefined;}
     position(p,time=this.time){const t=p.moveDuration?Math.min(1,Math.max(0,(time-p.moved)/p.moveDuration)):1;return{x:p.fromX+(p.x-p.fromX)*t,y:p.fromY+(p.y-p.fromY)*t};}
     occupied(p){const at=this.position(p);return{x:Math.round(at.x),y:Math.round(at.y)};}
-    interval(p){const type=this.surface(p.x,p.y)?.type,multiplier=type==='speed'?1.5:type==='mud'?.55:type==='ice'?1.25:1;return(this.curse(p,'slow')?.38:.22/(1+p.speed*.25))/multiplier;}
+    interval(p){const type=this.surface(p.x,p.y)?.type,multiplier=type==='speed'?1.5:type==='mud'?.55:type==='ice'?1.25:1;return(this.curse(p,'slow')?.76:.44/(1+p.speed*.25))/multiplier;}
     move(p,dir){
       if(!p?.alive||this.state!=='playing'||this.time+1e-8<p.nextMove)return false;
       const [dx,dy]=DIRS[dir];p.dir=dir;
